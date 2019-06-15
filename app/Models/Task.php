@@ -1,0 +1,150 @@
+<?php
+
+namespace App\Models;
+
+use App\User;
+use Carbon\Carbon;
+use Eloquent as Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * App\Models\Task
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $description
+ * @property int $project_id
+ * @property int $status
+ * @property Carbon $due_date
+ * @property int|null $deleted_by
+ * @property int $created_by
+ * @property int $time_entries_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $assignee_name
+ * @property-read mixed $project_name
+ * @property-read \App\Models\Project $project
+ * @property-read \App\User $createdUser
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $taskAssignee
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeEntry[] $timeEntries
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBY($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedBy($value)
+ * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Task onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
+ */
+class Task extends Model
+{
+    use SoftDeletes;
+
+    const STATUS_COMPLETED = 1;
+    const STATUS_ACTIVE = 0;
+
+    const STATUS_ARR = [1 => 'Completed', 0 => 'Active'];
+
+    public $table = 'tasks';
+
+    public $fillable = [
+        'title',
+        'description',
+        'project_id',
+        'status',
+        'due_date',
+        'deleted_by',
+        'created_by'
+    ];
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'          => 'integer',
+        'title'       => 'string',
+        'description' => 'string',
+        'project_id'  => 'integer',
+        'status'      => 'integer',
+        'due_date'    => 'date',
+        'deleted_by'  => 'integer',
+        'created_by' => 'integer',
+    ];
+
+    /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'title'      => 'required',
+        'project_id' => 'required',
+    ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'task_tags', 'task_id', 'tag_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function project()
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    /**
+     * @param  string  $value
+     * @return string
+     */
+    public function getDueDateAttribute($value)
+    {
+        if (!empty($value)) {
+            return Carbon::parse($value)->toDateString();
+        }
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function timeEntries()
+    {
+        return $this->hasMany(TimeEntry::class, 'task_id')->latest();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function taskAssignee()
+    {
+        return $this->belongsToMany(User::class, 'task_assignees', 'task_id', 'user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function createdUser()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+}

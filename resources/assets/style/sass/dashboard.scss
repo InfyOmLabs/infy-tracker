@@ -1,0 +1,16 @@
+// Variables
+@import 'variables';
+
+.time_range {
+    background: $white;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid $primary-border;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.no-record {
+    padding-top: 50px;
+    height: 150px;
+}

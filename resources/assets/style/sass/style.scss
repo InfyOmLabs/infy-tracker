@@ -1,0 +1,448 @@
+@import "https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css";
+@import "infy-loader";
+/** spinner css start **/
+@-webkit-keyframes sk-bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        -webkit-transform: scale(1.0);
+    }
+}
+
+@keyframes sk-bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+/** spinner css end **/
+/* common style for table */
+/*table.dataTable tbody th,*/
+/*table.dataTable tbody td {*/
+/*    padding: 2px 8px !important;*/
+/*    vertical-align: middle;*/
+/*}*/
+/* page header style goes here */
+/*modal globally styles*/
+/*pagination styles */
+/*!* Button used to open the chat form - fixed at the bottom of the page *!*/
+/* The popup chat - hidden by default */
+/* Add styles to the form container */
+/* Add some hover effects to buttons */
+.form-control {
+    border-radius: 5px !important;
+}
+
+.filter-control {
+    margin-top: -5px !important;
+    margin-bottom: 5px !important;
+}
+
+.disabled {
+    pointer-events: none;
+}
+
+.lbl-block {
+    display: block;
+}
+
+.dataTables_filter {
+    input {
+        width: 180px !important;
+    }
+}
+
+.column-right {
+    width: 50px;
+}
+
+.column-right-2 {
+    width: 60px;
+}
+
+.column-right-3 {
+    width: 81px;
+}
+
+.column-right-4 {
+    width: 105px;
+}
+
+.no-sort {
+    background-image: none !important;
+}
+
+[class^='select2'] {
+    border-radius: 4px !important;
+}
+
+.required {
+    color: red;
+}
+
+.d-none {
+    display: none;
+}
+
+.yes-color {
+    color: #66CC33;
+}
+
+.no-color {
+    color: #FF6666;
+}
+
+.resize-none {
+    resize: none;
+}
+
+.preview-image-video-container {
+    padding-left: 0;
+    margin-top: 20px;
+}
+
+div.dataTables_wrapper {
+    div.dataTables_processing {
+        top: 30%;
+    }
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    margin: 100px auto;
+}
+
+.double-bounce1 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #333;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #333;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.content-wrapper {
+    max-height: calc(100vh - 101px);
+    overflow: auto;
+}
+
+.icheckbox_line-green {
+    background: #59ce4b !important;
+    padding: 15px 0 5px 22px !important;
+
+    .icheck_line-icon {
+        left: 4px !important;
+    }
+}
+
+.iradio_line-green {
+    padding: 21px 0 5px 28px !important;
+
+    .icheck_line-icon {
+        left: 4px !important;
+    }
+}
+
+.icheckbox_line-red {
+    padding: 21px 0 5px 28px !important;
+    background: #f34242 !important;
+
+    .icheck_line-icon {
+        left: 7px !important;
+    }
+}
+
+.iradio_line-red {
+    padding: 21px 0 5px 28px !important;
+
+    .icheck_line-icon {
+        left: 7px !important;
+    }
+}
+
+.featured_btn {
+    width: 5px;
+    height: 5px;
+    margin-left: 18px;
+}
+
+table.dataTable {
+    border-collapse: collapse;
+}
+
+.action-icon {
+    font-size: 12px;
+    color: white !important;
+}
+
+.action-btn {
+    padding: 1px 6px !important;
+    display: inline-block;
+}
+
+.page-header {
+    display: flex;
+    position: relative;
+    top: 2px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    align-items: center;
+
+    label {
+        margin-bottom: 0;
+    }
+}
+
+.modal-header {
+    background-color: #20a8d8;
+    color: white;
+    border-radius: 4px 4px 0 0;
+}
+
+.modal-content {
+    border: 0;
+
+    .modal-header {
+        .close {
+            outline: none;
+            color: white;
+            opacity: .8;
+        }
+    }
+}
+
+.modal-body {
+    padding: 35px;
+}
+
+.select2-container {
+    .select2-selection--single {
+        height: 35px !important;
+    }
+}
+
+.select.form-control {
+    &:not([size]) {
+        &:not([multiple]) {
+            height: calc(1.5em + .75rem + 2px);
+        }
+    }
+}
+
+.select2-container--default {
+    .select2-selection--single {
+        .select2-selection__arrow {
+            top: 6px;
+        }
+
+        .select2-selection__rendered {
+            line-height: 34px;
+        }
+    }
+}
+
+.active_btn {
+    width: 5px;
+    height: 5px;
+    margin-left: 18px;
+}
+
+.chkStatus {
+    height: 18px;
+    width: 18px;
+}
+
+.sidebar {
+    .nav-item.active {
+        .nav-icon {
+            color: #20a8d8;
+        }
+    }
+}
+
+.dataTables_wrapper {
+    .dataTables_paginate {
+        .paginate_button.current {
+            color: white !important;
+            background: #4285f4 !important;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+
+            &:hover {
+                color: white !important;
+            }
+        }
+
+        .paginate_button {
+            color: #212529 !important;
+
+            &:hover {
+                background: #3d8ef4 !important;
+                border: 1px solid transparent !important;
+                color: #212529 !important;
+            }
+        }
+    }
+}
+
+.dataTables_paginate {
+    margin-top: 12px;
+}
+
+.icheckbox_line-white {
+    position: relative;
+    display: block;
+    margin: 0;
+    font-size: 13px;
+    line-height: 17px;
+    background: #ffffff;
+    border: 0.5px solid #d0d0d0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 15px 0 5px 22px !important;
+}
+
+#timer {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.img-stopwatch {
+    cursor: pointer;
+    position: fixed;
+    bottom: 60px;
+    right: 15px;
+    height: 60px;
+    border-radius: 5px;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+}
+
+.time-tracker-form {
+    width: 725px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #c8ced3;
+    border-radius: 5px;
+
+    &__btn {
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.open-button {
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.app-body {
+    + {
+        .open-button {
+            bottom: 75px;
+            padding: 10px 10px 10px 10px;
+            font-size: 18px;
+        }
+    }
+}
+
+.chat-popup {
+    position: fixed;
+    bottom: 105px;
+    right: 454px;
+    width: 318px;
+}
+
+.time-tracker-modal {
+    padding: 0 5px 0 5px;
+}
+
+.filter-container {
+    display: flex;
+    align-self: center;
+
+    &__btn {
+        align-self: center;
+        margin-top: auto;
+    }
+}
+
+.filter-date {
+    background: #fff;
+    cursor: pointer;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    border-radius: 5px;
+    align-self: center;
+    margin-top: auto;
+}
+
+.task-detail {
+    &__heading {
+        display: inline-block;
+        width: 30%;
+    }
+}
+
+.badge-primary {
+    background: #007bff;
+}
+
+.badge {
+    padding: 5px;
+    font-size: 10px;
+}
+
+.app-footer {
+    position: fixed;
+    height: 50px;
+    bottom: 0;
+    width: 100%;
+}
+
+.powered-by {
+    margin-right: 11%;
+}
+
+.modal-content {
+    border-radius: 5px !important;
+}

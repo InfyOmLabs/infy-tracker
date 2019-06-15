@@ -1,0 +1,30 @@
+// loader style
+$len: 242.776657104492px;
+$time: 1.6s;
+.infy-loader {
+    height: 150px;
+}
+
+#outline {
+    stroke-dasharray: $len*0.01, $len;
+    stroke-dashoffset: 0;
+    animation: anim $time linear infinite;
+}
+
+@keyframes anim {
+    12.5% {
+        stroke-dasharray: $len*0.14, $len;
+        stroke-dashoffset: -$len*0.11;
+    }
+
+    43.75% {
+        stroke-dasharray: $len*0.35, $len;
+        stroke-dashoffset: -$len*0.35;
+        stroke: #f5981c;
+    }
+
+    100% {
+        stroke-dasharray: $len*0.01, $len;
+        stroke-dashoffset: -$len*0.99;
+    }
+}
