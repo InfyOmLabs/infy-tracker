@@ -14,7 +14,6 @@ use DataTables;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class UserController extends AppBaseController
 {
@@ -76,23 +75,25 @@ class UserController extends AppBaseController
         $input = $request->all();
         $input['created_by'] = getLoggedInUserId();
         $input['activation_code'] = uniqid();
-        $input['is_active'] = true;
+        $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
         /** @var User $user */
         $user = $this->userRepository->create($input);
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {
             $user->projects()->sync($input['project_ids']);
         }
 
-        /*
+        if ($input['is_active']) {
+            /*
          * Send confirmation email
          */
-        $key = $user->id . '|' . $user->activation_code;
-        $code = Crypt::encrypt($key);
-        $this->accountRepository->sendConfirmEmail(
-            $user->name,
-            $user->email,
-            $code
-        );
+            $key = $user->id . '|' . $user->activation_code;
+            $code = Crypt::encrypt($key);
+            $this->accountRepository->sendConfirmEmail(
+                $user->name,
+                $user->email,
+                $code
+            );
+        }
 
         return $this->sendSuccess('User created successfully.');
     }
@@ -130,6 +131,7 @@ class UserController extends AppBaseController
 
         $projectIds = [];
         $input = $request->all();
+        $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
 
         $this->userRepository->update($input, $id);
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {

@@ -60,6 +60,9 @@ window.renderData = function (url) {
                 $('#edit_email').val(user.email);
                 $('#edit_phone').val(user.phone);
                 $('#editProjectId').val(user.project_ids).trigger("change");
+                if (user.is_active) {
+                    $('#edit_is_active').val(1).prop('checked', true);
+                }
                 $('#EditModal').modal('show');
             }
         },
