@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class AdminUserSeeder extends Seeder
@@ -20,6 +21,6 @@ class AdminUserSeeder extends Seeder
             'is_active' => true,
         ];
 
-        \App\User::create($input);
+        User::create($input);
     }
 }

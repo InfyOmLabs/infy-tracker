@@ -2,26 +2,25 @@
 
 namespace App\Models;
 
-use App\User;
 use Eloquent as Model;
 
 /**
- * App\Models\ActivityTYpe
+ * App\Models\ActivityType
  *
  * @property int $id
  * @property string $name
+ * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $created_by
- * @property-read \App\User $createdUser
+ * @property-read \App\Models\User|null $createdUser
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBy($value)
  * @mixin \Eloquent
  */
 class ActivityType extends Model
