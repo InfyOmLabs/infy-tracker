@@ -10,7 +10,7 @@
 namespace App\Repositories;
 
 use App\Models\TimeEntry;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 
 class DashboardRepository

@@ -10,10 +10,6 @@
 
 namespace App\Repositories;
 
-use App\Models\ActivityType;
-use App\Models\Task;
-use App\User;
-
 class ReportRepository
 {
 

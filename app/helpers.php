@@ -1,5 +1,4 @@
 <?php
-use App\User;
 
 /**
  * @return int
@@ -10,7 +9,7 @@ function getLoggedInUserId()
 }
 
 /**
- * @return User
+ * @return \Illuminate\Contracts\Auth\Authenticatable|null
  */
 function getLoggedInUser()
 {
