@@ -134,28 +134,14 @@ class UserController extends AppBaseController
         $user = $this->userRepository->findOrFail($id);
 
         $projectIds = [];
-        $imagePath = '';
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
-        if (!empty($input['password'])) {
-            $input['password'] = bcrypt($input['password']);
-        } else {
-            unset($input['password']);
+        $this->userRepository->update($input, $id);
+        if (isset($input['project_ids']) && !empty($input['project_ids'])) {
+            $projectIds = $input['project_ids'];
         }
-        try {
-            if (isset($input['photo']) && !empty($input['photo'])) {
-                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH);
-                $imagePath = $user->image_path;
-            }
-            if (!empty($imagePath)) {
-                $user->deleteImage();
-            }
-            $this->userRepository->update($input, $id);
-            if (isset($input['project_ids']) && !empty($input['project_ids'])) {
-                $projectIds = $input['project_ids'];
-            }
-            $user->projects()->sync($projectIds);
-            if ($input['is_active'] && !$user->is_email_verified) {
+        $user->projects()->sync($projectIds);
+        if ($input['is_active'] && !$user->is_email_verified) {
             $key = $user->id . '|' . $user->activation_code;
             $code = Crypt::encrypt($key);
             $this->accountRepository->sendConfirmEmail(
@@ -164,12 +150,6 @@ class UserController extends AppBaseController
                 $code
             );
         }
-        } catch (Exception $e) {
-            if (isset($input['image_url']) && !empty($input['image_url'])) {
-                $this->deleteImage(User::IMAGE_PATH . DIRECTORY_SEPARATOR . $input['image_url']);
-            }
-        }
-
         return $this->sendSuccess('User updated successfully.');
     }
 
@@ -189,5 +169,39 @@ class UserController extends AppBaseController
         $this->userRepository->delete($id);
 
         return $this->sendSuccess('User deleted successfully.');
+    }
+
+    /**
+     * @param $id
+     * @param UpdateUserRequest $request
+     * @return JsonResponse
+     */
+    public function updateProfile($id, UpdateUserRequest $request)
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findOrFail($id);
+        $imagePath = '';
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = bcrypt($input['password']);
+        } else {
+            unset($input['password']);
+        }
+        try {
+            if (isset($input['photo']) && !empty($input['photo'])) {
+                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH);
+                $imagePath = $user->image_path;
+            }
+            if (!empty($imagePath)) {
+                $user->deleteImage();
+            }
+            $this->userRepository->update($input, $id);
+        } catch (Exception $e) {
+            if (isset($input['image_url']) && !empty($input['image_url'])) {
+                $this->deleteImage(User::IMAGE_PATH . DIRECTORY_SEPARATOR . $input['image_url']);
+            }
+        }
+
+        return $this->sendSuccess('User profile updated successfully.');
     }
 }

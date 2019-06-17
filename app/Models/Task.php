@@ -44,6 +44,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
+ * @mixin \Eloquent
  */
 class Task extends Model
 {

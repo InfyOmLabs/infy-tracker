@@ -45,7 +45,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link" style="margin-right: 10px" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">
-                <img src="{{ asset('assets/img/user-avatar.png') }}" alt="" class="img-avatar">
+                <img src="{{ Auth::user()->image_path }}" alt="" class="img-avatar">
                 <span class="pr-3 align-middle">{!! Auth::user()->name !!}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -119,9 +119,11 @@
         loadingButton.button('loading');
         var id = $('#pfUserId').val();
         $.ajax({
-            url: '{{url('users')}}/' + id + '/update',
+            url: '{{url('users')}}/' + id + '/update-profile',
             type: 'post',
-            data: $(this).serialize(),
+            data: new FormData($(this)[0]),
+            processData: false,
+            contentType: false,
             success: function (result) {
                 if (result.success) {
                     $('#EditProfileModal').modal('hide');
