@@ -21,7 +21,8 @@
         "infyomlabs/laravel-generator": "5.8.x-dev",
         "infyomlabs/swagger-generator": "dev-master",
         "laravelcollective/html": "^5.8.0",
-        "yajra/laravel-datatables-oracle": "~9.0"
+        "yajra/laravel-datatables-oracle": "~9.0",
+        "intervention/image": "^2.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

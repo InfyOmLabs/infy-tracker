@@ -161,8 +161,12 @@
                     $('#pfName').val(user.name);
                     $('#pfEmail').val(user.email);
                     $('#pfPhone').val(user.phone);
+                    $('#edit_preview_photo').attr('src',user.image_path);
                     $('#EditProfileModal').modal('show');
                 }
+            },
+            error: function (error) {
+                manageAjaxErrors(error)
             }
         });
     }

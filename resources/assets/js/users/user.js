@@ -106,7 +106,9 @@ $(function () {
         $.ajax({
             url: usersUrl + id + '/update',
             type: 'post',
-            data: $(this).serialize(),
+            data: new FormData($(this)[0]),
+            processData: false,
+            contentType: false,
             success: function (result) {
                 if (result.success) {
                     $('#EditModal').modal('hide');

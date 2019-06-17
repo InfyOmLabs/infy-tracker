@@ -49,6 +49,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBy($value)
  */
 class Task extends Model
 {

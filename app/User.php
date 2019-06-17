@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\ImageTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -43,12 +44,19 @@ use Illuminate\Notifications\Notifiable;
  * @mixin \Eloquent
  * @property int $is_active
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereIsActive($value)
+ * @property string $image_path
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereImagePath($value)
  */
 class User extends Authenticatable
 {
     use Notifiable;
+    use ImageTrait;
+    use ImageTrait {
+        deleteImage as traitDeleteImage;
+    }
 
     public $table = 'users';
+    const IMAGE_PATH = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -64,6 +72,7 @@ class User extends Authenticatable
         'is_email_verified',
         'activation_code',
         'is_active',
+        'image_path'
     ];
 
     /**
@@ -121,5 +130,28 @@ class User extends Authenticatable
     public function createdUser()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function getImagePathAttribute($value)
+    {
+        if (!empty($value)) {
+            return $this->imageUrl(self::IMAGE_PATH . DIRECTORY_SEPARATOR . $value);
+        }
+        return asset('assets/img/user-avatar.png');
+    }
+    /**
+     * @return bool
+     */
+    public function deleteImage()
+    {
+        $image = $this->getOriginal('image_path');
+        if (empty($image)) {
+            return true;
+        }
+        return $this->traitDeleteImage(self::IMAGE_PATH . DIRECTORY_SEPARATOR . $image);
     }
 }

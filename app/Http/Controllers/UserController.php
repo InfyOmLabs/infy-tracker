@@ -8,15 +8,18 @@ use App\Queries\UserDataTable;
 use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
+use App\Traits\ImageTrait;
 use App\User;
 use Crypt;
 use DataTables;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends AppBaseController
 {
+    use ImageTrait;
     /** @var UserRepository */
     private $userRepository;
     /** @var ProjectRepository */
@@ -130,14 +133,32 @@ class UserController extends AppBaseController
         $user = $this->userRepository->findOrFail($id);
 
         $projectIds = [];
+        $imagePath = '';
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
-
-        $this->userRepository->update($input, $id);
-        if (isset($input['project_ids']) && !empty($input['project_ids'])) {
-            $projectIds = $input['project_ids'];
+        if (!empty($input['password'])) {
+            $input['password'] = bcrypt($input['password']);
+        } else {
+            unset($input['password']);
         }
-        $user->projects()->sync($projectIds);
+        try {
+            if (isset($input['photo']) && !empty($input['photo'])) {
+                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH);
+                $imagePath = $user->image_path;
+            }
+            if (!empty($imagePath)) {
+                $user->deleteImage();
+            }
+            $this->userRepository->update($input, $id);
+            if (isset($input['project_ids']) && !empty($input['project_ids'])) {
+                $projectIds = $input['project_ids'];
+            }
+            $user->projects()->sync($projectIds);
+        } catch (Exception $e) {
+            if (isset($input['image_url']) && !empty($input['image_url'])) {
+                $this->deleteImage(User::IMAGE_PATH . DIRECTORY_SEPARATOR . $input['image_url']);
+            }
+        }
 
         return $this->sendSuccess('User updated successfully.');
     }
