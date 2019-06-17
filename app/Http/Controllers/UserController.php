@@ -132,11 +132,6 @@ class UserController extends AppBaseController
 
         $projectIds = [];
         $input = $request->all();
-        if (!empty($input['password'])) {
-            $input['password'] = bcrypt($input['password']);
-        } else {
-            unset($input['password']);
-        }
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
 
         $user = $this->userRepository->update($input, $id);
