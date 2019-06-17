@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\User;
 use Eloquent as Model;
 
 /**
@@ -11,20 +10,20 @@ use Eloquent as Model;
  * @property int $id
  * @property string $name
  * @property string $email
- * @property string|null $website
+ * @property string $website
+ * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $created_by
- * @property-read \App\User $createdUser
+ * @property-read \App\Models\User|null $createdUser
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereWebsite($value)
  * @mixin \Eloquent
  */

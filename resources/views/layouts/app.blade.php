@@ -112,6 +112,7 @@
 @yield('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <script>
+    var loginUrl = '{{ route('login') }}';
     $('#editProfileForm').submit(function (event) {
         event.preventDefault();
         var loadingButton = jQuery(this).find("#btnEditSave");

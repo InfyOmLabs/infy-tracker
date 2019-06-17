@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\User;
 use Eloquent as Model;
 
 /**
@@ -11,25 +10,23 @@ use Eloquent as Model;
  * @property int $id
  * @property string $name
  * @property int|null $client_id
- * @property int $team
- * @property string|null $description
+ * @property string $description
+ * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $created_by
- * @property-read \App\Models\Client $client
- * @property-read \App\User $createdUser
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property-read \App\Models\Client|null $client
+ * @property-read \App\Models\User|null $createdUser
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereClientId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereCreatedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereTeam($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereCreatedBy($value)
  * @mixin \Eloquent
  */
 class Project extends Model
@@ -87,7 +84,7 @@ class Project extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User');
+        return $this->belongsToMany('App\Models\User');
     }
 
     /**

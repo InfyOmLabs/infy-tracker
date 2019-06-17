@@ -2,9 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\User;
+use App\Models\User;
 use Closure;
 use Session;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use InfyOm\Generator\Utils\ResponseUtil;
 
 class ValidateUserMiddleware
 {
@@ -22,17 +25,26 @@ class ValidateUserMiddleware
 
         if (!$user) {
             Session::flash('error', 'Your account is not activated.');
+            if($request->ajax()){
+                return JsonResponse::fromJsonString(ResponseUtil::makeError('Your account is not activated.'), Response::HTTP_UNAUTHORIZED);
+            }
             return redirect('login');
         }
 
         if (!$user->is_email_verified) {
             \Auth::logout();
             Session::flash('error', 'Your account is not verified.');
+            if($request->ajax()){
+                return JsonResponse::fromJsonString(ResponseUtil::makeError('Your account is not verified.'), Response::HTTP_UNAUTHORIZED);
+            }
             return redirect('login');
         }
         if (!$user->is_active) {
             \Auth::logout();
             Session::flash('error', 'Your account is deactivated. please contact your administrator.');
+            if($request->ajax()){
+                return JsonResponse::fromJsonString(ResponseUtil::makeError('Your account is deactivated. please contact your administrator.'), Response::HTTP_UNAUTHORIZED);
+            }
             return redirect('login');
         }
 

@@ -10,7 +10,7 @@
 
 namespace App\Queries;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**

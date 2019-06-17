@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
 use App\Queries\UserDataTable;
 use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
 use App\Traits\ImageTrait;
-use App\User;
 use Crypt;
 use DataTables;
 use Exception;
@@ -126,6 +126,7 @@ class UserController extends AppBaseController
      * @param UpdateUserRequest $request
      *
      * @return JsonResponse|RedirectResponse
+     * @throws \Exception
      */
     public function update($id, UpdateUserRequest $request)
     {
@@ -154,6 +155,15 @@ class UserController extends AppBaseController
                 $projectIds = $input['project_ids'];
             }
             $user->projects()->sync($projectIds);
+            if ($input['is_active'] && !$user->is_email_verified) {
+            $key = $user->id . '|' . $user->activation_code;
+            $code = Crypt::encrypt($key);
+            $this->accountRepository->sendConfirmEmail(
+                $user->name,
+                $user->email,
+                $code
+            );
+        }
         } catch (Exception $e) {
             if (isset($input['image_url']) && !empty($input['image_url'])) {
                 $this->deleteImage(User::IMAGE_PATH . DIRECTORY_SEPARATOR . $input['image_url']);

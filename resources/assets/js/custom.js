@@ -3,6 +3,11 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
+$( document ).ajaxError(function(event, xhr, settings) {
+    if(xhr.status == 401){
+        location.replace(loginUrl);
+    }
+});
 $.extend($.fn.dataTable.defaults, {
     "paging": true,
     "info": true,

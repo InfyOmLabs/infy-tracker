@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
-use App\User;
+use App\Models\User;
 use Crypt;
 use Exception;
 use Illuminate\Http\Request;
