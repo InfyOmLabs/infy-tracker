@@ -123,6 +123,7 @@ class UserController extends AppBaseController
      * @param UpdateUserRequest $request
      *
      * @return JsonResponse|RedirectResponse
+     * @throws \Exception
      */
     public function update($id, UpdateUserRequest $request)
     {
@@ -133,11 +134,20 @@ class UserController extends AppBaseController
         $input = $request->all();
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
 
-        $this->userRepository->update($input, $id);
+        $user = $this->userRepository->update($input, $id);
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {
             $projectIds = $input['project_ids'];
         }
         $user->projects()->sync($projectIds);
+        if ($input['is_active'] && !$user->is_email_verified) {
+            $key = $user->id . '|' . $user->activation_code;
+            $code = Crypt::encrypt($key);
+            $this->accountRepository->sendConfirmEmail(
+                $user->name,
+                $user->email,
+                $code
+            );
+        }
 
         return $this->sendSuccess('User updated successfully.');
     }
