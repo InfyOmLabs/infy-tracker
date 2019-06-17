@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\User;
 use Carbon\Carbon;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,43 +11,40 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property int $id
  * @property string $title
- * @property string|null $description
+ * @property string $description
  * @property int $project_id
  * @property int $status
- * @property Carbon $due_date
+ * @property string $due_date
+ * @property int|null $created_by
  * @property int|null $deleted_by
- * @property int $created_by
- * @property int $time_entries_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $assignee_name
- * @property-read mixed $project_name
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\User|null $createdUser
  * @property-read \App\Models\Project $project
- * @property-read \App\User $createdUser
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $taskAssignee
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $taskAssignee
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeEntry[] $timeEntries
+ * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newQuery()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Task onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task query()
+ * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedBy($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDueDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereProjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDueDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereCreatedBY($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedBy($value)
- * @mixin \Eloquent
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Task onlyTrashed()
- * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereDeletedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
+ * @mixin \Eloquent
  */
 class Task extends Model
 {

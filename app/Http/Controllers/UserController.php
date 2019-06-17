@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\User;
 use App\Queries\UserDataTable;
 use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
-use App\User;
 use Crypt;
 use DataTables;
 use Illuminate\Http\JsonResponse;
