@@ -23,7 +23,6 @@ mix
 
 /* JS */
 mix
-    .js('resources/assets/js/laravel/app.js', 'public/assets/js/laravel/app.js')
     .js('resources/assets/js/custom.js', 'public/assets/js/custom.js')
     .js('resources/assets/js/time_tracker/time_tracker.js', 'public/assets/js/time_tracker/time_tracker.js')
     .js('resources/assets/js/users/user.js', 'public/assets/js/users/user.js')
