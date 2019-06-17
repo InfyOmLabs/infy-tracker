@@ -55,15 +55,6 @@ class Handler extends ExceptionHandler
             $code = \Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        if ($exception instanceof ValidationException) {
-            $validator = $exception->validator;
-
-            return Response::json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
         if ($exception instanceof ModelNotFoundException) {
             return Response::json([
                 'success' => false,
@@ -72,6 +63,14 @@ class Handler extends ExceptionHandler
         }
 
         if ($request->expectsJson() or $request->isXmlHttpRequest()) {
+            if ($exception instanceof ValidationException) {
+                $validator = $exception->validator;
+                return Response::json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
             return Response::json([
                 'success' => false,
                 'message' => $exception->getMessage(),
