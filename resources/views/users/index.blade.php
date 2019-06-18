@@ -34,7 +34,6 @@
 @section('scripts')
     <script>
         let createUserUrl = "{{ route('users.store') }}";
-        let usersUrl = "{{ url('users') }}/";
     </script>
     <script src="{{ mix('assets/js/users/user.js') }}"></script>
 @endsection

@@ -52,8 +52,10 @@
                 <div class="dropdown-header text-center">
                     <strong>Account</strong>
                 </div>
-                <a href="#" class="dropdown-item btn btn-primary btn btn-default btn-flat" data-toggle="modal"
-                   onclick="renderProfileData({{ getLoggedInUserId() }})"><i class="fa fa-user"></i>Profile</a>
+                <a href="#" class="dropdown-item btn btn-primary btn btn-default btn-flat edit-profile"
+                   data-toggle="modal" data-id="{{ getLoggedInUserId() }}">
+                    <i class="fa fa-user"></i>Profile
+                </a>
                 <a class="dropdown-item" href="{!! url('/logout') !!}" class="btn btn-default btn-flat"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     <i class="fa fa-lock"></i>Logout
@@ -107,41 +109,18 @@
     let loginUserId = "{{ getLoggedInUserId() }}";
     let closeWatchImg = "{{asset('assets/img/close.png')}}";
     let stopWatchImg = "{{asset('assets/img/stopwatch.png')}}";
+    let usersUrl = "{{ url('users') }}/";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+<script src="{{ mix('assets/js/profile/profile.js') }}"></script>
 <script>
     var loginUrl = '{{ route('login') }}';
-    $('#editProfileForm').submit(function (event) {
-        event.preventDefault();
-        var loadingButton = jQuery(this).find("#btnEditSave");
-        loadingButton.button('loading');
-        var id = $('#pfUserId').val();
-        $.ajax({
-            url: '{{url('users')}}/' + id + '/update',
-            type: 'post',
-            data: $(this).serialize(),
-            success: function (result) {
-                if (result.success) {
-                    $('#EditProfileModal').modal('hide');
-                    location.reload();
-                }
-            },
-            error: function (result) {
-                printErrorMessage("#editValidationErrorsBox", result);
-            },
-            complete: function () {
-                loadingButton.button('reset');
-            }
-        });
-    });
-    $('#EditProfileModal').on('hidden.bs.modal', function () {
-        resetModalForm('#editProfileForm', '#editValidationErrorsBox');
-    });
+
     // Loading button plugin (removed from BS4)
-    (function($) {
-        $.fn.button = function(action) {
+    (function ($) {
+        $.fn.button = function (action) {
             if (action === 'loading' && this.data('loading-text')) {
                 this.data('original-text', this.html()).html(this.data('loading-text')).prop('disabled', true);
             }
@@ -150,22 +129,5 @@
             }
         };
     }(jQuery));
-
-    function renderProfileData(id) {
-        $.ajax({
-            url: '{{url('users')}}/' + id + '/edit',
-            type: 'GET',
-            success: function (result) {
-                if (result.success) {
-                    let user = result.data;
-                    $('#pfUserId').val(user.id);
-                    $('#pfName').val(user.name);
-                    $('#pfEmail').val(user.email);
-                    $('#pfPhone').val(user.phone);
-                    $('#EditProfileModal').modal('show');
-                }
-            }
-        });
-    }
 </script>
 </html>
