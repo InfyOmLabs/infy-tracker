@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('clients/{id}/update', 'ClientController@update');
 
     Route::post('users/profile-update', 'UserController@profileUpdate');
+    Route::post('users/{id}/active-de-active', 'UserController@activeDeActiveUser');
     Route::resource('users', 'UserController');
     Route::post('users/{id}/update', 'UserController@update');
     Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
