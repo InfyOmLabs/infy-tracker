@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\UpdateProfileUserRequest;
+use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Queries\UserDataTable;
@@ -183,10 +183,10 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param UpdateProfileUserRequest $request
+     * @param UpdateUserProfileRequest $request
      * @return JsonResponse
      */
-    public function profileUpdate(UpdateProfileUserRequest $request)
+    public function profileUpdate(UpdateUserProfileRequest $request)
     {
         $input = $request->all();
         if (isset($input['password']) && !empty($input['password'])) {
