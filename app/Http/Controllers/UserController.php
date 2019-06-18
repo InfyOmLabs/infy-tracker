@@ -172,6 +172,6 @@ class UserController extends AppBaseController
 
     public function resendEmailVerification($id){
         $this->userRepository->resendEmailVerification($id);
-        return $this->sendSuccess('Verification email has been send successfully.');
+        return $this->sendSuccess('Verification email has been sent successfully.');
     }
 }
