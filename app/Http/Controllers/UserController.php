@@ -169,4 +169,9 @@ class UserController extends AppBaseController
 
         return $this->sendSuccess('User deleted successfully.');
     }
+
+    public function resendEmailVerification($id){
+        $this->userRepository->resendEmailVerification($id);
+        return $this->sendSuccess('Verification email has been sent successfully.');
+    }
 }
