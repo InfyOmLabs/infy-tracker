@@ -14,10 +14,16 @@ var tbl = $('#users_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [3],
+            "targets": [4],
             "orderable": false,
             "className": 'text-center',
             "width": "5%"
+        },
+        {
+            "targets": [3],
+            "orderable": false,
+            "className": 'text-center',
+            "width": "9%"
         }
     ],
     columns: [
@@ -32,6 +38,18 @@ var tbl = $('#users_table').DataTable({
         {
             data: 'phone',
             name: 'phone'
+        },
+        {
+            data: function (row) {
+                var email_verification = '<button type="button" title="Send Verification Mail" id="email-btn" class="btn action-btn btn-primary btn-sm email-btn" ' +
+                    'data-loading-text="<span class=\'spinner-border spinner-border-sm\'></span>" data-id="' + row.id + '">' +
+                    '<i class="icon-envelope icons action-icon "></i></button>';
+                if(row.is_email_verified){
+                    email_verification = '<a title="Email Verified" data-id="' + row.id + '">' +
+                        '<i class="cui-circle-check check-icon"></i></a>';
+                }
+                return email_verification;
+            }, name: 'id'
         },
         {
             data: function (row) {
@@ -69,6 +87,26 @@ window.renderData = function (url) {
         error: function (error) {
             manageAjaxErrors(error);
         },
+    });
+};
+
+window.sendVerificationEmail = function (url) {
+    var loadingButton = $("#email-btn");
+    loadingButton.button('loading');
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (result) {
+            if (result.success) {
+                swal("Success!", result.message, "success");
+            }
+        },
+        error: function (error) {
+            manageAjaxErrors(error);
+        },
+        complete: function () {
+            loadingButton.button('reset');
+        }
     });
 };
 
@@ -140,5 +178,11 @@ $(function () {
     $(document).on('click', '.delete-btn', function (event) {
         let userId = $(event.currentTarget).data('id');
         deleteItem(usersUrl + userId, '#users_table', 'User');
+    });
+
+    // open email confirmation model
+    $(document).on('click', '.email-btn', function (event) {
+        let userId = $(event.currentTarget).data('id');
+        sendVerificationEmail(usersUrl + 'send-email/' + userId);
     });
 });

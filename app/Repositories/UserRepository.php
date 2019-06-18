@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Exception;
 use Hash;
+use Crypt;
 
 /**
  * Class UserRepository
@@ -64,6 +65,25 @@ class UserRepository extends BaseRepository
         $user->save();
 
         \Auth::login($user);
+        return true;
+    }
+
+    public function resendEmailVerification($id){
+        /** @var AccountRepository $accountRepository */
+        $accountRepository = new AccountRepository();
+        $activation_code = uniqid();
+
+        $user = $this->find($id);
+        $user->activation_code = $activation_code;
+        $user->save();
+
+        $key = $user->id . '|' . $activation_code;
+        $code = Crypt::encrypt($key);
+        $accountRepository->sendConfirmEmail(
+            $user->name,
+            $user->email,
+            $code
+        );
         return true;
     }
 }
