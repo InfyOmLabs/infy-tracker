@@ -180,7 +180,6 @@ $(function () {
         deleteItem(usersUrl + userId, '#users_table', 'User');
     });
 
-    // open email confirmation model
     $(document).on('click', '.email-btn', function (event) {
         let userId = $(event.currentTarget).data('id');
         sendVerificationEmail(usersUrl + 'send-email/' + userId);
