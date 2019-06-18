@@ -191,6 +191,8 @@ class UserController extends AppBaseController
         $input = $request->all();
         if (isset($input['password']) && !empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
         }
         $this->userRepository->update($input, Auth::user()->id);
         return $this->sendSuccess('Profile updated successfully.');
