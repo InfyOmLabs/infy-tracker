@@ -8,7 +8,7 @@
             </div>
             {!! Form::open(['id'=>'editProfileForm','files'=>true]) !!}
             <div class="modal-body">
-                <div class="alert alert-danger" style="display: none" id="editValidationErrorsBox"></div>
+                <div class="alert alert-danger" style="display: none" id="editProfileValidationErrorsBox"></div>
                 {!! Form::hidden('user_id',null,['id'=>'pfUserId']) !!}
                 {!! Form::hidden('is_active',1) !!}
                 {{csrf_field()}}
@@ -38,7 +38,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        {!! Form::label('phone', 'Attachment') !!}
+                        {!! Form::label('phone', 'Profile Image') !!}
                         <label class="edit-profile__file-upload"> Choose your file
                             {!! Form::file('photo',['id'=>'pfImage','class' => 'd-none']) !!}
                         </label>

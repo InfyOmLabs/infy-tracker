@@ -13,6 +13,7 @@ use App\Exceptions\ApiOperationFailedException;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
+use Image;
 use Log;
 use Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,11 +43,11 @@ trait ImageTrait
      * @param UploadedFile $file
      * @param string $path
      *
+     * @param array $options
      * @return string
      * @throws ApiOperationFailedException
-     *
      */
-    public static function makeImage($file, $path)
+    public static function makeImage($file, $path, $options = [])
     {
         try {
             $fileName = '';
@@ -57,7 +58,13 @@ trait ImageTrait
                 }
                 $date = Carbon::now()->format('Y-m-d');
                 $fileName = $date . '_' . uniqid() . '.' . $extension;
-                Storage::putFileAs($path, $file, $fileName, 'public');
+                if (!empty($options)) {
+                    $imageThumb = Image::make($file->getRealPath())->fit($options['width'], $options['height']);
+                    $imageThumb = $imageThumb->stream();
+                    Storage::put($path . DIRECTORY_SEPARATOR . $fileName, $imageThumb->__toString());
+                } else {
+                    Storage::putFileAs($path, $file, $fileName, 'public');
+                }
             }
 
             return $fileName;

@@ -107,7 +107,8 @@ class User extends Authenticatable
 
     public static $messages = [
         'phone.digits' => 'The phone number must be 10 digits long.',
-        'email.regex' => 'Please enter valid email.'
+        'email.regex' => 'Please enter valid email.',
+        'photo.mimes' => 'The profile image must be a file of type: jpeg, jpg, png.'
     ];
 
     public static $setPasswordRules = [
