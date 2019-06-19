@@ -1,5 +1,6 @@
 @import "https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css";
 @import "infy-loader";
+@import "variables";
 /** spinner css start **/
 @-webkit-keyframes sk-bounce {
     0%, 100% {
@@ -459,4 +460,8 @@ table.dataTable {
         background-color: #1985ac;
         border-color: #187da0
     }
+}
+.check-icon {
+    color: $green;
+    font-weight: bold;
 }

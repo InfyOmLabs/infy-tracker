@@ -41,9 +41,11 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::resource('clients', 'ClientController');
     Route::post('clients/{id}/update', 'ClientController@update');
 
+    Route::post('users/profile-update', 'UserController@profileUpdate');
     Route::resource('users', 'UserController');
     Route::post('users/{id}/update', 'UserController@update');
     Route::post('users/{id}/update-profile', 'UserController@updateProfile');
+    Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
 
     Route::resource('tags', 'TagController');
     Route::post('tags/{id}/update', 'TagController@update');
