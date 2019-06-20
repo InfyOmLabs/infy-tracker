@@ -161,6 +161,7 @@ $(function () {
     });
 
     $('#AddModal').on('hidden.bs.modal', function () {
+        $('#projectId').val(null).trigger("change");
         resetModalForm('#addNewForm', '#validationErrorsBox');
     });
 

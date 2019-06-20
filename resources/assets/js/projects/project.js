@@ -99,6 +99,7 @@ $('#editForm').submit(function (event) {
 
 $('#AddModal').on('hidden.bs.modal', function () {
     $('#client_id').val(null).trigger("change");
+    $('#user_ids').val(null).trigger("change");
     resetModalForm('#addNewForm', '#validationErrorsBox');
 });
 
