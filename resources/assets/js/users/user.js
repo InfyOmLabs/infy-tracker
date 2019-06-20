@@ -14,17 +14,23 @@ var tbl = $('#users_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [4],
+            "targets": [5],
             "orderable": false,
             "className": 'text-center',
             "width": "5%"
         },
         {
-            "targets": [3],
+            "targets": [4],
             "orderable": false,
             "className": 'text-center',
             "width": "9%"
-        }
+        },
+        {
+            "targets": [3],
+            "orderable": false,
+            "className": 'text-center',
+            "width": "4%"
+        },
     ],
     columns: [
         {
@@ -41,10 +47,22 @@ var tbl = $('#users_table').DataTable({
         },
         {
             data: function (row) {
+                let checked = row.is_active === 0 ? '' : 'checked';
+                if (loginUserId === row.id) {
+                    return '';
+                }
+                return ' <label class="switch switch-label switch-outline-primary-alt d-block">' +
+                    '<input name="is_active" data-id="' + row.id + '" class="switch-input is-active" type="checkbox" value="1" ' + checked + '>' +
+                    '<span class="switch-slider" data-checked="&#x2713;" data-unchecked="&#x2715;"></span>' +
+                    '</label>'
+            }, name: 'id'
+        },
+        {
+            data: function (row) {
                 var email_verification = '<button type="button" title="Send Verification Mail" id="email-btn" class="btn action-btn btn-primary btn-sm email-btn" ' +
                     'data-loading-text="<span class=\'spinner-border spinner-border-sm\'></span>" data-id="' + row.id + '">' +
-                    '<i class="icon-envelope icons action-icon "></i></button>';
-                if(row.is_email_verified){
+                    '<i class="icon-envelope icons action-icon"></i></button>';
+                if (row.is_email_verified) {
                     email_verification = '<a title="Email Verified" data-id="' + row.id + '">' +
                         '<i class="cui-circle-check check-icon"></i></a>';
                 }
@@ -186,3 +204,23 @@ $(function () {
         sendVerificationEmail(usersUrl + 'send-email/' + userId);
     });
 });
+
+// listen user activation deactivation change event
+$(document).on('change', '.is-active', function (event) {
+    const userId = $(event.currentTarget).data('id');
+    activeDeActiveUser(userId);
+});
+
+// activate de-activate user
+window.activeDeActiveUser = function (id) {
+    $.ajax({
+        url: usersUrl + id + '/active-de-active',
+        method: 'post',
+        cache: false,
+        success: function (result) {
+            if (result.success) {
+                tbl.ajax.reload();
+            }
+        }
+    });
+}
