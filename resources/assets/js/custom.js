@@ -140,3 +140,8 @@ window.manageAjaxErrors = function (data, errorDivId = 'editValidationErrorsBox'
         printErrorMessage("#" + errorDivId, data);
     }
 };
+$(document).on('keydown', function (e) {
+    if (e.keyCode === 27) {
+        $('.modal').modal('hide');
+    }
+});
