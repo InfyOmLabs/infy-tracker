@@ -36,4 +36,5 @@ mix
     .js('resources/assets/js/dashboard/dashboard.js', 'public/assets/js/dashboard/dashboard.js')
     .js('resources/assets/js/dashboard/developers-daily-report.js', 'public/assets/js/dashboard/developers-daily-report.js')
     .js('resources/assets/js/task/task_detail.js', 'public/assets/js/task/task_detail.js')
+    .js('resources/assets/js/profile/profile.js', 'public/assets/js/profile/profile.js')
     .version();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Queries\UserDataTable;
@@ -14,6 +15,8 @@ use DataTables;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends AppBaseController
 {
@@ -132,6 +135,7 @@ class UserController extends AppBaseController
 
         $projectIds = [];
         $input = $request->all();
+
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
 
         $user = $this->userRepository->update($input, $id);
@@ -154,9 +158,7 @@ class UserController extends AppBaseController
 
     /**
      * Remove the specified User from storage.
-     *
      * @param int $id
-     *
      * @return JsonResponse
      * @throws \Exception
      *
@@ -168,5 +170,31 @@ class UserController extends AppBaseController
         $this->userRepository->delete($id);
 
         return $this->sendSuccess('User deleted successfully.');
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function resendEmailVerification($id)
+    {
+        $this->userRepository->resendEmailVerification($id);
+        return $this->sendSuccess('Verification email has been sent successfully.');
+    }
+
+    /**
+     * @param UpdateUserProfileRequest $request
+     * @return JsonResponse
+     */
+    public function profileUpdate(UpdateUserProfileRequest $request)
+    {
+        $input = $request->all();
+        if (isset($input['password']) && !empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
+        }
+        $this->userRepository->update($input, Auth::user()->id);
+        return $this->sendSuccess('Profile updated successfully.');
     }
 }
