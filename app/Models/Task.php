@@ -54,6 +54,7 @@ class Task extends Model
     const STATUS_ACTIVE = 0;
 
     const STATUS_ARR = [1 => 'Completed', 0 => 'Active'];
+    const PATH = 'attachments';
 
     public $table = 'tasks';
 
@@ -142,5 +143,13 @@ class Task extends Model
     public function createdUser()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class, 'task_id');
     }
 }

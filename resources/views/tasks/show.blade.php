@@ -7,6 +7,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -80,6 +82,12 @@
                                                 {{$task->description}}
                                             </p>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <form method="post" action="{{url("tasks/add-attachment/$task->id")}}" enctype="multipart/form-data"
+                                                  class="dropzone" id="dropzone">
+                                                {{csrf_field()}}
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -87,17 +95,24 @@
                     </div>
                 </div>
             </div>
+            <div class="previewEle">
+            </div>
             @include('tasks.task_edit_modal')
         </div>
     </div>
 @endsection
 @section('page_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js.map"></script>
 @endsection
 @section('scripts')
     <script>
         let taskUrl = '{{url('tasks')}}/';
-
+        let taskId = '{{$task->id}}';
+        let attachmentUrl = '{{ $attachmentUrl }}/';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
