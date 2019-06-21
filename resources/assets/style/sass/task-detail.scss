@@ -1,0 +1,56 @@
+//task-detail style
+@import "variables";
+.flex-1 {
+    flex: 1;
+}
+
+.dropzone {
+    border: 1px solid $gray;
+}
+
+.task-detail-lg-8__heading {
+    width: 30%;
+}
+
+.task-div {
+    padding: 16px 16px 0px 16px;
+}
+
+.task-detail__width {
+    width: 100%;
+    margin-right: 10px;
+}
+
+// Large devices
+@media (min-width: #{$screen-lg-min}) {
+    .task-detail-lg-8__heading {
+        display: inline-block;
+        width: 18%;
+    }
+    .task-detail__width {
+        width: 40%;
+    }
+}
+
+.dz-remove {
+    width: 1.2em;
+    height: 1.2em;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    z-index: 1000;
+    font-size: 1.2em !important;
+    line-height: 1em;
+    font-weight: bold;
+    border: 1px solid $gray !important;
+    border-radius: 1.2em;
+    color: $gray;
+    background-color: $white;
+    opacity: .5;
+}
+
+.dz-remove:hover {
+    text-decoration: none !important;
+    opacity :1;
+    color: $red;
+}
