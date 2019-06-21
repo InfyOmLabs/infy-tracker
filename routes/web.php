@@ -20,6 +20,7 @@ Route::get('/', function () {
 | Auth Login Route
 |--------------------------------------------------------------------------
 */
+Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 
 Route::post('login', 'Auth\LoginController@login');
