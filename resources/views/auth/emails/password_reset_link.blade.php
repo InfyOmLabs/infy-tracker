@@ -51,10 +51,10 @@
             font-size: 13px;
             color: #6D6C6C
         }
-        .regards-p1 {
+        .regards-mb-4 {
             margin-bottom: 4px;
         }
-        .regards-p2 {
+        .regards-mt-4 {
             margin-top: 4px;
         }
         .bottom-text{
@@ -99,8 +99,8 @@
         </tr>
         <tr>
             <td>
-                <p class="regards-p1">Regards,</p>
-                <p class="regards-p2">InfyTracker</p>
+                <p class="regards-mb-4">Regards,</p>
+                <p class="regards-mt-4">InfyTracker</p>
             </td>
         </tr>
         <tr>
