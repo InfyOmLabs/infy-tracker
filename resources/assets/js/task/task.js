@@ -294,7 +294,7 @@ $('#editForm').submit(function (event) {
 
 $('#AddModal').on('hidden.bs.modal', function () {
     $('#projectId').val(null).trigger("change");
-    $('#assignTo').val(null).trigger("change");
+    $('#assignee').val(null).trigger("change");
     $('#tagIds').val(null).trigger("change");
     resetModalForm('#addNewForm', '#validationErrorsBox');
 });
