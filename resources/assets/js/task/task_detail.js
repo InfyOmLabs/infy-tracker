@@ -107,7 +107,7 @@ Dropzone.options.dropzone = {
     thumbnailWidth:125,
     acceptedFiles: 'image/*,.pdf,.doc,.docx,.xls,.xlsx',
     addRemoveLinks: true,
-    dictRemoveFile: 'Remove',
+    dictRemoveFile: 'x',
     timeout: 50000,
     init: function() {
         thisDropzone = this;
@@ -122,6 +122,7 @@ Dropzone.options.dropzone = {
             });
         });
         this.on("thumbnail", function(file, dataUrl) {
+            $(file.previewTemplate).find('.dz-details').css('display','none');
             previewFile(file);
             let fileNameExtArr = file.name.split('.');
             let fileName = fileNameExtArr[0];
@@ -206,7 +207,7 @@ Dropzone.options.dropzone = {
     },
     error: function(file, response)
     {
-        swal("error!", response, "error");
+        swal("error!", response.message, "error");
         let fileRef;
         return (fileRef = file.previewElement) != null ?
             fileRef.parentNode.removeChild(file.previewElement) : void 0;
