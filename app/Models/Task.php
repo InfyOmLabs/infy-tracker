@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $task_number
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
  */
 class Task extends Model
 {
@@ -64,7 +66,8 @@ class Task extends Model
         'status',
         'due_date',
         'deleted_by',
-        'created_by'
+        'created_by',
+        'task_number'
     ];
 
     /**

@@ -63,8 +63,10 @@ class TaskController extends AppBaseController
     public function store(CreateTaskRequest $request)
     {
         $input = $request->all();
-        $this->taskRepository->store($this->fill($input));
-
+        /** @var Task $task */
+        $task = $this->taskRepository->store($this->fill($input));
+        $indexNumber = $this->taskRepository->getIndex($task->project_id);
+        $task->update(['task_number' => $indexNumber]);
         return $this->sendSuccess('Task created successfully.');
     }
 

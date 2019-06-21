@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
+use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use Carbon\Carbon;
@@ -58,9 +59,7 @@ class TaskRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @throws Exception
-     *
-     * @return bool
+     * @return Task|\Illuminate\Database\Eloquent\Model
      */
     public function store($input)
     {
@@ -85,7 +84,7 @@ class TaskRepository extends BaseRepository
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        return true;
+        return $task;
     }
 
     /**
@@ -268,5 +267,22 @@ class TaskRepository extends BaseRepository
             'activities' => ActivityType::get(['name', 'id']),
             'tasks' => $assignedTasks,
         ];
+    }
+
+    /**
+     * @param $projectId
+     * @return string
+     */
+    public function getIndex($projectId)
+    {
+        /** @var Task $task */
+        $task = Task::whereProjectId($projectId)->whereNotNull('task_number')->latest('task_number')->first();
+        if (empty($task)) {
+            $project = Project::findOrFail($projectId);
+            return $project->prefix . '-' . 1;
+        }
+        $orderArr = explode('-', $task->task_number);
+        $value = $orderArr[1] + 1;
+        return $task->project->prefix . '-' . $value;
     }
 }
