@@ -276,13 +276,15 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::whereProjectId($projectId)->whereNotNull('task_number')->latest('task_number')->first();
+        $task = Task::whereProjectId($projectId)->where('task_number', '!=', "")->latest('created_at')->first();
         if (empty($task)) {
             $project = Project::findOrFail($projectId);
             return $project->prefix . '-' . 1;
         }
         $orderArr = explode('-', $task->task_number);
-        $value = $orderArr[1] + 1;
-        return $task->project->prefix . '-' . $value;
+        $uniqueNumber = (int)$orderArr[1];
+        $uniqueNumber += 1;
+        $index = $task->project->prefix . '-' . $uniqueNumber;
+        return $index;
     }
 }
