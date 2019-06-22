@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
+use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskAttachment;
@@ -61,9 +62,7 @@ class TaskRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @throws Exception
-     *
-     * @return bool
+     * @return Task|\Illuminate\Database\Eloquent\Model
      */
     public function store($input)
     {
@@ -88,7 +87,7 @@ class TaskRepository extends BaseRepository
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        return true;
+        return $task;
     }
 
     /**
@@ -274,16 +273,36 @@ class TaskRepository extends BaseRepository
     }
 
     /**
+     * @param $projectId
+     * @return string
+     */
+    public function getIndex($projectId)
+    {
+        /** @var Task $task */
+        $task = Task::whereProjectId($projectId)->where('task_number', '!=', "")->latest('created_at')->first();
+        if (empty($task)) {
+            $project = Project::findOrFail($projectId);
+            return $project->prefix . '-' . 1;
+        }
+        $orderArr = explode('-', $task->task_number);
+        $uniqueNumber = (int)$orderArr[1];
+        $uniqueNumber += 1;
+        $index = $task->project->prefix . '-' . $uniqueNumber;
+        return $index;
+    }
+
+    /**
      * @param $id
      * @param $file
      * @return string
      * @throws Exception
      */
-    public function uploadFile($id, $file){
+    public function uploadFile($id, $file)
+    {
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
         try {
-            $fileName = time().'_'.uniqid() . '.' . $file->getClientOriginalExtension();
+            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
             $file->move($destinationPath, $fileName);
             $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
@@ -294,8 +313,8 @@ class TaskRepository extends BaseRepository
             return $fileName;
         } catch (Exception $e) {
             DB::rollBack();
-            if (file_exists($destinationPath.'/'.$fileName)) {
-                unlink($destinationPath.'/'.$fileName);
+            if (file_exists($destinationPath . '/' . $fileName)) {
+                unlink($destinationPath . '/' . $fileName);
             }
             throw new UploadException($e->getMessage(), $e->getCode());
         }
@@ -306,19 +325,20 @@ class TaskRepository extends BaseRepository
      * @param $input
      * @return bool
      */
-    public function deleteFile($id, $input){
+    public function deleteFile($id, $input)
+    {
         $file = $input['filename'];
-        $attachment = TaskAttachment::where('file','like',"%$file%")->where('task_id','=',$id)->first();
-        if(empty($attachment)){
+        $attachment = TaskAttachment::where('file', 'like', "%$file%")->where('task_id', '=', $id)->first();
+        if (empty($attachment)) {
             throw new NotFoundException('File not found.');
         }
         $fileName = $attachment->getOriginal('file');
         $attachment->delete();
         $destinationPath = public_path(Task::PATH);
 
-        if (!empty($fileName)){
-            if (file_exists($destinationPath.'/'.$fileName)) {
-                unlink($destinationPath.'/'.$fileName);
+        if (!empty($fileName)) {
+            if (file_exists($destinationPath . '/' . $fileName)) {
+                unlink($destinationPath . '/' . $fileName);
             }
         }
         return true;
@@ -328,20 +348,23 @@ class TaskRepository extends BaseRepository
      * @param $id
      * @return array
      */
-    public function getAttachments($id){
+    public function getAttachments($id)
+    {
+        /** @var Task $task */
         $task = $this->find($id);
         $attachments = $task->attachments;
 
-        $result  = [];
+        $result = [];
 
         $destinationPath = public_path(Task::PATH);
-        foreach ($attachments as $attachment){
+        foreach ($attachments as $attachment) {
             $file = $attachment->getOriginal('file');
             $obj['name'] = $file;
-            $obj['size'] = filesize($destinationPath.'/'.$file);
+            $obj['size'] = filesize($destinationPath . '/' . $file);
             $obj['url'] = $attachment->file;
             $result[] = $obj;
         }
         return $result;
     }
 }
+

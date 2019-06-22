@@ -45,8 +45,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $task_number
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
  * @property string|null $priority
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
  */
 class Task extends Model
 {
@@ -69,6 +72,7 @@ class Task extends Model
         'due_date',
         'deleted_by',
         'created_by',
+        'task_number',
         'priority'
     ];
 

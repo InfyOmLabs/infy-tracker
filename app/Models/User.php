@@ -44,6 +44,8 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $image_path
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
  */
 class User extends Authenticatable
 {
