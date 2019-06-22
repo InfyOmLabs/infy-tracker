@@ -7,6 +7,9 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"/>
+    <link href="{{mix('assets/style/css/task-detail.css')}}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -15,96 +18,120 @@
             <div class="page-header">
                 <h3>Task detail</h3>
                 <div class="filter-container__btn">
-                    <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}" data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">Edit Detail</button>
+                    <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}"
+                            data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">
+                        Edit Detail
+                    </button>
                     <a class="btn btn-secondary" href="{{url(route('tasks.index'))}}">Back</a>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <h4 class="mb-3">{{$task->title}}</h4>
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h4 class="mb-3">{{$task->title}}</h4>
+                            </div>
+                        </div>
+                        <div class="row task-detail d-flex">
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__project-heading">Project</span>
+                                <span class="flex-1">{{$task->project->name}}</span>
+                            </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__created-heading">Created</span>
+                                <span class="flex-1">{{$task->created_at->format('dS F, Y h:i A')}}</span>
+                            </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__status-heading">Status</span>
+                                <span class="flex-1">
+                                    @if($task->status=='0')
+                                        <span class="badge badge-primary text-uppercase">Started</span>
+                                    @else
+                                        <span class="badge badge-success text-uppercase">Completed</span>
+                                    @endif
+                                </span>
+                            </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__updated-heading">Updated</span>
+                                <span class="flex-1">{{$task->updated_at->format('dS F, Y h:i A')}}</span>
+                            </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__reporter-heading">Reporter</span>
+                                <span class="flex-1">{{$task->createdUser->name}}</span>
+                            </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__priority-heading">Priority</span>
+                                <i class="fa fa-arrow-up task-detail__priority-heading--{{$task->priority}}" aria-hidden="true"></i>
+                                {{ucfirst($task->priority)}}
+                            </div>
+                            @if(!empty($task->due_date))
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__due-date-heading">Due Date</span>
+                                    <span
+                                        class="flex-1">{{\Carbon\Carbon::parse($task->due_date)->format('dS F, Y')}}</span>
                                 </div>
-                                <div class="col-lg-12">
-                                    <div class="row">
-                                        <div class="col-lg-8">
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3"><span
-                                                                class="task-detail__heading">Project:</span> {{$task->project->name}}
-                                                    </div>
-                                                    <div class="mb-3"><span
-                                                                class="task-detail__heading">Tags:</span> {{implode(", ",$task->tags->pluck('name')->toArray())}}
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                            <span class="task-detail__heading">
-                                                Status:
-                                            </span>
-                                                        @if($task->status=='0')
-                                                            <span class="badge badge-primary text-uppercase">started</span>
-
-                                                        @else
-                                                            <span class="badge badge-success text-uppercase">Completed</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="col-lg-12">
-                                                <div class="mb-3"><span
-                                                            class="task-detail__heading">Assignee:</span> {{implode(", ",$task->taskAssignee->pluck('name')->toArray())}}
-                                                </div>
-                                                <div class="mb-3"><span
-                                                            class="task-detail__heading">Reporter:</span> {{$task->createdUser->name}}
-                                                </div>
-                                                <div class="mb-3"><span
-                                                            class="task-detail__heading">Created At:</span> {{$task->created_at->format('d F, Y h:i A')}}
-                                                </div>
-                                                <div class="mb-3"><span
-                                                            class="task-detail__heading">Updated At:</span> {{$task->updated_at->format('d F, Y h:i A')}}
-                                                </div>
-                                                <div class="mb-3"><span
-                                                            class="task-detail__heading">Priority:</span> <i
-                                                            class="fa fa-arrow-up priority-{{$task->priority}}"
-                                                            aria-hidden="true"></i> {{ucfirst($task->priority)}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <b>Description</b>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <p>
-                                                {{$task->description}}
-                                            </p>
-                                        </div>
-                                    </div>
+                            @endif
+                            @if(!empty($task->taskAssignee->pluck('name')->toArray()))
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__assignee-heading">Assignee</span>
+                                    <span
+                                        class="flex-1">{{implode(", ",$task->taskAssignee->pluck('name')->toArray())}}</span>
                                 </div>
+                            @endif
+                            @if(!empty($task->tags->pluck('name')->toArray()))
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__tag-heading">Tags</span>
+                                    <span class="flex-1">{{implode(", ",$task->tags->pluck('name')->toArray())}}</span>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12">
+                                <span class="task-detail__description-heading">Description</span>
+                            </div>
+                            <div class="col-lg-8 col-sm-12">
+                                <span>{{$task->description}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12">
+                                <div class="mb-3 d-flex">
+                                    <span class="task-detail__attachment-heading">Attachments</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8 col-sm-12">
+                                <form method="post" action="{{url("tasks/add-attachment/$task->id")}}"
+                                      enctype="multipart/form-data"
+                                      class="dropzone" id="dropzone">
+                                    {{csrf_field()}}
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="previewEle">
             </div>
             @include('tasks.task_edit_modal')
         </div>
     </div>
 @endsection
 @section('page_js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js.map"></script>
 @endsection
 @section('scripts')
     <script>
         let taskUrl = '{{url('tasks')}}/';
-
+        let taskId = '{{$task->id}}';
+        let attachmentUrl = '{{ $attachmentUrl }}/';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
-
-
