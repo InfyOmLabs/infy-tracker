@@ -1,0 +1,125 @@
+//task-detail style
+@import "variables";
+
+.flex-1 {
+    flex: 1;
+}
+
+.dropzone {
+    border: 1px solid $gray;
+}
+
+%task-heading {
+    display: inline-block;
+    width: 20%;
+    font-weight: 700;
+}
+
+.task-detail {
+    padding: 16px 16px 0 16px;
+
+    &__item {
+        width: 100%;
+        margin-right: 10px;
+
+        @media (min-width: #{$screen-lg-min}) {
+            width: 40%;
+        }
+    }
+
+    &__project-heading {
+        @extend %task-heading;
+    }
+
+    &__updated-heading {
+        @extend %task-heading;
+    }
+
+    &__status-heading {
+        @extend %task-heading;
+    }
+
+    &__created-heading {
+        @extend %task-heading;
+    }
+
+    &__reporter-heading {
+        @extend %task-heading;
+    }
+
+    &__due-date-heading {
+        @extend %task-heading;
+    }
+
+    &__assignee-heading {
+        @extend %task-heading;
+    }
+
+    &__tag-heading {
+        @extend %task-heading;
+    }
+
+    &__description-heading {
+        @extend %task-heading;
+    }
+
+    &__attachment-heading {
+        margin-top: 15px;
+        @extend %task-heading;
+    }
+
+    &__priority-heading {
+        @extend %task-heading;
+
+        $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);
+
+        @each $name, $color in $priority {
+            &--#{$name} {
+                color: $color;
+                margin-top: 4px;
+                margin-right: 3px;
+            }
+        }
+    }
+}
+
+.priority--lowest,
+.priority--low {
+    transform: rotate(180deg);
+}
+
+.dz-remove {
+    width: 1.2em;
+    height: 1.2em;
+    position: absolute;
+    top: 0;
+    right: 5px;
+    z-index: 1000;
+    font-size: 1.2em;
+    line-height: 1em;
+    font-weight: bold;
+    border: 1px solid $gray;
+    border-radius: 1.2em;
+    color: $gray;
+    background-color: $white;
+    opacity: .5;
+
+    &:hover {
+        text-decoration: none !important;
+        opacity: 1;
+        color: $red;
+    }
+}
+
+$priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);
+
+@each $name, $color in $priority {
+    .priority--#{$name} {
+        color: $color;
+    }
+}
+
+.priority--lowest,
+.priority--low {
+    transform: rotate(180deg);
+}

@@ -23,6 +23,12 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
+                        {!! Form::label('priority', 'Priority') !!}<span class="required">*</span>
+                        {!! Form::select('priority',$priority, null, ['class' => 'form-control','id'=>'priority','required','placeholder'=>'Select Priority']) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
                         {!! Form::label('assign_to', 'Assign To') !!}
                         {!! Form::select('assignees[]',$assignees, null, ['class' => 'form-control','id'=>'assignee', 'multiple' => true]) !!}
                     </div>

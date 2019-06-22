@@ -47,6 +47,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  * @property string|null $task_number
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
+ * @property string|null $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
  */
 class Task extends Model
 {
@@ -56,6 +59,8 @@ class Task extends Model
     const STATUS_ACTIVE = 0;
 
     const STATUS_ARR = [1 => 'Completed', 0 => 'Active'];
+    const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
+    const PATH = 'attachments';
 
     public $table = 'tasks';
 
@@ -67,7 +72,8 @@ class Task extends Model
         'due_date',
         'deleted_by',
         'created_by',
-        'task_number'
+        'task_number',
+        'priority'
     ];
 
     /**
@@ -145,5 +151,13 @@ class Task extends Model
     public function createdUser()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function attachments()
+    {
+        return $this->hasMany(TaskAttachment::class, 'task_id');
     }
 }

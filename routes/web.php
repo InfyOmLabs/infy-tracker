@@ -20,6 +20,7 @@ Route::get('/', function () {
 | Auth Login Route
 |--------------------------------------------------------------------------
 */
+Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 
 Route::post('login', 'Auth\LoginController@login');
@@ -57,6 +58,9 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::resource('tasks', 'TaskController');
     Route::post('tasks/{id}/update', 'TaskController@update');
     Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
+    Route::post('tasks/add-attachment/{id}', 'TaskController@addAttachment');
+    Route::post('tasks/delete-attachment/{id}', 'TaskController@deleteAttachment');
+    Route::get('tasks/get-attachments/{id}', 'TaskController@getAttachment');
 
     Route::resource('timeEntries', 'TimeEntryController');
     Route::post('timeEntries/{id}/update', 'TimeEntryController@update');

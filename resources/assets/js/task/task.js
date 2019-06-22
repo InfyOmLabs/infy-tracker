@@ -11,6 +11,10 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
+    $('#priority,#editPriority').select2({
+        width: '100%',
+        placeholder: "Select Priority"
+    });
     $('#tagIds,#assignee').select2({
         width: '100%',
         tags: true
@@ -24,7 +28,7 @@ $(function () {
             down: "icon-angle-down"
         },
         sideBySide: true,
-        minDate: new Date()
+        minDate: moment().millisecond(0).second(0).minute(0).hour(0)
     });
 
     $(document).ajaxComplete(function (result) {
@@ -187,6 +191,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editTagIds").val(tagsIds).trigger('change');
 
                 $("#editAssignee").val(userIds).trigger('change');
+                $("#editPriority").val(task.priority).trigger('change');
                 $('#EditModal').modal('show');
             }
         },

@@ -25,7 +25,7 @@
         <div class="col-md-6">
             <div class="card mx-4">
                 <div class="card-body p-4">
-                    <form method="post" action="{{ url('/password/reset') }}">
+                    <form method="post" action="{{ route('password.update') }}">
                         {!! csrf_field() !!}
                         <h1>Reset Password</h1>
                         <p class="text-muted">Enter email and new password</p>
@@ -67,6 +67,7 @@
                                </span>
                             @endif
                         </div>
+                        <input type="hidden" name="token" value="{{$token}}">
                         <button type="submit" class="btn btn-block btn-primary btn-block btn-flat">
                             <i class="fa fa-btn fa-refresh"></i> Reset
                         </button>
