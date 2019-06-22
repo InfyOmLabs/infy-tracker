@@ -11,7 +11,7 @@
 
 %task-heading {
     display: inline-block;
-    width: 25%;
+    width: 20%;
     font-weight: 700;
 }
 
@@ -67,6 +67,25 @@
         margin-top: 15px;
         @extend %task-heading;
     }
+
+    &__priority-heading {
+        @extend %task-heading;
+
+        $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);
+
+        @each $name, $color in $priority {
+            &--#{$name} {
+                color: $color;
+                margin-top: 4px;
+                margin-right: 3px;
+            }
+        }
+    }
+}
+
+.priority--lowest,
+.priority--low {
+    transform: rotate(180deg);
 }
 
 .dz-remove {
@@ -92,15 +111,3 @@
     }
 }
 
-$priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);
-
-@each $name, $color in $priority {
-    .priority--#{$name} {
-        color: $color;
-    }
-}
-
-.priority--lowest,
-.priority--low {
-    transform: rotate(180deg);
-}
