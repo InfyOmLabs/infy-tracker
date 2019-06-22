@@ -190,7 +190,7 @@ class TaskController extends AppBaseController
      */
     public function deleteAttachment($id, Request $request){
         $this->taskRepository->deleteFile($id, $request->all());
-        return $this->sendSuccess('File has been deleted successfully');
+        return $this->sendSuccess('File has been deleted successfully.');
     }
 
     /**
