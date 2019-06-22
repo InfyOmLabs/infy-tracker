@@ -92,9 +92,11 @@ $(document).on('click', '[data-toggle="lightbox"]', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
 });
+
 function getRandomString(){
     return Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
 }
+
 //file upload dropzon js
 Dropzone.options.dropzone = {
     maxFilesize: 12,
@@ -114,7 +116,6 @@ Dropzone.options.dropzone = {
         $.get(taskUrl+'get-attachments/'+taskId, function(data) {
             $.each(data.data, function(key,value){
                 let mockFile = { name: value.name, size: value.size };
-
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
                 thisDropzone.emit("complete", mockFile);
@@ -147,6 +148,7 @@ Dropzone.options.dropzone = {
                 }
             });
         });
+
         this.on('addedfile', function(file) {
             previewFile(file);
         });
@@ -164,6 +166,7 @@ Dropzone.options.dropzone = {
             $('.dz-image').last().find('img').attr({width: '100%', height: '100%'});
         }
     },
+
     removedfile: function(file)
     {
         let fileuploded = file.previewElement.querySelector("[data-dz-name]");
@@ -202,7 +205,6 @@ Dropzone.options.dropzone = {
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
-            // $(file.previewElement).find(".dz-image img").addClass(newFileName);
         }
     },
     error: function(file, response)
@@ -211,7 +213,5 @@ Dropzone.options.dropzone = {
         let fileRef;
         return (fileRef = file.previewElement) != null ?
             fileRef.parentNode.removeChild(file.previewElement) : void 0;
-
-        return false;
     },
 };

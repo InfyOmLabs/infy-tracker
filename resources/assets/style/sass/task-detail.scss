@@ -1,5 +1,6 @@
 //task-detail style
 @import "variables";
+
 .flex-1 {
     flex: 1;
 }
@@ -8,27 +9,63 @@
     border: 1px solid $gray;
 }
 
-.task-detail-lg-8__heading {
-    width: 30%;
+%task-heading {
+    display: inline-block;
+    width: 25%;
+    font-weight: 700;
 }
 
-.task-div {
-    padding: 16px 16px 0px 16px;
-}
+.task-detail {
+    padding: 16px 16px 0 16px;
 
-.task-detail__width {
-    width: 100%;
-    margin-right: 10px;
-}
+    &__item {
+        width: 100%;
+        margin-right: 10px;
 
-// Large devices
-@media (min-width: #{$screen-lg-min}) {
-    .task-detail-lg-8__heading {
-        display: inline-block;
-        width: 18%;
+        @media (min-width: #{$screen-lg-min}) {
+            width: 40%;
+        }
     }
-    .task-detail__width {
-        width: 40%;
+
+    &__project-heading {
+        @extend %task-heading;
+    }
+
+    &__updated-heading {
+        @extend %task-heading;
+    }
+
+    &__status-heading {
+        @extend %task-heading;
+    }
+
+    &__created-heading {
+        @extend %task-heading;
+    }
+
+    &__reporter-heading {
+        @extend %task-heading;
+    }
+
+    &__due-date-heading {
+        @extend %task-heading;
+    }
+
+    &__assignee-heading {
+        @extend %task-heading;
+    }
+
+    &__tag-heading {
+        @extend %task-heading;
+    }
+
+    &__description-heading {
+        @extend %task-heading;
+    }
+
+    &__attachment-heading {
+        margin-top: 15px;
+        @extend %task-heading;
     }
 }
 
@@ -36,21 +73,22 @@
     width: 1.2em;
     height: 1.2em;
     position: absolute;
-    top: 0px;
+    top: 0;
     right: 5px;
     z-index: 1000;
-    font-size: 1.2em !important;
+    font-size: 1.2em;
     line-height: 1em;
     font-weight: bold;
-    border: 1px solid $gray !important;
+    border: 1px solid $gray;
     border-radius: 1.2em;
     color: $gray;
     background-color: $white;
     opacity: .5;
+
+    &:hover {
+        text-decoration: none !important;
+        opacity: 1;
+        color: $red;
+    }
 }
 
-.dz-remove:hover {
-    text-decoration: none !important;
-    opacity :1;
-    color: $red;
-}
