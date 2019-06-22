@@ -5,10 +5,13 @@ namespace App\Repositories;
 use App\Models\ActivityType;
 use App\Models\Tag;
 use App\Models\Task;
+use App\Models\TaskAttachment;
 use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use League\Container\Exception\NotFoundException;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -52,7 +55,7 @@ class TaskRepository extends BaseRepository
      */
     public function find($id, $columns = ['*'])
     {
-        return $this->findOrFail($id, ['tags', 'project', 'taskAssignee']);
+        return $this->findOrFail($id, ['tags', 'project', 'taskAssignee', 'attachments']);
     }
 
     /**
@@ -247,7 +250,6 @@ class TaskRepository extends BaseRepository
         return $task;
     }
 
-
     /**
      * @param $input
      *
@@ -269,5 +271,77 @@ class TaskRepository extends BaseRepository
             'activities' => ActivityType::get(['name', 'id']),
             'tasks' => $assignedTasks,
         ];
+    }
+
+    /**
+     * @param $id
+     * @param $file
+     * @return string
+     * @throws Exception
+     */
+    public function uploadFile($id, $file){
+        $destinationPath = public_path(Task::PATH);
+        $task = $this->findOrFail($id);
+        try {
+            $fileName = time().'_'.uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move($destinationPath, $fileName);
+            $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
+
+            DB::beginTransaction();
+            $task->attachments()->save($attachment);
+            DB::commit();
+            return $fileName;
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (file_exists($destinationPath.'/'.$fileName)) {
+                unlink($destinationPath.'/'.$fileName);
+            }
+            throw new UploadException($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $input
+     * @return bool
+     */
+    public function deleteFile($id, $input){
+        $file = $input['filename'];
+        $attachment = TaskAttachment::where('file','like',"%$file%")->where('task_id','=',$id)->first();
+        if(empty($attachment)){
+            throw new NotFoundException('File not found.');
+        }
+        $fileName = $attachment->getOriginal('file');
+        $attachment->delete();
+        $destinationPath = public_path(Task::PATH);
+
+        if (!empty($fileName)){
+            if (file_exists($destinationPath.'/'.$fileName)) {
+                unlink($destinationPath.'/'.$fileName);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getAttachments($id){
+        $task = $this->find($id);
+        $attachments = $task->attachments;
+
+        $result  = [];
+
+        $destinationPath = public_path(Task::PATH);
+        foreach ($attachments as $attachment){
+            $file = $attachment->getOriginal('file');
+            $obj['name'] = $file;
+            $obj['size'] = filesize($destinationPath.'/'.$file);
+            $obj['url'] = $attachment->file;
+            $result[] = $obj;
+        }
+        return $result;
     }
 }
