@@ -14,7 +14,16 @@ class MigrateValueOfTaskNumberInTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //
+            $projects = \App\Models\Project::all()->pluck('prefix', 'id')->toArray();
+            foreach ($projects as $key => $project) {
+                $tasks = \App\Models\Task::withTrashed()->whereProjectId($key)->get();
+                $taskNumber = 1;
+                foreach ($tasks as $task) {
+                    $task->task_number = $project . '-' . $taskNumber;
+                    $task->save();
+                    $taskNumber++;
+                }
+            }
         });
     }
 
@@ -26,7 +35,7 @@ class MigrateValueOfTaskNumberInTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //
+            \App\Models\Task::query()->update(['task_number' => null]);
         });
     }
 }
