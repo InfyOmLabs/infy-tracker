@@ -19,13 +19,23 @@ let tbl = $('#projects_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [2],
+            "targets": [0],
+            "orderable": false,
+            "className": 'text-center',
+            "width": '7%'
+        },
+        {
+            "targets": [3],
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
         }
     ],
     columns: [
+        {
+            data: 'prefix',
+            name: 'prefix'
+        },
         {
             data: 'name',
             name: 'name'
