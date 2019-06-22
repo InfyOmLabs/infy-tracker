@@ -45,6 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
+ * @property string|null $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
  */
 class Task extends Model
 {
@@ -54,6 +56,7 @@ class Task extends Model
     const STATUS_ACTIVE = 0;
 
     const STATUS_ARR = [1 => 'Completed', 0 => 'Active'];
+    const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';
 
     public $table = 'tasks';
@@ -65,7 +68,8 @@ class Task extends Model
         'status',
         'due_date',
         'deleted_by',
-        'created_by'
+        'created_by',
+        'priority'
     ];
 
     /**

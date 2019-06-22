@@ -11,6 +11,10 @@ $(function () {
         width: '100%',
         tags: true
     });
+    $('#editPriority').select2({
+        width: '100%',
+        placeholder: "Select Priority"
+    });
 
     $('#dueDate,#editDueDate').datetimepicker({
         format: 'YYYY-MM-DD',
@@ -55,6 +59,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editTagIds").val(tagsIds).trigger('change');
 
                 $("#editAssignee").val(userIds).trigger('change');
+                $("#editPriority").val(task.priority).trigger('change');
                 loadingButton.button('reset');
                 $('#EditModal').modal('show');
             }
