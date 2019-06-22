@@ -30,7 +30,9 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h4 class="mb-3">{{$task->title}}</h4>
+                                <h4 class="mb-3">
+                                    <span class="text-info pr-2">#{{$task->task_number}}</span>{{$task->title}}
+                                </h4>
                             </div>
                         </div>
                         <div class="row task-detail d-flex">
