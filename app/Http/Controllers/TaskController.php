@@ -76,7 +76,7 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
-        $task = $this->taskRepository->find($id);
+        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee'])->first();;
         $taskData = $this->taskRepository->getTaskData();
 
         return view('tasks.show', compact('task'))->with($taskData);

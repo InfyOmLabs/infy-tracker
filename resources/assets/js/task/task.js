@@ -86,7 +86,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a href="' + taskUrl + row.id + '" target="_blank">' + row.title + '</a>'
+                return '<a href="' + taskUrl + row.task_number + '" target="_blank">' + row.title + '</a>'
             },
             name: 'title'
         },
