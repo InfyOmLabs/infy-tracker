@@ -164,6 +164,7 @@ class TaskRepository extends BaseRepository
 
         $data['status'] = Task::STATUS_ARR;
         $data['tasks'] = $this->getTaskList($loginUserProjects);
+        $data['priority'] = Task::PRIORITY;
         return $data;
     }
 

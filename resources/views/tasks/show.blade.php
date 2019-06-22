@@ -68,6 +68,11 @@
                                                 <div class="mb-3"><span
                                                             class="task-detail__heading">Updated At:</span> {{$task->updated_at->format('d F, Y h:i A')}}
                                                 </div>
+                                                <div class="mb-3"><span
+                                                            class="task-detail__heading">Priority:</span> <i
+                                                            class="fa fa-arrow-up priority-{{$task->priority}}"
+                                                            aria-hidden="true"></i> {{ucfirst($task->priority)}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -452,3 +452,11 @@ table.dataTable {
     color: $green;
     font-weight: bold;
 }
+
+$priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);
+
+@each $name, $color in $priority {
+    .priority-#{$name} {
+        color: $color;
+    }
+}
