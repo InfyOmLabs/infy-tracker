@@ -237,7 +237,7 @@ class TaskController extends AppBaseController
 
     public function editComment($id, Request $request){
         $comment = Comment::findOrFail($id);
-        $comment->comment = $request->get('comment');
+        $comment->comment = htmlentities($request->get('comment'));
         $comment->save();
         return $this->sendSuccess('Comment has been updated successfully.');
     }

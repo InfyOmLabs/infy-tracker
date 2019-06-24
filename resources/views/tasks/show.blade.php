@@ -129,23 +129,24 @@
                                               <a>{{$comment['createdUser']->name}}</a>
                                               <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
                                               <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
+                                              <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
                                             </span>
                                                 <span class="description">{{time_elapsed_string($comment->created_at)}}</span>
                                             </div>
                                             <!-- /.user-block -->
-                                            <p class="comment comment-display {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
-                                                {{$comment->comment}}
-                                            </p>
-                                            <p class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
-                                                {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
-                                            </p>
+                                            <div class="comment comment-display {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
+                                                <?php echo html_entity_decode($comment->comment) ?>
+                                            </div>
+                                            <div class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
+                                                {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control  comment-editor', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
+                                            </div>
                                         </div>
                                     @endforeach
                                 </div>
                                 <div>
                                     <div class="row">
-                                        <div class="form-group col-sm-6">
-                                            {!! Form::textarea('comment', null, ['class' => 'form-control', 'id'=>'comment', 'rows' => 5, 'placeholder' => 'Add a comment...']) !!}
+                                        <div class="form-group col-sm-8">
+                                            {!! Form::textarea('comment', null, ['class' => 'form-control comment-editor', 'id'=>'comment', 'rows' => 5, 'placeholder' => 'Add a comment...']) !!}
                                         </div>
                                     </div>
                                     <div class="row">
@@ -172,6 +173,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js.map"></script>
+    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
 @endsection
 @section('scripts')
     <script>

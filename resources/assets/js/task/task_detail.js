@@ -231,23 +231,24 @@ function addCommentDiv(comment) {
         '      <a>'+ comment.created_user.name +'</a>\n' +
         '      <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash"></i></a>\n' +
         '      <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>\n' +
+        '      <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>\n' +
         '    </span>\n' +
         '        <span class="description">just now</span>\n' +
         '    </div>\n' +
         '    <!-- /.user-block -->\n' +
-        '    <p class="comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
+        '    <div class="comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
                 comment.comment +
-        '    </p>\n' +
-        '    <p class="comment d-none comment-edit comment-edit-'+id+'">\n' +
+        '    </div>\n' +
+        '    <div class="comment d-none comment-edit comment-edit-'+id+'">\n' +
         '        <textarea class="form-control" id="comment-edit-'+id+'" rows="4" name="comment" cols="50">'+comment.comment+'</textarea>\n' +
-        '    </p>\n' +
+        '    </div>\n' +
         '</div>';
 };
 
 $('#btnComment').click(function (event) {
     let loadingButton = jQuery(this).find("#btnComment");
     loadingButton.button('loading');
-    let comment = $('#comment').val();
+    let comment = CKEDITOR.instances.comment.getData();
     if(comment == ''){
         return false;
     }
@@ -260,8 +261,11 @@ $('#btnComment').click(function (event) {
         data: { 'comment': comment, 'task_id': taskId },
         success: function (result) {
             if (result.success) {
+                let commentId = result.data.comment.id;
                 commentDiv = addCommentDiv(result.data.comment);
                 $(".comments__section").append(commentDiv);
+                $(".comment-display-"+commentId).html(comment);
+                CKEDITOR.instances.comment.setData('');
             }
             loadingButton.button('reset');
         },
@@ -295,16 +299,35 @@ $(document).on('click', '.del-comment', function (event) {
 
 $(document).on('click', ".comment-display" ,function () {
     let commentId = $(this).data('id');
+    let commentClass = "comment-edit-"+commentId;
     $(this).addClass('d-none');
+
+    if (!CKEDITOR.instances[commentClass]) {
+        CKEDITOR.replace( commentClass, {
+            language: 'en',
+            height: '100px',
+        });
+    }
+
     $(".comment-edit-"+commentId).removeClass('d-none');
     $(".comment-edit-icon-"+commentId).removeClass('d-none');
+    $(".comment-cancel-icon-"+commentId).removeClass('d-none');
+});
+
+$(document).on('click', ".cancel-comment", function (event) {
+    let commentId = $(this).data('id');
+    $(this).addClass('d-none');
+    $(".comment-display-"+commentId).removeClass('d-none');
+    $(".comment-edit-"+commentId).addClass('d-none');
+    $(".comment-edit-icon-"+commentId).addClass('d-none');
 });
 
 $(document).on('click', ".edit-comment", function (event) {
     let commentId = $(this).data('id');
     // var loadingButton = jQuery(this).find("#btnComment");
     // loadingButton.button('loading');
-    var comment = $("#comment-edit-"+commentId).val();
+    let commentClass = "comment-edit-"+commentId;
+    let comment = CKEDITOR.instances[commentClass].getData();
     if(comment == ''){
         return false;
     }
@@ -317,9 +340,10 @@ $(document).on('click', ".edit-comment", function (event) {
         data: { 'comment': comment.trim() },
         success: function (result) {
             if (result.success) {
-                $(".comment-display-"+commentId).text(comment).removeClass('d-none');
+                $(".comment-display-"+commentId).html(comment).removeClass('d-none');
                 $(".comment-edit-"+commentId).addClass('d-none');
                 $(".comment-edit-icon-"+commentId).addClass('d-none');
+                $(".comment-cancel-icon-"+commentId).addClass('d-none');
             }
         },
         error: function (result) {
@@ -335,4 +359,9 @@ $(document).on('mouseenter', ".post", function () {
 
 $(document).on('mouseleave', ".post", function () {
     $(this).find('.del-comment').addClass('d-none');
+});
+
+CKEDITOR.replace( 'comment', {
+    language: 'en',
+    height: '100px',
 });
