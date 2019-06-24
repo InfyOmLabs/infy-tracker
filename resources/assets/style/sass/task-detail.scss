@@ -54,3 +54,53 @@
     opacity :1;
     color: $red;
 }
+
+//comment section design
+.post {
+    border-bottom: 1px solid #d2d6de;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    color: #666;
+}
+.post .user-block {
+    margin-bottom: 15px;
+}
+.user-block img {
+    width: 40px;
+    height: 40px;
+    float: left;
+}
+.user-block a, .user-block a:hover{
+    text-decoration: none;
+}
+.user-block .cui-trash{
+    color: $red;
+}
+.img-bordered-sm {
+    border: 2px solid #d2d6de;
+    padding: 2px;
+}
+.img-circle {
+    border-radius: 50%;
+}
+img {
+    vertical-align: middle;
+}
+.user-block .username {
+    font-size: 16px;
+    font-weight: 600;
+}
+.user-block .username, .user-block .description, .user-block .comment {
+    display: block;
+    margin-left: 50px;
+}
+.user-block .description {
+    color: #999;
+    font-size: 13px;
+}
+.post .comment {
+    margin-left: 50px;
+}
+.comments__section {
+    padding: 25px 0px;
+}

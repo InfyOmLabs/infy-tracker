@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
+use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskAttachment;
@@ -10,6 +11,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use League\Container\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -342,5 +344,11 @@ class TaskRepository extends BaseRepository
             $result[] = $obj;
         }
         return $result;
+    }
+
+    public function addComment($input){
+        $input['created_by'] = Auth::id();
+        $comment = Comment::create($input);
+        return Comment::with('createdUser')->findOrFail($comment->id);
     }
 }

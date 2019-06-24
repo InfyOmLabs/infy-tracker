@@ -25,6 +25,7 @@
             <div class="row">
                 <div class="card w-100">
                     <div class="card-body">
+                        <div class="alert alert-danger" id="taskValidationErrorsBox" style="display: none"></div>
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4 class="mb-3">{{$task->title}}</h4>
@@ -97,6 +98,50 @@
                                       class="dropzone" id="dropzone">
                                     {{csrf_field()}}
                                 </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="comments__section">
+                                    <div>
+                                        <div class="mb-3 d-flex">
+                                            <span class="font-weight-bold">Comments</span>
+                                        </div>
+                                    </div>
+                                    @foreach($task->comments as $comment)
+                                        <div class="post clearfix" id="{{ 'comment__div-'.$comment->id }}">
+                                            <div class="user-block">
+                                                <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">
+                                                <span class="username">
+                                              <a>{{$comment['createdUser']->name}}</a>
+                                              <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
+                                              <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
+                                            </span>
+                                                <span class="description">{{time_elapsed_string($comment->created_at)}}</span>
+                                            </div>
+                                            <!-- /.user-block -->
+                                            <p class="comment comment-display {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
+                                                {{$comment->comment}}
+                                            </p>
+                                            <p class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
+                                                {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            {!! Form::textarea('comment', null, ['class' => 'form-control', 'id'=>'comment', 'rows' => 5, 'placeholder' => 'Add a comment...']) !!}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            {!! Form::button('Save', ['type'=>'button','class' => 'btn btn-primary','id'=>'btnComment','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
+                                            <button type="button" id="btnCancel" class="btn btn-light ml-1" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

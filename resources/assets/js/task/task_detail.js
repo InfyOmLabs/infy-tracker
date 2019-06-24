@@ -215,3 +215,118 @@ Dropzone.options.dropzone = {
         return false;
     },
 };
+
+function addCommentDiv(comment) {
+    let id = comment.id;
+    return '<div class="post clearfix" id="comment__div-'+id+'">\n' +
+        '    <div class="user-block">\n' +
+        '        <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">\n' +
+        '        <span class="username">\n' +
+        '      <a>'+ comment.created_user.name +'</a>\n' +
+        '      <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash"></i></a>\n' +
+        '      <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>\n' +
+        '    </span>\n' +
+        '        <span class="description">just now</span>\n' +
+        '    </div>\n' +
+        '    <!-- /.user-block -->\n' +
+        '    <p class="comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
+                comment.comment +
+        '    </p>\n' +
+        '    <p class="comment d-none comment-edit comment-edit-'+id+'">\n' +
+        '        <textarea class="form-control" id="comment-edit-'+id+'" rows="4" name="comment" cols="50">'+comment.comment+'</textarea>\n' +
+        '    </p>\n' +
+        '</div>';
+};
+
+$('#btnComment').click(function (event) {
+    let loadingButton = jQuery(this).find("#btnComment");
+    loadingButton.button('loading');
+    let comment = $('#comment').val();
+    if(comment == ''){
+        return false;
+    }
+    if(comment.trim() == ''){
+        return false;
+    }
+    $.ajax({
+        url: taskUrl + 'add-comment',
+        type: 'post',
+        data: { 'comment': comment, 'task_id': taskId },
+        success: function (result) {
+            if (result.success) {
+                commentDiv = addCommentDiv(result.data.comment);
+                $(".comments__section").append(commentDiv);
+            }
+            loadingButton.button('reset');
+        },
+        error: function (result) {
+            loadingButton.button('reset');
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('click', '.del-comment', function (event) {
+    let commentId = $(this).data('id');
+    // var loadingButton = jQuery(this).find("#btnComment");
+    // loadingButton.button('loading');
+    // var comment = $('#comment').val();
+    $.ajax({
+        url: taskUrl + 'del-comment/' + commentId,
+        type: 'get',
+        success: function (result) {
+            if (result.success) {
+                let commetDiv = 'comment__div-'+commentId;
+                $("#"+commetDiv).remove();
+            }
+        },
+        error: function (result) {
+            // loadingButton.button('reset');
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('click', ".comment-display" ,function () {
+    let commentId = $(this).data('id');
+    $(this).addClass('d-none');
+    $(".comment-edit-"+commentId).removeClass('d-none');
+    $(".comment-edit-icon-"+commentId).removeClass('d-none');
+});
+
+$(document).on('click', ".edit-comment", function (event) {
+    let commentId = $(this).data('id');
+    // var loadingButton = jQuery(this).find("#btnComment");
+    // loadingButton.button('loading');
+    var comment = $("#comment-edit-"+commentId).val();
+    if(comment == ''){
+        return false;
+    }
+    if(comment.trim() == ''){
+        return false;
+    }
+    $.ajax({
+        url: taskUrl + 'edit-comment/' + commentId,
+        type: 'post',
+        data: { 'comment': comment.trim() },
+        success: function (result) {
+            if (result.success) {
+                $(".comment-display-"+commentId).text(comment).removeClass('d-none');
+                $(".comment-edit-"+commentId).addClass('d-none');
+                $(".comment-edit-icon-"+commentId).addClass('d-none');
+            }
+        },
+        error: function (result) {
+            // loadingButton.button('reset');
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('mouseenter', ".post", function () {
+    $(this).find('.del-comment').removeClass('d-none');
+});
+
+$(document).on('mouseleave', ".post", function () {
+    $(this).find('.del-comment').addClass('d-none');
+});

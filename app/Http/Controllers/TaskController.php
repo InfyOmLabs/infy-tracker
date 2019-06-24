@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Comment;
 use App\Models\Task;
 use App\Queries\TaskDataTable;
 use App\Repositories\TaskRepository;
@@ -74,7 +75,8 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
-        $task = $this->taskRepository->find($id);
+        $task = Task::with(['tags', 'project', 'taskAssignee', 'attachments', 'comments' , 'comments.createdUser'])
+                    ->find($id);
         $taskData = $this->taskRepository->getTaskData();
         $attachmentPath = Task::PATH;
         $attachmentUrl = url($attachmentPath);
@@ -217,6 +219,23 @@ class TaskController extends AppBaseController
     public function getAttachment($id){
         $result = $this->taskRepository->getAttachments($id);
         return $this->sendResponse($result, 'Task retrieved successfully.');
+    }
+
+    public function addComment(Request $request) {
+        $comment = $this->taskRepository->addComment($request->all());
+        return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
+    }
+
+    public function deleteComment($id){
+        Comment::findOrFail($id)->delete();
+        return $this->sendSuccess('Comment has been deleted successfully.');
+    }
+
+    public function editComment($id, Request $request){
+        $comment = Comment::findOrFail($id);
+        $comment->comment = $request->get('comment');
+        $comment->save();
+        return $this->sendSuccess('Comment has been updated successfully.');
     }
 
 }

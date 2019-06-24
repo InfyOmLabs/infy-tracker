@@ -28,6 +28,8 @@ use Eloquent as Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $prefix
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project wherePrefix($value)
  */
 class Project extends Model
 {
