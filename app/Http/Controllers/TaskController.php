@@ -63,8 +63,10 @@ class TaskController extends AppBaseController
     public function store(CreateTaskRequest $request)
     {
         $input = $request->all();
-        $this->taskRepository->store($this->fill($input));
-
+        /** @var Task $task */
+        $task = $this->taskRepository->store($this->fill($input));
+        $indexNumber = $this->taskRepository->getIndex($task->project_id);
+        $task->update(['task_number' => $indexNumber]);
         return $this->sendSuccess('Task created successfully.');
     }
 
@@ -74,10 +76,12 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
-        $task = $this->taskRepository->find($id);
+        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee'])->first();;
         $taskData = $this->taskRepository->getTaskData();
+        $attachmentPath = Task::PATH;
+        $attachmentUrl = url($attachmentPath);
 
-        return view('tasks.show', compact('task'))->with($taskData);
+        return view('tasks.show', compact('task','attachmentUrl'))->with($taskData);
     }
 
     /**
@@ -180,4 +184,41 @@ class TaskController extends AppBaseController
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
         return $input;
     }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteAttachment($id, Request $request){
+        $this->taskRepository->deleteFile($id, $request->all());
+        return $this->sendSuccess('File has been deleted successfully.');
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function addAttachment($id, Request $request){
+        $input = $request->all();
+        $file = $input['file'];
+        $extension = $file->getClientOriginalExtension();
+        if(!in_array($extension,['xls','pdf','doc','docx','xlsx','jpg','jpeg','png'])){
+            return $this->sendError('You can not upload this file.');
+        }
+        $fileName = $this->taskRepository->uploadFile($id, $input['file']);
+        return $this->sendResponse(['fileName' => $fileName], 'File has been uploaded successfully.');
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function getAttachment($id){
+        $result = $this->taskRepository->getAttachments($id);
+        return $this->sendResponse($result, 'Task retrieved successfully.');
+    }
+
 }

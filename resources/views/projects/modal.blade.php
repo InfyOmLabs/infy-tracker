@@ -1,4 +1,4 @@
-<div id="AddModal" class="modal fade" role="dialog" tabindex="-1">
+<div id="AddModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -12,7 +12,13 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('name', 'Name') !!}<span class="required">*</span>
-                        {!! Form::text('name', '', ['id'=>'name','class' => 'form-control','required']) !!}
+                        {!! Form::text('name', null, ['id'=>'name','class' => 'form-control','required']) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('prefix', 'Prefix') !!}<span class="required">*</span>
+                        {!! Form::text('prefix', null, ['id'=>'prefix','class' => 'form-control','required','maxlength'=>'6','onkeypress'=>'return (event.charCode === 8 || (event.charCode >= 65 && event.charCode <= 90)||(event.charCode >= 95 && event.charCode <= 122))||(event.charCode === 0 || (event.charCode >= 48 && event.charCode <= 57))']) !!}
                     </div>
                 </div>
                 <div class="row">

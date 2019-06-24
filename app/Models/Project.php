@@ -28,6 +28,8 @@ use Eloquent as Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $prefix
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project wherePrefix($value)
  */
 class Project extends Model
 {
@@ -41,6 +43,7 @@ class Project extends Model
         'description',
         'client_id',
         'created_by',
+        'prefix'
     ];
 
     /**
@@ -63,13 +66,22 @@ class Project extends Model
      * @var array
      */
     public static $rules = [
-        'name'      => 'required|unique:projects,name',
+        'name' => 'required|unique:projects,name',
         'client_id' => 'required',
+        'prefix' => 'required|alpha_num|min:6|unique:projects,prefix',
     ];
 
     public static $messages = [
-        'unique' => 'Project with same name already exist.',
+        'name.unique' => 'Project with same name already exist.',
     ];
+
+    /**
+     * @param $value
+     */
+    public function setPrefixAttribute($value)
+    {
+        $this->attributes['prefix'] = strtoupper($value);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
