@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\MailResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -43,6 +44,8 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $image_path
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
  */
 class User extends Authenticatable
 {
@@ -106,6 +109,17 @@ class User extends Authenticatable
         'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
         'password_confirmation' => 'min:6'
     ];
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MailResetPasswordNotification($token));
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

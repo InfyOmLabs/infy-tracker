@@ -11,6 +11,10 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
+    $('#priority,#editPriority').select2({
+        width: '100%',
+        placeholder: "Select Priority"
+    });
     $('#tagIds,#assignee').select2({
         width: '100%',
         tags: true
@@ -24,7 +28,7 @@ $(function () {
             down: "icon-angle-down"
         },
         sideBySide: true,
-        minDate: new Date()
+        minDate: moment().millisecond(0).second(0).minute(0).hour(0)
     });
 
     $(document).ajaxComplete(function (result) {
@@ -86,7 +90,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a href="' + taskUrl + row.id + '" target="_blank">' + row.title + '</a>'
+                return '<a href="' + taskUrl + row.task_number + '" target="_blank">' + row.title + '</a>'
             },
             name: 'title'
         },
@@ -187,6 +191,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editTagIds").val(tagsIds).trigger('change');
 
                 $("#editAssignee").val(userIds).trigger('change');
+                $("#editPriority").val(task.priority).trigger('change');
                 $('#EditModal').modal('show');
             }
         },
@@ -294,7 +299,7 @@ $('#editForm').submit(function (event) {
 
 $('#AddModal').on('hidden.bs.modal', function () {
     $('#projectId').val(null).trigger("change");
-    $('#assignTo').val(null).trigger("change");
+    $('#assignee').val(null).trigger("change");
     $('#tagIds').val(null).trigger("change");
     resetModalForm('#addNewForm', '#validationErrorsBox');
 });

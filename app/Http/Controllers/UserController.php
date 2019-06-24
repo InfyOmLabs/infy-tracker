@@ -197,4 +197,14 @@ class UserController extends AppBaseController
         $this->userRepository->update($input, Auth::user()->id);
         return $this->sendSuccess('Profile updated successfully.');
     }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function activeDeActiveUser($id)
+    {
+        $this->userRepository->activeDeActiveUser($id);
+        return $this->sendSuccess('User updated successfully.');
+    }
 }

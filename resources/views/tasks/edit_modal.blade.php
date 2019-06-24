@@ -1,4 +1,4 @@
-<div id="EditModal" class="modal fade" role="dialog"  tabindex="-1">
+<div id="EditModal" class="modal fade" role="dialog" >
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -20,6 +20,12 @@
                     <div class="form-group col-sm-12">
                         {!! Form::label('title', 'Title') !!}<span class="required">*</span>
                         {!! Form::text('title', null, ['id'=>'editTitle','class' => 'form-control','required']) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('priority', 'Priority') !!}<span class="required">*</span>
+                        {!! Form::select('priority',$priority, null, ['class' => 'form-control','id'=>'editPriority','required']) !!}
                     </div>
                 </div>
                 <div class="row">

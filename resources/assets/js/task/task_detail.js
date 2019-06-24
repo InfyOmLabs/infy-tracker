@@ -11,6 +11,10 @@ $(function () {
         width: '100%',
         tags: true
     });
+    $('#editPriority').select2({
+        width: '100%',
+        placeholder: "Select Priority"
+    });
 
     $('#dueDate,#editDueDate').datetimepicker({
         format: 'YYYY-MM-DD',
@@ -55,6 +59,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editTagIds").val(tagsIds).trigger('change');
 
                 $("#editAssignee").val(userIds).trigger('change');
+                $("#editPriority").val(task.priority).trigger('change');
                 loadingButton.button('reset');
                 $('#EditModal').modal('show');
             }
@@ -95,6 +100,7 @@ $(document).on('click', '[data-toggle="lightbox"]', function(event) {
 function getRandomString(){
     return Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
 }
+
 //file upload dropzon js
 Dropzone.options.dropzone = {
     maxFilesize: 12,

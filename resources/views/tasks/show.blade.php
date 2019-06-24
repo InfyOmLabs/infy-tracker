@@ -8,7 +8,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"/>
     <link href="{{mix('assets/style/css/task-detail.css')}}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
@@ -18,7 +18,10 @@
             <div class="page-header">
                 <h3>Task detail</h3>
                 <div class="filter-container__btn">
-                    <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}" data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">Edit Detail</button>
+                    <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}"
+                            data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">
+                        Edit Detail
+                    </button>
                     <a class="btn btn-secondary" href="{{url(route('tasks.index'))}}">Back</a>
                 </div>
             </div>
@@ -28,73 +31,83 @@
                         <div class="alert alert-danger" id="taskValidationErrorsBox" style="display: none"></div>
                         <div class="row">
                             <div class="col-lg-12">
-                                <h4 class="mb-3">{{$task->title}}</h4>
+                                <h4 class="mb-3">
+                                    <span class="text-info pr-2">#{{$task->task_number}}</span>{{$task->title}}
+                                </h4>
                             </div>
                         </div>
-                        <div class="row task-div d-flex">
-                            <div class="mb-3 d-flex task-detail__width">
-                                <span class="task-detail__heading font-weight-bold">Project:</span>
+                        <div class="row task-detail d-flex">
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__project-heading">Project</span>
                                 <span class="flex-1">{{$task->project->name}}</span>
                             </div>
-                            <div class="mb-3 d-flex task-detail__width">
-                                <span class="task-detail__heading font-weight-bold">Updated At:</span>
-                                <span class="flex-1">{{$task->updated_at->format('d F, Y h:i A')}}</span>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__created-heading">Created</span>
+                                <span class="flex-1">{{$task->created_at->format('dS F, Y h:i A')}}</span>
                             </div>
-                            <div class="mb-3 d-flex task-detail__width">
-                                <span class="task-detail__heading font-weight-bold">Status:</span>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__status-heading">Status</span>
                                 <span class="flex-1">
                                     @if($task->status=='0')
-                                        <span class="badge badge-primary text-uppercase">started</span>
+                                        <span class="badge badge-primary text-uppercase">Started</span>
                                     @else
                                         <span class="badge badge-success text-uppercase">Completed</span>
                                     @endif
                                 </span>
                             </div>
-                            <div class="mb-3 d-flex task-detail__width">
-                                <span class="task-detail__heading font-weight-bold">Created At:</span>
-                                <span class="flex-1">{{$task->created_at->format('d F, Y h:i A')}}</span>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__updated-heading">Updated</span>
+                                <span class="flex-1">{{$task->updated_at->format('dS F, Y h:i A')}}</span>
                             </div>
-                            <div class="mb-3 d-flex task-detail__width">
-                                <span class="task-detail__heading font-weight-bold">Reporter:</span>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__reporter-heading">Reporter</span>
                                 <span class="flex-1">{{$task->createdUser->name}}</span>
                             </div>
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__priority-heading">Priority</span>
+                                <i class="fa fa-arrow-up task-detail__priority-heading--{{$task->priority}}" aria-hidden="true"></i>
+                                {{ucfirst($task->priority)}}
+                            </div>
                             @if(!empty($task->due_date))
-                                <div class="mb-3 d-flex task-detail__width">
-                                    <span class="task-detail__heading font-weight-bold">Due date:</span>
-                                    <span class="flex-1">{{$task->due_date}}</span>
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__due-date-heading">Due Date</span>
+                                    <span
+                                            class="flex-1">{{\Carbon\Carbon::parse($task->due_date)->format('dS F, Y')}}</span>
                                 </div>
                             @endif
                             @if(!empty($task->taskAssignee->pluck('name')->toArray()))
-                                <div class="mb-3 d-flex task-detail__width">
-                                    <span class="task-detail__heading font-weight-bold">Assignee:</span>
-                                    <span class="flex-1">{{implode(", ",$task->taskAssignee->pluck('name')->toArray())}}</span>
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__assignee-heading">Assignee</span>
+                                    <span
+                                            class="flex-1">{{implode(", ",$task->taskAssignee->pluck('name')->toArray())}}</span>
                                 </div>
                             @endif
                             @if(!empty($task->tags->pluck('name')->toArray()))
-                                <div class="mb-3 d-flex task-detail__width">
-                                    <span class="task-detail__heading font-weight-bold">Tags:</span>
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__tag-heading">Tags</span>
                                     <span class="flex-1">{{implode(", ",$task->tags->pluck('name')->toArray())}}</span>
                                 </div>
                             @endif
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
-                                <div class="mb-3 d-flex">
-                                    <span class="task-detail-lg-8__heading font-weight-bold">Description:</span>
-                                    <span class="flex-1">{{$task->description}}</span>
-                                </div>
+                                <span class="task-detail__description-heading">Description</span>
+                            </div>
+                            <div class="col-lg-8 col-sm-12">
+                                <span>{{$task->description}}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
                                 <div class="mb-3 d-flex">
-                                    <span class="font-weight-bold">Attachments</span>
+                                    <span class="task-detail__attachment-heading">Attachments</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
-                                <form method="post" action="{{url("tasks/add-attachment/$task->id")}}" enctype="multipart/form-data"
+                                <form method="post" action="{{url("tasks/add-attachment/$task->id")}}"
+                                      enctype="multipart/form-data"
                                       class="dropzone" id="dropzone">
                                     {{csrf_field()}}
                                 </form>
