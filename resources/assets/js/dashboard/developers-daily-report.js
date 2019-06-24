@@ -79,7 +79,7 @@ window.prepareDeveloperWorkReport = function (result) {
                         let m = this.y * 60;
                         const h = time[0]
                         const rm = m - (h * 60);
-                        return this.y === 0 ? 'On Leave' : h + ':' + Math.floor(rm) + ' hr'
+                        return h + ':' + Math.floor(rm) + ' hr'
                     },
                 },
             }
