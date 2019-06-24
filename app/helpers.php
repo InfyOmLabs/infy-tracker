@@ -37,5 +37,10 @@ function roundToQuarterHour($totalMinutes)
 {
     $hours = intval($totalMinutes / 60);
     $minutes = $totalMinutes % 60;
-    printf("%02d:%02d", $hours, $minutes);
+    if ($hours > 0) {
+        printf("%02d:%02d h", $hours, $minutes);
+    } else {
+        printf("%02d:%02d m", $hours, $minutes);
+    }
+
 }

@@ -133,16 +133,9 @@ $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #3366
     transform: rotate(180deg);
 }
 
-.time-tracker-table {
-    th {
-        &:last-child {
-            white-space: nowrap;
-        }
+#timeTrackingModal {
+    .modal-content {
+        max-height: 92vh;
     }
 
-    td {
-        &:last-child {
-            text-align: center;
-        }
-    }
 }

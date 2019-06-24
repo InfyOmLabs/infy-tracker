@@ -7,21 +7,23 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body overflow-auto">
                 <table class="table table-hover time-tracker-table">
                     <thead>
                     <tr>
                         <th scope="col">Note</th>
                         <th scope="col">Activity</th>
-                        <th scope="col">Total Minute(s)</th>
+                        <th scope="col" class="text-nowrap text-center">Track By</th>
+                        <th scope="col" class="text-nowrap text-center">Total Minute(s)</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($task->timeEntries as $entry)
                         <tr>
-                            <td>{{$entry->note}}</td>
+                            <td>{!! $entry->note !!}</td>
                             <td>{{$entry->activityType->name}}</td>
-                            <td>{{$entry->duration}}</td>
+                            <td class="text-nowrap text-center">{{$entry->user->name}}</td>
+                            <td class="text-nowrap text-center">{{$entry->duration}}</td>
                         </tr>
                     @endforeach
                     </tbody>
