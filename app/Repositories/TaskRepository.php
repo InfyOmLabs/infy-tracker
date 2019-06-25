@@ -367,6 +367,10 @@ class TaskRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param $input
+     * @return Comment|Comment[]|Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
     public function addComment($input){
         $input['created_by'] = Auth::id();
         $input['comment'] = htmlentities($input['comment']);

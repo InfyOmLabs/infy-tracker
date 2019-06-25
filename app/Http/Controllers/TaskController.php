@@ -225,16 +225,30 @@ class TaskController extends AppBaseController
         return $this->sendResponse($result, 'Task retrieved successfully.');
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function addComment(Request $request) {
         $comment = $this->taskRepository->addComment($request->all());
         return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
     }
 
+    /**
+     * @param $id
+     * @return JsonResponse
+     * @throws Exception
+     */
     public function deleteComment($id){
         Comment::findOrFail($id)->delete();
         return $this->sendSuccess('Comment has been deleted successfully.');
     }
 
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function editComment($id, Request $request){
         $comment = Comment::findOrFail($id);
         $comment->comment = htmlentities($request->get('comment'));
