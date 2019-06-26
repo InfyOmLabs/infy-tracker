@@ -126,20 +126,24 @@
                                             <div class="user-block">
                                                 <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">
                                                 <span class="username">
-                                              <a>{{$comment['createdUser']->name}}</a>
-                                              <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
-                                              <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
-                                              <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
+                                                <a>{{$comment['createdUser']->name}}</a>
+                                                @if($comment->created_by == Auth::id())
+                                                    <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
+                                                    <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
+                                                    <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
+                                                @endif
                                             </span>
                                                 <span class="description">{{time_elapsed_string($comment->created_at)}}</span>
                                             </div>
                                             <!-- /.user-block -->
-                                            <div class="comment comment-display {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
+                                            <div class="comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
                                                 <?php echo html_entity_decode($comment->comment) ?>
                                             </div>
-                                            <div class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
-                                                {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control  comment-editor', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
-                                            </div>
+                                            @if($comment->created_by == Auth::id())
+                                                <div class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
+                                                    {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control  comment-editor', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
+                                                </div>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>
