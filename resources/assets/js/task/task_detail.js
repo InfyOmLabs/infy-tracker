@@ -208,7 +208,6 @@ Dropzone.options.dropzone = {
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
-            // $(file.previewElement).find(".dz-image img").addClass(newFileName);
         }
     },
     error: function(file, response)
@@ -222,9 +221,9 @@ Dropzone.options.dropzone = {
     },
 };
 
-function addCommentDiv(comment) {
+function addCommentSection(comment) {
     let id = comment.id;
-    return '<div class="post clearfix" id="comment__div-'+id+'">\n' +
+    return '<div class="post clearfix" id="comment__'+id+'">\n' +
         '    <div class="user-block">\n' +
         '        <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">\n' +
         '        <span class="username">\n' +
@@ -249,20 +248,17 @@ $('#btnComment').click(function (event) {
     let loadingButton = jQuery(this).find("#btnComment");
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
-    if(comment == ''){
-        return false;
-    }
-    if(comment.trim() == ''){
+    if(comment == '' || comment.trim() == ''){
         return false;
     }
     $.ajax({
-        url: taskUrl + 'add-comment',
+        url: baseUrl + 'comments/new',
         type: 'post',
         data: { 'comment': comment, 'task_id': taskId },
         success: function (result) {
             if (result.success) {
                 let commentId = result.data.comment.id;
-                commentDiv = addCommentDiv(result.data.comment);
+                commentDiv = addCommentSection(result.data.comment);
                 $(".comments__section").append(commentDiv);
                 $(".comment-display-"+commentId).html(comment);
                 CKEDITOR.instances.comment.setData('');
@@ -278,20 +274,16 @@ $('#btnComment').click(function (event) {
 
 $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
-    // var loadingButton = jQuery(this).find("#btnComment");
-    // loadingButton.button('loading');
-    // var comment = $('#comment').val();
     $.ajax({
-        url: taskUrl + 'del-comment/' + commentId,
+        url: baseUrl + 'comments/' + commentId + '/delete',
         type: 'get',
         success: function (result) {
             if (result.success) {
-                let commetDiv = 'comment__div-'+commentId;
+                let commetDiv = 'comment__'+commentId;
                 $("#"+commetDiv).remove();
             }
         },
         error: function (result) {
-            // loadingButton.button('reset');
             printErrorMessage("#taskValidationErrorsBox", result);
         }
     });
@@ -328,14 +320,11 @@ $(document).on('click', ".edit-comment", function (event) {
     // loadingButton.button('loading');
     let commentClass = "comment-edit-"+commentId;
     let comment = CKEDITOR.instances[commentClass].getData();
-    if(comment == ''){
-        return false;
-    }
-    if(comment.trim() == ''){
+    if(comment == '' || comment.trim() == ''){
         return false;
     }
     $.ajax({
-        url: taskUrl + 'edit-comment/' + commentId,
+        url: baseUrl + 'comments/' + commentId + '/update',
         type: 'post',
         data: { 'comment': comment.trim() },
         success: function (result) {

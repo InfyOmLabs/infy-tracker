@@ -61,9 +61,9 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('tasks/add-attachment/{id}', 'TaskController@addAttachment');
     Route::post('tasks/delete-attachment/{id}', 'TaskController@deleteAttachment');
     Route::get('tasks/get-attachments/{id}', 'TaskController@getAttachment');
-    Route::post('tasks/add-comment', 'TaskController@addComment');
-    Route::post('tasks/edit-comment/{id}', 'TaskController@editComment');
-    Route::get('tasks/del-comment/{id}', 'TaskController@deleteComment');
+    Route::post('comments/new', 'CommentController@addComment');
+    Route::post('comments/{id}/update', 'CommentController@editComment');
+    Route::get('comments/{id}/delete', 'CommentController@deleteComment');
 
     Route::resource('timeEntries', 'TimeEntryController');
     Route::post('timeEntries/{id}/update', 'TimeEntryController@update');

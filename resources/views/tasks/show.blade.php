@@ -122,7 +122,7 @@
                                         </div>
                                     </div>
                                     @foreach($task->comments as $comment)
-                                        <div class="post clearfix" id="{{ 'comment__div-'.$comment->id }}">
+                                        <div class="post clearfix" id="{{ 'comment__'.$comment->id }}">
                                             <div class="user-block">
                                                 <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">
                                                 <span class="username">
@@ -184,8 +184,7 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskId = '{{$task->id}}';
         let attachmentUrl = '{{ $attachmentUrl }}/';
+        let baseUrl = '{{ url('/') }}/';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
-
-

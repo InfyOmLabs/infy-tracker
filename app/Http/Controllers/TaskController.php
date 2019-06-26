@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Models\Comment;
 use App\Models\Task;
 use App\Queries\TaskDataTable;
 use App\Repositories\TaskRepository;
@@ -223,37 +222,6 @@ class TaskController extends AppBaseController
     {
         $result = $this->taskRepository->getAttachments($id);
         return $this->sendResponse($result, 'Task retrieved successfully.');
-    }
-
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function addComment(Request $request) {
-        $comment = $this->taskRepository->addComment($request->all());
-        return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
-    }
-
-    /**
-     * @param $id
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function deleteComment($id){
-        Comment::findOrFail($id)->delete();
-        return $this->sendSuccess('Comment has been deleted successfully.');
-    }
-
-    /**
-     * @param $id
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function editComment($id, Request $request){
-        $comment = Comment::findOrFail($id);
-        $comment->comment = htmlentities($request->get('comment'));
-        $comment->save();
-        return $this->sendSuccess('Comment has been updated successfully.');
     }
 
 }
