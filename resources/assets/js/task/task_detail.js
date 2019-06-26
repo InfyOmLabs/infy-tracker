@@ -223,25 +223,25 @@ Dropzone.options.dropzone = {
 
 function addCommentSection(comment) {
     let id = comment.id;
-    return '<div class="post clearfix" id="comment__'+id+'">\n' +
-        '    <div class="user-block">\n' +
-        '        <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">\n' +
-        '        <span class="username">\n' +
-        '      <a>'+ comment.created_user.name +'</a>\n' +
-        '      <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash"></i></a>\n' +
-        '      <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>\n' +
-        '      <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>\n' +
-        '    </span>\n' +
-        '        <span class="description">just now</span>\n' +
-        '    </div>\n' +
-        '    <!-- /.user-block -->\n' +
-        '    <div class="comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
-                comment.comment +
-        '    </div>\n' +
-        '    <div class="comment d-none comment-edit comment-edit-'+id+'">\n' +
-        '        <textarea class="form-control" id="comment-edit-'+id+'" rows="4" name="comment" cols="50">'+comment.comment+'</textarea>\n' +
-        '    </div>\n' +
-        '</div>';
+    let imgUrl = baseUrl +'/assets/img/user-avatar.png';
+    return '<div class="comments__information clearfix" id="comment__'+id+'">\n' +
+        '        <div class="user">\n' +
+        '            <img class="user__img" src="'+ imgUrl +'" alt="User Image">\n' +
+        '            <span class="user__username">\n' +
+        '                <a>'+ comment.created_user.name +'</a>\n' +
+        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash"></i></a>\n' +
+        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>\n' +
+        '            </span>\n' +
+        '            <span class="user__description">just now</span>\n' +
+        '        </div>\n' +
+        '        <div class="user__comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
+                    comment.comment +
+        '        </div>\n' +
+        '        <div class="user__comment d-none comment-edit comment-edit-'+id+'">\n' +
+        '           <textarea class="form-control" id="comment-edit-'+id+'" rows="4" name="comment">'+comment.comment+'</textarea>\n' +
+        '        </div>\n' +
+        '    </div>';
 };
 
 $('#btnComment').click(function (event) {
@@ -259,7 +259,7 @@ $('#btnComment').click(function (event) {
             if (result.success) {
                 let commentId = result.data.comment.id;
                 commentDiv = addCommentSection(result.data.comment);
-                $(".comments__section").append(commentDiv);
+                $(".comments").append(commentDiv);
                 $(".comment-display-"+commentId).html(comment);
                 CKEDITOR.instances.comment.setData('');
             }
@@ -342,11 +342,11 @@ $(document).on('click', ".edit-comment", function (event) {
     });
 });
 
-$(document).on('mouseenter', ".post", function () {
+$(document).on('mouseenter', ".comments__information", function () {
     $(this).find('.del-comment').removeClass('d-none');
 });
 
-$(document).on('mouseleave', ".post", function () {
+$(document).on('mouseleave', ".comments__information", function () {
     $(this).find('.del-comment').addClass('d-none');
 });
 

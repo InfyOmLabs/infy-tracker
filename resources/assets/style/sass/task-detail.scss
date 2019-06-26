@@ -14,6 +14,20 @@
     font-weight: 700;
 }
 
+%user-display {
+    display: block;
+    margin-left: 50px;
+}
+
+%img-bordered-sm {
+  border: 2px solid #d2d6de;
+  padding: 2px;
+}
+
+%img-circle {
+  border-radius: 50%;
+}
+
 .task-detail {
     padding: 16px 16px 0 16px;
 
@@ -95,73 +109,69 @@
     right: 5px;
     z-index: 1000;
     font-size: 1.2em !important;
-    line-height: 1em;
+    line-height: 0.9em;
     font-weight: bold;
     border: 1px solid $gray !important;
     border-radius: 1.2em;
     color: $gray;
     background-color: $white;
     opacity: .5;
-}
 
-.dz-remove:hover {
-    text-decoration: none !important;
-    opacity :1;
-    color: $red;
+    &:hover {
+        text-decoration: none !important;
+        opacity :1;
+        color: $red;
+    }
 }
 
 //comment section design
-.post {
-    border-bottom: 1px solid #d2d6de;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    color: #666;
-}
-.post .user-block {
-    margin-bottom: 15px;
-}
-.user-block img {
-    width: 40px;
-    height: 40px;
-    float: left;
-}
-.user-block a, .user-block a:hover{
-    text-decoration: none;
-}
-.user-block .cui-trash{
+.user .cui-trash{
     color: $red;
 }
-.img-bordered-sm {
-    border: 2px solid #d2d6de;
-    padding: 2px;
-}
-.img-circle {
-    border-radius: 50%;
-}
+
 img {
     vertical-align: middle;
 }
-.user-block .username {
-    font-size: 16px;
-    font-weight: 600;
-}
-.user-block .username, .user-block .description, .user-block .comment {
-    display: block;
-    margin-left: 50px;
-}
-.user-block .description {
-    color: #999;
-    font-size: 13px;
-}
-.post .comment {
-    margin-left: 50px;
-}
-.comments__section {
+.comments {
     padding: 25px 0px;
     &:hover {
         text-decoration: none !important;
         opacity: 1;
         color: $red;
+    }
+    &__information {
+      border-bottom: 1px solid #d2d6de;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      color: #666;
+    }
+}
+
+.user{
+    margin-bottom: 15px;
+    &__img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        @extend %img-bordered-sm;
+        @extend %img-circle;
+    }
+    &__username {
+        font-size: 16px;
+        font-weight: 600;
+        @extend %user-display;
+        text-decoration: none;
+        &:hover{
+            text-decoration: none;
+        }
+    }
+    &__description {
+      @extend %user-display;
+      color: #999;
+      font-size: 13px;
+    }
+    &__comment {
+      @extend %user-display;
     }
 }
 

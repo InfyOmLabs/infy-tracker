@@ -115,32 +115,31 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-8">
-                                <div class="comments__section">
+                                <div class="comments">
                                     <div>
                                         <div class="mb-3 d-flex">
                                             <span class="font-weight-bold">Comments</span>
                                         </div>
                                     </div>
                                     @foreach($task->comments as $comment)
-                                        <div class="post clearfix" id="{{ 'comment__'.$comment->id }}">
-                                            <div class="user-block">
-                                                <img class="img-circle img-bordered-sm" src="/assets/img/user-avatar.png" alt="User Image">
-                                                <span class="username">
-                                                <a>{{$comment['createdUser']->name}}</a>
-                                                @if($comment->created_by == Auth::id())
-                                                    <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
-                                                    <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
-                                                    <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
-                                                @endif
-                                            </span>
-                                                <span class="description">{{time_elapsed_string($comment->created_at)}}</span>
+                                        <div class="comments__information clearfix" id="{{ 'comment__'.$comment->id }}">
+                                            <div class="user">
+                                                <img class="user__img" src="{{url('/assets/img/user-avatar.png')}}" alt="User Image">
+                                                <span class="user__username">
+                                                    <a>{{$comment['createdUser']->name}}</a>
+                                                    @if($comment->created_by == Auth::id())
+                                                        <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
+                                                        <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
+                                                        <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
+                                                    @endif
+                                                </span>
+                                                <span class="user__description">{{time_elapsed_string($comment->created_at)}}</span>
                                             </div>
-                                            <!-- /.user-block -->
-                                            <div class="comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
+                                            <div class="user__comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
                                                 <?php echo html_entity_decode($comment->comment) ?>
                                             </div>
                                             @if($comment->created_by == Auth::id())
-                                                <div class="comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
+                                                <div class="user__comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
                                                     {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control  comment-editor', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
                                                 </div>
                                             @endif
@@ -185,6 +184,7 @@
         let taskId = '{{$task->id}}';
         let attachmentUrl = '{{ $attachmentUrl }}/';
         let baseUrl = '{{ url('/') }}/';
+        let authId = '{{Auth::id()}}';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
