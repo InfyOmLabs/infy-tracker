@@ -13,8 +13,8 @@
                     <tr>
                         <th scope="col">Note</th>
                         <th scope="col">Activity</th>
-                        <th scope="col" class="text-nowrap text-center">Track By</th>
-                        <th scope="col" class="text-nowrap text-center">Total Minute(s)</th>
+                        <th scope="col" class="text-nowrap text-center">Tracked By</th>
+                        <th scope="col" class="text-nowrap text-center">Time (Minutes)</th>
                     </tr>
                     </thead>
                     <tbody>
