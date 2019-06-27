@@ -24,7 +24,7 @@ $(function () {
             down: "icon-angle-down"
         },
         sideBySide: true,
-        minDate: new Date()
+        minDate: moment().millisecond(0).second(0).minute(0).hour(0)
     });
     $('[data-toggle="tooltip"]').tooltip()
 });
