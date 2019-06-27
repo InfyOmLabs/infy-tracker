@@ -390,6 +390,7 @@ table.dataTable {
     bottom: 105px;
     right: 454px;
     width: 318px;
+    z-index:2;
 }
 
 .time-tracker-modal {
@@ -431,6 +432,7 @@ table.dataTable {
     height: 50px;
     bottom: 0;
     width: 100%;
+    z-index:2;
 }
 
 .powered-by {
