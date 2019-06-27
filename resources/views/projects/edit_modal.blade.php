@@ -18,6 +18,12 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
+                        {!! Form::label('prefix', 'Prefix') !!}<span class="required">*</span>
+                        {!! Form::text('prefix', '', ['id'=>'edit_prefix','class' => 'form-control','required','maxlength'=>'4','onkeypress'=>'return (event.charCode === 8 || (event.charCode >= 65 && event.charCode <= 90)||(event.charCode >= 95 && event.charCode <= 122))||(event.charCode === 0 || (event.charCode >= 48 && event.charCode <= 57))']) !!}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
                         {!! Form::label('user_id', 'Users') !!}<span class="required">*</span>
                         {!! Form::select('user_ids[]', $users, null, ['id' => 'edit_user_ids','class' => 'form-control', 'required', 'multiple']) !!}
                     </div>

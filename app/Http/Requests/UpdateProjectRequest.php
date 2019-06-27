@@ -33,6 +33,7 @@ class UpdateProjectRequest extends FormRequest
     {
         $rules = Project::$rules;
         $rules['name'] = 'required|unique:projects,name,'.$this->route('id');
+        $rules['prefix'] = 'required|alpha_num|max:4|min:2|unique:projects,prefix,'.$this->route('id');
 
         return $rules;
     }

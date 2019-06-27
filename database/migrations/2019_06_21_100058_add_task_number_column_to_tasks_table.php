@@ -14,7 +14,7 @@ class AddTaskNumberColumnToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->string('task_number')->after('created_by')->nullable();
+            $table->unsignedInteger('task_number')->after('created_by')->nullable();
         });
     }
 
