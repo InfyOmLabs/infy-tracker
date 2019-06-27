@@ -229,9 +229,9 @@ function addCommentSection(comment) {
         '            <img class="user__img" src="'+ imgUrl +'" alt="User Image">\n' +
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
-        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash"></i></a>\n' +
-        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>\n' +
-        '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
+        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
         '            <span class="user__description">just now</span>\n' +
         '        </div>\n' +
@@ -316,8 +316,6 @@ $(document).on('click', ".cancel-comment", function (event) {
 
 $(document).on('click', ".edit-comment", function (event) {
     let commentId = $(this).data('id');
-    // var loadingButton = jQuery(this).find("#btnComment");
-    // loadingButton.button('loading');
     let commentClass = "comment-edit-"+commentId;
     let comment = CKEDITOR.instances[commentClass].getData();
     if(comment == '' || comment.trim() == ''){
@@ -336,7 +334,6 @@ $(document).on('click', ".edit-comment", function (event) {
             }
         },
         error: function (result) {
-            // loadingButton.button('reset');
             printErrorMessage("#taskValidationErrorsBox", result);
         }
     });

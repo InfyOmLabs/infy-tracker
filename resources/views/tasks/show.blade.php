@@ -128,9 +128,9 @@
                                                 <span class="user__username">
                                                     <a>{{$comment['createdUser']->name}}</a>
                                                     @if($comment->created_by == Auth::id())
-                                                        <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash"></i></a>
-                                                        <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil"></i>&nbsp;&nbsp;</a>
-                                                        <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times"></i>&nbsp;&nbsp;</a>
+                                                        <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
+                                                        <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                        <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                     @endif
                                                 </span>
                                                 <span class="user__description">{{time_elapsed_string($comment->created_at)}}</span>
