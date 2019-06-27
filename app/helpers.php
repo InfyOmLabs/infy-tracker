@@ -32,3 +32,14 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
 
     return $arr;
 }
+
+function roundToQuarterHour($totalMinutes)
+{
+    $hours = intval($totalMinutes / 60);
+    $minutes = $totalMinutes % 60;
+    if ($hours > 0) {
+        printf("%02d:%02d h", $hours, $minutes);
+    } else {
+        printf("%02d:%02d m", $hours, $minutes);
+    }
+}
