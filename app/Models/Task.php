@@ -45,11 +45,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
- * @property string|null $task_number
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
+ * @property string|null $task_number
  * @property string|null $priority
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
+
  */
 class Task extends Model
 {
@@ -159,5 +160,13 @@ class Task extends Model
     public function attachments()
     {
         return $this->hasMany(TaskAttachment::class, 'task_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'task_id');
     }
 }

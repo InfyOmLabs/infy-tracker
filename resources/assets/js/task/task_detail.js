@@ -98,7 +98,6 @@ $(document).on('click', '[data-toggle="lightbox"]', function(event) {
     event.preventDefault();
     $(this).ekkoLightbox();
 });
-
 function getRandomString(){
     return Math.random().toString(36).substring(2, 8) + Math.random().toString(36).substring(2, 8);
 }
@@ -122,6 +121,7 @@ Dropzone.options.dropzone = {
         $.get(taskUrl+'get-attachments/'+taskId, function(data) {
             $.each(data.data, function(key,value){
                 let mockFile = { name: value.name, size: value.size };
+
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
                 thisDropzone.emit("complete", mockFile);
@@ -154,7 +154,6 @@ Dropzone.options.dropzone = {
                 }
             });
         });
-
         this.on('addedfile', function(file) {
             previewFile(file);
         });
@@ -172,7 +171,6 @@ Dropzone.options.dropzone = {
             $('.dz-image').last().find('img').attr({width: '100%', height: '100%'});
         }
     },
-
     removedfile: function(file)
     {
         let fileuploded = file.previewElement.querySelector("[data-dz-name]");
@@ -219,5 +217,138 @@ Dropzone.options.dropzone = {
         let fileRef;
         return (fileRef = file.previewElement) != null ?
             fileRef.parentNode.removeChild(file.previewElement) : void 0;
+
+        return false;
     },
 };
+
+function addCommentSection(comment) {
+    let id = comment.id;
+    let imgUrl = baseUrl +'/assets/img/user-avatar.png';
+    return '<div class="comments__information clearfix" id="comment__'+id+'">\n' +
+        '        <div class="user">\n' +
+        '            <img class="user__img" src="'+ imgUrl +'" alt="User Image">\n' +
+        '            <span class="user__username">\n' +
+        '                <a>'+ comment.created_user.name +'</a>\n' +
+        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
+        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '            </span>\n' +
+        '            <span class="user__description">just now</span>\n' +
+        '        </div>\n' +
+        '        <div class="user__comment comment-display comment-display-'+id+'" data-id="'+id+'">\n' +
+                    comment.comment +
+        '        </div>\n' +
+        '        <div class="user__comment d-none comment-edit comment-edit-'+id+'">\n' +
+        '           <textarea class="form-control" id="comment-edit-'+id+'" rows="4" name="comment">'+comment.comment+'</textarea>\n' +
+        '        </div>\n' +
+        '    </div>';
+};
+
+$('#btnComment').click(function (event) {
+    let loadingButton = jQuery(this).find("#btnComment");
+    loadingButton.button('loading');
+    let comment = CKEDITOR.instances.comment.getData();
+    if(comment == '' || comment.trim() == ''){
+        return false;
+    }
+    $.ajax({
+        url: baseUrl + 'comments/new',
+        type: 'post',
+        data: { 'comment': comment, 'task_id': taskId },
+        success: function (result) {
+            if (result.success) {
+                let commentId = result.data.comment.id;
+                commentDiv = addCommentSection(result.data.comment);
+                $(".comments").append(commentDiv);
+                $(".comment-display-"+commentId).html(comment);
+                CKEDITOR.instances.comment.setData('');
+            }
+            loadingButton.button('reset');
+        },
+        error: function (result) {
+            loadingButton.button('reset');
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('click', '.del-comment', function (event) {
+    let commentId = $(this).data('id');
+    $.ajax({
+        url: baseUrl + 'comments/' + commentId + '/delete',
+        type: 'get',
+        success: function (result) {
+            if (result.success) {
+                let commetDiv = 'comment__'+commentId;
+                $("#"+commetDiv).remove();
+            }
+        },
+        error: function (result) {
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('click', ".comment-display" ,function () {
+    let commentId = $(this).data('id');
+    let commentClass = "comment-edit-"+commentId;
+    $(this).addClass('d-none');
+
+    if (!CKEDITOR.instances[commentClass]) {
+        CKEDITOR.replace( commentClass, {
+            language: 'en',
+            height: '100px',
+        });
+    }
+
+    $(".comment-edit-"+commentId).removeClass('d-none');
+    $(".comment-edit-icon-"+commentId).removeClass('d-none');
+    $(".comment-cancel-icon-"+commentId).removeClass('d-none');
+});
+
+$(document).on('click', ".cancel-comment", function (event) {
+    let commentId = $(this).data('id');
+    $(this).addClass('d-none');
+    $(".comment-display-"+commentId).removeClass('d-none');
+    $(".comment-edit-"+commentId).addClass('d-none');
+    $(".comment-edit-icon-"+commentId).addClass('d-none');
+});
+
+$(document).on('click', ".edit-comment", function (event) {
+    let commentId = $(this).data('id');
+    let commentClass = "comment-edit-"+commentId;
+    let comment = CKEDITOR.instances[commentClass].getData();
+    if(comment == '' || comment.trim() == ''){
+        return false;
+    }
+    $.ajax({
+        url: baseUrl + 'comments/' + commentId + '/update',
+        type: 'post',
+        data: { 'comment': comment.trim() },
+        success: function (result) {
+            if (result.success) {
+                $(".comment-display-"+commentId).html(comment).removeClass('d-none');
+                $(".comment-edit-"+commentId).addClass('d-none');
+                $(".comment-edit-icon-"+commentId).addClass('d-none');
+                $(".comment-cancel-icon-"+commentId).addClass('d-none');
+            }
+        },
+        error: function (result) {
+            printErrorMessage("#taskValidationErrorsBox", result);
+        }
+    });
+});
+
+$(document).on('mouseenter', ".comments__information", function () {
+    $(this).find('.del-comment').removeClass('d-none');
+});
+
+$(document).on('mouseleave', ".comments__information", function () {
+    $(this).find('.del-comment').addClass('d-none');
+});
+
+CKEDITOR.replace( 'comment', {
+    language: 'en',
+    height: '100px',
+});
