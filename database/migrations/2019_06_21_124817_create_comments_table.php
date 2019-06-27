@@ -18,17 +18,14 @@ class CreateCommentsTable extends Migration
             $table->text('comment');
             $table->unsignedInteger('task_id');
             $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by');
             $table->timestamps();
             $table->softDeletes();
+        });
 
+        Schema::table('comments', function (Blueprint $table) {
             // foreign
-            $table->foreign('created_by')->references('id')->on('users')
-                ->onDelete('set null')
-                ->onUpdate('set null');
-
-            $table->foreign('task_id')
-                ->references('id')->on('tasks');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('task_id')->references('id')->on('tasks');
         });
     }
 
