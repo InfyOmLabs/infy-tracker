@@ -42,5 +42,4 @@ function roundToQuarterHour($totalMinutes)
     } else {
         printf("%02d:%02d m", $hours, $minutes);
     }
-
 }
