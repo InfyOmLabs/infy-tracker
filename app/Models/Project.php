@@ -70,6 +70,9 @@ class Project extends Model
         'client_id' => 'required',
         'prefix' => 'required|alpha_num|min:6|unique:projects,prefix',
     ];
+    public static $editRules = [
+        'client_id' => 'required'
+    ];
 
     public static $messages = [
         'name.unique' => 'Project with same name already exist.',
