@@ -26,6 +26,7 @@ $(function () {
         sideBySide: true,
         minDate: new Date()
     });
+    $('[data-toggle="tooltip"]').tooltip()
 });
 
 // open edit user model

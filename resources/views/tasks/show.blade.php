@@ -88,6 +88,12 @@
                                     <span class="flex-1">{{implode(", ",$task->tags->pluck('name')->toArray())}}</span>
                                 </div>
                             @endif
+                            @if(!empty($task->timeEntries->isNotEmpty()))
+                                <div class="mb-3 d-flex task-detail__item">
+                                    <span class="task-detail__tag-heading">Time Tracking</span>
+                                    <span class="flex-1"><a class="task-detail__total-time" data-toggle="modal" data-target="#timeTrackingModal"><span data-toggle="tooltip" data-placement="bottom" title="Click for view all entry">{{roundToQuarterHour($task->timeEntries()->sum('duration'))}}</span></a></span>
+                                </div>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
@@ -167,6 +173,7 @@
             <div class="previewEle">
             </div>
             @include('tasks.task_edit_modal')
+            @include('tasks.time_tracking_modal')
         </div>
     </div>
 @endsection

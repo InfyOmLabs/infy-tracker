@@ -83,7 +83,8 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
-        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser'])->first();
+        /** @var Task $task */
+        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
         $taskData = $this->taskRepository->getTaskData();
         $attachmentPath = Task::PATH;
         $attachmentUrl = url($attachmentPath);

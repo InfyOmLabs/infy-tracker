@@ -33,7 +33,8 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
     return $arr;
 }
 
-function time_elapsed_string($datetime, $full = false) {
+function time_elapsed_string($datetime, $full = false)
+{
     $now = new DateTime;
     $ago = new DateTime($datetime);
     $diff = $now->diff($ago);
@@ -60,4 +61,16 @@ function time_elapsed_string($datetime, $full = false) {
 
     if (!$full) $string = array_slice($string, 0, 1);
     return $string ? implode(', ', $string) . ' ago' : 'just now';
+
+}
+
+function roundToQuarterHour($totalMinutes)
+{
+    $hours = intval($totalMinutes / 60);
+    $minutes = $totalMinutes % 60;
+    if ($hours > 0) {
+        printf("%02d:%02d h", $hours, $minutes);
+    } else {
+        printf("%02d:%02d m", $hours, $minutes);
+    }
 }
