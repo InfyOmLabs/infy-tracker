@@ -1,16 +1,17 @@
+$('#user_id').select2();
 let timeRange = $('#time_range');
 const today = moment();
 let start = today.clone().startOf('week');
 let end = today.clone().endOf('week');
-
+let userId = $('#user_id').val();
 $(window).on("load", function () {
-    loadUserWorkReport(start.format('YYYY-MM-D  H:mm:ss'), end.format('YYYY-MM-D  H:mm:ss'));
+    loadUserWorkReport(start.format('YYYY-MM-D  H:mm:ss'), end.format('YYYY-MM-D  H:mm:ss'),userId);
 });
 
 timeRange.on('apply.daterangepicker', function (ev, picker) {
     let startDate = picker.startDate.format('YYYY-MM-D  H:mm:ss');
     let endDate = picker.endDate.format('YYYY-MM-D  H:mm:ss');
-    loadUserWorkReport(startDate, endDate);
+    loadUserWorkReport(startDate, endDate, userId);
 });
 
 window.cb = function (start, end) {
@@ -36,8 +37,13 @@ timeRange.daterangepicker({
         'Last Month': [lastMonth.clone().startOf('month'), lastMonth.clone().endOf('month')]
     }
 }, cb);
+$("#user_id").on('change', function (e) {
+    e.preventDefault();
+    userId = $('#user_id').val();
+    loadUserWorkReport(start.format('YYYY-MM-D  H:mm:ss'), end.format('YYYY-MM-D  H:mm:ss'),userId);
+});
 
-window.loadUserWorkReport = function (startDate, endDate) {
+window.loadUserWorkReport = function (startDate, endDate, userId) {
     $.ajax({
         type: 'GET',
         url: userReportUrl,
@@ -45,6 +51,7 @@ window.loadUserWorkReport = function (startDate, endDate) {
         data: {
             start_date: startDate,
             end_date: endDate,
+            user_id: userId
         },
         cache: false
     }).done(prepareUserWorkReport);
@@ -62,12 +69,12 @@ window.prepareUserWorkReport = function (result) {
         $('#work-report-container').append('<canvas id="daily-work-report"></canvas>');
     }
 
-    var barChartData = {
+    let barChartData = {
         labels: data.date,
         datasets: data.data
 
     };
-    var ctx = document.getElementById('daily-work-report').getContext('2d');
+    let ctx = document.getElementById('daily-work-report').getContext('2d');
     ctx.canvas.style.height = '400px';
     ctx.canvas.style.width = '100%';
     window.myBar = new Chart(ctx, {

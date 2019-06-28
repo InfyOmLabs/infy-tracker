@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Repositories\DashboardRepository;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,8 @@ class HomeController extends AppBaseController
      */
     public function index()
     {
-        return view('dashboard.index');
+        $users = User::pluck('name', 'id');
+        return view('dashboard.index', compact('users'));
     }
 
     /**

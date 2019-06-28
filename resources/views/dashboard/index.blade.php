@@ -16,7 +16,10 @@
             @include('flash::message')
             <div class="page-header">
                 <h3>Dashboard</h3>
-                <div id="rightData">
+                <div id="rightData" class="d-flex align-items-center">
+                    <div class="mr-2">
+                        {!! Form::select('users', $users, Auth::id(), ['id' => 'user_id']) !!}
+                    </div>
                     <div id="time_range" class="time_range">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
                             class="caret"></b>
@@ -49,7 +52,7 @@
                                 </div>
                             </div>
                             <div id="developers-daily-work-report-container" class="pt-2">
-                                <div id="developers-daily-work-report"></div>
+                                <canvas id="developers-daily-work-report"></canvas>
                             </div>
                         </div>
                     </div>
@@ -71,5 +74,5 @@
         let userDeveloperReportUrl = "{{route('developers-work-report')}}";
     </script>
     <script src="{{ mix('assets/js/dashboard/dashboard.js') }}"></script>
-{{--    <script src="{{ mix('assets/js/dashboard/developers-daily-report.js') }}"></script>--}}
+    <script src="{{ mix('assets/js/dashboard/developers-daily-report.js') }}"></script>
 @endsection

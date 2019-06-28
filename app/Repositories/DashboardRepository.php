@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\Models\TimeEntry;
 use App\Models\User;
+use Arr;
 use Carbon\Carbon;
 
 class DashboardRepository
@@ -22,9 +23,9 @@ class DashboardRepository
     public function getWorkReport($input)
     {
         $dates = $this->getDate($input['start_date'], $input['end_date']);
-        $colors = ['#6574cd', '#F66081', '#9561e2', '#ff0052', '#e1c936', '#9e00ff', '#ffef00', '#3f3f3f'];
+        $colors = getChartColors();
         $timeEntry = TimeEntry::with('task.project')
-            ->whereUserId(getLoggedInUserId())
+            ->whereUserId($input['user_id'])
             ->whereBetween('start_time', [$dates['startDate'], $dates['endDate']])
             ->get();
 
@@ -86,7 +87,7 @@ class DashboardRepository
             ->get();
         $users = User::all();
         $data['drilldown'] = [];
-        $data['data'] = [];
+        $data['result'] = [];
         foreach ($users as $user) {
             $totalDuration = 0;
             $projectData = [];
@@ -119,17 +120,22 @@ class DashboardRepository
                     ];
             }
 
-            $data['data'][] = (object)[
+            $data['result'][] = (object)[
                 "name" => ucfirst($user->name),
-                "y" => round($totalDuration / 60, 2),
+                "total_hours" => round($totalDuration / 60, 2),
                 "drilldown" => $totalDuration === 0 ? null : ucfirst($user->name)
             ];
         }
         $data['totalRecords'] = 0;
-        foreach ($data['data'] as $item) {
-            $data['totalRecords'] = $data['totalRecords'] + $item->y;
+        foreach ($data['result'] as $item) {
+            $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
         $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
+        $data['data']['labels'] = Arr::pluck($data['result'], 'name');
+        $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
+        $data['data']['backgroundColor'] = array_values(getBarChartColors());
+        $data['data']['borderColor'] = array_keys(getBarChartColors());
+        //unset($data['result']);
         return $data;
     }
 
