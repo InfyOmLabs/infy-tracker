@@ -51,93 +51,61 @@ window.loadUserWorkReport = function (startDate, endDate) {
 }
 
 window.prepareUserWorkReport = function (result) {
+    $('#daily-work-report').html('');
     let data = result.data;
     if (data.totalRecords === 0) {
-        $('#work-report-container').empty();
+        $('#work-report-container').html('');
         $('#work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
         return true
+    } else {
+        $('#work-report-container').html('');
+        $('#work-report-container').append('<canvas id="daily-work-report"></canvas>');
     }
-    Highcharts.chart('work-report-container', {
-        colors: ['#6574cd', '#F66081', '#9561e2', '#ff0052', '#e1c936', '#9e00ff', '#ffef00', '#3f3f3f'],
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: data.label
-        },
-        xAxis: {
-            categories: data.date
-        },
-        yAxis: {
-            min: 0,
-            title: {
-                text: 'Hours'
-            },
-            stackLabels: {
-                enabled: false,
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        legend: {
-            align: 'right',
-            x: -33,
-            verticalAlign: 'top',
-            padding: 3,
-            y: 0,
-            floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-            borderColor: '#cc321a',
-            borderWidth: 1,
-            shadow: false
-        },
-        tooltip: {
-            formatter: function () {
-                const totalTime = this.point.stackTotal.toString().split('.');
-                const h = totalTime[0]
-                const rm = this.point.stackTotal * 60 - (h * 60);
 
-                const projectTime = this.point.y.toString().split('.');
-                const ph = projectTime[0]
-                const prm = this.point.y * 60 - (ph * 60);
+    var barChartData = {
+        labels: data.date,
+        datasets: data.data
 
-                return this.series.name + '-' + ph + ':' + Math.floor(prm) + ' hr' +'<br/>Total HR:' + h + ':' + Math.floor(rm) + ' hr'
-            },
-        },
-        plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    style: {
-                        fontWeight: 'bold',
-                        color: '#000'
-                    },
-                    formatter: function () {
-                        const time = this.y.toString().split('.');
-                        let m = this.y * 60;
-                        const h = time[0]
-                        const rm = m - (h * 60);
-                        return h + ':' + Math.floor(rm)
-                    },
-                    inside: true,
+    };
+    var ctx = document.getElementById('daily-work-report').getContext('2d');
+    ctx.canvas.style.height = '400px';
+    ctx.canvas.style.width = '100%';
+    window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                title: {
+                    display: false,
+                    text: data.label
                 },
-                groupPadding: 0
-            },
-            column: {
-                stacking: 'normal',
-                dataLabels: {
-                    enabled: true,
-                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                tooltips: {
+                    mode: 'index',
+                    callbacks: {
+                        label: function (tooltipItem, data) {
+                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += Math.round(tooltipItem.yLabel * 100) / 100;
+                            return label +' hr';
+                        }
+                    }
+                },
+                responsive: false,
+                maintainAspectRatio:false,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Hours'
+                        }
+                    }]
                 }
             }
-        },
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        },
-        series: data.data
-    });
-    // start for no records founds
-}
+        });
+};

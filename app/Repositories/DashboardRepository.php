@@ -22,6 +22,7 @@ class DashboardRepository
     public function getWorkReport($input)
     {
         $dates = $this->getDate($input['start_date'], $input['end_date']);
+        $colors = ['#6574cd', '#F66081', '#9561e2', '#ff0052', '#e1c936', '#9e00ff', '#ffef00', '#3f3f3f'];
         $timeEntry = TimeEntry::with('task.project')
             ->whereUserId(getLoggedInUserId())
             ->whereBetween('start_time', [$dates['startDate'], $dates['endDate']])
@@ -44,9 +45,11 @@ class DashboardRepository
 
         $data = [];
         $totalRecords = 0;
+        $index=0;
         /** @var TimeEntry $entry */
         foreach ($projects as $entry) {
-            $item['name'] = $entry['name'];
+            $item['label'] = $entry['name'];
+            $item['backgroundColor'] = $colors[$index];
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
                 $duration = isset($entry[$date]) ? round($entry[$date] / 60, 2) : 0;
@@ -54,6 +57,7 @@ class DashboardRepository
                 $totalRecords = $totalRecords + $duration;
             }
             $data[] = (object)$item;
+            $index++;
         }
 
         $result = [];
