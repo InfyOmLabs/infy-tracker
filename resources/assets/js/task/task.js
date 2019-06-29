@@ -96,12 +96,17 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                var assignee = [];
+                let imgStr = ''
                 $(row.task_assignee).each(function (i, e) {
-                    assignee.push(e.name);
+                    let nameArr = e.name.split(' ');
+                    if(nameArr.length >= 2){
+                        imgStr += '<img class="padding-2" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                    }else {
+                        imgStr += '<img class="padding-2" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                    }
                 });
 
-                return assignee.join(", ")
+                return imgStr;
             }, name: 'taskAssignee.name'
         },
         {
