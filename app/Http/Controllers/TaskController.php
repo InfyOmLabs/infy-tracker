@@ -91,8 +91,14 @@ class TaskController extends AppBaseController
         $taskNumber = explode('-',$id)[1];
         /** @var Project $project */
         $project = Project::wherePrefix($projectPrefix)->first();
+        if(empty($project)){
+            return redirect()->back();
+        }
         /** @var Task $task */
         $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
+        if(empty($task)){
+            return redirect()->back();
+        }
         $taskData = $this->taskRepository->getTaskData();
         $attachmentPath = Task::PATH;
         $attachmentUrl = url($attachmentPath);
