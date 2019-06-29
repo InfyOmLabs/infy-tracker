@@ -153,7 +153,7 @@ function storeTimeEntry() {
             }
         },
         error: function (result) {
-            printErrorMessage("#validationErrorsBox", result);
+            printErrorMessage("#timeTrackerValidationErrorsBox", result);
             $('#tmActivityId').attr('disabled', true);
             $('#tmTaskId').attr('disabled', true);
             $('#tmProjectId').attr('disabled', true);
