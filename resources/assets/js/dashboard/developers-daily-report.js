@@ -12,7 +12,7 @@ $datePicker.on('apply.daterangepicker', function (ev, picker) {
 
 window.cb = function (start) {
     $datePicker.find('span').html(start.format('MMMM D, YYYY'));
-}
+};
 
 cb(start);
 
@@ -34,7 +34,7 @@ window.loadDevelopersWorkReport = function (startDate) {
         },
         cache: false
     }).done(prepareDeveloperWorkReport);
-}
+};
 
 window.prepareDeveloperWorkReport = function (result) {
     $('#developers-daily-work-report-container').html('');
@@ -88,4 +88,4 @@ window.prepareDeveloperWorkReport = function (result) {
             }
         }
     });
-}
+};

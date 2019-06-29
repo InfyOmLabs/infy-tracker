@@ -18,7 +18,7 @@
                 <h3>Dashboard</h3>
                 <div id="rightData" class="d-flex align-items-center">
                     <div class="mr-2">
-                        {!! Form::select('users', $users, Auth::id(), ['id' => 'user_id']) !!}
+                        {!! Form::select('users', $users, Auth::id(), ['id' => 'userId']) !!}
                     </div>
                     <div id="time_range" class="time_range">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b

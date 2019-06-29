@@ -82,6 +82,6 @@ function getChartColors()
 
 function getBarChartColors()
 {
-    return ['#6574cd' => '#d8dcf3', '#ff6384' => '#ffccd7', '#36a2eb' => '#b9dff8', '#ffce56' => '#ffe9b3', '#4bc0c0' => '#b4e4e4', '#9966ff' => '#ddccff', '#ff9f40' => '#ffd9b3', '#ffef00' => '#fff899', '#9e00ff' => '#e2b3ff','#6574cd'=>
-    '#b2bae6','#ff0052'=>'#ffb3cb','#9561e2'=>'#e2d4f7','#f66081'=>'#fbb7c5','#5263c7'=>'#c5cbec'];
+    return ['#6574cd' => '#d8dcf3', '#ff6384' => '#ffccd7', '#36a2eb' => '#b9dff8', '#ffce56' => '#ffe9b3', '#4bc0c0' => '#b4e4e4', '#9966ff' => '#ddccff', '#ff9f40' => '#ffd9b3', '#ffef00' => '#fff899', '#9e00ff' => '#e2b3ff', '#2c3987' =>
+        '#b2bae6', '#ff0052' => '#ffb3cb', '#9561e2' => '#e2d4f7', '#f66081' => '#fbb7c5', '#5263c7' => '#c5cbec'];
 }
