@@ -126,6 +126,7 @@ window.renderData = function (id) {
                 let project = result.data.project;
                 $('#projectId').val(project.id);
                 $('#edit_name').val(project.name);
+                $('#edit_prefix').val(project.prefix);
                 $('#edit_client_id').val(project.client_id).trigger("change");
                 $('#edit_description').val(project.description);
                 var valArr = result.data.users;

@@ -68,7 +68,6 @@ class Project extends Model
     public static $rules = [
         'name' => 'required|unique:projects,name',
         'client_id' => 'required',
-        'prefix' => 'required|alpha_num|min:6|unique:projects,prefix',
     ];
     public static $editRules = [
         'client_id' => 'required'

@@ -275,21 +275,24 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param $projectId
-     * @return string
+     * @return int|string|null
      */
     public function getIndex($projectId)
     {
         /** @var Task $task */
         $task = Task::whereProjectId($projectId)->where('task_number', '!=', "")->latest('created_at')->first();
-        if (empty($task)) {
-            $project = Project::findOrFail($projectId);
-            return $project->prefix . '-' . 1;
+        $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
+        $isUnique = false;
+        while (!$isUnique) {
+            $task = Task::whereProjectId($projectId)->where('task_number', '=', $uniqueNumber)->first();
+            if(empty($task)){
+                $isUnique = true;
+            }else {
+                $uniqueNumber++;
+            }
         }
-        $orderArr = explode('-', $task->task_number);
-        $uniqueNumber = (int)$orderArr[1];
-        $uniqueNumber += 1;
-        $index = $task->project->prefix . '-' . $uniqueNumber;
-        return $index;
+
+        return $uniqueNumber;
     }
 
     /**
