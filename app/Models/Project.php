@@ -28,7 +28,7 @@ use Eloquent as Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property string|null $prefix
+ * @property string $prefix
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project wherePrefix($value)
  */
 class Project extends Model
@@ -68,7 +68,9 @@ class Project extends Model
     public static $rules = [
         'name' => 'required|unique:projects,name',
         'client_id' => 'required',
-        'prefix' => 'required|alpha_num|min:6|unique:projects,prefix',
+    ];
+    public static $editRules = [
+        'client_id' => 'required'
     ];
 
     public static $messages = [

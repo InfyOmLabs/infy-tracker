@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Project;
 use App\Models\Task;
 use App\Queries\TaskDataTable;
 use App\Repositories\TaskRepository;
@@ -70,18 +71,39 @@ class TaskController extends AppBaseController
         return $this->sendSuccess('Task created successfully.');
     }
 
+    private function fill($input)
+    {
+        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? 1 : 0;
+        $input['description'] = is_null($input['description']) ? '' : $input['description'];
+        return $input;
+    }
+
     /**
      * @param $id
      * @return Factory|JsonResponse|View
      */
     public function show($id)
     {
-        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee'])->first();;
+        if(count(explode('-',$id)) != 2){
+            return redirect()->back();
+        }
+        $projectPrefix = explode('-',$id)[0];
+        $taskNumber = explode('-',$id)[1];
+        /** @var Project $project */
+        $project = Project::wherePrefix($projectPrefix)->first();
+        if(empty($project)){
+            return redirect()->back();
+        }
+        /** @var Task $task */
+        $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
+        if(empty($task)){
+            return redirect()->back();
+        }
         $taskData = $this->taskRepository->getTaskData();
         $attachmentPath = Task::PATH;
         $attachmentUrl = url($attachmentPath);
 
-        return view('tasks.show', compact('task','attachmentUrl'))->with($taskData);
+        return view('tasks.show', compact('task', 'attachmentUrl'))->with($taskData);
     }
 
     /**
@@ -178,19 +200,13 @@ class TaskController extends AppBaseController
         return $timerDetails;
     }
 
-    private function fill($input)
-    {
-        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? 1 : 0;
-        $input['description'] = is_null($input['description']) ? '' : $input['description'];
-        return $input;
-    }
-
     /**
      * @param $id
      * @param Request $request
      * @return JsonResponse
      */
-    public function deleteAttachment($id, Request $request){
+    public function deleteAttachment($id, Request $request)
+    {
         $this->taskRepository->deleteFile($id, $request->all());
         return $this->sendSuccess('File has been deleted successfully.');
     }
@@ -201,11 +217,12 @@ class TaskController extends AppBaseController
      * @return JsonResponse
      * @throws Exception
      */
-    public function addAttachment($id, Request $request){
+    public function addAttachment($id, Request $request)
+    {
         $input = $request->all();
         $file = $input['file'];
         $extension = $file->getClientOriginalExtension();
-        if(!in_array($extension,['xls','pdf','doc','docx','xlsx','jpg','jpeg','png'])){
+        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
             return $this->sendError('You can not upload this file.');
         }
         $fileName = $this->taskRepository->uploadFile($id, $input['file']);
@@ -216,7 +233,8 @@ class TaskController extends AppBaseController
      * @param $id
      * @return JsonResponse
      */
-    public function getAttachment($id){
+    public function getAttachment($id)
+    {
         $result = $this->taskRepository->getAttachments($id);
         return $this->sendResponse($result, 'Task retrieved successfully.');
     }

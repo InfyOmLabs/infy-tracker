@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
+use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
@@ -11,6 +12,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use League\Container\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -86,7 +88,6 @@ class TaskRepository extends BaseRepository
             DB::rollBack();
             throw new BadRequestHttpException($e->getMessage());
         }
-
         return $task;
     }
 
@@ -274,21 +275,24 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param $projectId
-     * @return string
+     * @return int|string|null
      */
     public function getIndex($projectId)
     {
         /** @var Task $task */
         $task = Task::whereProjectId($projectId)->where('task_number', '!=', "")->latest('created_at')->first();
-        if (empty($task)) {
-            $project = Project::findOrFail($projectId);
-            return $project->prefix . '-' . 1;
+        $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
+        $isUnique = false;
+        while (!$isUnique) {
+            $task = Task::whereProjectId($projectId)->where('task_number', '=', $uniqueNumber)->first();
+            if(empty($task)){
+                $isUnique = true;
+            }else {
+                $uniqueNumber++;
+            }
         }
-        $orderArr = explode('-', $task->task_number);
-        $uniqueNumber = (int)$orderArr[1];
-        $uniqueNumber += 1;
-        $index = $task->project->prefix . '-' . $uniqueNumber;
-        return $index;
+
+        return $uniqueNumber;
     }
 
     /**
@@ -306,7 +310,6 @@ class TaskRepository extends BaseRepository
 
             $file->move($destinationPath, $fileName);
             $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
-
             DB::beginTransaction();
             $task->attachments()->save($attachment);
             DB::commit();
@@ -325,6 +328,7 @@ class TaskRepository extends BaseRepository
      * @param $input
      * @return bool
      */
+
     public function deleteFile($id, $input)
     {
         $file = $input['filename'];
@@ -335,7 +339,6 @@ class TaskRepository extends BaseRepository
         $fileName = $attachment->getOriginal('file');
         $attachment->delete();
         $destinationPath = public_path(Task::PATH);
-
         if (!empty($fileName)) {
             if (file_exists($destinationPath . '/' . $fileName)) {
                 unlink($destinationPath . '/' . $fileName);
@@ -366,5 +369,15 @@ class TaskRepository extends BaseRepository
         }
         return $result;
     }
-}
 
+    /**
+     * @param $input
+     * @return Comment|Comment[]|Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     */
+    public function addComment($input){
+        $input['created_by'] = Auth::id();
+        $input['comment'] = htmlentities($input['comment']);
+        $comment = Comment::create($input);
+        return Comment::with('createdUser')->findOrFail($comment->id);
+    }
+}

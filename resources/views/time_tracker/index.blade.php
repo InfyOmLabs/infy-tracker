@@ -2,7 +2,7 @@
 <div class="chat-popup card-body" id="timeTracker" style="display: none">
     {!! Form::open(['id'=>'timeTrackerForm', 'class' => 'time-tracker-form']) !!}
     <div class="modal-body time-tracker-modal">
-        <div class="alert alert-danger" style="display: none" id="validationErrorsBox"></div>
+        <div class="alert alert-danger" style="display: none" id="timeTrackerValidationErrorsBox"></div>
         <div class="row">
             <div class="form-group col-sm-4">
                 {!! Form::label('project_id', 'Project') !!}<span class="required">*</span>

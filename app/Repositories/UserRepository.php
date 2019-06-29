@@ -46,7 +46,7 @@ class UserRepository extends BaseRepository
      */
     public function getUserList()
     {
-        return User::pluck('name', 'id');
+        return User::orderBy('name')->pluck('name', 'id');
     }
 
     /**

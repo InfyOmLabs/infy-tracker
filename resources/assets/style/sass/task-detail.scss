@@ -1,6 +1,5 @@
 //task-detail style
 @import "variables";
-
 .flex-1 {
     flex: 1;
 }
@@ -9,10 +8,28 @@
     border: 1px solid $gray;
 }
 
+.hand-cursor {
+    cursor: pointer;
+}
+
 %task-heading {
     display: inline-block;
     width: 20%;
     font-weight: 700;
+}
+
+%user-display {
+    display: block;
+    margin-left: 50px;
+}
+
+%img-bordered-sm {
+  border: 2px solid #d2d6de;
+  padding: 2px;
+}
+
+%img-circle {
+  border-radius: 50%;
 }
 
 .task-detail {
@@ -81,6 +98,15 @@
             }
         }
     }
+
+    &__total-time {
+        color: #20a8d8 !important;
+        cursor: pointer;
+
+        &:hover {
+            color:#1b8eb7 !important;
+        }
+    }
 }
 
 .priority--lowest,
@@ -95,10 +121,10 @@
     top: 0;
     right: 5px;
     z-index: 1000;
-    font-size: 1.2em;
-    line-height: 1em;
+    font-size: 1.2em !important;
+    line-height: 0.9em;
     font-weight: bold;
-    border: 1px solid $gray;
+    border: 1px solid $gray !important;
     border-radius: 1.2em;
     color: $gray;
     background-color: $white;
@@ -106,8 +132,56 @@
 
     &:hover {
         text-decoration: none !important;
-        opacity: 1;
+        opacity :1;
         color: $red;
+    }
+}
+
+//comment section design
+.user .cui-trash{
+    color: $red;
+}
+
+.comments {
+    padding: 25px 0px;
+    &:hover {
+        text-decoration: none !important;
+        opacity: 1;
+    }
+    &__information {
+      border-bottom: 1px solid #d2d6de;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      color: #666;
+    }
+}
+
+.user{
+    margin-bottom: 15px;
+    &__img {
+        width: 40px;
+        height: 40px;
+        float: left;
+        @extend %img-bordered-sm;
+        @extend %img-circle;
+        vertical-align: middle;
+    }
+    &__username {
+        font-size: 16px;
+        font-weight: 600;
+        @extend %user-display;
+        text-decoration: none;
+        &:hover{
+            text-decoration: none;
+        }
+    }
+    &__description {
+      @extend %user-display;
+      color: #999;
+      font-size: 13px;
+    }
+    &__comment {
+      @extend %user-display;
     }
 }
 
@@ -122,4 +196,10 @@ $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #3366
 .priority--lowest,
 .priority--low {
     transform: rotate(180deg);
+}
+
+#timeTrackingModal {
+    .modal-content {
+        max-height: 92vh;
+    }
 }
