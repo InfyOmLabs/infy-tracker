@@ -31,7 +31,11 @@ class TaskDataTable
 
         $query->when(isset($input['filter_status']),
             function (Builder $q) use ($input) {
-                $q->where('status', $input['filter_status']);
+                if($input['filter_status'] == 2){
+                    $q->whereIn('status', [0,1]);
+                } else {
+                    $q->where('status', $input['filter_status']);
+                }
             });
 
         $query->when(isset($input['filter_user']),
