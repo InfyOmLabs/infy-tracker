@@ -69,6 +69,9 @@ class Project extends Model
         'name' => 'required|unique:projects,name',
         'client_id' => 'required',
     ];
+    public static $editRules = [
+        'client_id' => 'required'
+    ];
 
     public static $messages = [
         'name.unique' => 'Project with same name already exist.',
