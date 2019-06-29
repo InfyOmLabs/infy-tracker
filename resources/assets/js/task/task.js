@@ -238,7 +238,7 @@ $(document).on('click', '.taskDetails', function (event) {
                         "<td>" + elem.end_time + "</td>" +
                         "<td>" + elem.duration + "</td>" +
                         "<td><a title='Edit' class='btn action-btn btn-primary btn-sm' onclick='renderTimeEntry(" + elem.id + ")'  style='margin-right:5px;'><i class='cui-pencil action-icon'  style='color:#3c8dbc'></i></a>" +
-                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")' style='margin-right: 5px'><i class='cui-trash action-icon' style='color:red'></i></a></td>" +
+                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ", " + elem.task_id + ")' style='margin-right: 5px'><i class='cui-trash action-icon' style='color:red'></i></a></td>" +
                         "</tr>"
                     );
                     table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
@@ -344,48 +344,6 @@ window.manageCollapseIcon = function (id) {
         $('#tdCollapse' + id).find('a span').addClass("fa-minus-circle");
     }
 }
-
-window.deleteTimeEntry = function (timeEntryId) {
-    let url = timeEntryUrl + timeEntryId;
-    swal({
-            title: "Delete !",
-            text: "Are you sure you want to delete this time entry?",
-            type: "warning",
-            showCancelButton: true,
-            closeOnConfirm: false,
-            showLoaderOnConfirm: true,
-            confirmButtonColor: '#5cb85c',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'No',
-            confirmButtonText: 'Yes'
-        },
-        function () {
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                dataType: 'json',
-                success: function (obj) {
-                    if (obj.success) {
-                        $(".close").trigger('click');
-                    }
-                    swal({
-                        title: 'Deleted!',
-                        text: 'Time entry has been deleted.',
-                        type: 'success',
-                        timer: 2000
-                    });
-                },
-                error: function (data) {
-                    swal({
-                        title: '',
-                        text: data.responseJSON.message,
-                        type: 'error',
-                        timer: 5000
-                    });
-                }
-            });
-        });
-};
 
 function setTaskDrp(id) {
     $('#taskId').val(id).trigger("change");
