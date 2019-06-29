@@ -60,4 +60,14 @@ class ProjectRepository extends BaseRepository
 
         return $projects;
     }
+
+    /**
+     * get clients
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getProjectsList()
+    {
+        return Project::orderBy('name')->pluck('name', 'id');
+    }
 }
