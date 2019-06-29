@@ -1,5 +1,5 @@
 <div id="AddModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -10,45 +10,39 @@
             <div class="modal-body">
                 <div class="alert alert-danger" id="validationErrorsBox" style="display: none"></div>
                 <div class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-6">
                         {!! Form::label('project_id', 'Project') !!}<span class="required">*</span>
                         {!! Form::select('project_id', $projects, null, ['class' => 'form-control','required', 'id' => 'projectId', 'placeholder'=>'Select Project']) !!}
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-6">
                         {!! Form::label('title', 'Title') !!}<span class="required">*</span>
                         {!! Form::text('title', null, ['id'=>'title','class' => 'form-control','required']) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-6">
                         {!! Form::label('priority', 'Priority') !!}<span class="required">*</span>
                         {!! Form::select('priority',$priority, null, ['class' => 'form-control','id'=>'priority','required','placeholder'=>'Select Priority']) !!}
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-6">
                         {!! Form::label('assign_to', 'Assign To') !!}
                         {!! Form::select('assignees[]',$assignees, null, ['class' => 'form-control','id'=>'assignee', 'multiple' => true]) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-6">
                         {!! Form::label('due_date', 'Due Date') !!}
                         {!! Form::text('due_date', null, ['id'=>'dueDate','class' => 'form-control', 'autocomplete' => 'off']) !!}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {!! Form::label('tags', 'Tags') !!}
+                        {!! Form::select('tags[]',$tags, null, ['class' => 'form-control','id'=>'tagIds', 'multiple' => true]) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('description', 'Description') !!}
                         {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 5]) !!}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-12">
-                        {!! Form::label('tags', 'Tags') !!}
-                        {!! Form::select('tags[]',$tags, null, ['class' => 'form-control','id'=>'tagIds', 'multiple' => true]) !!}
                     </div>
                 </div>
                 <div class="text-right">
