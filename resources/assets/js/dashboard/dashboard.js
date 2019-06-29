@@ -9,9 +9,9 @@ $(window).on("load", function () {
 });
 
 timeRange.on('apply.daterangepicker', function (ev, picker) {
-    let startDate = picker.startDate.format('YYYY-MM-D  H:mm:ss');
-    let endDate = picker.endDate.format('YYYY-MM-D  H:mm:ss');
-    loadUserWorkReport(startDate, endDate, userId);
+    start = picker.startDate.format('YYYY-MM-D  H:mm:ss');
+    end = picker.endDate.format('YYYY-MM-D  H:mm:ss');
+    loadUserWorkReport(start, end, userId);
 });
 
 window.cb = function (start, end) {
@@ -37,6 +37,7 @@ timeRange.daterangepicker({
         'Last Month': [lastMonth.clone().startOf('month'), lastMonth.clone().endOf('month')]
     }
 }, cb);
+
 $("#user_id").on('change', function (e) {
     e.preventDefault();
     userId = $('#user_id').val();
