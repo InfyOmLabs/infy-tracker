@@ -45,7 +45,7 @@ class TaskController extends AppBaseController
                 'filter_project',
                 'filter_status',
                 'filter_user',
-            ])))->make(true);
+            ])))->editColumn('title', '#{{$task_number}} {{$title}}')->make(true);
         }
         $taskData = $this->taskRepository->getTaskData();
 

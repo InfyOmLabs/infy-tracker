@@ -46,7 +46,7 @@ $(function () {
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[5, "desc"]],
+    "order": [[4, "desc"]],
     ajax: {
         url: taskIndexUrl,
         data: function (data) {
@@ -57,7 +57,7 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [6],
             "orderable": false,
             "className": 'text-center',
             "width": "13%"
@@ -73,7 +73,7 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [4, 5],
+            "targets": [3, 4],
             "width": "10%",
             "className": 'text-center',
         },
@@ -104,10 +104,6 @@ var tbl = $('#task_table').DataTable({
 
                 return assignee.join(", ")
             }, name: 'taskAssignee.name'
-        },
-        {
-            data: 'project.name',
-            name: 'project.name'
         },
         {
             data: 'due_date',
