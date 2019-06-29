@@ -61,7 +61,7 @@ class UserController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new UserDataTable())->get())->make(true);
         }
-        $projects = $this->projectRepository->all()->pluck('name', 'id');
+        $projects = $this->projectRepository->getProjectsList();
 
         return view('users.index')->with('projects', $projects);
     }

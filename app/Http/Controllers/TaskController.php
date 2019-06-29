@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Project;
 use App\Models\Task;
 use App\Queries\TaskDataTable;
 use App\Repositories\TaskRepository;
@@ -83,8 +84,21 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
+        if(count(explode('-',$id)) != 2){
+            return redirect()->back();
+        }
+        $projectPrefix = explode('-',$id)[0];
+        $taskNumber = explode('-',$id)[1];
+        /** @var Project $project */
+        $project = Project::wherePrefix($projectPrefix)->first();
+        if(empty($project)){
+            return redirect()->back();
+        }
         /** @var Task $task */
-        $task = Task::whereTaskNumber($id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
+        $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
+        if(empty($task)){
+            return redirect()->back();
+        }
         $taskData = $this->taskRepository->getTaskData();
         $attachmentPath = Task::PATH;
         $attachmentUrl = url($attachmentPath);

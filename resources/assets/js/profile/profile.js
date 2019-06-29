@@ -50,7 +50,7 @@ window.renderProfileData = function (usersUrl) {
 $(document).on('keyup', '#name', function (e) {
     let txtVal = $(this).val().trim();
     if ((e.charCode === 8 || (e.charCode >= 65 && e.charCode <= 90) || (e.charCode >= 95 && e.charCode <= 122)) || (e.charCode === 0 || (e.charCode >= 48 && e.charCode <= 57))) {
-        if (txtVal.length <= 6) {
+        if (txtVal.length <= 4) {
             $('#prefix').val(txtVal.toLocaleUpperCase());
         }
     }

@@ -90,7 +90,8 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a href="' + taskUrl + row.task_number + '" target="_blank">' + row.title + '</a>'
+                let url = taskUrl + row.project.prefix + '-' + row.task_number;
+                return '<a href="' + url + '" target="_blank">' + row.title + '</a>'
             },
             name: 'title'
         },
@@ -134,8 +135,8 @@ var tbl = $('#task_table').DataTable({
                     '<i class="cui-trash action-icon"></i></a>' +
                     '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
                     '<i class="fa fa-user-clock action-icon"></i></a>' +
-                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-warning btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
-                    '<i class="fa fa-eye action-icon"></i></a>'
+                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
+                    '<i class="fa fa-clock action-icon"></i></a>'
             }, name: 'id'
         }
     ],
