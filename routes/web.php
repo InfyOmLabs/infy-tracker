@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::post('projects/{id}/update', 'ProjectController@update');
     });
 
-    Route::middleware('permission:manage_tasks')->group(function () {
+    Route::middleware('permission:manage_all_tasks')->group(function () {
         Route::resource('tasks', 'TaskController');
         Route::post('tasks/{id}/update', 'TaskController@update');
         Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
@@ -77,10 +77,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::get('task-details/{task_id}', 'TaskController@getTaskDetails');
     });
 
-    Route::middleware('permission:manage_time_entries')->group(function () {
-        Route::resource('timeEntries', 'TimeEntryController');
-        Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
-    });
+    Route::resource('timeEntries', 'TimeEntryController');
+    Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
 
     Route::get('reports', 'ReportController@index')->name('reports.index')->middleware('permission:manage_reports');
 
