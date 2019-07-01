@@ -28,8 +28,7 @@
 
 @section('scripts')
     <script>
-       let permissionCreateUrl='{{route('permissions.store')}}';
-       let permissionUrl='{{url('permissions')}}/';
+        let permissionUrl='{{url('permissions')}}/';
     </script>
     <script src="{{ mix('assets/js/permissions/permission.js') }}"></script>
 @endsection
