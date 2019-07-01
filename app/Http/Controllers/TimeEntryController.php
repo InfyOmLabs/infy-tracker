@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
+use Auth;
 use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class TimeEntryController extends AppBaseController
@@ -91,6 +93,8 @@ class TimeEntryController extends AppBaseController
         $input = $this->validateInput($request->all());
 
         $this->timeEntryRepository->updateTimeEntry($input, $id);
+        Log::info('Request is: ', $input);
+        Log::info('Entry updated by: ' . Auth::user()->name);
 
         return $this->sendSuccess('Time Entry updated successfully.');
     }
