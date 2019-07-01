@@ -24,14 +24,9 @@ class MigrateDefaultPermissions extends Migration
                 'description' => 'Project tab visible and manage it.'
             ],
             [
-                'name' => 'manage_tasks',
+                'name' => 'manage_all_tasks',
                 'display_name' => 'Manage Tasks',
                 'description' => 'All projects list comes into Project filter otherwise comes only related projects.Assignee Filter visible in task module otherwise own assigned and non-assigned.'
-            ],
-            [
-                'name' => 'manage_time_entries',
-                'display_name' => 'Manage Time Entries',
-                'description' => 'Assignee Filter visible in time entry module otherwise own Entry.Able to visible all users otherwise own.'
             ],
             [
                 'name' => 'manage_users',
