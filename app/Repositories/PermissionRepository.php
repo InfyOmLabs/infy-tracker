@@ -35,6 +35,6 @@ class PermissionRepository extends BaseRepository
     }
     public function permissionList()
     {
-        return Permission::pluck('name', 'id');
+        return Permission::pluck('display_name', 'id');
     }
 }

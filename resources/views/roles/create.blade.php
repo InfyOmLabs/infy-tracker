@@ -9,13 +9,12 @@
 @section('content')
     <div class="container-fluid">
         <div class="animated fadeIn">
+            <div class="page-header">
+                <h3>New Role</h3>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">
-                            <i class="fa fa-plus-square-o fa-lg"></i>
-                            <strong>New Role</strong>
-                        </div>
                         <div class="card-body">
                             @include('coreui-templates::common.errors')
                             {!! Form::open(['route' => 'roles.store']) !!}
