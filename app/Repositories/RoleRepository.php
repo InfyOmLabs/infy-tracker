@@ -33,4 +33,13 @@ class RoleRepository extends BaseRepository
     {
         return Role::class;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getRolesList()
+    {
+        return Role::orderBy('name')->pluck('name', 'id');
+    }
 }

@@ -50,7 +50,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $task_number
  * @property string|null $priority
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
-
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  */
 class Task extends Model
 {
