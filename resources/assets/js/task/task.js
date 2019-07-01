@@ -261,6 +261,7 @@ $('#addNewForm').submit(function (event) {
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
             }
@@ -285,6 +286,7 @@ $('#editForm').submit(function (event) {
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
             }

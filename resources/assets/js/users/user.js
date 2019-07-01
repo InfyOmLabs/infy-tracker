@@ -140,6 +140,7 @@ $(function () {
             data: $(this).serialize(),
             success: function (result) {
                 if (result.success) {
+                    displaySuccessMessage(result.message);
                     $('#AddModal').modal('hide');
                     $('#users_table').DataTable().ajax.reload(null, false);
                 }
@@ -165,6 +166,7 @@ $(function () {
             data: $(this).serialize(),
             success: function (result) {
                 if (result.success) {
+                    displaySuccessMessage(result.message);
                     $('#EditModal').modal('hide');
                     $('#users_table').DataTable().ajax.reload(null, false);
                 }
