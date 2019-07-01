@@ -32,7 +32,6 @@ class Role extends EntrustRole
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:roles,name',
-        'display_name' => 'required',
+        'name' => 'required|unique:roles,name'
     ];
 }

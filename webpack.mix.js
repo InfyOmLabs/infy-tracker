@@ -39,4 +39,5 @@ mix
     .js('resources/assets/js/task/task_detail.js', 'public/assets/js/task/task_detail.js')
     .js('resources/assets/js/profile/profile.js', 'public/assets/js/profile/profile.js')
     .js('resources/assets/js/permissions/permission.js', 'public/assets/js/permissions/permission.js')
+    .js('resources/assets/js/roles/role.js', 'public/assets/js/roles/role.js')
     .version();

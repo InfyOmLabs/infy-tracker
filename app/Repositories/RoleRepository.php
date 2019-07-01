@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Models\Permission;
+use App\Models\Role;
 
 
-class PermissionRepository extends BaseRepository
+class RoleRepository extends BaseRepository
 {
     /**
      * @var array
@@ -31,10 +31,6 @@ class PermissionRepository extends BaseRepository
      **/
     public function model()
     {
-        return Permission::class;
-    }
-    public function permissionList()
-    {
-        return Permission::pluck('name', 'id');
+        return Role::class;
     }
 }
