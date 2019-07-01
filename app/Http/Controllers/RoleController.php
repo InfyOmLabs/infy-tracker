@@ -14,6 +14,7 @@ use DataTables;
 use Flash;
 use Illuminate\Http\Request;
 use Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class RoleController extends AppBaseController
 {
@@ -132,12 +133,16 @@ class RoleController extends AppBaseController
      */
     public function destroy($id)
     {
+        /** @var Role $roles */
         $roles = $this->rolesRepository->find($id);
 
         if (empty($roles)) {
             Flash::error('Roles not found');
 
             return redirect(route('roles.index'));
+        }
+        if ($roles->users()->count() > 0) {
+            throw new BadRequestHttpException('This user role could not be deleted, because it’s assigned to a user.', null, \Illuminate\Http\Response::HTTP_BAD_REQUEST);
         }
 
         $this->rolesRepository->delete($id);

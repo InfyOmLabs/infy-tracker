@@ -1,4 +1,4 @@
-<table class="table table-responsive-sm table-striped table-bordered" id="roles-table">
+<table class="table table-responsive-sm table-striped table-bordered" id="role_table">
     <thead>
         <th>Name</th>
         <th>Detail</th>

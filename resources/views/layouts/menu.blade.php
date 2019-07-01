@@ -41,7 +41,7 @@
 </li>
 <li class="nav-item {{ Request::is('roles*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('roles') !!}">
-        <i class="fa fa-file nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Roles
+        <i class="fa fa-user nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Roles
     </a>
 </li>
 <li class="nav-item {{ Request::is('permissions*') ? 'active' : '' }}">
