@@ -58,7 +58,7 @@ window.renderProfileData = function (usersUrl) {
             }
         }
     });
-}
+};
 window.displayPhoto = function (input, selector) {
     let displayPreview = true;
     if (input.files && input.files[0]) {
@@ -78,3 +78,12 @@ window.displayPhoto = function (input, selector) {
         }
     }
 };
+
+$(document).on('keyup', '#name', function (e) {
+    let txtVal = $(this).val().trim();
+    if ((e.charCode === 8 || (e.charCode >= 65 && e.charCode <= 90) || (e.charCode >= 95 && e.charCode <= 122)) || (e.charCode === 0 || (e.charCode >= 48 && e.charCode <= 57))) {
+        if (txtVal.length <= 4) {
+            $('#prefix').val(txtVal.toLocaleUpperCase());
+        }
+    }
+});

@@ -390,6 +390,7 @@ table.dataTable {
     bottom: 105px;
     right: 454px;
     width: 318px;
+    z-index:2;
 }
 
 .time-tracker-modal {
@@ -417,13 +418,6 @@ table.dataTable {
     margin-top: auto;
 }
 
-.task-detail {
-    &__heading {
-        display: inline-block;
-        width: 30%;
-    }
-}
-
 .badge-primary {
     background: #007bff;
 }
@@ -438,6 +432,7 @@ table.dataTable {
     height: 50px;
     bottom: 0;
     width: 100%;
+    z-index:2;
 }
 
 .powered-by {
@@ -465,3 +460,4 @@ table.dataTable {
     color: $green;
     font-weight: bold;
 }
+

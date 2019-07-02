@@ -153,7 +153,7 @@ function storeTimeEntry() {
             }
         },
         error: function (result) {
-            printErrorMessage("#validationErrorsBox", result);
+            printErrorMessage("#timeTrackerValidationErrorsBox", result);
             $('#tmActivityId').attr('disabled', true);
             $('#tmTaskId').attr('disabled', true);
             $('#tmProjectId').attr('disabled', true);
@@ -196,17 +196,22 @@ $("#tmProjectId").on('change', function (e) {
 
 function loadTimerData(projectId) {
     $.ajax({
-        url: myTasksUrl +'?project_id=' + projectId,
+        url: myTasksUrl + '?project_id=' + projectId,
         type: 'GET',
         success: function (result) {
             $('#tmTaskId').find('option').remove().end().append('<option value="">Select Task</option>');
             $('#tmTaskId').val("").trigger('change');
+
             $(result.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
             });
+
+            $('#tmActivityId').find('option').remove().end().append('<option value="">Select Activity</option>');
+            $('#tmActivityId').val("").trigger('change');
             $(result.activities).each(function (i, e) {
                 $("#tmActivityId").append($('<option></option>').attr('value', e.id).text(e.name));
             });
+
             $("#tmTaskId").removeAttr('disabled');
             // if timer is running then set values as it is
             if (localStorage.getItem('clockRunning') !== null) {
@@ -215,7 +220,7 @@ function loadTimerData(projectId) {
 
                 $('#tmTaskId').attr('disabled', true);
                 $('#tmActivityId').attr('disabled', true);
-            }else {
+            } else {
                 $('#tmActivityId').val(localStorage.getItem('activity_id')).trigger("change");
                 $('#tmTaskId').val(localStorage.getItem('task_id')).trigger("change");
             }

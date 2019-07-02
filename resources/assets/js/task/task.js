@@ -11,6 +11,10 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
+    $('#priority,#editPriority').select2({
+        width: '100%',
+        placeholder: "Select Priority"
+    });
     $('#tagIds,#assignee').select2({
         width: '100%',
         tags: true
@@ -24,7 +28,7 @@ $(function () {
             down: "icon-angle-down"
         },
         sideBySide: true,
-        minDate: new Date()
+        minDate: moment().millisecond(0).second(0).minute(0).hour(0)
     });
 
     $(document).ajaxComplete(function (result) {
@@ -86,7 +90,8 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a href="' + taskUrl + row.id + '" target="_blank">' + row.title + '</a>'
+                let url = taskUrl + row.project.prefix + '-' + row.task_number;
+                return '<a href="' + url + '" target="_blank">' + row.title + '</a>'
             },
             name: 'title'
         },
@@ -130,8 +135,8 @@ var tbl = $('#task_table').DataTable({
                     '<i class="cui-trash action-icon"></i></a>' +
                     '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
                     '<i class="fa fa-user-clock action-icon"></i></a>' +
-                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-warning btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
-                    '<i class="fa fa-eye action-icon"></i></a>'
+                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
+                    '<i class="fa fa-clock action-icon"></i></a>'
             }, name: 'id'
         }
     ],
@@ -187,6 +192,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editTagIds").val(tagsIds).trigger('change');
 
                 $("#editAssignee").val(userIds).trigger('change');
+                $("#editPriority").val(task.priority).trigger('change');
                 $('#EditModal').modal('show');
             }
         },
@@ -294,8 +300,9 @@ $('#editForm').submit(function (event) {
 
 $('#AddModal').on('hidden.bs.modal', function () {
     $('#projectId').val(null).trigger("change");
-    $('#assignTo').val(null).trigger("change");
+    $('#assignee').val(null).trigger("change");
     $('#tagIds').val(null).trigger("change");
+    $('#priority').val(null).trigger("change");
     resetModalForm('#addNewForm', '#validationErrorsBox');
 });
 

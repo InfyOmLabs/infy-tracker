@@ -25,7 +25,7 @@
         <div class="col-md-6">
             <div class="card mx-4">
                 <div class="card-body p-4">
-                    <form method="post" action="{{ url('/password/reset') }}">
+                    <form method="post" action="{{ route('password.update') }}">
                         {!! csrf_field() !!}
                         <h1>Reset Password</h1>
                         <p class="text-muted">Enter email and new password</p>
@@ -67,6 +67,7 @@
                                </span>
                             @endif
                         </div>
+                        <input type="hidden" name="token" value="{{$token}}">
                         <button type="submit" class="btn btn-block btn-primary btn-block btn-flat">
                             <i class="fa fa-btn fa-refresh"></i> Reset
                         </button>
@@ -77,7 +78,7 @@
     </div>
 </div>
 <!-- CoreUI and necessary plugins-->
-<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.min.js"></script>

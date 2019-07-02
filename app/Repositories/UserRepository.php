@@ -3,9 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Crypt;
 use Exception;
 use Hash;
-use Crypt;
 
 /**
  * Class UserRepository
@@ -46,11 +46,11 @@ class UserRepository extends BaseRepository
      */
     public function getUserList()
     {
-        return User::pluck('name', 'id');
+        return User::orderBy('name')->pluck('name', 'id');
     }
 
     /**
-     * @param  array  $input
+     * @param  array $input
      * @return bool
      * @throws Exception
      */
@@ -68,7 +68,8 @@ class UserRepository extends BaseRepository
         return true;
     }
 
-    public function resendEmailVerification($id){
+    public function resendEmailVerification($id)
+    {
         /** @var AccountRepository $accountRepository */
         $accountRepository = new AccountRepository();
         $activation_code = uniqid();
@@ -85,5 +86,18 @@ class UserRepository extends BaseRepository
             $code
         );
         return true;
+    }
+
+    /**
+     * @param $id
+     * @return User
+     */
+    public function activeDeActiveUser($id)
+    {
+        /** @var User $user */
+        $user = $this->findOrFail($id);
+        $user->is_active = !$user->is_active;
+        $user->save();
+        return $user;
     }
 }

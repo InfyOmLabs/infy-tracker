@@ -65,7 +65,7 @@ class UserController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new UserDataTable())->get())->make(true);
         }
-        $projects = $this->projectRepository->all()->pluck('name', 'id');
+        $projects = $this->projectRepository->getProjectsList();
 
         return view('users.index')->with('projects', $projects);
     }
@@ -213,5 +213,15 @@ class UserController extends AppBaseController
             }
         }
         return $this->sendSuccess('Profile updated successfully.');
+    }
+
+    /**
+     * @param $id
+     * @return JsonResponse
+     */
+    public function activeDeActiveUser($id)
+    {
+        $this->userRepository->activeDeActiveUser($id);
+        return $this->sendSuccess('User updated successfully.');
     }
 }

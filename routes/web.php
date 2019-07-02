@@ -20,6 +20,7 @@ Route::get('/', function () {
 | Auth Login Route
 |--------------------------------------------------------------------------
 */
+Auth::routes();
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 
 Route::post('login', 'Auth\LoginController@login');
@@ -29,7 +30,7 @@ Route::get('activate', 'AuthController@verifyAccount');
 Route::post('set-password', 'AuthController@setPassword');
 
 Route::group(['middleware' => ['auth', 'validate.user']], function () {
-    Route::get('/home', 'HomeController@index')->name('home');
+//    Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/users-work-report', 'HomeController@workReport')->name('users-work-report');
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
 
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('clients/{id}/update', 'ClientController@update');
 
     Route::post('users/profile-update', 'UserController@profileUpdate');
+    Route::post('users/{id}/active-de-active', 'UserController@activeDeActiveUser');
     Route::resource('users', 'UserController');
     Route::post('users/{id}/update', 'UserController@update');
     Route::post('users/{id}/update-profile', 'UserController@updateProfile');
@@ -57,6 +59,12 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::resource('tasks', 'TaskController');
     Route::post('tasks/{id}/update', 'TaskController@update');
     Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
+    Route::post('tasks/add-attachment/{id}', 'TaskController@addAttachment');
+    Route::post('tasks/delete-attachment/{id}', 'TaskController@deleteAttachment');
+    Route::get('tasks/get-attachments/{id}', 'TaskController@getAttachment');
+    Route::post('comments/new', 'CommentController@addComment');
+    Route::post('comments/{id}/update', 'CommentController@editComment');
+    Route::get('comments/{id}/delete', 'CommentController@deleteComment');
 
     Route::resource('timeEntries', 'TimeEntryController');
     Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
