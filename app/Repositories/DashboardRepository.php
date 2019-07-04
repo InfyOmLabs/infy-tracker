@@ -46,7 +46,7 @@ class DashboardRepository
 
         $data = [];
         $totalRecords = 0;
-        $index=0;
+        $index = 0;
         /** @var TimeEntry $entry */
         foreach ($projects as $entry) {
             $item['label'] = $entry['name'];

@@ -1,8 +1,8 @@
-{{--<li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
+<li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('home') !!}">
         <i class="fas fa-tachometer-alt nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Dashboard
     </a>
-</li>--}}
+</li>
 
 <li class="nav-item {{ Request::is('clients*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('clients.index') !!}">

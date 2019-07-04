@@ -1,6 +1,6 @@
 $('#userId').select2({
-    width: '100%',
-    placeholder:'Select User'
+    width: '110%',
+    placeholder: 'Select User'
 });
 let timeRange = $('#time_range');
 const today = moment();
@@ -9,7 +9,7 @@ let end = today.clone().endOf('week');
 let userId = $('#userId').val();
 let isPickerApply = false;
 $(window).on("load", function () {
-    loadUserWorkReport(start.format('YYYY-MM-D  H:mm:ss'), end.format('YYYY-MM-D  H:mm:ss'),userId);
+    loadUserWorkReport(start.format('YYYY-MM-D  H:mm:ss'), end.format('YYYY-MM-D  H:mm:ss'), userId);
 });
 
 timeRange.on('apply.daterangepicker', function (ev, picker) {
