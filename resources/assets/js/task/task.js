@@ -43,6 +43,12 @@ $(function () {
     });
 });
 
+function getRandomColor() {
+    let num = Math.floor(Math.random() * 12) + 1;
+    let coloCodes = ['0095ff', '9594fe', 'da4342', '8e751c', 'ac1f87', 'c86069', '370e1c', 'ca4e7d', 'c02bd8', '289e05', '3aad14', '0D8ABC', '511852'];
+    return coloCodes[num];
+}
+
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
@@ -98,11 +104,12 @@ var tbl = $('#task_table').DataTable({
             data: function (row) {
                 let imgStr = ''
                 $(row.task_assignee).each(function (i, e) {
+                    let colorCode = getRandomColor();
                     let nameArr = e.name.split(' ');
                     if(nameArr.length >= 2){
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
                     }else {
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
                     }
                 });
 
