@@ -237,8 +237,8 @@ $(document).on('click', '.taskDetails', function (event) {
                         "<td>" + elem.start_time + "</td>" +
                         "<td>" + elem.end_time + "</td>" +
                         "<td>" + elem.duration + "</td>" +
-                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm' onclick='renderTimeEntry(" + elem.id + ")'  style='margin-right:5px;'><i class='cui-pencil action-icon'  style='color:#3c8dbc'></i></a>" +
-                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")' style='margin-right: 5px'><i class='cui-trash action-icon' style='color:red'></i></a></td>" +
+                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
+                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
                         "</tr>"
                     );
                     table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
@@ -349,7 +349,7 @@ window.deleteTimeEntry = function (timeEntryId) {
     let url = timeEntryUrl + timeEntryId;
     swal({
             title: "Delete !",
-            text: "Are you sure you want to delete this time entry?",
+            text: "Are you sure you want to delete this Time Entry?",
             type: "warning",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -370,7 +370,7 @@ window.deleteTimeEntry = function (timeEntryId) {
                     }
                     swal({
                         title: 'Deleted!',
-                        text: 'Time entry has been deleted.',
+                        text: 'Time Entry has been deleted.',
                         type: 'success',
                         timer: 2000
                     });
