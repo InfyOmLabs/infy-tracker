@@ -29,13 +29,9 @@ class TaskDataTable
                 $q->where('project_id', $input['filter_project']);
             });
 
-        $query->when(isset($input['filter_status']),
+        $query->when(isset($input['filter_status']) && $input['filter_status'] != 2,
             function (Builder $q) use ($input) {
-                if($input['filter_status'] == 2){
-                    $q->whereIn('status', [0,1]);
-                } else {
-                    $q->where('status', $input['filter_status']);
-                }
+                $q->where('status', $input['filter_status']);
             });
 
         $query->when(isset($input['filter_user']),
