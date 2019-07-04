@@ -100,9 +100,9 @@ var tbl = $('#task_table').DataTable({
                 $(row.task_assignee).each(function (i, e) {
                     let nameArr = e.name.split(' ');
                     if(nameArr.length >= 2){
-                        imgStr += '<img class="padding-2" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
                     }else {
-                        imgStr += '<img class="padding-2" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background=0D8ABC&color=fff&rounded=true&size=30">';
                     }
                 });
 
