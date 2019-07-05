@@ -4,7 +4,6 @@
         <th></th>
         <th>Title</th>
         <th>Assign To</th>
-        <th>Project</th>
         <th>Due Date</th>
         <th>Created At</th>
         <th>Reporter</th>
