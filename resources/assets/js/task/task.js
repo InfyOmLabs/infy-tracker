@@ -43,6 +43,12 @@ $(function () {
     });
 });
 
+function getRandomColor() {
+    let num = Math.floor(Math.random() * 12) + 1;
+    let coloCodes = ['0095ff', '9594fe', 'da4342', '8e751c', 'ac1f87', 'c86069', '370e1c', 'ca4e7d', 'c02bd8', '289e05', '3aad14', '0D8ABC', '511852'];
+    return coloCodes[num];
+}
+
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
@@ -97,12 +103,18 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                var assignee = [];
+                let imgStr = ''
                 $(row.task_assignee).each(function (i, e) {
-                    assignee.push(e.name);
+                    let colorCode = getRandomColor();
+                    let nameArr = e.name.split(' ');
+                    if(nameArr.length >= 2){
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                    }else {
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                    }
                 });
 
-                return assignee.join(", ")
+                return imgStr;
             }, name: 'taskAssignee.name'
         },
         {
@@ -237,8 +249,8 @@ $(document).on('click', '.taskDetails', function (event) {
                         "<td>" + elem.start_time + "</td>" +
                         "<td>" + elem.end_time + "</td>" +
                         "<td>" + elem.duration + "</td>" +
-                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm' onclick='renderTimeEntry(" + elem.id + ")'  style='margin-right:5px;'><i class='cui-pencil action-icon'  style='color:#3c8dbc'></i></a>" +
-                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ", " + elem.task_id + ")' style='margin-right: 5px'><i class='cui-trash action-icon' style='color:red'></i></a></td>" +
+                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
+                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
                         "</tr>"
                     );
                     table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
@@ -343,7 +355,49 @@ window.manageCollapseIcon = function (id) {
         $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle');
         $('#tdCollapse' + id).find('a span').addClass("fa-minus-circle");
     }
-}
+};
+
+window.deleteTimeEntry = function (timeEntryId) {
+    let url = timeEntryUrl + timeEntryId;
+    swal({
+            title: "Delete !",
+            text: "Are you sure you want to delete this Time Entry?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#5cb85c',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes'
+        },
+        function () {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                dataType: 'json',
+                success: function (obj) {
+                    if (obj.success) {
+                        $(".close").trigger('click');
+                    }
+                    swal({
+                        title: 'Deleted!',
+                        text: 'Time Entry has been deleted.',
+                        type: 'success',
+                        timer: 2000
+                    });
+                },
+                error: function (data) {
+                    swal({
+                        title: '',
+                        text: data.responseJSON.message,
+                        type: 'error',
+                        timer: 5000
+                    });
+                }
+            });
+        });
+};
 
 function setTaskDrp(id) {
     $('#taskId').val(id).trigger("change");
