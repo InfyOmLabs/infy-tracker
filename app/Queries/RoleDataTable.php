@@ -10,8 +10,6 @@ use App\Models\Role;
  */
 class RoleDataTable
 {
-
-
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
