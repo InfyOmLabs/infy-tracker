@@ -13,6 +13,10 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class PermissionController
+ * @package App\Http\Controllers
+ */
 class PermissionController extends AppBaseController
 {
     /** @var PermissionRepository */

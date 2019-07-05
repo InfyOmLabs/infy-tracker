@@ -15,6 +15,10 @@ use Illuminate\Http\Request;
 use Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * Class RoleController
+ * @package App\Http\Controllers
+ */
 class RoleController extends AppBaseController
 {
     /** @var  RoleRepository */
