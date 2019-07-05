@@ -22,7 +22,6 @@ class HomeController extends AppBaseController
         $this->middleware('auth');
         $this->dashboardRepo = $dashboardRepository;
         $this->userRepository = $userRepository;
-
     }
 
     /**
