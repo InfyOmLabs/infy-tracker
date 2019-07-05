@@ -14,7 +14,6 @@ $(function () {
         width: '100%',
         tags: true,
         createTag: function (tag) {
-
             // Check if the option is already there
             var found = false;
             $("#editTagIds option").each(function() {
@@ -22,7 +21,6 @@ $(function () {
                     found = true;
                 }
             });
-
             // Show the suggestion only if a match was not found
             if (!found) {
                 return {
