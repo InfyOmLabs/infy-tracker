@@ -14,14 +14,12 @@ $(function () {
         width: '100%',
         tags: true,
         createTag: function (tag) {
-            // Check if the option is already there
             var found = false;
             $("#editTagIds option").each(function() {
                 if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
                     found = true;
                 }
             });
-            // Show the suggestion only if a match was not found
             if (!found) {
                 return {
                     id: tag.term,
