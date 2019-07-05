@@ -1,16 +1,16 @@
 <?php
 
 use App\Models\Permission;
-use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Seeder;
 
-class MigrateDefaultPermissions extends Migration
+class PermissionTableSeeder extends Seeder
 {
     /**
-     * Run the migrations.
+     * Run the database seeds.
      *
      * @return void
      */
-    public function up()
+    public function run()
     {
         $permissions = [
             [
@@ -58,19 +58,5 @@ class MigrateDefaultPermissions extends Migration
         foreach ($permissions as $permission) {
             Permission::create($permission);
         }
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-       $permissions=Permission::get();
-       /** @var Permission $permission */
-        foreach ($permissions as $permission){
-           $permission->delete();
-       }
     }
 }

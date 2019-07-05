@@ -43,13 +43,13 @@
     </a>
 </li>
 @endpermission
-
+@permission('manage_reports')
 <li class="nav-item {{ Request::is('report*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('reports') !!}">
         <i class="fa fa-file nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Reports
     </a>
 </li>
-
+@endpermission
 @permission('manage_roles')
 <li class="nav-item {{ Request::is('roles*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('roles') !!}">

@@ -16,13 +16,13 @@
     <div class="row">
         @foreach($permissions as $key=>$value)
             @if(in_array($key,$roles->perms->pluck('id')->toArray()))
-                <div class="checkbox col-lg-2">
-                    <label class="vertical-align"><input name="permissions[]" type="checkbox" class="permission-checkbox"
+                <div class="checkbox col-lg-2 role-checkbox">
+                    <label class="role-checkbox__label"><input name="permissions[]" type="checkbox" class="permission-checkbox"
                                   value="{{$key}}" checked> {{$value}}</label>
                 </div>
             @else
-                <div class="checkbox col-lg-2">
-                    <label class="vertical-align"><input name="permissions[]" type="checkbox" class="permission-checkbox"
+                <div class="checkbox col-lg-2 role-checkbox">
+                    <label class="role-checkbox__label"><input name="permissions[]" type="checkbox" class="permission-checkbox"
                                   value="{{$key}}"> {{$value}}</label>
                 </div>
             @endif
