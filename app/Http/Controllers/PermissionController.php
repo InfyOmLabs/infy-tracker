@@ -18,7 +18,6 @@ class PermissionController extends AppBaseController
     /** @var PermissionRepository */
     private $permissionRepository;
 
-
     /**
      * PermissionController constructor.
      * @param PermissionRepository $permissionRepository

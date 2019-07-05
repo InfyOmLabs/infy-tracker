@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Permission;
@@ -23,6 +22,11 @@ class RoleController extends AppBaseController
     /** @var PermissionRepository */
     private $permissionRepository;
 
+    /**
+     * RoleController constructor.
+     * @param RoleRepository $rolesRepo
+     * @param PermissionRepository $permissionRepository
+     */
     public function __construct(RoleRepository $rolesRepo, PermissionRepository $permissionRepository)
     {
         $this->rolesRepository = $rolesRepo;
@@ -72,7 +76,6 @@ class RoleController extends AppBaseController
         if (isset($input['permissions']) && !empty($input['permissions'])) {
             $roles->perms()->sync($input['permissions']);
         }
-
         Flash::success('Roles saved successfully.');
 
         return redirect(route('roles.index'));
@@ -117,7 +120,7 @@ class RoleController extends AppBaseController
             $permissions = $input['permissions'];
         }
         $roles->perms()->sync($permissions);
-        Flash::success('Roles updated successfully.');
+        Flash::success('Role updated successfully.');
 
         return redirect(route('roles.index'));
     }
@@ -144,10 +147,8 @@ class RoleController extends AppBaseController
         if ($roles->users()->count() > 0) {
             throw new BadRequestHttpException('This user role could not be deleted, because it’s assigned to a user.', null, \Illuminate\Http\Response::HTTP_BAD_REQUEST);
         }
-
         $this->rolesRepository->delete($id);
-
-        Flash::success('Roles deleted successfully.');
+        Flash::success('Role deleted successfully.');
 
         return response()->json(['success' => true], 200);
     }

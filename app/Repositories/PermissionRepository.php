@@ -4,7 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Permission;
 
-
+/**
+ * Class PermissionRepository
+ * @package App\Repositories
+ */
 class PermissionRepository extends BaseRepository
 {
     /**
@@ -33,6 +36,10 @@ class PermissionRepository extends BaseRepository
     {
         return Permission::class;
     }
+
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function permissionList()
     {
         return Permission::pluck('display_name', 'id');

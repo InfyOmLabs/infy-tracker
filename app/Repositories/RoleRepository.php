@@ -4,7 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Role;
 
-
+/**
+ * Class RoleRepository
+ * @package App\Repositories
+ */
 class RoleRepository extends BaseRepository
 {
     /**
@@ -33,7 +36,6 @@ class RoleRepository extends BaseRepository
     {
         return Role::class;
     }
-
 
     /**
      * @return mixed

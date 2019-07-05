@@ -5,8 +5,6 @@
 @section('page_css')
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
 @endsection
-
-
 @section('content')
     <ol class="breadcrumb">
           <li class="breadcrumb-item">

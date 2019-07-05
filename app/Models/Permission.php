@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Zizaco\Entrust\EntrustPermission;
-
-
 /**
  * App\Models\Permission
  *
