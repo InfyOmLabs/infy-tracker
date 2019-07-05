@@ -7,9 +7,26 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
-    $('#editTagIds,#editAssignee').select2({
+    $('#editAssignee').select2({
+        width: '100%'
+    });
+    $('#editTagIds').select2({
         width: '100%',
-        tags: true
+        tags: true,
+        createTag: function (tag) {
+            var found = false;
+            $("#editTagIds option").each(function() {
+                if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                return {
+                    id: tag.term,
+                    text: tag.term
+                };
+            }
+        }
     });
     $('#editPriority').select2({
         width: '100%',

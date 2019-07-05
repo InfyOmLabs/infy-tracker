@@ -3,11 +3,11 @@ $(function () {
     $('#filter_project,#filter_status,#filter_user').select2({
         minimumResultsForSearch: -1
     });
-    $('#assignTo').select2({
+    $('#assignTo,#editAssignTo').select2({
         width: '100%',
         placeholder: "Select Assignee"
     });
-    $('#projectId').select2({
+    $('#projectId,#editProjectId').select2({
         width: '100%',
         placeholder: "Select Project"
     });
@@ -15,9 +15,26 @@ $(function () {
         width: '100%',
         placeholder: "Select Priority"
     });
-    $('#tagIds,#assignee').select2({
+    $('#assignee,#editAssignee').select2({
         width: '100%',
-        tags: true
+    });
+    $('#tagIds,#editTagIds').select2({
+        width: '100%',
+        tags: true,
+        createTag: function (tag) {
+            var found = false;
+            $("#tagIds option").each(function() {
+                if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                return {
+                    id: tag.term,
+                    text: tag.term
+                };
+            }
+        }
     });
 
     $('#dueDate,#editDueDate').datetimepicker({
@@ -166,18 +183,6 @@ $('#task_table').on('draw.dt', function () {
 // open edit user model
 $(document).on('click', '.edit-btn', function (event) {
     let id = $(event.currentTarget).data('id');
-    $('#editAssignTo').select2({
-        width: '100%',
-        placeholder: "Select Assignee"
-    });
-    $('#editProjectId').select2({
-        width: '100%',
-        placeholder: "Select Project"
-    });
-    $('#editTagIds,#editAssignee').select2({
-        width: '100%',
-        tags: true
-    });
     $.ajax({
         url: taskUrl + id + '/edit',
         type: 'GET',
