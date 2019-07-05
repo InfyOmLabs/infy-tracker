@@ -6,6 +6,10 @@ namespace App\Http\Requests;
 use App\Models\Permission;
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class CreatePermissionRequest
+ * @package App\Http\Requests
+ */
 class CreatePermissionRequest extends FormRequest
 {
     /**
