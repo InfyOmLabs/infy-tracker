@@ -11,6 +11,7 @@ namespace App\Repositories;
 
 use App\Models\TimeEntry;
 use App\Models\User;
+use Arr;
 use Carbon\Carbon;
 
 class DashboardRepository
@@ -22,8 +23,9 @@ class DashboardRepository
     public function getWorkReport($input)
     {
         $dates = $this->getDate($input['start_date'], $input['end_date']);
+        $colors = getChartColors();
         $timeEntry = TimeEntry::with('task.project')
-            ->whereUserId(getLoggedInUserId())
+            ->whereUserId($input['user_id'])
             ->whereBetween('start_time', [$dates['startDate'], $dates['endDate']])
             ->get();
 
@@ -44,9 +46,11 @@ class DashboardRepository
 
         $data = [];
         $totalRecords = 0;
+        $index = 0;
         /** @var TimeEntry $entry */
         foreach ($projects as $entry) {
-            $item['name'] = $entry['name'];
+            $item['label'] = $entry['name'];
+            $item['backgroundColor'] = $colors[$index];
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
                 $duration = isset($entry[$date]) ? round($entry[$date] / 60, 2) : 0;
@@ -54,6 +58,7 @@ class DashboardRepository
                 $totalRecords = $totalRecords + $duration;
             }
             $data[] = (object)$item;
+            $index++;
         }
 
         $result = [];
@@ -82,7 +87,7 @@ class DashboardRepository
             ->get();
         $users = User::all();
         $data['drilldown'] = [];
-        $data['data'] = [];
+        $data['result'] = [];
         foreach ($users as $user) {
             $totalDuration = 0;
             $projectData = [];
@@ -115,17 +120,22 @@ class DashboardRepository
                     ];
             }
 
-            $data['data'][] = (object)[
+            $data['result'][] = (object)[
                 "name" => ucfirst($user->name),
-                "y" => round($totalDuration / 60, 2),
+                "total_hours" => round($totalDuration / 60, 2),
                 "drilldown" => $totalDuration === 0 ? null : ucfirst($user->name)
             ];
         }
         $data['totalRecords'] = 0;
-        foreach ($data['data'] as $item) {
-            $data['totalRecords'] = $data['totalRecords'] + $item->y;
+        foreach ($data['result'] as $item) {
+            $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
         $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
+        $data['data']['labels'] = Arr::pluck($data['result'], 'name');
+        $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
+        $data['data']['backgroundColor'] = array_values(getBarChartColors());
+        $data['data']['borderColor'] = array_keys(getBarChartColors());
+        //unset($data['result']);
         return $data;
     }
 

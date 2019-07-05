@@ -12,7 +12,7 @@ $datePicker.on('apply.daterangepicker', function (ev, picker) {
 
 window.cb = function (start) {
     $datePicker.find('span').html(start.format('MMMM D, YYYY'));
-}
+};
 
 cb(start);
 
@@ -34,87 +34,58 @@ window.loadDevelopersWorkReport = function (startDate) {
         },
         cache: false
     }).done(prepareDeveloperWorkReport);
-}
+};
 
 window.prepareDeveloperWorkReport = function (result) {
+    $('#developers-daily-work-report-container').html('');
     let data = result.data;
     if (data.totalRecords === 0) {
         $('#developers-daily-work-report-container').empty();
         $('#developers-daily-work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
         return true
+    }else{
+        $('#developers-daily-work-report-container').html('');
+        $('#developers-daily-work-report-container').append('<canvas id="developers-daily-work-report"></canvas>');
     }
-    Highcharts.chart('developers-daily-work-report', {
-        chart: {
-            type: 'column'
+    let ctx = document.getElementById('developers-daily-work-report').getContext('2d');
+    ctx.canvas.style.height = '400px';
+    ctx.canvas.style.width = '100%';
+    let dailyWorkReportChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.data.labels,
+            datasets: [{
+                label: data.label,
+                data: data.data.data,
+                backgroundColor: data.data.backgroundColor,
+                borderColor: data.data.borderColor,
+                borderWidth: 1
+            }]
         },
+        options: {
+            tooltips: {
+                mode: 'index',
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
 
-        title: {
-            text: data.label
-        },
-
-        xAxis: {
-            type: 'category',
-            title: {
-                text: 'Developers'
-            }
-        },
-
-        yAxis: {
-            title: {
-                text: 'Hours'
-            }
-        },
-
-        legend: {
-            enabled: false
-        },
-
-        plotOptions: {
-            series: {
-                borderWidth: 0,
-                dataLabels: {
-                    enabled: true,
-                    formatter: function () {
-                        const time = this.y.toString().split('.');
-                        let m = this.y * 60;
-                        const h = time[0]
-                        const rm = m - (h * 60);
-                        return h + ':' + Math.floor(rm) + ' hr'
-                    },
-                },
-            }
-        },
-
-        credits: {
-            enabled: false
-        },
-
-        tooltip: {
-            formatter: function () {
-                const time = this.y.toString().split('.');
-                let m = this.y * 60;
-                const h = time[0]
-                const rm = m - (h * 60);
-                return this.series.name + ' <br/>Total HR:' + h + ':' + Math.floor(rm) + ' hr'
+                        if (label) {
+                            label += ': ';
+                        }
+                        label += Math.round(tooltipItem.yLabel * 100) / 100;
+                        return label +' hr';
+                    }
+                }
             },
-        },
-
-        series: [
-            {
-                name: "Daily Reports",
-                colorByPoint: true,
-                data: data.data
+            scales: {
+                yAxes: [{
+                    stacked: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Hours'
+                    }
+                }]
             }
-        ],
-
-        drilldown: {
-            series: data.drilldown
-        },
-
-        navigation: {
-            buttonOptions: {
-                enabled: false
-            }
-        },
+        }
     });
-}
+};

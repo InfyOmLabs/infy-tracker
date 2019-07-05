@@ -30,7 +30,7 @@ Route::get('activate', 'AuthController@verifyAccount');
 Route::post('set-password', 'AuthController@setPassword');
 
 Route::group(['middleware' => ['auth', 'validate.user']], function () {
-//    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/users-work-report', 'HomeController@workReport')->name('users-work-report');
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
 
@@ -76,4 +76,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::get('my-tasks', 'TaskController@myTasks');
     Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask');
     Route::get('get-tasks/{projectId}', 'TimeEntryController@getTasks');
+});
+
+Route::fallback(function() {
+    abort(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 });
