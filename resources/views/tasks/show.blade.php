@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4 class="mb-3">
-                                    <span class="text-info pr-2">#{{$task->task_number}}</span>{{$task->title}}
+                                    <span class="text-info pr-2">{{$task->prefix_task_number}}</span>{{$task->title}}
                                 </h4>
                             </div>
                         </div>
