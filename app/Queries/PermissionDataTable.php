@@ -4,7 +4,6 @@ namespace App\Queries;
 
 use App\Models\Permission;
 
-
 /**
  * Class PermissionDataTable
  * @package App\Queries
