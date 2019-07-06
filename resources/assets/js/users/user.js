@@ -1,7 +1,6 @@
 $(function () {
     $('#projectId,#editProjectId').select2({
-        width: '100%',
-        tags: true
+        width: '100%'
     });
 });
 

@@ -29,7 +29,7 @@ class TaskDataTable
                 $q->where('project_id', $input['filter_project']);
             });
 
-        $query->when(isset($input['filter_status']),
+        $query->when(isset($input['filter_status']) && $input['filter_status'] != 2,
             function (Builder $q) use ($input) {
                 $q->where('status', $input['filter_status']);
             });

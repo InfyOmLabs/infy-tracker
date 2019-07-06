@@ -45,7 +45,9 @@ class TaskController extends AppBaseController
                 'filter_project',
                 'filter_status',
                 'filter_user',
-            ])))->make(true);
+            ])))->editColumn('title', function (Task $task) {
+                return $task->prefix_task_number . ' ' . $task->title;
+            })->make(true);
         }
         $taskData = $this->taskRepository->getTaskData();
 
@@ -84,19 +86,19 @@ class TaskController extends AppBaseController
      */
     public function show($id)
     {
-        if(count(explode('-',$id)) != 2){
+        if (count(explode('-', $id)) != 2) {
             return redirect()->back();
         }
-        $projectPrefix = explode('-',$id)[0];
-        $taskNumber = explode('-',$id)[1];
+        $projectPrefix = explode('-', $id)[0];
+        $taskNumber = explode('-', $id)[1];
         /** @var Project $project */
         $project = Project::wherePrefix($projectPrefix)->first();
-        if(empty($project)){
+        if (empty($project)) {
             return redirect()->back();
         }
         /** @var Task $task */
-        $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser','timeEntries'])->first();
-        if(empty($task)){
+        $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser', 'timeEntries'])->first();
+        if (empty($task)) {
             return redirect()->back();
         }
         $taskData = $this->taskRepository->getTaskData();

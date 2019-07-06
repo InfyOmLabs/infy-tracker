@@ -3,11 +3,11 @@ $(function () {
     $('#filter_project,#filter_status,#filter_user').select2({
         minimumResultsForSearch: -1
     });
-    $('#assignTo').select2({
+    $('#assignTo,#editAssignTo').select2({
         width: '100%',
         placeholder: "Select Assignee"
     });
-    $('#projectId').select2({
+    $('#projectId,#editProjectId').select2({
         width: '100%',
         placeholder: "Select Project"
     });
@@ -15,9 +15,26 @@ $(function () {
         width: '100%',
         placeholder: "Select Priority"
     });
-    $('#tagIds,#assignee').select2({
+    $('#assignee,#editAssignee').select2({
         width: '100%',
-        tags: true
+    });
+    $('#tagIds,#editTagIds').select2({
+        width: '100%',
+        tags: true,
+        createTag: function (tag) {
+            var found = false;
+            $("#tagIds option").each(function() {
+                if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                return {
+                    id: tag.term,
+                    text: tag.term
+                };
+            }
+        }
     });
 
     $('#dueDate,#editDueDate').datetimepicker({
@@ -43,10 +60,16 @@ $(function () {
     });
 });
 
+function getRandomColor() {
+    let num = Math.floor(Math.random() * 12) + 1;
+    let coloCodes = ['0095ff', '9594fe', 'da4342', '8e751c', 'ac1f87', 'c86069', '370e1c', 'ca4e7d', 'c02bd8', '289e05', '3aad14', '0D8ABC', '511852'];
+    return coloCodes[num];
+}
+
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[5, "desc"]],
+    "order": [[4, "desc"]],
     ajax: {
         url: taskIndexUrl,
         data: function (data) {
@@ -57,7 +80,7 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [6],
             "orderable": false,
             "className": 'text-center',
             "width": "13%"
@@ -73,7 +96,7 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [4, 5],
+            "targets": [3, 4],
             "width": "10%",
             "className": 'text-center',
         },
@@ -97,17 +120,19 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                var assignee = [];
+                let imgStr = ''
                 $(row.task_assignee).each(function (i, e) {
-                    assignee.push(e.name);
+                    let colorCode = getRandomColor();
+                    let nameArr = e.name.split(' ');
+                    if(nameArr.length >= 2){
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                    }else {
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                    }
                 });
 
-                return assignee.join(", ")
+                return imgStr;
             }, name: 'taskAssignee.name'
-        },
-        {
-            data: 'project.name',
-            name: 'project.name'
         },
         {
             data: 'due_date',
@@ -154,24 +179,14 @@ $('#task_table').on('draw.dt', function () {
 // open edit user model
 $(document).on('click', '.edit-btn', function (event) {
     let id = $(event.currentTarget).data('id');
-    $('#editAssignTo').select2({
-        width: '100%',
-        placeholder: "Select Assignee"
-    });
-    $('#editProjectId').select2({
-        width: '100%',
-        placeholder: "Select Project"
-    });
-    $('#editTagIds,#editAssignee').select2({
-        width: '100%',
-        tags: true
-    });
     $.ajax({
         url: taskUrl + id + '/edit',
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                var task = result.data;
+                let task = result.data;
+                let desc = $('<div/>').html(task.description).text();
+                CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);
                 $('#editTitle').val(task.title);
                 $('#editDesc').val(task.description);
@@ -237,8 +252,8 @@ $(document).on('click', '.taskDetails', function (event) {
                         "<td>" + elem.start_time + "</td>" +
                         "<td>" + elem.end_time + "</td>" +
                         "<td>" + elem.duration + "</td>" +
-                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm' onclick='renderTimeEntry(" + elem.id + ")'  style='margin-right:5px;'><i class='cui-pencil action-icon'  style='color:#3c8dbc'></i></a>" +
-                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ", " + elem.task_id + ")' style='margin-right: 5px'><i class='cui-trash action-icon' style='color:red'></i></a></td>" +
+                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
+                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
                         "</tr>"
                     );
                     table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
@@ -253,12 +268,16 @@ $(document).on('click', '.taskDetails', function (event) {
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnSave");
+    let loadingButton = jQuery(this).find("#btnSave");
     loadingButton.button('loading');
+
+    let formdata = $(this).serialize();
+    let desc = CKEDITOR.instances.description.getData();
+    formdata = formdata.replace("description=", "description="+desc);
     $.ajax({
         url: createTaskUrl,
         type: 'POST',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 $('#AddModal').modal('hide');
@@ -276,13 +295,20 @@ $('#addNewForm').submit(function (event) {
 
 $('#editForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnEditSave");
+    let loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
-    var id = $('#tagId').val();
+    let id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = CKEDITOR.instances.editDesc.getData();
+    $.each(formdata, function (i, val) {
+        if(val.name == 'description'){
+            formdata[i].value = desc;
+        }
+    });
     $.ajax({
         url: taskUrl + id + '/update',
         type: 'post',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 $('#EditModal').modal('hide');
@@ -299,6 +325,7 @@ $('#editForm').submit(function (event) {
 });
 
 $('#AddModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.description.setData('');
     $('#projectId').val(null).trigger("change");
     $('#assignee').val(null).trigger("change");
     $('#tagIds').val(null).trigger("change");
@@ -307,6 +334,7 @@ $('#AddModal').on('hidden.bs.modal', function () {
 });
 
 $('#EditModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.editDesc.setData('');
     resetModalForm('#editForm', '#editValidationErrorsBox');
 });
 
@@ -343,7 +371,49 @@ window.manageCollapseIcon = function (id) {
         $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle');
         $('#tdCollapse' + id).find('a span').addClass("fa-minus-circle");
     }
-}
+};
+
+window.deleteTimeEntry = function (timeEntryId) {
+    let url = timeEntryUrl + timeEntryId;
+    swal({
+            title: "Delete !",
+            text: "Are you sure you want to delete this Time Entry?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#5cb85c',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes'
+        },
+        function () {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                dataType: 'json',
+                success: function (obj) {
+                    if (obj.success) {
+                        $(".close").trigger('click');
+                    }
+                    swal({
+                        title: 'Deleted!',
+                        text: 'Time Entry has been deleted.',
+                        type: 'success',
+                        timer: 2000
+                    });
+                },
+                error: function (data) {
+                    swal({
+                        title: '',
+                        text: data.responseJSON.message,
+                        type: 'error',
+                        timer: 5000
+                    });
+                }
+            });
+        });
+};
 
 function setTaskDrp(id) {
     $('#taskId').val(id).trigger("change");
@@ -355,4 +425,14 @@ $(document).on('click', '.entry-model', function (event) {
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
     getTasksByproject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+});
+
+CKEDITOR.replace( 'description', {
+    language: 'en',
+    height: '100px',
+});
+
+CKEDITOR.replace( 'editDesc', {
+    language: 'en',
+    height: '100px',
 });
