@@ -57,6 +57,8 @@ $(document).on('click', '.edit-btn', function (event) {
         success: function (result) {
             if (result.success) {
                 var task = result.data;
+                let desc = $('<div/>').html(task.description).text();
+                CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);
                 $('#editTitle').val(task.title);
                 $('#editDesc').val(task.description);
@@ -90,10 +92,17 @@ $('#editForm').submit(function (event) {
     var loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
     var id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = CKEDITOR.instances.editDesc.getData();
+    $.each(formdata, function (i, val) {
+        if(val.name == 'description'){
+            formdata[i].value = desc;
+        }
+    });
     $.ajax({
         url: taskUrl + id + '/update',
         type: 'post',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 location.reload();
@@ -107,6 +116,7 @@ $('#editForm').submit(function (event) {
 });
 
 $('#EditModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.editDesc.setData('');
     resetModalForm('#editForm', '#editValidationErrorsBox');
 });
 
@@ -366,6 +376,11 @@ $(document).on('mouseleave', ".comments__information", function () {
 });
 
 CKEDITOR.replace( 'comment', {
+    language: 'en',
+    height: '100px',
+});
+
+CKEDITOR.replace( 'editDesc', {
     language: 'en',
     height: '100px',
 });
