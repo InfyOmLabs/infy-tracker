@@ -100,7 +100,7 @@
                                 <span class="task-detail__description-heading">Description</span>
                             </div>
                             <div class="col-lg-8 col-sm-12">
-                                <span>{{$task->description}}</span>
+                                <div><?php echo html_entity_decode($task->description) ?></div>
                             </div>
                         </div>
                         <div class="row">
