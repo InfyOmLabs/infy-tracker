@@ -73,6 +73,7 @@ class TaskRepository extends BaseRepository
         try {
             DB::beginTransaction();
             $input['created_by'] = getLoggedInUserId();
+            $input['description'] = htmlentities($input['description']);
             $task = Task::create($input);
 
             if (isset($input['tags']) && !empty($input['tags'])) {
@@ -106,6 +107,7 @@ class TaskRepository extends BaseRepository
 
         try {
             DB::beginTransaction();
+            $input['description'] = htmlentities($input['description']);
             $task->update($input);
 
             if (isset($input['tags']) && !empty($input['tags'])) {

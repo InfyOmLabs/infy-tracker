@@ -100,7 +100,7 @@
                                 <span class="task-detail__description-heading">Description</span>
                             </div>
                             <div class="col-lg-8 col-sm-12">
-                                <span>{{$task->description}}</span>
+                                <div><?php echo html_entity_decode($task->description) ?></div>
                             </div>
                         </div>
                         <div class="row">
@@ -173,7 +173,7 @@
             </div>
             <div class="previewEle">
             </div>
-            @include('tasks.task_edit_modal')
+            @include('tasks.edit_modal')
             @include('tasks.time_tracking_modal')
         </div>
     </div>
