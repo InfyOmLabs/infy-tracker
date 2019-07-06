@@ -135,7 +135,8 @@
                                                     <a>{{$comment['createdUser']->name}}</a>
                                                     @if($comment->created_by == Auth::id())
                                                         <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
-                                                        <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                        <a class="pull-right edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
+                                                        <a class="pull-right save-comment {{'comment-save-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>
                                                         <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                     @endif
                                                 </span>
@@ -161,7 +162,7 @@
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             {!! Form::button('Save', ['type'=>'button','class' => 'btn btn-primary','id'=>'btnComment','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
-                                            <button type="button" id="btnCancel" class="btn btn-light ml-1" data-dismiss="modal">Cancel</button>
+                                            <button type="reset" id="btnCancel" class="btn btn-light ml-1">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
