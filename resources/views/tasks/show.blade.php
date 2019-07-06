@@ -172,7 +172,7 @@
             </div>
             <div class="previewEle">
             </div>
-            @include('tasks.task_edit_modal')
+            @include('tasks.edit_modal')
             @include('tasks.time_tracking_modal')
         </div>
     </div>
