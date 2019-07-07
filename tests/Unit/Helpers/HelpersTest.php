@@ -19,5 +19,8 @@ class HelpersTest extends TestCase
 
         $result = explode_trim_remove_empty_values_from_array(" hello , ,, test   ");
         $this->assertEquals(["hello", "test"], $result);
+
+        $result = explode_trim_remove_empty_values_from_array(" hello ,, ,0, test   ");
+        $this->assertEquals(["hello", "0", "test"], $result);
     }
 }
