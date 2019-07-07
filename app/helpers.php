@@ -30,7 +30,7 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
         return !empty($value);
     });
 
-    return $arr;
+    return array_values($arr);
 }
 
 function time_elapsed_string($datetime, $full = false)
