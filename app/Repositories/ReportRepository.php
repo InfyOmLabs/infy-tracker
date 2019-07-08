@@ -1,39 +1,84 @@
 <?php
-/**
- * Company: InfyOm Technologies, Copyright 2019, All Rights Reserved.
- *
- * User: Ajay Makwana
- * Email: ajay.makwana@infyom.com
- * Date: 5/8/2019
- * Time: 11:25 AM
- */
 
 namespace App\Repositories;
 
-class ReportRepository
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\Report;
+use App\Models\ReportFilter;
+use App\Models\Tag;
+use App\Models\User;
+
+/**
+ * Class ReportRepository
+ * @package App\Repositories
+ * @version July 6, 2019, 12:12 pm UTC
+ */
+class ReportRepository extends BaseRepository
 {
+    /**
+     * @var array
+     */
+    protected $fieldSearchable = [
+        'name',
+        'start_date',
+        'end_date'
+    ];
 
     /**
+     * Return searchable fields
      * @return array
      */
-    public function getReportData()
+    public function getFieldsSearchable()
     {
-        /** @var UserRepository $userRepo */
-        $userRepo = app(UserRepository::class);
-        $data['users'] = $userRepo->getUserList();
+        return $this->fieldSearchable;
+    }
 
-        /** @var ActivityTypeRepository $activityTypeRepo */
-        $activityTypeRepo = app(ActivityTypeRepository::class);
-        $data['activityTypes'] = $activityTypeRepo->getActivityTypeList();
+    /**
+     * Configure the Model
+     **/
+    public function model()
+    {
+        return Report::class;
+    }
 
-        /** @var TaskRepository $taskRepo */
-        $taskRepo = app(TaskRepository::class);
-        $data['tasks'] = $taskRepo->getTaskList();
+    /**
+     * @param $input
+     * @param $report
+     * @return array
+     */
+    public function createReportFilter($input, $report)
+    {
+        $result = [];
+        if (isset($input['projectIds'])) {
+            foreach ($input['projectIds'] as $projectId) {
+                $result[] = $this->createFilter($report->id, $projectId, Project::class);
+            }
+        }
 
-        /** @var ProjectRepository $projectRepo */
-        $projectRepo = app(ProjectRepository::class);
-        $data['projects'] = $projectRepo->getLoginUserAssignProjectsArr();
+        if (isset($input['userIds'])) {
+            foreach ($input['userIds'] as $userId) {
+                $result[] = $this->createFilter($report->id, $userId, User::class);
+            }
+        }
 
-        return $data;
+        if (isset($input['tagsIds'])) {
+            foreach ($input['tagsIds'] as $tagsId) {
+                $result[] = $this->createFilter($report->id, $tagsId, Tag::class);
+            }
+        }
+
+        if (isset($input['client_id'])) {
+            $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+        }
+        return $result;
+    }
+
+    private function createFilter($reportId, $paramId, $type)
+    {
+        $filterInput['report_id'] = $reportId;
+        $filterInput['param_id'] = $paramId;
+        $filterInput['param_type'] = $type;
+        return ReportFilter::create($filterInput);
     }
 }

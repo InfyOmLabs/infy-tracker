@@ -390,7 +390,7 @@ table.dataTable {
     bottom: 105px;
     right: 454px;
     width: 318px;
-    z-index:2;
+    z-index: 2;
 }
 
 .time-tracker-modal {
@@ -432,7 +432,7 @@ table.dataTable {
     height: 50px;
     bottom: 0;
     width: 100%;
-    z-index:2;
+    z-index: 2;
 }
 
 .powered-by {
@@ -448,7 +448,16 @@ table.dataTable {
     font-weight: bold;
 }
 
-.assignee__avatar{
+.assignee__avatar {
     padding: 2px;
 }
 
+.select2-selection {
+    &--multiple {
+        border: 1px solid #e4e7ea !important;
+    }
+
+    &--single {
+        border: 1px solid #e4e7ea !important;
+    }
+}

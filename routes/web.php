@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
 
     Route::resource('clients', 'ClientController');
     Route::post('clients/{id}/update', 'ClientController@update');
+    Route::get('clients/{id}/projects', 'ClientController@projects');
 
     Route::post('users/profile-update', 'UserController@profileUpdate');
     Route::post('users/{id}/active-de-active', 'UserController@activeDeActiveUser');
@@ -54,7 +55,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::resource('projects', 'ProjectController');
     Route::get('my-projects', 'ProjectController@getMyProjects');
     Route::post('projects/{id}/update', 'ProjectController@update');
-
+    Route::get('projects/{id}/users', 'ProjectController@users');
     Route::resource('tasks', 'TaskController');
     Route::post('tasks/{id}/update', 'TaskController@update');
     Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
@@ -68,7 +69,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::resource('timeEntries', 'TimeEntryController');
     Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
 
-    Route::get('reports', 'ReportController@index')->name('reports.index');
+//    Route::get('reports', 'ReportController@index')->name('reports.index');
+    Route::resource('reports', 'ReportController');
     Route::get('timeTracker', 'TimeTrackerController@index')->name('timeTracker.index');
 
     Route::get('task-details/{task_id}', 'TaskController@getTaskDetails');

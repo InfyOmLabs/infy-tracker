@@ -25,11 +25,18 @@ class ProjectController extends AppBaseController
     /** @var UserRepository */
     private $userRepository;
 
+    /**
+     * ProjectController constructor.
+     * @param ProjectRepository $projectRepo
+     * @param ClientRepository $clientRepo
+     * @param UserRepository $userRepository
+     */
     public function __construct(
         ProjectRepository $projectRepo,
         ClientRepository $clientRepo,
         UserRepository $userRepository
-    ) {
+    )
+    {
         $this->projectRepository = $projectRepo;
         $this->clientRepository = $clientRepo;
         $this->userRepository = $userRepository;
@@ -37,7 +44,6 @@ class ProjectController extends AppBaseController
 
     /**
      * Display a listing of the Project.
-     *
      * @param  Request $request
      * @return \Illuminate\View\View
      * @throws Exception
@@ -58,9 +64,7 @@ class ProjectController extends AppBaseController
 
     /**
      * Store a newly created Project in storage.
-     *
      * @param  CreateProjectRequest $request
-     *
      * @return JsonResponse
      */
     public function store(CreateProjectRequest $request)
@@ -78,9 +82,7 @@ class ProjectController extends AppBaseController
 
     /**
      * Show the form for editing the specified Project.
-     *
      * @param  int $id
-     *
      * @return JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function edit($id)
@@ -94,10 +96,8 @@ class ProjectController extends AppBaseController
 
     /**
      * Update the specified Client in storage.
-     *
      * @param  int $id
      * @param  UpdateProjectRequest $request
-     *
      * @return JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function update($id, UpdateProjectRequest $request)
@@ -115,9 +115,7 @@ class ProjectController extends AppBaseController
 
     /**
      * Remove the specified Project from storage.
-     *
      * @param  int $id
-     *
      * @return JsonResponse
      * @throws Exception
      */
@@ -137,5 +135,19 @@ class ProjectController extends AppBaseController
         $projects = $this->projectRepository->getMyProjects();
 
         return $this->sendResponse($projects, 'Project Retrieved successfully.');
+    }
+
+    /**
+     * @param $projectIds
+     * @return JsonResponse
+     */
+    public function users($projectIds)
+    {
+        $projectIdsArr = [];
+        if ($projectIds != 0) {
+            $projectIdsArr = explode(',', $projectIds);
+        }
+        $users = $this->userRepository->getUserList($projectIdsArr);
+        return $this->sendResponse($users, 'Users Retrieved successfully.');
     }
 }

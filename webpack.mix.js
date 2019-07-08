@@ -20,6 +20,7 @@ mix
     .sass('resources/assets/style/sass/style.scss', 'public/assets/style/css/style.css')
     .sass('resources/assets/style/sass/dashboard.scss', 'public/assets/style/css/dashboard.css')
     .sass('resources/assets/style/sass/task-detail.scss', 'public/assets/style/css/task-detail.css')
+    .sass('resources/assets/style/sass/report.scss', 'public/assets/style/css/report.css')
     .version();
 
 /* JS */

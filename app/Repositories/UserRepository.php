@@ -42,11 +42,19 @@ class UserRepository extends BaseRepository
     }
 
     /**
+     * @param $projectIds
      * @return \Illuminate\Support\Collection
      */
-    public function getUserList()
+    public function getUserList($projectIds = [])
     {
-        return User::orderBy('name')->pluck('name', 'id');
+        $query = User::orderBy('name');
+        if (!empty($projectIds)) {
+            $query = $query->whereHas('projects', function ($query) use ($projectIds) {
+                $query->whereIn('projects.id', $projectIds);
+            });
+        }
+
+        return $query->pluck('name', 'id');
     }
 
     /**

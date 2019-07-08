@@ -110,6 +110,8 @@
     let closeWatchImg = "{{asset('assets/img/close.png')}}";
     let stopWatchImg = "{{asset('assets/img/stopwatch.png')}}";
     let usersUrl = "{{ url('users') }}/";
+    let clientsUrl = "{{ url('clients') }}/";
+    let projectsUrl = "{{ url('projects') }}/";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

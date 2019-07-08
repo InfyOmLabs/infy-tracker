@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,10 +65,16 @@ class ProjectRepository extends BaseRepository
     /**
      * get clients
      *
+     * @param null $clientId
      * @return \Illuminate\Support\Collection
      */
-    public function getProjectsList()
+    public function getProjectsList($clientId = null)
     {
-        return Project::orderBy('name')->pluck('name', 'id');
+        /** @var \Illuminate\Database\Query\Builder $query */
+        $query = Project::orderBy('name');
+        if(!is_null($clientId)){
+            $query = $query->whereClientId($clientId);
+        }
+        return $query->pluck('name', 'id');
     }
 }
