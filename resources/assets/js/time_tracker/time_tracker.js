@@ -101,7 +101,6 @@ $("#startTimer").click(function (e) {
 
 $("#stopTimer").click(function (e) {
     e.preventDefault();
-    $(this).attr('disabled', 'true');
 
     $('#tmActivityId').removeAttr('disabled');
     $('#tmTaskId').removeAttr('disabled');
@@ -157,7 +156,6 @@ function storeTimeEntry() {
             $('#tmActivityId').attr('disabled', true);
             $('#tmTaskId').attr('disabled', true);
             $('#tmProjectId').attr('disabled', true);
-            $('#stopTimer').removeAttr('disabled');
         },
         complete: function () {
         }
