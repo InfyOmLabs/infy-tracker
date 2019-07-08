@@ -58,6 +58,8 @@ $(function () {
             insert: '<div class="icheck_line-icon"></div>'
         });
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 function getRandomColor() {
@@ -125,9 +127,9 @@ var tbl = $('#task_table').DataTable({
                     let colorCode = getRandomColor();
                     let nameArr = e.name.split(' ');
                     if(nameArr.length >= 2){
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+e.name+'">';
                     }else {
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30">';
+                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+e.name+'">';
                     }
                 });
 
