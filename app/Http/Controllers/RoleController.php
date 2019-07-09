@@ -8,6 +8,7 @@ use App\Queries\RoleDataTable;
 use App\Repositories\PermissionRepository;
 use App\Repositories\RoleRepository;
 use DataTables;
+use Exception;
 use Flash;
 use Illuminate\Http\Request;
 use Response;
@@ -41,7 +42,7 @@ class RoleController extends AppBaseController
      * @param Request $request
      *
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function index(Request $request)
     {
@@ -72,7 +73,6 @@ class RoleController extends AppBaseController
     public function store(CreateRoleRequest $request)
     {
         $input = $request->all();
-
         /** @var Role $roles */
         $roles = $this->rolesRepository->create($input);
         if (isset($input['permissions']) && !empty($input['permissions'])) {
@@ -122,13 +122,9 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * Remove the specified Roles from storage.
-     *
-     * @param int $id
-     *
-     * @return Response
-     * @throws \Exception
-     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws Exception
      */
     public function destroy($id)
     {
@@ -142,7 +138,6 @@ class RoleController extends AppBaseController
             throw new BadRequestHttpException('This user role could not be deleted, because it’s assigned to a user.', null, \Illuminate\Http\Response::HTTP_BAD_REQUEST);
         }
         $this->rolesRepository->delete($id);
-        Flash::success('Role deleted successfully.');
-        return response()->json(['success' => true], 200);
+        return $this->sendSuccess('Role deleted successfully.');
     }
 }

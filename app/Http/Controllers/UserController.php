@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -25,11 +23,11 @@ class UserController extends AppBaseController
     private $userRepository;
     /** @var ProjectRepository */
     private $projectRepository;
-
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+    /** @var RoleRepository  */
     private $roleRepository;
 
     /**
@@ -70,7 +68,6 @@ class UserController extends AppBaseController
         }
         $projects = $this->projectRepository->getProjectsList();
         $roles = $this->roleRepository->getRolesList();
-
         return view('users.index')->with(['projects' => $projects, 'roles' => $roles]);
     }
 
@@ -95,7 +92,6 @@ class UserController extends AppBaseController
         if (isset($input['role_id']) && !empty($input['role_id'])) {
             $user->roles()->sync($input['role_id']);
         }
-
         if ($input['is_active']) {
             /*
          * Send confirmation email
