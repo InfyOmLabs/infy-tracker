@@ -87,8 +87,6 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::get('get-tasks/{projectId}', 'TimeEntryController@getTasks');
     Route::get('my-projects', 'ProjectController@getMyProjects');
 
-    Route::get('permissions', 'PermissionController@index')->middleware('permission:manage_roles');
-
     Route::middleware('permission:manage_roles')->group(function () {
         Route::resource('roles', 'RoleController');
         Route::post('roles/{id}/update', 'RoleController@update');

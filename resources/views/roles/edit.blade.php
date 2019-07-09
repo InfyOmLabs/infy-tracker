@@ -6,20 +6,14 @@
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
 @endsection
 @section('content')
-    <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-             <a href="{!! route('roles.index') !!}">Roles</a>
-          </li>
-          <li class="breadcrumb-item active">Edit</li>
-        </ol>
     <div class="container-fluid">
          <div class="animated fadeIn">
+             <div class="page-header">
+                 <h3>Edit Role</h3>
+             </div>
              <div class="row">
                  <div class="col-lg-12">
                       <div class="card">
-                          <div class="card-header">
-                              <strong>Edit Roles</strong>
-                          </div>
                           <div class="card-body">
                               @include('coreui-templates::common.errors')
                               {!! Form::model($roles, ['route' => ['roles.update', $roles->id], 'method' => 'patch']) !!}

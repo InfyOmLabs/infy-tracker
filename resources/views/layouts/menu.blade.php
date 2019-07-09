@@ -58,14 +58,6 @@
 </li>
 @endpermission
 
-@permission('manage_roles')
-<li class="nav-item {{ Request::is('permissions*') ? 'active' : '' }}">
-    <a class="nav-link" href="{!! url('permissions') !!}">
-        <i class="fa fa-file nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Permissions
-    </a>
-</li>
-@endpermission
-
 @permission('manage_activities','manage_tags')
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#">

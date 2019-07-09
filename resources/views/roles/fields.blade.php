@@ -1,23 +1,29 @@
-<!-- Name Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('name', 'Name') !!}<span class="required"> *</span>
-    {!! Form::text('name', null, ['class' => 'form-control','required']) !!}
-</div>
+<div class="row">
+    <div class="col-6">
+        <!-- Name Field -->
+        <div class="form-group col-sm-12">
+            {!! Form::label('name', 'Name') !!}<span class="required"> *</span>
+            {!! Form::text('name', null, ['class' => 'form-control','required']) !!}
+        </div>
 
-<!-- Detail Field -->
-<div class="form-group col-sm-6 col-lg-6">
-    {!! Form::label('detail', 'Description') !!}
-    {!! Form::textarea('description', null, ['class' => 'form-control','rows'=>5]) !!}
-</div>
-
-<div class="form-group col-sm-12 col-lg-12">
-    {!! Form::label('detail', 'Permissions') !!}
-    <div class="row">
-        @foreach($permissions as $key=>$value)
-            <div class="col-lg-2 role-checkbox">
-                <label class="role-checkbox__label"><input name="permissions[]" type="checkbox" class="permission-checkbox" value="{{$key}}"> {{$value}}</label>
+        <!-- Detail Field -->
+        <div class="form-group col-sm-12 col-lg-12">
+            {!! Form::label('detail', 'Description') !!}
+            {!! Form::textarea('description', null, ['class' => 'form-control','rows'=>5]) !!}
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group col-sm-12 col-lg-12">
+            {!! Form::label('detail', 'Permissions') !!}
+            <div class="row">
+                @foreach($permissions as $key=>$value)
+                    <div class="col-lg-4 role-checkbox mt-1">
+                        <label class="role-checkbox__label d-flex align-items-center"><input name="permissions[]" type="checkbox" class="permission-checkbox" value="{{$key}}"> {{$value}}</label>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
+
+        </div>
     </div>
 
 </div>
