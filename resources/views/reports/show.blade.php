@@ -28,17 +28,17 @@
                             <h4>{{$report->name}}</h4>
                             <div class="reports__container">
                                 <div class="reports__client-row">
-                                    <h5>Scott</h5>
-                                    <h5>18hr</h5>
+                                    <h5 class="mb-0"><i class="fas fa-user-tie mr-2"></i>Scott</h5>
+                                    <h5 class="mb-0">18hr</h5>
                                 </div>
-                                <hr class="mt-1 mb-3"/>
+                                <hr class="my-0"/>
                                 <div class="reports__project-row">
-                                    <div class="reports__project-header">Inventory</div>
+                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory</div>
                                     <span>10hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -53,7 +53,7 @@
                                 {{--repeated developer-task section--}}
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Shailsh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Shailsh</div>
                                         <span>4hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -67,12 +67,12 @@
                                 </div>
 
                                 <div class="reports__project-row">
-                                    <div class="reports__project-header">OR</div>
+                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>OR</div>
                                     <span>7hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Monika</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Monika</div>
                                         <span>8hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -88,17 +88,17 @@
                             {{--repeated container--}}
                             <div class="reports__container">
                                 <div class="reports__client-row">
-                                    <h5>Scott</h5>
-                                    <h5>18hr</h5>
+                                    <h5 class="mb-0"><i class="fas fa-user-tie mr-2"></i>Scott</h5>
+                                    <h5 class="mb-0">18hr</h5>
                                 </div>
-                                <hr class="mt-1 mb-3"/>
+                                <hr class="my-0"/>
                                 <div class="reports__project-row">
-                                    <div class="reports__project-header">Inventory</div>
+                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory</div>
                                     <span>6hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -113,7 +113,7 @@
                                 {{--repeated developer-task section--}}
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
