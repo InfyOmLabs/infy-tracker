@@ -101,7 +101,6 @@ class RoleController extends AppBaseController
         return view('roles.edit')->with(['roles' => $roles, 'permissions' => $permissions]);
     }
 
-
     /**
      * @param $id
      * @param Request $request
