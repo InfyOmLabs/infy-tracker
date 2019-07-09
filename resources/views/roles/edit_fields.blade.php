@@ -10,7 +10,6 @@
     {!! Form::textarea('description', null, ['class' => 'form-control','rows'=>5]) !!}
 </div>
 
-
 <div class="form-group col-sm-12 col-lg-12">
     {!! Form::label('permissions', 'Permissions') !!}
     <div class="row">
