@@ -15,7 +15,7 @@ class AssignDefaultRoleToUserSeeder extends Seeder
     {
         $roleIds = [];
         /** @var Role $role */
-        $role = Role::whereName('User')->first();
+        $role = Role::whereName('Admin')->first();
         if (!empty($role)) {
             $roleIds = $role->id;
         }

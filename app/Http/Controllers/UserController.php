@@ -121,7 +121,7 @@ class UserController extends AppBaseController
         $user = $this->userRepository->findOrFail($id);
         $userObj = $user->toArray();
         $userObj['project_ids'] = $user->projects()->pluck('project_id')->toArray();
-        $userObj['role_id']=$user->roles()->pluck('role_id')->toArray();
+        $userObj['role_id'] = $user->roles()->pluck('role_id')->toArray();
         return $this->sendResponse($userObj, 'User retrieved successfully.');
     }
 

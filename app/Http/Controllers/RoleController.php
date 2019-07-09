@@ -78,7 +78,7 @@ class RoleController extends AppBaseController
         if (isset($input['permissions']) && !empty($input['permissions'])) {
             $roles->perms()->sync($input['permissions']);
         }
-        Flash::success('Roles saved successfully.');
+        Flash::success('Role saved successfully.');
         return redirect(route('roles.index'));
     }
 
@@ -93,7 +93,7 @@ class RoleController extends AppBaseController
     {
         $roles = $this->rolesRepository->find($id);
         if (empty($roles)) {
-            Flash::error('Roles not found');
+            Flash::error('Role not found');
             return redirect(route('roles.index'));
         }
         /** @var Permission $permissions */
@@ -131,7 +131,7 @@ class RoleController extends AppBaseController
         /** @var Role $roles */
         $roles = $this->rolesRepository->find($id);
         if (empty($roles)) {
-            Flash::error('Roles not found');
+            Flash::error('Role not found');
             return redirect(route('roles.index'));
         }
         if ($roles->users()->count() > 0) {
