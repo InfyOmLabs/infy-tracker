@@ -27,10 +27,10 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
     $arr = explode($delimiter, trim($str));
     $arr = array_map('trim', $arr);
     $arr = array_filter($arr, function ($value) {
-        return !empty($value);
+        return strlen($value);
     });
 
-    return $arr;
+    return array_values($arr);
 }
 
 function time_elapsed_string($datetime, $full = false)
@@ -73,4 +73,15 @@ function roundToQuarterHour($totalMinutes)
     } else {
         printf("%02d:%02d m", $hours, $minutes);
     }
+}
+
+function getChartColors()
+{
+    return ['#6574cd', '#F66081', '#9561e2', '#ff0052', '#e1c936', '#9e00ff', '#ffef00', '#3f3f3f'];
+}
+
+function getBarChartColors()
+{
+    return ['#6574cd' => '#d8dcf3', '#ff6384' => '#ffccd7', '#36a2eb' => '#b9dff8', '#ffce56' => '#ffe9b3', '#4bc0c0' => '#b4e4e4', '#9966ff' => '#ddccff', '#ff9f40' => '#ffd9b3', '#ffef00' => '#fff899', '#9e00ff' => '#e2b3ff', '#2c3987' =>
+        '#b2bae6', '#ff0052' => '#ffb3cb', '#9561e2' => '#e2d4f7', '#f66081' => '#fbb7c5', '#5263c7' => '#c5cbec'];
 }

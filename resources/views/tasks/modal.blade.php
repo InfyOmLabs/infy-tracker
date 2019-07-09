@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('description', 'Description') !!}
-                        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 5]) !!}
+                        {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'rows' => 5]) !!}
                     </div>
                 </div>
                 <div class="text-right">

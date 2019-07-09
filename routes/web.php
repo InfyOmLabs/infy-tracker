@@ -77,3 +77,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask');
     Route::get('get-tasks/{projectId}', 'TimeEntryController@getTasks');
 });
+
+Route::fallback(function() {
+    abort(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
+});

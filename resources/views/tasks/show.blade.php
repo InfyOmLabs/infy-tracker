@@ -32,7 +32,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <h4 class="mb-3">
-                                    <span class="text-info pr-2">#{{$task->task_number}}</span>{{$task->title}}
+                                    <span class="text-info pr-2">{{$task->prefix_task_number}}</span>{{$task->title}}
                                 </h4>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                                 <span class="task-detail__description-heading">Description</span>
                             </div>
                             <div class="col-lg-8 col-sm-12">
-                                <span>{{$task->description}}</span>
+                                <div><?php echo html_entity_decode($task->description) ?></div>
                             </div>
                         </div>
                         <div class="row">
@@ -135,7 +135,8 @@
                                                     <a>{{$comment['createdUser']->name}}</a>
                                                     @if($comment->created_by == Auth::id())
                                                         <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
-                                                        <a class="pull-right edit-comment {{'comment-edit-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                        <a class="pull-right edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
+                                                        <a class="pull-right save-comment {{'comment-save-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>
                                                         <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                     @endif
                                                 </span>
@@ -161,7 +162,7 @@
                                     <div class="row">
                                         <div class="form-group col-sm-6">
                                             {!! Form::button('Save', ['type'=>'button','class' => 'btn btn-primary','id'=>'btnComment','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
-                                            <button type="button" id="btnCancel" class="btn btn-light ml-1" data-dismiss="modal">Cancel</button>
+                                            <button type="reset" id="btnCancel" class="btn btn-light ml-1">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +173,7 @@
             </div>
             <div class="previewEle">
             </div>
-            @include('tasks.task_edit_modal')
+            @include('tasks.edit_modal')
             @include('tasks.time_tracking_modal')
         </div>
     </div>

@@ -50,7 +50,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $task_number
  * @property string|null $priority
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
-
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property-read mixed $prefix_task_number
  */
 class Task extends Model
 {
@@ -59,7 +60,7 @@ class Task extends Model
     const STATUS_COMPLETED = 1;
     const STATUS_ACTIVE = 0;
 
-    const STATUS_ARR = [1 => 'Completed', 0 => 'Active'];
+    const STATUS_ARR = [2 => 'All', 1 => 'Completed', 0 => 'Active'];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';
 
@@ -83,13 +84,13 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'id'          => 'integer',
-        'title'       => 'string',
+        'id' => 'integer',
+        'title' => 'string',
         'description' => 'string',
-        'project_id'  => 'integer',
-        'status'      => 'integer',
-        'due_date'    => 'date',
-        'deleted_by'  => 'integer',
+        'project_id' => 'integer',
+        'status' => 'integer',
+        'due_date' => 'date',
+        'deleted_by' => 'integer',
         'created_by' => 'integer',
     ];
 
@@ -99,7 +100,7 @@ class Task extends Model
      * @var array
      */
     public static $rules = [
-        'title'      => 'required',
+        'title' => 'required',
         'project_id' => 'required',
     ];
 
@@ -120,7 +121,7 @@ class Task extends Model
     }
 
     /**
-     * @param  string  $value
+     * @param string $value
      * @return string
      */
     public function getDueDateAttribute($value)
@@ -128,6 +129,14 @@ class Task extends Model
         if (!empty($value)) {
             return Carbon::parse($value)->toDateString();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefixTaskNumberAttribute()
+    {
+        return '#' . $this->project->prefix . '-' . $this->task_number;
     }
 
     /**
