@@ -34,7 +34,7 @@
                                 <hr class="mt-1 mb-3"/>
                                 <div class="reports__project-row">
                                     <div class="reports__project-header">Inventory</div>
-                                    <span>6hr</span>
+                                    <span>10hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
@@ -42,27 +42,46 @@
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
-                                        <span class="reports__task-header">UI Enhacement</span>
-                                        <span>6hr</span>
+                                        <span class="reports__task-header">INVENTORY-1714 Asset Model Implemented</span>
+                                        <span>3hr</span>
                                     </div>
                                     <div class="reports__task-row">
-                                        <span class="reports__task-header">UI Enhacement</span>
-                                        <span>6hr</span>
+                                        <span class="reports__task-header">INVENTORY-1780 officespot affiliate support added</span>
+                                        <span>3hr</span>
                                     </div>
                                 </div>
                                 {{--repeated developer-task section--}}
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header">Dharmesh</div>
-                                        <span>6hr</span>
+                                        <div class="reports__developer-header">Shailsh</div>
+                                        <span>4hr</span>
                                     </div>
                                     <div class="reports__task-row">
-                                        <span class="reports__task-header">UI Enhacement</span>
-                                        <span>6hr</span>
+                                        <span class="reports__task-header">INVENTORY-1223 Print label: add locations after warehouse setup</span>
+                                        <span>3hr</span>
                                     </div>
                                     <div class="reports__task-row">
-                                        <span class="reports__task-header">UI Enhacement</span>
-                                        <span>6hr</span>
+                                        <span class="reports__task-header">INVENTORY-1780 User should only be able to perform Audit for one Site</span>
+                                        <span>1hr</span>
+                                    </div>
+                                </div>
+
+                                <div class="reports__project-row">
+                                    <div class="reports__project-header">OR</div>
+                                    <span>7hr</span>
+                                </div>
+                                <div class="reports__developer-task">
+                                    <div class="reports__developer-row">
+                                        <div class="reports__developer-header">Monika</div>
+                                        <span>8hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">OR-122 Asset model support add into order request</span>
+                                        <span>4hr 30min</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">OR-121 Status change notification sent to asset and inventory managers</span>
+                                        <span>3hr 30min</span>
                                     </div>
                                 </div>
                             </div>
