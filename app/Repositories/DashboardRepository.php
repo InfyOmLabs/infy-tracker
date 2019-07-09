@@ -53,7 +53,7 @@ class DashboardRepository
             $item['backgroundColor'] = $colors[$index];
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
-                $duration = isset($entry[$date]) ? round($entry[$date] / 60, 2) : 0;
+                $duration = isset($entry[$date]) ? $entry[$date] : 0;
                 $item['data'][] = $duration;
                 $totalRecords = $totalRecords + $duration;
             }
