@@ -271,9 +271,8 @@ table.dataTable {
 }
 
 .active_btn {
-    width: 5px;
-    height: 5px;
-    margin-left: 18px;
+    width: 20px;
+    margin: auto;
 }
 
 .chkStatus {
@@ -312,24 +311,35 @@ table.dataTable {
         }
     }
 }
+#clients_table,
+#projects_table,
+#users_table,
+#task_table,
+#timeEntryTable,
+#reportTable {
+    td,
+    th {
+        vertical-align: middle;
+    }
+}
 
 .dataTables_paginate {
     margin-top: 12px;
 }
 
 .icheckbox_line-white {
-    position: relative;
     display: block;
-    margin: 0;
-    font-size: 13px;
-    line-height: 17px;
+    margin: auto;
     background: #ffffff;
     border: 0.5px solid #d0d0d0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
     border-radius: 3px;
     cursor: pointer;
-    padding: 15px 0 5px 22px !important;
+    width: 20px;
+    height: 20px;
+}
+
+.switch-label {
+    margin-bottom: 0;
 }
 
 #timer {
