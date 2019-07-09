@@ -167,7 +167,11 @@ class TaskRepository extends BaseRepository
         $activityTypeRepo = app(ActivityTypeRepository::class);
         $data['activityTypes'] = $activityTypeRepo->getActivityTypeList();
 
-        $data['status'] = Task::STATUS_ARR;
+        $statusArr = Task::STATUS_ARR;
+        asort($statusArr);
+        $data['status'] = $statusArr;
+        unset($statusArr[Task::STATUS_ALL]);
+        $data['taskStatus'] = $statusArr;
         $data['tasks'] = $this->getTaskList($loginUserProjects);
         $data['priority'] = Task::PRIORITY;
         return $data;

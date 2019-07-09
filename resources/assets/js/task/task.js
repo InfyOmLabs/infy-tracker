@@ -192,9 +192,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $('#editDesc').val(task.description);
                 $('#editDueDate').val(task.due_date);
                 $('#editProjectId').val(task.project.id).trigger("change");
-                if (task.status == 1) {
-                    $('#editStatus').prop('checked', true);
-                }
+                $('#editStatus').val(task.status);
 
                 var tagsIds = [];
                 var userIds = [];
@@ -429,10 +427,10 @@ $(document).on('click', '.entry-model', function (event) {
 
 CKEDITOR.replace( 'description', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });
 
 CKEDITOR.replace( 'editDesc', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });
