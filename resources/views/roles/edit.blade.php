@@ -23,9 +23,7 @@
                           <div class="card-body">
                               @include('coreui-templates::common.errors')
                               {!! Form::model($roles, ['route' => ['roles.update', $roles->id], 'method' => 'patch']) !!}
-
-                              @include('roles.edit_fields')
-
+                                @include('roles.edit_fields')
                               {!! Form::close() !!}
                           </div>
                         </div>

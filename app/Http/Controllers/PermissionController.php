@@ -1,9 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
-use App\Http\Requests\CreatePermissionRequest;
-use App\Http\Requests\UpdatePermissionRequest;
 use App\Queries\PermissionDataTable;
 use App\Repositories\PermissionRepository;
 use DataTables;
@@ -43,7 +39,6 @@ class PermissionController extends AppBaseController
         if ($request->ajax()) {
             return DataTables::of((new PermissionDataTable())->get())->make(true);
         }
-
         return view('permissions.index');
     }
 
@@ -59,9 +54,7 @@ class PermissionController extends AppBaseController
     public function destroy($id)
     {
         $this->permissionRepository->findOrFail($id);
-
         $this->permissionRepository->delete($id);
-
         return $this->sendSuccess('Permission deleted successfully.');
     }
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Queries;
-
 use App\Models\Permission;
 
 /**
@@ -10,7 +8,6 @@ use App\Models\Permission;
  */
 class PermissionDataTable
 {
-
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */

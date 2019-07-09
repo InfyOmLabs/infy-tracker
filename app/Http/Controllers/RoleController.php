@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Permission;
@@ -81,7 +79,6 @@ class RoleController extends AppBaseController
             $roles->perms()->sync($input['permissions']);
         }
         Flash::success('Roles saved successfully.');
-
         return redirect(route('roles.index'));
     }
 
@@ -95,10 +92,8 @@ class RoleController extends AppBaseController
     public function edit($id)
     {
         $roles = $this->rolesRepository->find($id);
-
         if (empty($roles)) {
             Flash::error('Roles not found');
-
             return redirect(route('roles.index'));
         }
         /** @var Permission $permissions */
@@ -116,7 +111,6 @@ class RoleController extends AppBaseController
     {
         $permissions = [];
         $this->rolesRepository->find($id);
-
         $input = $request->all();
         /** @var Role $roles */
         $roles = $this->rolesRepository->update($input, $id);
@@ -125,7 +119,6 @@ class RoleController extends AppBaseController
         }
         $roles->perms()->sync($permissions);
         Flash::success('Role updated successfully.');
-
         return redirect(route('roles.index'));
     }
 
@@ -142,10 +135,8 @@ class RoleController extends AppBaseController
     {
         /** @var Role $roles */
         $roles = $this->rolesRepository->find($id);
-
         if (empty($roles)) {
             Flash::error('Roles not found');
-
             return redirect(route('roles.index'));
         }
         if ($roles->users()->count() > 0) {
@@ -153,7 +144,6 @@ class RoleController extends AppBaseController
         }
         $this->rolesRepository->delete($id);
         Flash::success('Role deleted successfully.');
-
         return response()->json(['success' => true], 200);
     }
 }

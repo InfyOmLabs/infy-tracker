@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Models;
-
 use Zizaco\Entrust\EntrustRole;
-
 
 /**
  * App\Models\Role

@@ -17,9 +17,7 @@
                         <div class="card-body">
                             @include('coreui-templates::common.errors')
                             {!! Form::open(['route' => 'roles.store']) !!}
-
-                            @include('roles.fields')
-
+                                @include('roles.fields')
                             {!! Form::close() !!}
                         </div>
                     </div>

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Queries;
-
 use App\Models\Role;
 
 /**

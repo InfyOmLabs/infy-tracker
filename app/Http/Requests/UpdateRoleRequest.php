@@ -1,9 +1,11 @@
 <?php
-
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class UpdateRoleRequest
+ * @package App\Http\Requests
+ */
 class UpdateRoleRequest extends FormRequest
 {
     /**
