@@ -184,7 +184,9 @@ $(document).on('click', '.edit-btn', function (event) {
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                var task = result.data;
+                let task = result.data;
+                let desc = $('<div/>').html(task.description).text();
+                CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);
                 $('#editTitle').val(task.title);
                 $('#editDesc').val(task.description);
@@ -266,12 +268,16 @@ $(document).on('click', '.taskDetails', function (event) {
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnSave");
+    let loadingButton = jQuery(this).find("#btnSave");
     loadingButton.button('loading');
+
+    let formdata = $(this).serialize();
+    let desc = CKEDITOR.instances.description.getData();
+    formdata = formdata.replace("description=", "description="+desc);
     $.ajax({
         url: createTaskUrl,
         type: 'POST',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 $('#AddModal').modal('hide');
@@ -289,13 +295,20 @@ $('#addNewForm').submit(function (event) {
 
 $('#editForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnEditSave");
+    let loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
-    var id = $('#tagId').val();
+    let id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = CKEDITOR.instances.editDesc.getData();
+    $.each(formdata, function (i, val) {
+        if(val.name == 'description'){
+            formdata[i].value = desc;
+        }
+    });
     $.ajax({
         url: taskUrl + id + '/update',
         type: 'post',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 $('#EditModal').modal('hide');
@@ -312,6 +325,7 @@ $('#editForm').submit(function (event) {
 });
 
 $('#AddModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.description.setData('');
     $('#projectId').val(null).trigger("change");
     $('#assignee').val(null).trigger("change");
     $('#tagIds').val(null).trigger("change");
@@ -320,6 +334,7 @@ $('#AddModal').on('hidden.bs.modal', function () {
 });
 
 $('#EditModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.editDesc.setData('');
     resetModalForm('#editForm', '#editValidationErrorsBox');
 });
 
@@ -410,4 +425,14 @@ $(document).on('click', '.entry-model', function (event) {
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
     getTasksByproject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+});
+
+CKEDITOR.replace( 'description', {
+    language: 'en',
+    height: '100px',
+});
+
+CKEDITOR.replace( 'editDesc', {
+    language: 'en',
+    height: '100px',
 });
