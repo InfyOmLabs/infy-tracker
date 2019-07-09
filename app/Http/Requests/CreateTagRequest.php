@@ -12,6 +12,7 @@ namespace App\Http\Requests;
 
 use App\Models\Tag;
 use Illuminate\Foundation\Http\FormRequest;
+
 class CreateTagRequest extends FormRequest
 {
     /**

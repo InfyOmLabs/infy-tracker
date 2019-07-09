@@ -4,20 +4,20 @@
  * Author: Vishal Ribdiya
  * Email: vishal.ribdiya@infyom.com
  * Date: 03-05-2019
- * Time: 12:59 PM
+ * Time: 12:59 PM.
  */
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\TaskTag
+ * App\Models\TaskTag.
  *
  * @property int $id
  * @property int $task_id
  * @property string $tag_id
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag query()
