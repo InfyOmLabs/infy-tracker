@@ -56,6 +56,8 @@ class TimeEntryController extends AppBaseController
         $input = $this->validateInput($request->all());
 
         $this->timeEntryRepository->create($input);
+        Log::info('Request is: ', $input);
+        Log::info('Entry created by: ' . Auth::user()->name);
 
         return $this->sendSuccess('Time Entry created successfully.');
     }
