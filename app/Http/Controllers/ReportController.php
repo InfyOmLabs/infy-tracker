@@ -33,9 +33,9 @@ class ReportController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return Factory|View
      * @throws Exception
      *
+     * @return Factory|View
      */
     public function index(Request $request)
     {

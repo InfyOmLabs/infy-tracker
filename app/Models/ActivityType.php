@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 /**
- * App\Models\ActivityType
+ * App\Models\ActivityType.
  *
  * @property int $id
  * @property string $name
@@ -13,6 +13,7 @@ use Eloquent as Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType query()
@@ -28,7 +29,7 @@ class ActivityType extends Model
     public $table = 'activity_types';
 
     public $fillable = [
-        'name'
+        'name',
     ];
 
     /**
@@ -37,17 +38,17 @@ class ActivityType extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string'
+        'id'   => 'integer',
+        'name' => 'string',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:activity_types,name'
+        'name' => 'required|unique:activity_types,name',
     ];
 
     public static $messages = [

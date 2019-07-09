@@ -15,11 +15,12 @@ use Illuminate\View\View;
 
 class TagController extends AppBaseController
 {
-    /** @var  TagRepository */
+    /** @var TagRepository */
     private $tagRepository;
 
     /**
      * TagController constructor.
+     *
      * @param TagRepository $tagRepo
      */
     public function __construct(TagRepository $tagRepo)
@@ -30,9 +31,9 @@ class TagController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return Factory|View
      * @throws Exception
      *
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -75,7 +76,7 @@ class TagController extends AppBaseController
     /**
      * Update the specified Tag in storage.
      *
-     * @param int $id
+     * @param int              $id
      * @param UpdateTagRequest $request
      *
      * @return JsonResponse
@@ -94,9 +95,9 @@ class TagController extends AppBaseController
      *
      * @param int $id
      *
-     * @return JsonResponse
-     *
      * @throws Exception
+     *
+     * @return JsonResponse
      */
     public function destroy($id)
     {
