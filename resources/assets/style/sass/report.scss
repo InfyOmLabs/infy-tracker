@@ -1,4 +1,66 @@
+@import "variables";
+
+%report-row {
+    display: flex;
+    justify-content: space-between;
+}
+
 .report__heading {
     text-decoration: none !important;
     padding: 10px 50px 10px 0;
+}
+
+.reports {
+
+    &__container {
+        max-width: 70%;
+        padding-top: 10px;
+        margin-bottom: 16px;
+    }
+
+    &__client-row {
+        @extend %report-row;
+        color: $blue;
+    }
+    &__project-row {
+        @extend %report-row;
+        color: $orange;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    &__developer-row {
+        @extend %report-row;
+        font-size: 15px;
+    }
+
+    &__task-row{
+        @extend %report-row;
+        color: #888;
+    }
+
+    &__project {
+        &-header {
+            margin-left: 3%;
+            margin-bottom: 8px;
+        }
+    }
+
+    &__developer-task {
+        margin-bottom: 8px;
+    }
+
+    &__developer {
+        margin-bottom: 4px;
+
+        &-header {
+            margin-left: 6%;
+        }
+    }
+
+    &__task {
+        &-header {
+            margin-left: 9%;
+        }
+    }
 }

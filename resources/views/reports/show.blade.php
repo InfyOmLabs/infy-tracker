@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('page_css')
+    <link href="{{mix('assets/style/css/report.css')}}" rel="stylesheet" type="text/css"/>
+@endsection
 
 @section('content')
     <div class="container-fluid">
@@ -21,8 +24,89 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body reports">
                             <h4>{{$report->name}}</h4>
+                            <div class="reports__container">
+                                <div class="reports__client-row">
+                                    <h5>Scott</h5>
+                                    <h5>18hr</h5>
+                                </div>
+                                <hr class="mt-1 mb-3"/>
+                                <div class="reports__project-row">
+                                    <div class="reports__project-header">Inventory</div>
+                                    <span>6hr</span>
+                                </div>
+                                <div class="reports__developer-task">
+                                    <div class="reports__developer-row">
+                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                </div>
+                                {{--repeated developer-task section--}}
+                                <div class="reports__developer-task">
+                                    <div class="reports__developer-row">
+                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {{--repeated container--}}
+                            <div class="reports__container">
+                                <div class="reports__client-row">
+                                    <h5>Scott</h5>
+                                    <h5>18hr</h5>
+                                </div>
+                                <hr class="mt-1 mb-3"/>
+                                <div class="reports__project-row">
+                                    <div class="reports__project-header">Inventory</div>
+                                    <span>6hr</span>
+                                </div>
+                                <div class="reports__developer-task">
+                                    <div class="reports__developer-row">
+                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                </div>
+                                {{--repeated developer-task section--}}
+                                <div class="reports__developer-task">
+                                    <div class="reports__developer-row">
+                                        <div class="reports__developer-header">Dharmesh</div>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                    <div class="reports__task-row">
+                                        <span class="reports__task-header">UI Enhacement</span>
+                                        <span>6hr</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
