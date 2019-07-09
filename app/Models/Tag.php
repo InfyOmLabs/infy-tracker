@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 /**
- * App\Models\Tag
+ * App\Models\Tag.
  *
  * @property int $id
  * @property string $name
@@ -13,6 +13,7 @@ use Eloquent as Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Tag query()
@@ -29,7 +30,7 @@ class Tag extends Model
 
     public $fillable = [
         'name',
-        'created_by'
+        'created_by',
     ];
 
     /**
@@ -38,18 +39,18 @@ class Tag extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
+        'id'         => 'integer',
+        'name'       => 'string',
         'created_by' => 'integer',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:tags,name'
+        'name' => 'required|unique:tags,name',
     ];
 
     /**

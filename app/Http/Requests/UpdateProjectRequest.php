@@ -12,6 +12,7 @@ namespace App\Http\Requests;
 
 use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
+
 class UpdateProjectRequest extends FormRequest
 {
     /**
@@ -32,7 +33,7 @@ class UpdateProjectRequest extends FormRequest
     public function rules()
     {
         $rules = Project::$editRules;
-        $rules['name'] = 'required|unique:projects,name,' . $this->route('id');
+        $rules['name'] = 'required|unique:projects,name,'.$this->route('id');
 
         return $rules;
     }

@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Models\Tag;
 
 /**
- * Class TagRepository
- * @package App\Repositories
+ * Class TagRepository.
+ *
  * @version May 3, 2019, 4:33 am UTC
  */
 class TagRepository extends BaseRepository
@@ -15,11 +15,11 @@ class TagRepository extends BaseRepository
      * @var array
      */
     protected $fieldSearchable = [
-        'name'
+        'name',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -29,7 +29,7 @@ class TagRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -51,8 +51,8 @@ class TagRepository extends BaseRepository
                     continue;
                 }
                 Tag::create([
-                    'name' => $tag,
-                    'created_by' => getLoggedInUserId()
+                    'name'       => $tag,
+                    'created_by' => getLoggedInUserId(),
                 ]);
             }
 

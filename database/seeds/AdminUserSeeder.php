@@ -13,12 +13,12 @@ class AdminUserSeeder extends Seeder
     public function run()
     {
         $input = [
-            'name' => 'InfyTracker Admin',
-            'email' => 'admin@infytracker.local',
-            'password' => Hash::make('InfyTrack3r'),
-            'set_password' => true,
+            'name'              => 'InfyTracker Admin',
+            'email'             => 'admin@infytracker.local',
+            'password'          => Hash::make('InfyTrack3r'),
+            'set_password'      => true,
             'is_email_verified' => true,
-            'is_active' => true,
+            'is_active'         => true,
         ];
 
         User::create($input);
