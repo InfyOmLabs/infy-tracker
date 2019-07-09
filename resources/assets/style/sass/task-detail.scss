@@ -183,6 +183,9 @@
     &__comment {
       @extend %user-display;
     }
+    &__icons {
+        float: right;
+    }
 }
 
 $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #336600, "lowest": #4C9900);

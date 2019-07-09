@@ -48,10 +48,10 @@
                             <div class="mb-3 d-flex task-detail__item">
                                 <span class="task-detail__status-heading">Status</span>
                                 <span class="flex-1">
-                                    @if($task->status=='0')
-                                        <span class="badge badge-primary text-uppercase">Started</span>
+                                    @if(isset($taskStatus[$task->status]))
+                                        <span class="badge {{$taskBadges[$task->status]}} text-uppercase">{{$taskStatus[$task->status]}}</span>
                                     @else
-                                        <span class="badge badge-success text-uppercase">Completed</span>
+                                        <span class="badge badge-success text-uppercase">-</span>
                                     @endif
                                 </span>
                             </div>
@@ -61,7 +61,7 @@
                             </div>
                             <div class="mb-3 d-flex task-detail__item">
                                 <span class="task-detail__reporter-heading">Reporter</span>
-                                <span class="flex-1">{{$task->createdUser->name}}</span>
+                                <span class="flex-1">{{(isset($task->createdUser->name) ? $task->createdUser->name : '')}}</span>
                             </div>
                             <div class="mb-3 d-flex task-detail__item">
                                 <span class="task-detail__priority-heading">Priority</span>
@@ -132,12 +132,12 @@
                                             <div class="user">
                                                 <img class="user__img" src="{{url('/assets/img/user-avatar.png')}}" alt="User Image">
                                                 <span class="user__username">
-                                                    <a>{{$comment['createdUser']->name}}</a>
+                                                    <a>{{isset($comment->createdUser->name) ? $comment->createdUser->name : ''}}</a>
                                                     @if($comment->created_by == Auth::id())
-                                                        <a class="pull-right del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
-                                                        <a class="pull-right edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
-                                                        <a class="pull-right save-comment {{'comment-save-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>
-                                                        <a class="pull-right cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                        <a class="user__icons del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
+                                                        <a class="user__icons edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
+                                                        <a class="user__icons save-comment {{'comment-save-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                        <a class="user__icons cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                     @endif
                                                 </span>
                                                 <span class="user__description">{{time_elapsed_string($comment->created_at)}}</span>
