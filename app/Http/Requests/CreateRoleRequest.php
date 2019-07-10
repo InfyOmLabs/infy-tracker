@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Http\Requests;
+
 use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateRoleRequest
- * @package App\Http\Requests
+ * Class CreateRoleRequest.
  */
 class CreateRoleRequest extends FormRequest
 {

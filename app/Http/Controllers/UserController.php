@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -27,7 +29,7 @@ class UserController extends AppBaseController
      * @var AccountRepository
      */
     private $accountRepository;
-    /** @var RoleRepository  */
+    /** @var RoleRepository */
     private $roleRepository;
 
     /**
@@ -36,15 +38,14 @@ class UserController extends AppBaseController
      * @param UserRepository    $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
-     * @param RoleRepository $roleRepository
+     * @param RoleRepository    $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
         AccountRepository $accountRepository,
         ProjectRepository $projectRepository,
         RoleRepository $roleRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepo;
         $this->accountRepository = $accountRepository;
         $this->projectRepository = $projectRepository;
@@ -64,11 +65,12 @@ class UserController extends AppBaseController
     {
         if ($request->ajax()) {
             return Datatables::of((new UserDataTable())->get())->addColumn('role_name', function (User $user) {
-                return implode(",", $user->roles()->pluck('name')->toArray());
+                return implode(',', $user->roles()->pluck('name')->toArray());
             })->make(true);
         }
         $projects = $this->projectRepository->getProjectsList();
         $roles = $this->roleRepository->getRolesList();
+
         return view('users.index')->with(['projects' => $projects, 'roles' => $roles]);
     }
 
@@ -125,6 +127,7 @@ class UserController extends AppBaseController
         $userObj = $user->toArray();
         $userObj['project_ids'] = $user->projects()->pluck('project_id')->toArray();
         $userObj['role_id'] = $user->roles()->pluck('role_id')->toArray();
+
         return $this->sendResponse($userObj, 'User retrieved successfully.');
     }
 

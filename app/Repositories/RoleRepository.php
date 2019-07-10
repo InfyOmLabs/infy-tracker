@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Repositories;
+
 use App\Models\Role;
 
 /**
- * Class RoleRepository
- * @package App\Repositories
+ * Class RoleRepository.
  */
 class RoleRepository extends BaseRepository
 {
@@ -14,11 +15,11 @@ class RoleRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'display_name',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -28,7 +29,7 @@ class RoleRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {

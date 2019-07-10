@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Http\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateRoleRequest
- * @package App\Http\Requests
+ * Class UpdateRoleRequest.
  */
 class UpdateRoleRequest extends FormRequest
 {
@@ -25,7 +26,8 @@ class UpdateRoleRequest extends FormRequest
      */
     public function rules()
     {
-        $rules['name'] = 'required|unique:roles,name,' . $this->request->get('id');
+        $rules['name'] = 'required|unique:roles,name,'.$this->request->get('id');
+
         return $rules;
     }
 }

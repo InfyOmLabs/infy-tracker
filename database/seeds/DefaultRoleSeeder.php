@@ -21,11 +21,11 @@ class DefaultRoleSeeder extends Seeder
             'manage_tags',
             'manage_activities',
             'manage_reports',
-            'manage_roles'
+            'manage_roles',
         ];
         $permissionIds = Permission::whereIn('name', $userPermissions)->get()->pluck('id');
         $input = [
-            'name' => 'Admin'
+            'name' => 'Admin',
         ];
         /** @var RoleRepository $roleRepo */
         $roleRepo = app(RoleRepository::class);
