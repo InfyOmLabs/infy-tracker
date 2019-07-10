@@ -58,7 +58,7 @@ class TimeEntryController extends AppBaseController
 
         $this->timeEntryRepository->create($input);
         Log::info('Request is: ', $input);
-        Log::info('Entry created by: ' . Auth::user()->name);
+        Log::info('Entry created by: '.Auth::user()->name);
 
         return $this->sendSuccess('Time Entry created successfully.');
     }
@@ -97,7 +97,7 @@ class TimeEntryController extends AppBaseController
 
         $this->timeEntryRepository->updateTimeEntry($input, $id);
         Log::info('New Request is: ', $input);
-        Log::info('Entry updated by: ' . Auth::user()->name);
+        Log::info('Entry updated by: '.Auth::user()->name);
 
         return $this->sendSuccess('Time Entry updated successfully.');
     }
