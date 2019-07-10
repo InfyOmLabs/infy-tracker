@@ -65,7 +65,6 @@ class User extends Authenticatable
     const IMAGE_PATH = 'users';
     protected $appends = ['img_avatar'];
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -169,6 +168,7 @@ class User extends Authenticatable
         }
         return asset('assets/img/user-avatar.png');
     }
+
     /**
      * @return bool
      */

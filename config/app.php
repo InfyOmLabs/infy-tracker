@@ -183,7 +183,6 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-
     ],
 
     /*
@@ -241,5 +240,4 @@ return [
         'Entrust'      => Zizaco\Entrust\EntrustFacade::class,
         'Image'        => Intervention\Image\Facades\Image::class,
     ],
-
 ];

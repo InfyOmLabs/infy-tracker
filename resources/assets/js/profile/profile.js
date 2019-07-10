@@ -69,7 +69,6 @@ window.displayPhoto = function (input, selector) {
             image.onload = function () {
                 $(selector).attr('src', e.target.result);
                 displayPreview = true;
-
             };
         };
         if (displayPreview) {

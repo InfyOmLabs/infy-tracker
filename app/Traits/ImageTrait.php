@@ -38,7 +38,6 @@ trait ImageTrait
         return false;
     }
 
-
     /**
      * @param UploadedFile $file
      * @param string $path
