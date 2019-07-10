@@ -82,7 +82,7 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [6],
+            "targets": [7],
             "orderable": false,
             "className": 'text-center',
             "width": "9%"
@@ -94,16 +94,16 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [2],
+            "targets": [3],
             "orderable": false,
         },
         {
-            "targets": [3, 4],
-            "width": "7%",
+            "targets": [5, 4],
+            "width": "10%",
             "className": 'text-center',
         },
         {
-            "targets": [5],
+            "targets": [6],
             "className": 'text-center',
         },
     ],
@@ -122,7 +122,16 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                let imgStr = ''
+                if(typeof taskStatus[row.status] == 'undefined')
+                    return '-';
+                else
+                    return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
+                },
+            name: 'status'
+        },
+        {
+            data: function (row) {
+                let imgStr = '';
                 $(row.task_assignee).each(function (i, e) {
                     let colorCode = getRandomColor();
                     let nameArr = e.name.split(' ');
