@@ -22,7 +22,7 @@ class DefaultRoleSeeder extends Seeder
             'manage_activities',
             'manage_reports',
             'manage_roles',
-            'manage_time_entries'
+            'manage_time_entries',
         ];
         $permissionIds = Permission::whereIn('name', $userPermissions)->get()->pluck('id');
         $input = [
