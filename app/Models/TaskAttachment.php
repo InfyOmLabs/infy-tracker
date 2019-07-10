@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\TaskAttachment
+ * App\Models\TaskAttachment.
  *
  * @property int $id
  * @property int $task_id
  * @property \Illuminate\Contracts\Routing\UrlGenerator|string $file
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment query()
@@ -28,18 +29,20 @@ class TaskAttachment extends Model
 
     public $fillable = [
         'task_id',
-        'file'
+        'file',
     ];
 
     /**
      * @param $value
+     *
      * @return \Illuminate\Contracts\Routing\UrlGenerator|string
      */
     public function getFileAttribute($value)
     {
-        if(isset($value) && !empty($value)){
+        if (isset($value) && !empty($value)) {
             return url('attachments').'/'.$value;
         }
+
         return url('assets').'/img/default_image.png';
     }
 }

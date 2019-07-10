@@ -16,7 +16,7 @@ class AddPrefixValueToExistRecordInProject extends Migration
         /** @var Project $project */
         foreach ($projects as $project) {
             $projectName = preg_replace('/\s+/', '', $project->name);
-            $projectName = substr(trim(str_replace('-', "", $projectName)), 0, 10);
+            $projectName = substr(trim(str_replace('-', '', $projectName)), 0, 10);
             $project->update(['prefix' => strtoupper($projectName)]);
         }
     }
@@ -28,6 +28,6 @@ class AddPrefixValueToExistRecordInProject extends Migration
      */
     public function down()
     {
-        Project::query()->update(['prefix' => ""]);
+        Project::query()->update(['prefix' => '']);
     }
 }

@@ -22,7 +22,8 @@
         "infyomlabs/swagger-generator": "dev-master",
         "laravelcollective/html": "^5.8.0",
         "yajra/laravel-datatables-oracle": "~9.0",
-        "intervention/image": "^2.4"
+        "intervention/image": "^2.4",
+        "zizaco/entrust": "dev-master"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -30,7 +31,6 @@
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "nunomaduro/phpinsights": "^1.2",
         "phpunit/phpunit": "^7.5"
     },
     "config": {

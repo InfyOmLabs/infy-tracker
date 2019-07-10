@@ -1,11 +1,12 @@
-<?php namespace App\Queries;
+<?php
+
+namespace App\Queries;
 
 use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ClientDataTable
- * @package App\Queries
+ * Class ClientDataTable.
  */
 class ProjectDataTable
 {

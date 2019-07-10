@@ -74,8 +74,7 @@ $("#startTimer").click(function (e) {
     var activity = $('#tmActivityId').val();
     var task = $('#tmTaskId').val();
     var project = $('#tmProjectId').val();
-
-    if (project != '' && activity != '' && task != '') {
+    if (project != '' && activity != '' && (task != '' && !(task == null))) {
         e.preventDefault();
         $('#tmActivityId').attr('disabled', true);
         $('#tmTaskId').attr('disabled', true);
@@ -102,6 +101,7 @@ $("#startTimer").click(function (e) {
 
 $("#stopTimer").click(function (e) {
     e.preventDefault();
+    $(this).attr('disabled', 'true');
 
     $('#tmActivityId').removeAttr('disabled');
     $('#tmTaskId').removeAttr('disabled');
@@ -157,6 +157,7 @@ function storeTimeEntry() {
             $('#tmActivityId').attr('disabled', true);
             $('#tmTaskId').attr('disabled', true);
             $('#tmProjectId').attr('disabled', true);
+            $('#stopTimer').removeAttr('disabled');
         },
         complete: function () {
         }

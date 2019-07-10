@@ -1,7 +1,10 @@
 $(function () {
     $('#projectId,#editProjectId').select2({
+        width: '100%'
+    });
+    $('#roleId,#editRoleId').select2({
         width: '100%',
-        tags: true
+        placeholder: "Select Role"
     });
 });
 
@@ -14,23 +17,27 @@ var tbl = $('#users_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [5],
+            "targets": [6],
             "orderable": false,
             "className": 'text-center',
             "width": "5%"
         },
         {
-            "targets": [4],
+            "targets": [5],
             "orderable": false,
             "className": 'text-center',
             "width": "9%"
         },
         {
-            "targets": [3],
+            "targets": [4],
             "orderable": false,
             "className": 'text-center',
             "width": "4%"
         },
+        {
+            "targets": [3],
+            "orderable": false
+        }
     ],
     columns: [
         {
@@ -44,6 +51,11 @@ var tbl = $('#users_table').DataTable({
         {
             data: 'phone',
             name: 'phone'
+        },
+        {
+            data: 'role_name',
+            name: 'role_name',
+            'searchable': false
         },
         {
             data: function (row) {
@@ -99,6 +111,7 @@ window.renderData = function (url) {
                 if (user.is_active) {
                     $('#edit_is_active').val(1).prop('checked', true);
                 }
+                $('#editRoleId').val(user.role_id).trigger("change");
                 $('#EditModal').modal('show');
             }
         },

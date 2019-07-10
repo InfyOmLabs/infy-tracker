@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Class TaskDataTable
- * @package App\Queries
+ * Class TaskDataTable.
  */
 class TaskDataTable
 {
@@ -29,7 +28,7 @@ class TaskDataTable
                 $q->where('project_id', $input['filter_project']);
             });
 
-        $query->when(isset($input['filter_status']),
+        $query->when(isset($input['filter_status']) && $input['filter_status'] != Task::STATUS_ALL,
             function (Builder $q) use ($input) {
                 $q->where('status', $input['filter_status']);
             });

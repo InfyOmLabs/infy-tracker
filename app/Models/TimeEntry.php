@@ -6,7 +6,7 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\TimeEntry
+ * App\Models\TimeEntry.
  *
  * @property int $id
  * @property int $task_id
@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\ActivityType $activityType
  * @property-read \App\Models\Task $task
  * @property-read \App\Models\User $user
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry newQuery()
@@ -80,7 +81,7 @@ class TimeEntry extends Model
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */

@@ -7,8 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class TaskDataTable
- * @package App\Queries
+ * Class TaskDataTable.
  */
 class ReportDataTable
 {

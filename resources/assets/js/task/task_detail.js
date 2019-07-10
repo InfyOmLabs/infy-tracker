@@ -7,9 +7,26 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
-    $('#editTagIds,#editAssignee').select2({
+    $('#editAssignee').select2({
+        width: '100%'
+    });
+    $('#editTagIds').select2({
         width: '100%',
-        tags: true
+        tags: true,
+        createTag: function (tag) {
+            var found = false;
+            $("#editTagIds option").each(function() {
+                if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                return {
+                    id: tag.term,
+                    text: tag.term
+                };
+            }
+        }
     });
     $('#editPriority').select2({
         width: '100%',
@@ -40,6 +57,8 @@ $(document).on('click', '.edit-btn', function (event) {
         success: function (result) {
             if (result.success) {
                 var task = result.data;
+                let desc = $('<div/>').html(task.description).text();
+                CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);
                 $('#editTitle').val(task.title);
                 $('#editDesc').val(task.description);
@@ -73,10 +92,17 @@ $('#editForm').submit(function (event) {
     var loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
     var id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = CKEDITOR.instances.editDesc.getData();
+    $.each(formdata, function (i, val) {
+        if(val.name == 'description'){
+            formdata[i].value = desc;
+        }
+    });
     $.ajax({
         url: taskUrl + id + '/update',
         type: 'post',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 location.reload();
@@ -90,6 +116,7 @@ $('#editForm').submit(function (event) {
 });
 
 $('#EditModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.editDesc.setData('');
     resetModalForm('#editForm', '#editValidationErrorsBox');
 });
 
@@ -231,7 +258,8 @@ function addCommentSection(comment) {
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
         '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
-        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
+        '                    <a class="pull-right save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
         '            <span class="user__description">just now</span>\n' +
@@ -246,7 +274,7 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
-    let loadingButton = jQuery(this).find("#btnComment");
+    let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
     if(comment == '' || comment.trim() == ''){
@@ -275,25 +303,50 @@ $('#btnComment').click(function (event) {
 
 $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
-    $.ajax({
-        url: baseUrl + 'comments/' + commentId + '/delete',
-        type: 'get',
-        success: function (result) {
-            if (result.success) {
-                let commetDiv = 'comment__'+commentId;
-                $("#"+commetDiv).remove();
-            }
+    swal({
+            title: "Delete !",
+            text: "Are you sure you want to delete this Comment?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#5cb85c',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes'
         },
-        error: function (result) {
-            printErrorMessage("#taskValidationErrorsBox", result);
-        }
-    });
+        function () {
+            $.ajax({
+                url: baseUrl + 'comments/' + commentId + '/delete',
+                type: 'get',
+                success: function (result) {
+                    if (result.success) {
+                        let commetDiv = 'comment__'+commentId;
+                        $("#"+commetDiv).remove();
+                    }
+                    swal({
+                        title: 'Deleted!',
+                        text: 'Comment has been deleted.',
+                        type: 'success',
+                        timer: 2000
+                    });
+                },
+                error: function (data) {
+                    swal({
+                        title: '',
+                        text: data.responseJSON.message,
+                        type: 'error',
+                        timer: 5000
+                    });
+                }
+            });
+        });
 });
 
-$(document).on('click', ".comment-display" ,function () {
+$(document).on('click', ".comment-display,.edit-comment" ,function () {
     let commentId = $(this).data('id');
     let commentClass = "comment-edit-"+commentId;
-    $(this).addClass('d-none');
+    $('.comment-display-'+commentId).addClass('d-none');
 
     if (!CKEDITOR.instances[commentClass]) {
         CKEDITOR.replace( commentClass, {
@@ -303,7 +356,7 @@ $(document).on('click', ".comment-display" ,function () {
     }
 
     $(".comment-edit-"+commentId).removeClass('d-none');
-    $(".comment-edit-icon-"+commentId).removeClass('d-none');
+    $(".comment-save-icon-"+commentId).removeClass('d-none');
     $(".comment-cancel-icon-"+commentId).removeClass('d-none');
 });
 
@@ -312,10 +365,10 @@ $(document).on('click', ".cancel-comment", function (event) {
     $(this).addClass('d-none');
     $(".comment-display-"+commentId).removeClass('d-none');
     $(".comment-edit-"+commentId).addClass('d-none');
-    $(".comment-edit-icon-"+commentId).addClass('d-none');
+    $(".comment-save-icon-"+commentId).addClass('d-none');
 });
 
-$(document).on('click', ".edit-comment", function (event) {
+$(document).on('click', ".save-comment", function (event) {
     let commentId = $(this).data('id');
     let commentClass = "comment-edit-"+commentId;
     let comment = CKEDITOR.instances[commentClass].getData();
@@ -330,7 +383,7 @@ $(document).on('click', ".edit-comment", function (event) {
             if (result.success) {
                 $(".comment-display-"+commentId).html(comment).removeClass('d-none');
                 $(".comment-edit-"+commentId).addClass('d-none');
-                $(".comment-edit-icon-"+commentId).addClass('d-none');
+                $(".comment-save-icon-"+commentId).addClass('d-none');
                 $(".comment-cancel-icon-"+commentId).addClass('d-none');
             }
         },
@@ -342,13 +395,24 @@ $(document).on('click', ".edit-comment", function (event) {
 
 $(document).on('mouseenter', ".comments__information", function () {
     $(this).find('.del-comment').removeClass('d-none');
+    $(this).find('.edit-comment').removeClass('d-none');
 });
 
 $(document).on('mouseleave', ".comments__information", function () {
     $(this).find('.del-comment').addClass('d-none');
+    $(this).find('.edit-comment').addClass('d-none');
 });
 
 CKEDITOR.replace( 'comment', {
     language: 'en',
-    height: '100px',
+    height: '150px',
+});
+
+CKEDITOR.replace( 'editDesc', {
+    language: 'en',
+    height: '150px',
+});
+
+$(document).on('click', '#btnCancel', function () {
+    CKEDITOR.instances.comment.setData('');
 });
