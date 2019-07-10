@@ -123,7 +123,7 @@ var tbl = $('#task_table').DataTable({
         {
             data: function (row) {
                 if(typeof taskStatus[row.status] == 'undefined')
-                    return '-';
+                    return '';
                 else
                     return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
                 },
