@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Queries;
+
 use App\Models\Role;
 
 /**
- * Class RoleDataTable
- * @package App\Queries
+ * Class RoleDataTable.
  */
 class RoleDataTable
 {

@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Repositories;
+
 use App\Models\Permission;
 
 /**
- * Class PermissionRepository
- * @package App\Repositories
+ * Class PermissionRepository.
  */
 class PermissionRepository extends BaseRepository
 {
@@ -14,11 +15,11 @@ class PermissionRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'display_name',
-        'description'
+        'description',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -28,7 +29,7 @@ class PermissionRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {

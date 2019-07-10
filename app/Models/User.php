@@ -50,7 +50,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string|null $image_path
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
  */
 class User extends Authenticatable

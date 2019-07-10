@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Permission;
@@ -15,19 +17,19 @@ use Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class RoleController
- * @package App\Http\Controllers
+ * Class RoleController.
  */
 class RoleController extends AppBaseController
 {
-    /** @var  RoleRepository */
+    /** @var RoleRepository */
     private $rolesRepository;
     /** @var PermissionRepository */
     private $permissionRepository;
 
     /**
      * RoleController constructor.
-     * @param RoleRepository $rolesRepo
+     *
+     * @param RoleRepository       $rolesRepo
      * @param PermissionRepository $permissionRepository
      */
     public function __construct(RoleRepository $rolesRepo, PermissionRepository $permissionRepository)
@@ -41,14 +43,16 @@ class RoleController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return Response
      * @throws Exception
+     *
+     * @return Response
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
             return Datatables::of((new RoleDataTable())->get())->make(true);
         }
+
         return view('roles.index');
     }
 
@@ -61,6 +65,7 @@ class RoleController extends AppBaseController
     {
         /** @var Permission $permissions */
         $permissions = $this->permissionRepository->permissionList();
+
         return view('roles.create', compact('permissions'));
     }
 
@@ -68,6 +73,7 @@ class RoleController extends AppBaseController
      * Store a newly created Roles in storage.
      *
      * @param CreateRoleRequest $request
+     *
      * @return Response
      */
     public function store(CreateRoleRequest $request)
@@ -79,6 +85,7 @@ class RoleController extends AppBaseController
             $roles->perms()->sync($input['permissions']);
         }
         Flash::success('Role saved successfully.');
+
         return redirect(route('roles.index'));
     }
 
@@ -94,16 +101,19 @@ class RoleController extends AppBaseController
         $roles = $this->rolesRepository->find($id);
         if (empty($roles)) {
             Flash::error('Role not found');
+
             return redirect(route('roles.index'));
         }
         /** @var Permission $permissions */
         $permissions = $this->permissionRepository->permissionList();
+
         return view('roles.edit')->with(['roles' => $roles, 'permissions' => $permissions]);
     }
 
     /**
      * @param $id
      * @param Request $request
+     *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update($id, UpdateRoleRequest $request)
@@ -118,13 +128,16 @@ class RoleController extends AppBaseController
         }
         $roles->perms()->sync($permissions);
         Flash::success('Role updated successfully.');
+
         return redirect(route('roles.index'));
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     *
      * @throws Exception
+     *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {
@@ -132,12 +145,14 @@ class RoleController extends AppBaseController
         $roles = $this->rolesRepository->find($id);
         if (empty($roles)) {
             Flash::error('Role not found');
+
             return redirect(route('roles.index'));
         }
         if ($roles->users()->count() > 0) {
             throw new BadRequestHttpException('This user role could not be deleted, because it’s assigned to a user.', null, \Illuminate\Http\Response::HTTP_BAD_REQUEST);
         }
         $this->rolesRepository->delete($id);
+
         return $this->sendSuccess('Role deleted successfully.');
     }
 }

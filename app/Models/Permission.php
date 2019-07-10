@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use Zizaco\Entrust\EntrustPermission;
 
 /**
- * App\Models\Permission
+ * App\Models\Permission.
  *
  * @property int $id
  * @property string $name
@@ -12,6 +14,7 @@ use Zizaco\Entrust\EntrustPermission;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Permission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Permission query()
@@ -38,19 +41,19 @@ class Permission extends EntrustPermission
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
+        'id'           => 'integer',
+        'name'         => 'string',
         'display_name' => 'string',
-        'description' => 'string',
+        'description'  => 'string',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:permissions,name',
+        'name'         => 'required|unique:permissions,name',
         'display_name' => 'required',
     ];
 }

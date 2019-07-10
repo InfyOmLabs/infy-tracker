@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use Zizaco\Entrust\EntrustRole;
 
 /**
- * App\Models\Role
+ * App\Models\Role.
  *
  * @property int $id
  * @property string $name
@@ -13,6 +15,7 @@ use Zizaco\Entrust\EntrustRole;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Permission[] $perms
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role query()
@@ -39,18 +42,18 @@ class Role extends EntrustRole
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
+        'id'           => 'integer',
+        'name'         => 'string',
         'display_name' => 'string',
-        'description' => 'string',
+        'description'  => 'string',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:roles,name'
+        'name' => 'required|unique:roles,name',
     ];
 }
