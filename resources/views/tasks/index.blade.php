@@ -66,6 +66,10 @@
         let createTaskUrl = '{{route('tasks.store')}}';
         let timeEntryUrl = "{{url('timeEntries')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
+        let taskStatusJson = '{!! json_encode($taskStatus) !!}';
+        let taskStatus = $.parseJSON(taskStatusJson)
+        let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
+        let taskBadges = $.parseJSON(taskBadgesJson)
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>

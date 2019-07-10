@@ -82,29 +82,29 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [6],
+            "targets": [7],
             "orderable": false,
             "className": 'text-center',
-            "width": "13%"
+            "width": "9%"
         },
         {
             "targets": [0],
             "width": "5%",
+            "className": 'text-center',
             "orderable": false,
         },
         {
-            "targets": [2],
-            "width": "15%",
+            "targets": [3],
             "orderable": false,
         },
         {
-            "targets": [3, 4],
+            "targets": [5, 4],
             "width": "10%",
             "className": 'text-center',
         },
         {
             "targets": [6],
-            "width": "15%"
+            "className": 'text-center',
         },
     ],
     columns: [
@@ -116,9 +116,18 @@ var tbl = $('#task_table').DataTable({
         {
             data: function (row) {
                 let url = taskUrl + row.project.prefix + '-' + row.task_number;
-                return '<a href="' + url + '" target="_blank">' + row.title + '</a>'
+                return '<a href="' + url + '">' + row.title + '</a>'
             },
             name: 'title'
+        },
+        {
+            data: function (row) {
+                if(typeof taskStatus[row.status] == 'undefined')
+                    return '';
+                else
+                    return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
+                },
+            name: 'status'
         },
         {
             data: function (row) {
@@ -131,7 +140,12 @@ var tbl = $('#task_table').DataTable({
             }, name: 'taskAssignee.name'
         },
         {
-            data: 'due_date',
+            data: function (row) {
+                return row;
+            },
+            render: function (row) {
+                return '<span>' + format(row.due_date) + '</span>';
+            },
             name: 'due_date'
         },
         {
@@ -145,7 +159,13 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return (row.created_user) ? row.created_user.name : ''
+                if(row.created_user) {
+                    let colorCode = getRandomColor();
+                    let nameArr = row.created_user.name.split(' ');
+                    return '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+row.created_user.name+'">';
+                } else {
+                    return '';
+                }
             }, name: 'createdUser.name'
         },
         {
@@ -188,9 +208,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $('#editDesc').val(task.description);
                 $('#editDueDate').val(task.due_date);
                 $('#editProjectId').val(task.project.id).trigger("change");
-                if (task.status == 1) {
-                    $('#editStatus').prop('checked', true);
-                }
+                $('#editStatus').val(task.status);
 
                 var tagsIds = [];
                 var userIds = [];
@@ -425,10 +443,10 @@ $(document).on('click', '.entry-model', function (event) {
 
 CKEDITOR.replace( 'description', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });
 
 CKEDITOR.replace( 'editDesc', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });

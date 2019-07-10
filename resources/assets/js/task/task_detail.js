@@ -405,12 +405,12 @@ $(document).on('mouseleave', ".comments__information", function () {
 
 CKEDITOR.replace( 'comment', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });
 
 CKEDITOR.replace( 'editDesc', {
     language: 'en',
-    height: '100px',
+    height: '150px',
 });
 
 $(document).on('click', '#btnCancel', function () {
