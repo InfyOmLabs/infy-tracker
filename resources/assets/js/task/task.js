@@ -122,15 +122,9 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                let imgStr = ''
+                let imgStr = '';
                 $(row.task_assignee).each(function (i, e) {
-                    let colorCode = getRandomColor();
-                    let nameArr = e.name.split(' ');
-                    if(nameArr.length >= 2){
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+e.name+'">';
-                    }else {
-                        imgStr += '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+e.name+'">';
-                    }
+                    imgStr += '<img class="assignee__avatar" src="'+e.img_avatar+'" data-toggle="tooltip" title="'+e.name+'">';
                 });
 
                 return imgStr;
