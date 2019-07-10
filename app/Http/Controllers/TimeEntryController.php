@@ -57,9 +57,6 @@ class TimeEntryController extends AppBaseController
         $input = $this->validateInput($request->all());
 
         $this->timeEntryRepository->create($input);
-        Log::info('Request is: ', $input);
-        Log::info('Entry created by: '.Auth::user()->name);
-
         return $this->sendSuccess('Time Entry created successfully.');
     }
 
@@ -89,16 +86,19 @@ class TimeEntryController extends AppBaseController
     public function update($id, Request $request)
     {
         $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($id);
-        Log::info('Old record is: ', $entry->toArray());
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
-
+        $existEntry = $entry->only(['id', 'task_id', 'activity_type_id', 'user_id', 'start_time', 'end_time', 'duration', 'note']);
+        $inputDiff = array_diff($existEntry, $input);
+        if (!empty($inputDiff)) {
+            Log::info('Entry Id: ' . $entry->id);
+            Log::info('Task Id: ' . $entry->task_id);
+            Log::info('fields changed: ', $inputDiff);
+            Log::info('Entry updated by: ' . Auth::user()->name);
+        }
         $this->timeEntryRepository->updateTimeEntry($input, $id);
-        Log::info('New Request is: ', $input);
-        Log::info('Entry updated by: '.Auth::user()->name);
-
         return $this->sendSuccess('Time Entry updated successfully.');
     }
 
