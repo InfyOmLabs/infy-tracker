@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Queries\UserDataTable;
 use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Crypt;
 use DataTables;
@@ -24,11 +25,12 @@ class UserController extends AppBaseController
     private $userRepository;
     /** @var ProjectRepository */
     private $projectRepository;
-
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+    /** @var RoleRepository */
+    private $roleRepository;
 
     /**
      * UserController constructor.
@@ -36,15 +38,18 @@ class UserController extends AppBaseController
      * @param UserRepository    $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
+     * @param RoleRepository    $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
         AccountRepository $accountRepository,
-        ProjectRepository $projectRepository
+        ProjectRepository $projectRepository,
+        RoleRepository $roleRepository
     ) {
         $this->userRepository = $userRepo;
         $this->accountRepository = $accountRepository;
         $this->projectRepository = $projectRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     /**
@@ -59,11 +64,14 @@ class UserController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of((new UserDataTable())->get())->make(true);
+            return Datatables::of((new UserDataTable())->get())->addColumn('role_name', function (User $user) {
+                return implode(',', $user->roles()->pluck('name')->toArray());
+            })->make(true);
         }
         $projects = $this->projectRepository->getProjectsList();
+        $roles = $this->roleRepository->getRolesList();
 
-        return view('users.index')->with('projects', $projects);
+        return view('users.index')->with(['projects' => $projects, 'roles' => $roles]);
     }
 
     /**
@@ -86,7 +94,9 @@ class UserController extends AppBaseController
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {
             $user->projects()->sync($input['project_ids']);
         }
-
+        if (isset($input['role_id']) && !empty($input['role_id'])) {
+            $user->roles()->sync($input['role_id']);
+        }
         if ($input['is_active']) {
             /*
          * Send confirmation email
@@ -114,9 +124,9 @@ class UserController extends AppBaseController
     {
         /** @var User $user */
         $user = $this->userRepository->findOrFail($id);
-
         $userObj = $user->toArray();
         $userObj['project_ids'] = $user->projects()->pluck('project_id')->toArray();
+        $userObj['role_id'] = $user->roles()->pluck('role_id')->toArray();
 
         return $this->sendResponse($userObj, 'User retrieved successfully.');
     }
@@ -133,19 +143,21 @@ class UserController extends AppBaseController
      */
     public function update($id, UpdateUserRequest $request)
     {
-        /** @var User $user */
-        $user = $this->userRepository->findOrFail($id);
+        $this->userRepository->findOrFail($id);
 
         $projectIds = [];
         $input = $request->all();
 
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
-
+        /** @var User $user */
         $user = $this->userRepository->update($input, $id);
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {
             $projectIds = $input['project_ids'];
         }
         $user->projects()->sync($projectIds);
+        if (isset($input['role_id']) && !empty($input['role_id'])) {
+            $user->roles()->sync($input['role_id']);
+        }
         if ($input['is_active'] && !$user->is_email_verified) {
             $key = $user->id.'|'.$user->activation_code;
             $code = Crypt::encrypt($key);

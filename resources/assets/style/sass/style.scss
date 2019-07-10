@@ -299,7 +299,7 @@ table.dataTable {
             color: $orange;
         }
 
-        &:hover  {
+        &:hover {
             .nav-icon {
                 color: #fff !important;
             }
@@ -337,6 +337,7 @@ table.dataTable {
         }
     }
 }
+
 #clients_table,
 #projects_table,
 #users_table,
@@ -426,7 +427,7 @@ table.dataTable {
     bottom: 105px;
     right: 454px;
     width: 318px;
-    z-index:2;
+    z-index: 2;
 }
 
 .time-tracker-modal {
@@ -468,7 +469,7 @@ table.dataTable {
     height: 50px;
     bottom: 0;
     width: 100%;
-    z-index:2;
+    z-index: 2;
 }
 
 .powered-by {
@@ -484,7 +485,15 @@ table.dataTable {
     font-weight: bold;
 }
 
-.assignee__avatar{
+.icheckbox_flat-blue {
+    margin-right: 8px;
+}
+
+.role-checkbox__label {
+    vertical-align: bottom;
+}
+
+.assignee__avatar {
     padding: 2px;
 }
 
