@@ -160,9 +160,7 @@ var tbl = $('#task_table').DataTable({
         {
             data: function (row) {
                 if(row.created_user) {
-                    let colorCode = getRandomColor();
-                    let nameArr = row.created_user.name.split(' ');
-                    return '<img class="assignee__avatar" src="https://ui-avatars.com/api/?name='+nameArr[0]+'+'+nameArr[1]+'&background='+colorCode+'&color=fff&rounded=true&size=30" data-toggle="tooltip" title="'+row.created_user.name+'">';
+                    return '<img class="assignee__avatar" src="'+row.created_user.img_avatar+'" data-toggle="tooltip" title="'+row.created_user.name+'">';
                 } else {
                     return '';
                 }
