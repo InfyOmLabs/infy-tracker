@@ -89,14 +89,14 @@ class TimeEntryController extends AppBaseController
     public function update($id, Request $request)
     {
         $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($id);
-
+        Log::info('Old record is: ', $entry->toArray());
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
 
         $this->timeEntryRepository->updateTimeEntry($input, $id);
-        Log::info('Request is: ', $input);
+        Log::info('New Request is: ', $input);
         Log::info('Entry updated by: ' . Auth::user()->name);
 
         return $this->sendSuccess('Time Entry updated successfully.');
