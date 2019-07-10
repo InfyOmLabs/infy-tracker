@@ -12,6 +12,7 @@ namespace App\Http\Requests;
 
 use App\Models\Project;
 use Illuminate\Foundation\Http\FormRequest;
+
 class CreateProjectRequest extends FormRequest
 {
     /**
@@ -33,6 +34,7 @@ class CreateProjectRequest extends FormRequest
     {
         $rules = Project::$rules;
         $rules['prefix'] = 'required|alpha_num|max:4|min:2|unique:projects,prefix';
+
         return $rules;
     }
 

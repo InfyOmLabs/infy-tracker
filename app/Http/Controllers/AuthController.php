@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
-use App\Models\User;
 use Crypt;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Session;
 
 class AuthController extends AppBaseController
 {
-    /** @var  AccountRepository */
+    /** @var AccountRepository */
     private $accountRepository;
 
     /**
@@ -35,6 +35,7 @@ class AuthController extends AppBaseController
 
         if (empty($token)) {
             Session::flash('error', 'token not found');
+
             return redirect('login');
         }
 
@@ -44,6 +45,7 @@ class AuthController extends AppBaseController
 
             if (count($result) < 2) {
                 Session::flash('error', 'token not found');
+
                 return redirect('login');
             }
 
@@ -52,10 +54,12 @@ class AuthController extends AppBaseController
 
             if (empty($user)) {
                 Session::flash('msg', 'This account activation token is invalid');
+
                 return redirect('login');
             }
             if ($user->is_email_verified) {
                 Session::flash('success', 'Your account already activated. Please do a login');
+
                 return redirect('login');
             }
 
@@ -63,20 +67,24 @@ class AuthController extends AppBaseController
             $user->save();
             if ($user->set_password) {
                 Session::flash('success', 'Your account is successfully activated. Please do a login');
+
                 return redirect('login');
             }
 
             return view('auth.set_password', compact('user'));
         } catch (Exception $e) {
             Session::flash('msg', 'Something went wrong');
+
             return redirect('login');
         }
     }
 
     /**
-     * @param  Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @param Request $request
+     *
      * @throws Exception
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function setPassword(Request $request)
     {
@@ -87,6 +95,7 @@ class AuthController extends AppBaseController
             /** @var User $user */
             $user = User::findOrFail($input['user_id']);
             Session::flash('error', $error);
+
             return view('auth.set_password', compact('user'));
         }
 

@@ -7,7 +7,7 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Task
+ * App\Models\Task.
  *
  * @property int $id
  * @property string $title
@@ -25,6 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $taskAssignee
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeEntry[] $timeEntries
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newQuery()
@@ -45,11 +46,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
+ *
  * @property string|null $task_number
  * @property string|null $priority
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read mixed $prefix_task_number
  */
@@ -92,7 +98,7 @@ class Task extends Model
         'deleted_by',
         'created_by',
         'task_number',
-        'priority'
+        'priority',
     ];
 
     /**
@@ -101,23 +107,23 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'title' => 'string',
+        'id'          => 'integer',
+        'title'       => 'string',
         'description' => 'string',
-        'project_id' => 'integer',
-        'status' => 'integer',
-        'due_date' => 'date',
-        'deleted_by' => 'integer',
-        'created_by' => 'integer',
+        'project_id'  => 'integer',
+        'status'      => 'integer',
+        'due_date'    => 'date',
+        'deleted_by'  => 'integer',
+        'created_by'  => 'integer',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'title' => 'required',
+        'title'      => 'required',
         'project_id' => 'required',
     ];
 
@@ -139,6 +145,7 @@ class Task extends Model
 
     /**
      * @param string $value
+     *
      * @return string
      */
     public function getDueDateAttribute($value)
@@ -153,7 +160,7 @@ class Task extends Model
      */
     public function getPrefixTaskNumberAttribute()
     {
-        return '#' . $this->project->prefix . '-' . $this->task_number;
+        return '#'.$this->project->prefix.'-'.$this->task_number;
     }
 
     /**

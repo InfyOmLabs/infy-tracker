@@ -78,6 +78,6 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::get('get-tasks/{projectId}', 'TimeEntryController@getTasks');
 });
 
-Route::fallback(function() {
+Route::fallback(function () {
     abort(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 });

@@ -12,7 +12,6 @@ namespace App\Repositories;
 
 class ReportRepository
 {
-
     /**
      * @return array
      */

@@ -7,14 +7,14 @@ use Response;
 use Validator;
 
 /**
- * Class AppBaseController
- * @package App\Http\Controllers
+ * Class AppBaseController.
  */
 class AppBaseController extends Controller
 {
     /**
-     * @param  array|mixed  $result
-     * @param  string  $message
+     * @param array|mixed $result
+     * @param string      $message
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function sendResponse($result, $message)
@@ -23,8 +23,9 @@ class AppBaseController extends Controller
     }
 
     /**
-     * @param  string  $error
-     * @param  int  $code
+     * @param string $error
+     * @param int    $code
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function sendError($error, $code = 500)
@@ -33,22 +34,23 @@ class AppBaseController extends Controller
     }
 
     /**
-     * @param  string  $message
+     * @param string $message
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function sendSuccess($message)
     {
         return Response::json([
             'success' => true,
-            'message' => $message
+            'message' => $message,
         ], 200);
     }
 
     /**
      * @param array $request
      * @param array $rules
-     *
      * @param array $ruleMessage
+     *
      * @return null|string
      */
     public function validateRules($request, $rules, $ruleMessage = [])
@@ -57,7 +59,5 @@ class AppBaseController extends Controller
         if ($validator->fails()) {
             return $validator->messages()->first();
         }
-
-        return null;
     }
 }

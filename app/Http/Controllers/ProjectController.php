@@ -38,9 +38,11 @@ class ProjectController extends AppBaseController
     /**
      * Display a listing of the Project.
      *
-     * @param  Request $request
-     * @return \Illuminate\View\View
+     * @param Request $request
+     *
      * @throws Exception
+     *
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -59,7 +61,7 @@ class ProjectController extends AppBaseController
     /**
      * Store a newly created Project in storage.
      *
-     * @param  CreateProjectRequest $request
+     * @param CreateProjectRequest $request
      *
      * @return JsonResponse
      */
@@ -79,7 +81,7 @@ class ProjectController extends AppBaseController
     /**
      * Show the form for editing the specified Project.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -95,8 +97,8 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param  int $id
-     * @param  UpdateProjectRequest $request
+     * @param int                  $id
+     * @param UpdateProjectRequest $request
      *
      * @return JsonResponse|\Illuminate\Http\RedirectResponse
      */
@@ -116,10 +118,11 @@ class ProjectController extends AppBaseController
     /**
      * Remove the specified Project from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
+     * @throws Exception
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function destroy($id)
     {
