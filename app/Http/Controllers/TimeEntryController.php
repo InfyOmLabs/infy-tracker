@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
+use Auth;
 use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class TimeEntryController extends AppBaseController
@@ -85,12 +87,18 @@ class TimeEntryController extends AppBaseController
     public function update($id, Request $request)
     {
         $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($id);
-
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
-
+        $existEntry = $entry->only(['id', 'task_id', 'activity_type_id', 'user_id', 'start_time', 'end_time', 'duration', 'note']);
+        $inputDiff = array_diff($existEntry, $input);
+        if (!empty($inputDiff)) {
+            Log::info('Entry Id: '.$entry->id);
+            Log::info('Task Id: '.$entry->task_id);
+            Log::info('fields changed: ', $inputDiff);
+            Log::info('Entry updated by: '.Auth::user()->name);
+        }
         $this->timeEntryRepository->updateTimeEntry($input, $id);
 
         return $this->sendSuccess('Time Entry updated successfully.');
