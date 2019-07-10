@@ -50,8 +50,6 @@
                                 <span class="flex-1">
                                     @if(isset($taskStatus[$task->status]))
                                         <span class="badge {{$taskBadges[$task->status]}} text-uppercase">{{$taskStatus[$task->status]}}</span>
-                                    @else
-                                        <span class="badge badge-success text-uppercase">-</span>
                                     @endif
                                 </span>
                             </div>
