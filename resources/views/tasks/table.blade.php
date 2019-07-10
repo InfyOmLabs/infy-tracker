@@ -3,6 +3,7 @@
     <tr>
         <th></th>
         <th>Title</th>
+        <th>Status</th>
         <th>Assign To</th>
         <th>Due Date</th>
         <th>Created At</th>

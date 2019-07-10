@@ -1,6 +1,18 @@
-@import "https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css";
-@import "infy-loader";
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
+@import '~@coreui/icons/css/coreui-icons.min.css';
+@import '~simple-line-icons/css/simple-line-icons.css';
 @import "variables";
+@import '~@coreui/coreui/scss/coreui';
+@import "infy-loader";
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+.main {
+    padding-bottom: 50px;
+}
+
 /** spinner css start **/
 @-webkit-keyframes sk-bounce {
     0%, 100% {
@@ -223,7 +235,7 @@ table.dataTable {
 }
 
 .modal-header {
-    background-color: #20a8d8;
+    background-color: #00C6FF;
     color: white;
     border-radius: 4px 4px 0 0;
 }
@@ -271,9 +283,8 @@ table.dataTable {
 }
 
 .active_btn {
-    width: 5px;
-    height: 5px;
-    margin-left: 18px;
+    width: 20px;
+    margin: auto;
 }
 
 .chkStatus {
@@ -282,9 +293,22 @@ table.dataTable {
 }
 
 .sidebar {
+
     .nav-item.active {
         .nav-icon {
-            color: #20a8d8;
+            color: $orange;
+        }
+
+        &:hover {
+            .nav-icon {
+                color: #fff !important;
+            }
+        }
+    }
+
+    .nav-link {
+        &:hover {
+            background-color: $orange;
         }
     }
 }
@@ -293,23 +317,36 @@ table.dataTable {
     .dataTables_paginate {
         .paginate_button.current {
             color: white !important;
-            background: #4285f4 !important;
+            background: $orange !important;
             box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+            border: 1px solid $orange !important;
 
             &:hover {
                 color: white !important;
             }
         }
 
-        .paginate_button {
+        .paginate_button:not(.current) {
             color: #212529 !important;
 
             &:hover {
-                background: #3d8ef4 !important;
+                background: $blue !important;
                 border: 1px solid transparent !important;
-                color: #212529 !important;
+                color: #fff !important;
             }
         }
+    }
+}
+
+#clients_table,
+#projects_table,
+#users_table,
+#task_table,
+#timeEntryTable,
+#reportTable {
+    td,
+    th {
+        vertical-align: middle;
     }
 }
 
@@ -318,18 +355,18 @@ table.dataTable {
 }
 
 .icheckbox_line-white {
-    position: relative;
     display: block;
-    margin: 0;
-    font-size: 13px;
-    line-height: 17px;
+    margin: auto;
     background: #ffffff;
     border: 0.5px solid #d0d0d0;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
     border-radius: 3px;
     cursor: pointer;
-    padding: 15px 0 5px 22px !important;
+    width: 20px;
+    height: 20px;
+}
+
+.switch-label {
+    margin-bottom: 0;
 }
 
 #timer {
@@ -390,7 +427,7 @@ table.dataTable {
     bottom: 105px;
     right: 454px;
     width: 318px;
-    z-index:2;
+    z-index: 2;
 }
 
 .time-tracker-modal {
@@ -432,7 +469,7 @@ table.dataTable {
     height: 50px;
     bottom: 0;
     width: 100%;
-    z-index:2;
+    z-index: 2;
 }
 
 .powered-by {
@@ -448,7 +485,28 @@ table.dataTable {
     font-weight: bold;
 }
 
-.assignee__avatar{
+.icheckbox_flat-blue {
+    margin-right: 8px;
+}
+
+.role-checkbox__label {
+    vertical-align: bottom;
+}
+
+.assignee__avatar {
     padding: 2px;
+}
+
+.sa-confirm-button-container {
+    .confirm {
+        background-color: $blue !important;
+    }
+}
+
+.sa-button-container {
+    .cancel {
+        color: #83888c;
+        background-color: #f0f3f5 !important;
+    }
 }
 

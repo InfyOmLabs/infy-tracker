@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 
 class HomeController extends AppBaseController
 {
-    /** @var  DashboardRepository $dashboardRepo */
+    /** @var DashboardRepository $dashboardRepo */
     private $dashboardRepo;
     private $userRepository;
 
     /**
      * HomeController constructor.
+     *
      * @param DashboardRepository $dashboardRepository
-     * @param UserRepository $userRepository
+     * @param UserRepository      $userRepository
      */
-    public function __construct(DashboardRepository $dashboardRepository,UserRepository $userRepository)
+    public function __construct(DashboardRepository $dashboardRepository, UserRepository $userRepository)
     {
         $this->middleware('auth');
         $this->dashboardRepo = $dashboardRepository;
@@ -26,16 +27,19 @@ class HomeController extends AppBaseController
 
     /**
      * Show the application dashboard.
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $users = $this->userRepository->getUserList();
+
         return view('dashboard.index', compact('users'));
     }
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function workReport(Request $request)
@@ -47,6 +51,7 @@ class HomeController extends AppBaseController
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function developerWorkReport(Request $request)

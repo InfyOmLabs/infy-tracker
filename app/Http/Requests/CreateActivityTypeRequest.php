@@ -12,6 +12,7 @@ namespace App\Http\Requests;
 
 use App\Models\ActivityType;
 use Illuminate\Foundation\Http\FormRequest;
+
 class CreateActivityTypeRequest extends FormRequest
 {
     /**

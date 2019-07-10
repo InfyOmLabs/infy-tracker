@@ -12,6 +12,7 @@ namespace App\Http\Requests;
 
 use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
+
 class UpdateClientRequest extends FormRequest
 {
     /**

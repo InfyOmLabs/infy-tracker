@@ -4,6 +4,7 @@
         <th>Name</th>
         <th>Email</th>
         <th>Phone</th>
+        <th>Role</th>
         <th>Active</th>
         <th>Is Email Verified</th>
         <th>Action</th>

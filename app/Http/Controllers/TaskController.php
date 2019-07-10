@@ -19,7 +19,7 @@ use Illuminate\View\View;
 
 class TaskController extends AppBaseController
 {
-    /** @var  TaskRepository */
+    /** @var TaskRepository */
     private $taskRepository;
     private $userRepo;
 
@@ -31,11 +31,12 @@ class TaskController extends AppBaseController
 
     /**
      * Display a listing of the Task.
+     *
      * @param Request $request
      *
-     * @return Factory|View
      * @throws Exception
      *
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -46,7 +47,7 @@ class TaskController extends AppBaseController
                 'filter_status',
                 'filter_user',
             ])))->editColumn('title', function (Task $task) {
-                return $task->prefix_task_number . ' ' . $task->title;
+                return $task->prefix_task_number.' '.$task->title;
             })->make(true);
         }
         $taskData = $this->taskRepository->getTaskData();
@@ -59,9 +60,9 @@ class TaskController extends AppBaseController
      *
      * @param CreateTaskRequest $request
      *
-     * @return JsonResponse
-     *
      * @throws Exception
+     *
+     * @return JsonResponse
      */
     public function store(CreateTaskRequest $request)
     {
@@ -70,18 +71,21 @@ class TaskController extends AppBaseController
         $task = $this->taskRepository->store($this->fill($input));
         $indexNumber = $this->taskRepository->getIndex($task->project_id);
         $task->update(['task_number' => $indexNumber]);
+
         return $this->sendSuccess('Task created successfully.');
     }
 
     private function fill($input)
     {
-        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? 1 : 0;
+        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : 0;
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
+
         return $input;
     }
 
     /**
      * @param $id
+     *
      * @return Factory|JsonResponse|View
      */
     public function show($id)
@@ -125,11 +129,12 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param int $id
+     * @param int               $id
      * @param UpdateTaskRequest $request
      *
-     * @return JsonResponse
      * @throws Exception
+     *
+     * @return JsonResponse
      */
     public function update($id, UpdateTaskRequest $request)
     {
@@ -142,11 +147,12 @@ class TaskController extends AppBaseController
 
     /**
      * Remove the specified Task from storage.
+     *
      * @param int $id
      *
-     * @return JsonResponse
      * @throws Exception
      *
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -192,6 +198,7 @@ class TaskController extends AppBaseController
 
     /**
      * @param Request $request
+     *
      * @return array
      */
     public function myTasks(Request $request)
@@ -205,19 +212,23 @@ class TaskController extends AppBaseController
     /**
      * @param $id
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function deleteAttachment($id, Request $request)
     {
         $this->taskRepository->deleteFile($id, $request->all());
+
         return $this->sendSuccess('File has been deleted successfully.');
     }
 
     /**
      * @param $id
      * @param Request $request
-     * @return JsonResponse
+     *
      * @throws Exception
+     *
+     * @return JsonResponse
      */
     public function addAttachment($id, Request $request)
     {
@@ -228,17 +239,19 @@ class TaskController extends AppBaseController
             return $this->sendError('You can not upload this file.');
         }
         $fileName = $this->taskRepository->uploadFile($id, $input['file']);
+
         return $this->sendResponse(['fileName' => $fileName], 'File has been uploaded successfully.');
     }
 
     /**
      * @param $id
+     *
      * @return JsonResponse
      */
     public function getAttachment($id)
     {
         $result = $this->taskRepository->getAttachments($id);
+
         return $this->sendResponse($result, 'Task retrieved successfully.');
     }
-
 }

@@ -3,25 +3,23 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
-use App\Repositories\BaseRepository;
 
 /**
- * Class ActivityTypeRepository
- * @package App\Repositories
+ * Class ActivityTypeRepository.
+ *
  * @version May 2, 2019, 10:52 am UTC
-*/
-
+ */
 class ActivityTypeRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'name'
+        'name',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -31,7 +29,7 @@ class ActivityTypeRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -39,7 +37,7 @@ class ActivityTypeRepository extends BaseRepository
     }
 
     /**
-     * get activity types
+     * get activity types.
      *
      * @return \Illuminate\Support\Collection
      */

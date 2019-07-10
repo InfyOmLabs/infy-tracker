@@ -4,7 +4,7 @@
  * User: Shailesh Ladumor
  * email: shaileshmladumor@gmail.com
  * Date: 08-06-2019
- * Time: 01:22 PM
+ * Time: 01:22 PM.
  */
 
 namespace App\Repositories;
@@ -18,6 +18,7 @@ class DashboardRepository
 {
     /**
      * @param $input
+     *
      * @return array
      */
     public function getWorkReport($input)
@@ -53,29 +54,31 @@ class DashboardRepository
             $item['backgroundColor'] = $colors[$index];
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
-                $duration = isset($entry[$date]) ? round($entry[$date] / 60, 2) : 0;
+                $duration = isset($entry[$date]) ? $entry[$date] : 0;
                 $item['data'][] = $duration;
                 $totalRecords = $totalRecords + $duration;
             }
-            $data[] = (object)$item;
+            $data[] = (object) $item;
             $index++;
         }
 
         $result = [];
         // preparing a date array for displaying a labels
         foreach ($dates['dateArr'] as $date) {
-            $date = date("d-M", strtotime($date));
+            $date = date('d-M', strtotime($date));
             $result['date'][] = $date;
         }
         $result['projects'] = array_keys($projects);
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
-        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y') . ' - ' . Carbon::parse($input['end_date'])->format('d M, Y');
+        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '.Carbon::parse($input['end_date'])->format('d M, Y');
+
         return $result;
     }
 
     /**
      * @param $input
+     *
      * @return mixed
      */
     public function getDeveloperWorkReport($input)
@@ -99,7 +102,7 @@ class DashboardRepository
                     if (!isset($projectData[$projectId])) {
                         $projectData[$projectId] = [
                             ucfirst($entry->task->project->name),
-                            0
+                            0,
                         ];
                     }
                     $projectData[$projectId][1] = $projectData[$projectId][1] + $entry->duration;
@@ -113,24 +116,24 @@ class DashboardRepository
             }
             if (count($proData) > 0) {
                 $data['drilldown'][] =
-                    (object)[
-                        "name" => ucfirst($user->name),
-                        "id" => ucfirst($user->name),
-                        "data" => $proData
+                    (object) [
+                        'name' => ucfirst($user->name),
+                        'id'   => ucfirst($user->name),
+                        'data' => $proData,
                     ];
             }
 
-            $data['result'][] = (object)[
-                "name" => ucfirst($user->name),
-                "total_hours" => round($totalDuration / 60, 2),
-                "drilldown" => $totalDuration === 0 ? null : ucfirst($user->name)
+            $data['result'][] = (object) [
+                'name'        => ucfirst($user->name),
+                'total_hours' => round($totalDuration / 60, 2),
+                'drilldown'   => $totalDuration === 0 ? null : ucfirst($user->name),
             ];
         }
         $data['totalRecords'] = 0;
         foreach ($data['result'] as $item) {
             $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
-        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
+        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
         $data['data']['backgroundColor'] = array_values(getBarChartColors());
@@ -142,6 +145,7 @@ class DashboardRepository
     /**
      * @param $startDate
      * @param $endDate
+     *
      * @return array
      */
     public function getDate($startDate, $endDate)
@@ -165,10 +169,11 @@ class DashboardRepository
             $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
         }
         $data = [
-            'dateArr' => $dateArr,
+            'dateArr'   => $dateArr,
             'startDate' => $subStartDate,
-            'endDate' => $subEndDate
+            'endDate'   => $subEndDate,
         ];
+
         return $data;
     }
 }

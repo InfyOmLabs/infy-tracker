@@ -7,6 +7,7 @@ class AddDefaultActivityTypes extends Migration
 {
     /**
      * Run the migrations.
+     *
      * @return void
      */
     public function up()
@@ -26,6 +27,7 @@ class AddDefaultActivityTypes extends Migration
 
     /**
      * Reverse the migrations.
+     *
      * @return void
      */
     public function down()

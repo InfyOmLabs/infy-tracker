@@ -43,12 +43,12 @@ window.prepareDeveloperWorkReport = function (result) {
         $('#developers-daily-work-report-container').empty();
         $('#developers-daily-work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
         return true
-    }else{
+    } else {
         $('#developers-daily-work-report-container').html('');
         $('#developers-daily-work-report-container').append('<canvas id="developers-daily-work-report"></canvas>');
     }
     let ctx = document.getElementById('developers-daily-work-report').getContext('2d');
-    ctx.canvas.style.height = '400px';
+    ctx.canvas.style.height = '500px';
     ctx.canvas.style.width = '100%';
     let dailyWorkReportChart = new Chart(ctx, {
         type: 'bar',
@@ -72,8 +72,8 @@ window.prepareDeveloperWorkReport = function (result) {
                         if (label) {
                             label += ': ';
                         }
-                        label += Math.round(tooltipItem.yLabel * 100) / 100;
-                        return label +' hr';
+                        result = convertToTimeFormat(tooltipItem.yLabel);
+                        return label + result;
                     }
                 }
             },
@@ -88,4 +88,22 @@ window.prepareDeveloperWorkReport = function (result) {
             }
         }
     });
+};
+window.convertToTimeFormat = function (total) {
+    let hours = 0;
+    let minutes = 0;
+    let totalArr = total.toString().split('.');
+    let totalHr = parseInt(totalArr[0]);
+    if (typeof totalArr[1] !== 'undefined') {
+        hours = parseInt(totalArr[1] / 60);
+        minutes = totalArr[1] % 60;
+    }
+    let format = null;
+    if (totalHr > 0) {
+        hours += totalHr;
+        format = hours + 'h ' + minutes + 'm';
+    } else {
+        format = minutes + 'm';
+    }
+    return format;
 };
