@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddUniqueConstraintsToTaskNumberColumnOfTasks extends Migration
 {
@@ -15,7 +15,7 @@ class AddUniqueConstraintsToTaskNumberColumnOfTasks extends Migration
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->unsignedInteger('task_number')->nullable(false)->change();
-            $table->unique(['task_number','project_id']);
+            $table->unique(['task_number', 'project_id']);
         });
     }
 
@@ -27,7 +27,7 @@ class AddUniqueConstraintsToTaskNumberColumnOfTasks extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropUnique(['task_number','project_id']);
+            $table->dropUnique(['task_number', 'project_id']);
             $table->unsignedInteger('task_number')->nullable()->change();
         });
     }

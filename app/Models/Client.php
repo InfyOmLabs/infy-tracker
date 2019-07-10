@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 /**
- * App\Models\Client
+ * App\Models\Client.
  *
  * @property int $id
  * @property string $name
@@ -15,6 +15,7 @@ use Eloquent as Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client query()
@@ -35,7 +36,7 @@ class Client extends Model
         'name',
         'email',
         'website',
-        'created_by'
+        'created_by',
     ];
 
     /**
@@ -51,24 +52,24 @@ class Client extends Model
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name'  => 'required|unique:clients,name',
-        'email'  => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'name'     => 'required|unique:clients,name',
+        'email'    => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
         'website'  => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
     ];
 
     public static $editRules = [
-        'email'  => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'email'    => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
         'website'  => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
     ];
 
     public static $messages = [
         'website.regex' => 'Please enter valid url.',
-        'email.regex' => 'Please enter valid email.'
+        'email.regex'   => 'Please enter valid email.',
     ];
 
     /**

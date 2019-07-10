@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class TimeEntryController extends AppBaseController
 {
-    /** @var  TimeEntryRepository */
+    /** @var TimeEntryRepository */
     private $timeEntryRepository;
 
     public function __construct(TimeEntryRepository $timeEntryRepo)
@@ -28,8 +28,9 @@ class TimeEntryController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -80,7 +81,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param int $id
+     * @param int     $id
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -103,8 +104,10 @@ class TimeEntryController extends AppBaseController
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
@@ -167,6 +170,7 @@ class TimeEntryController extends AppBaseController
 
     /**
      * @param int $projectId
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getTasks($projectId)

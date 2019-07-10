@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Class TaskDataTable
- * @package App\Queries
+ * Class TaskDataTable.
  */
 class TaskDataTable
 {
