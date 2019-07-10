@@ -299,7 +299,7 @@ table.dataTable {
             color: $orange;
         }
 
-        &:hover  {
+        &:hover {
             .nav-icon {
                 color: #fff !important;
             }
@@ -337,6 +337,7 @@ table.dataTable {
         }
     }
 }
+
 #clients_table,
 #projects_table,
 #users_table,
@@ -482,6 +483,14 @@ table.dataTable {
 .check-icon {
     color: $green;
     font-weight: bold;
+}
+
+.icheckbox_flat-blue {
+    margin-right: 8px;
+}
+
+.role-checkbox__label {
+    vertical-align: bottom;
 }
 
 .assignee__avatar {

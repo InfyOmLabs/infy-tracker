@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\MailResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
  * App\Models\User.
@@ -49,12 +50,17 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $image_path
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, EntrustUserTrait;
 
     public $table = 'users';
+    protected $appends = ['img_avatar'];
 
     /**
      * The attributes that are mass assignable.
@@ -139,5 +145,10 @@ class User extends Authenticatable
     public function createdUser()
     {
         return $this->belongsTo(self::class, 'created_by');
+    }
+
+    public function getImgAvatarAttribute()
+    {
+        return getUserImageInitial($this->id, $this->name);
     }
 }
