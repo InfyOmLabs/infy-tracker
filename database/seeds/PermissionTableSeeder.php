@@ -29,6 +29,11 @@ class PermissionTableSeeder extends Seeder
                 'description'  => 'All projects list comes into Project filter otherwise comes only related projects.Assignee Filter visible in task module otherwise own assigned and non-assigned.',
             ],
             [
+                'name'         => 'manage_time_entries',
+                'display_name' => 'Manage Entry',
+                'description'  => 'User can manage own time entry.',
+            ],
+            [
                 'name'         => 'manage_users',
                 'display_name' => 'Manage Users',
                 'description'  => 'User tab visible',

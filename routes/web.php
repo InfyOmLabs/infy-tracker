@@ -77,8 +77,10 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::get('task-details/{task_id}', 'TaskController@getTaskDetails');
     });
 
-    Route::resource('timeEntries', 'TimeEntryController');
-    Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
+    Route::middleware('permission:manage_time_entries')->group(function () {
+        Route::resource('timeEntries', 'TimeEntryController');
+        Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
+    });
 
     Route::get('reports', 'ReportController@index')->name('reports.index')->middleware('permission:manage_reports');
 
