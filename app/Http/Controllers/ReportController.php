@@ -140,6 +140,7 @@ class ReportController extends AppBaseController
         }
 
         $this->reportRepository->update($request->all(), $id);
+        $this->reportRepository->updateReportFilter($request->all(), $report);
         Flash::success('Report updated successfully.');
 
         return redirect(route('reports.index'));

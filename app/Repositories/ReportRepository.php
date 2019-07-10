@@ -51,10 +51,9 @@ class ReportRepository extends BaseRepository
     {
         $result = [];
         if (isset($input['projectIds'])) {
-            $report->projects()->wherePivot('param_type', Project::class)->sync($input['projectIds']);
-//            foreach ($input['projectIds'] as $projectId) {
-//                $result[] = $this->createFilter($report->id, $projectId, Project::class);
-//            }
+            foreach ($input['projectIds'] as $projectId) {
+                $result[] = $this->createFilter($report->id, $projectId, Project::class);
+            }
         }
 
         if (isset($input['userIds'])) {
@@ -87,28 +86,54 @@ class ReportRepository extends BaseRepository
     {
         $result = [];
         if (isset($input['projectIds'])) {
-            foreach ($input['projectIds'] as $projectId) {
+            $projectIds = $this->getProjectIds($report->id)->toArray();
+            $ids = array_diff($input['projectIds'], (array)$projectIds);
+            foreach ($ids as $projectId) {
                 $result[] = $this->createFilter($report->id, $projectId, Project::class);
+            }
+            $deleteProjects = array_diff((array)$projectIds, $input['projectIds']);
+            if (!empty($deleteProjects)) {
+                ReportFilter::whereParamType(Project::class)->whereParamId($deleteProjects)->delete();
             }
         }
 
         if (isset($input['userIds'])) {
-            foreach ($input['userIds'] as $userId) {
+            $userIds = $this->getUserIds($report->id)->toArray();
+            $ids = array_diff($input['userIds'], (array)$userIds);
+            foreach ($ids as $userId) {
                 $result[] = $this->createFilter($report->id, $userId, User::class);
+            }
+            $deleteUsers = array_diff((array)$userIds, $input['userIds']);
+            if (!empty($deleteUsers)) {
+                ReportFilter::whereParamType(User::class)->whereParamId($deleteUsers)->delete();
             }
         }
 
         if (isset($input['tagIds'])) {
-            foreach ($input['tagIds'] as $tagId) {
+            $tagIds = $this->getTagIds($report->id)->toArray();
+            $ids = array_diff($input['tagIds'], (array)$tagIds);
+            foreach ($ids as $tagId) {
                 $result[] = $this->createFilter($report->id, $tagId, Tag::class);
+            }
+            $deleteTags = array_diff((array)$tagIds, $input['tagIds']);
+            if (!empty($deleteTags)) {
+                ReportFilter::whereParamType(Tag::class)->whereParamId($deleteTags)->delete();
             }
         }
 
         if (isset($input['client_id'])) {
-            $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+            $clientId = $this->getClientId($report->id);
+            if ($input['client_id'] !== $clientId) {
+                $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+            }
+
+            if (empty($clientId) && $input['client_id'] !== $clientId) {
+                ReportFilter::whereParamType(Tag::class)->whereParamId($clientId)->delete();
+            }
         }
         return $result;
     }
+
     /**
      * @param $reportId
      * @return bool|mixed|null
