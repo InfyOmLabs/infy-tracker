@@ -55,7 +55,7 @@ class User extends Authenticatable
     use Notifiable;
 
     public $table = 'users';
-    protected  $appends = ['img_avatar'];
+    protected $appends = ['img_avatar'];
 
     /**
      * The attributes that are mass assignable.
