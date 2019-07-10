@@ -28,7 +28,6 @@ use Eloquent as Model;
  */
 class Report extends Model
 {
-
     public $table = 'reports';
 
     public $fillable = [
@@ -46,8 +45,8 @@ class Report extends Model
         'id' => 'integer',
         'name' => 'string',
         'owner_id' => 'integer',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime'
+        'start_date' => 'date',
+        'end_date' => 'date'
     ];
 
     /**
@@ -59,4 +58,9 @@ class Report extends Model
         'start_date' => 'required',
         'end_date' => 'required',
     ];
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, 'report_filters', 'report_id', 'param_id');
+    }
 }

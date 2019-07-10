@@ -112,8 +112,16 @@ class ReportController extends AppBaseController
             Flash::error('Report not found.');
             return redirect(route('reports.index'));
         }
-
-        return view('reports.edit')->with('report', $report);
+        $data['tags'] = $this->tagRepo->getTagList();
+        $data['users'] = $this->userRepo->getUserList();
+        $data['clients'] = $this->clientRepo->getClientList();
+        $data['projects'] = $this->projectRepo->getProjectsList();
+        $data['report'] = $report;
+        $data['projectIds'] = $this->reportRepository->getProjectIds($id);
+        $data['tagIds'] = $this->reportRepository->getTagIds($id);
+        $data['userIds'] = $this->reportRepository->getUserIds($id);
+        $data['clientId'] = $this->reportRepository->getClientId($id);
+        return view('reports.edit')->with($data);
     }
 
     /**
@@ -154,6 +162,7 @@ class ReportController extends AppBaseController
         }
 
         $this->reportRepository->delete($id);
+        $this->reportRepository->deleteFilter($id);
 
         Flash::success('Report deleted successfully.');
 

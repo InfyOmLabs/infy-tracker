@@ -10,11 +10,11 @@
             <div class="page-header">
                 <h3>View Report</h3>
                 <div class="filter-container">
-                    <a href="{!! route('reports.edit',$report->id) !!}}"
+                    <a href="{{ route('reports.edit', $report->id) }}"
                        class="btn btn-primary filter-container__btn mr-1">
                         Edit
                     </a>
-                    <a href="{!! route('reports.destroy',$report->id) !!}}"
+                    <a href="{{ route('reports.destroy', $report->id) }}"
                        class="btn btn-danger filter-container__btn mr-1">
                         Delete
                     </a>
@@ -33,12 +33,14 @@
                                 </div>
                                 <hr class="my-0"/>
                                 <div class="reports__project-row">
-                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory</div>
+                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory
+                                    </div>
                                     <span>10hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh
+                                        </div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -53,7 +55,8 @@
                                 {{--repeated developer-task section--}}
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Shailsh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Shailsh
+                                        </div>
                                         <span>4hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -72,7 +75,8 @@
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Monika</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Monika
+                                        </div>
                                         <span>8hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -93,12 +97,14 @@
                                 </div>
                                 <hr class="my-0"/>
                                 <div class="reports__project-row">
-                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory</div>
+                                    <div class="reports__project-header"><i class="fa fa-folder-open mr-2"></i>Inventory
+                                    </div>
                                     <span>6hr</span>
                                 </div>
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh
+                                        </div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">
@@ -113,7 +119,8 @@
                                 {{--repeated developer-task section--}}
                                 <div class="reports__developer-task">
                                     <div class="reports__developer-row">
-                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh</div>
+                                        <div class="reports__developer-header"><i class="fa fa-users mr-2"></i>Dharmesh
+                                        </div>
                                         <span>6hr</span>
                                     </div>
                                     <div class="reports__task-row">

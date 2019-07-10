@@ -23,28 +23,28 @@
     <!-- Client Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('client_id', 'Client') !!}
-        {!! Form::select('client_id', $clients, null, ['class' => 'form-control','id' => 'client','placeholder'=>'Select Client']) !!}
+        {!! Form::select('client_id', $clients, isset($clientId)?$clientId:null, ['class' => 'form-control','id' => 'client','placeholder'=>'Select Client']) !!}
     </div>
 </div>
 <div class="row">
     <!-- Projects Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('projectIds', 'Project') !!}
-        {!! Form::select('projectIds[]', $projects, null, ['class' => 'form-control','id' => 'projectIds','multiple' => true]) !!}
+        {!! Form::select('projectIds[]', $projects, isset($projectIds)?$projectIds:null, ['class' => 'form-control','id' => 'projectIds','multiple' => true]) !!}
     </div>
 </div>
 <div class="row">
     <!-- Users Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('users', 'Users') !!}
-        {!! Form::select('userIds[]', $users, null, ['class' => 'form-control','id'=>'userIds','multiple' => true]) !!}
+        {!! Form::select('userIds[]', $users, isset($userIds)?$userIds:null, ['class' => 'form-control','id'=>'userIds','multiple' => true]) !!}
     </div>
 </div>
 <div class="row">
     <!-- tags Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('tags', 'Tags') !!}
-        {!! Form::select('tags[]', $tags, null, ['class' => 'form-control','id'=>'tagIds','multiple' => true]) !!}
+        {!! Form::select('tagIds[]', $tags,isset($tagIds)?$tagIds:null, ['class' => 'form-control','id'=>'tagIds','multiple' => true]) !!}
     </div>
 
     <!-- Submit Field -->
