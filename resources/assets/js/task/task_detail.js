@@ -64,10 +64,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $('#editDesc').val(task.description);
                 $('#editDueDate').val(task.due_date);
                 $('#editProjectId').val(task.project.id).trigger("change");
-                if (task.status == 1) {
-                    $('#editStatus').prop('checked', true);
-                }
-
+                $('#editStatus').val(task.status);
                 var tagsIds = [];
                 var userIds = [];
                 $(task.tags).each(function (i, e) {
