@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\ImageTrait;
 use App\Notifications\MailResetPasswordNotification;
+use App\Traits\ImageTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -46,7 +46,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ *
  * @property string $image_path
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
  * @mixin \Eloquent
  *
@@ -79,7 +81,7 @@ class User extends Authenticatable
         'is_email_verified',
         'activation_code',
         'is_active',
-        'image_path'
+        'image_path',
     ];
 
     /**
@@ -114,8 +116,8 @@ class User extends Authenticatable
 
     public static $messages = [
         'phone.digits' => 'The phone number must be 10 digits long.',
-        'email.regex' => 'Please enter valid email.',
-        'photo.mimes' => 'The profile image must be a file of type: jpeg, jpg, png.'
+        'email.regex'  => 'Please enter valid email.',
+        'photo.mimes'  => 'The profile image must be a file of type: jpeg, jpg, png.',
     ];
 
     public static $setPasswordRules = [
@@ -159,13 +161,15 @@ class User extends Authenticatable
 
     /**
      * @param $value
+     *
      * @return string
      */
     public function getImagePathAttribute($value)
     {
         if (!empty($value)) {
-            return $this->imageUrl(self::IMAGE_PATH . DIRECTORY_SEPARATOR . $value);
+            return $this->imageUrl(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$value);
         }
+
         return asset('assets/img/user-avatar.png');
     }
 
@@ -178,6 +182,7 @@ class User extends Authenticatable
         if (empty($image)) {
             return true;
         }
-        return $this->traitDeleteImage(self::IMAGE_PATH . DIRECTORY_SEPARATOR . $image);
+
+        return $this->traitDeleteImage(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$image);
     }
 }

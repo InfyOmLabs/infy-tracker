@@ -1,6 +1,8 @@
-<?php namespace App\Traits;
+<?php
 
-/**
+namespace App\Traits;
+
+/*
  * Company: InfyOm Technologies, Copyright 2019, All Rights Reserved.
  *
  * User: Ajay Makwana
@@ -19,13 +21,13 @@ use Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Trait ImageTrait
- * @package App\Traits
+ * Trait ImageTrait.
  */
 trait ImageTrait
 {
     /**
      * @param string $file
+     *
      * @return bool
      */
     public static function deleteImage($file)
@@ -35,16 +37,18 @@ trait ImageTrait
 
             return true;
         }
+
         return false;
     }
 
     /**
      * @param UploadedFile $file
-     * @param string $path
+     * @param string       $path
+     * @param array        $options
      *
-     * @param array $options
-     * @return string
      * @throws ApiOperationFailedException
+     *
+     * @return string
      */
     public static function makeImage($file, $path, $options = [])
     {
@@ -56,11 +60,11 @@ trait ImageTrait
                     throw  new ApiOperationFailedException('invalid image', Response::HTTP_BAD_REQUEST);
                 }
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date . '_' . uniqid() . '.' . $extension;
+                $fileName = $date.'_'.uniqid().'.'.$extension;
                 if (!empty($options)) {
                     $imageThumb = Image::make($file->getRealPath())->fit($options['width'], $options['height']);
                     $imageThumb = $imageThumb->stream();
-                    Storage::put($path . DIRECTORY_SEPARATOR . $fileName, $imageThumb->__toString());
+                    Storage::put($path.DIRECTORY_SEPARATOR.$fileName, $imageThumb->__toString());
                 } else {
                     Storage::putFileAs($path, $file, $fileName, 'public');
                 }
@@ -69,12 +73,14 @@ trait ImageTrait
             return $fileName;
         } catch (Exception $e) {
             Log::info($e->getMessage());
+
             throw new ApiOperationFailedException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public function imageUrl($path)
@@ -87,10 +93,10 @@ trait ImageTrait
      *
      * @return mixed
      */
-    function urlEncoding($url)
+    public function urlEncoding($url)
     {
-        $entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D', '%5C');
-        $replacements = array('!', '*', "'", "(", ")", ";", ":", "@", "&", "=", "+", "$", ",", "/", "?", "%", "#", "[", "]", "/");
+        $entities = ['%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D', '%5C'];
+        $replacements = ['!', '*', "'", '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '%', '#', '[', ']', '/'];
 
         return str_replace($entities, $replacements, urlencode($url));
     }
@@ -99,9 +105,9 @@ trait ImageTrait
      * @param UploadedFile $file
      * @param $path
      *
-     * @return string
      * @throws ApiOperationFailedException
      *
+     * @return string
      */
     public static function uploadVideo($file, $path)
     {
@@ -113,24 +119,25 @@ trait ImageTrait
                     throw  new ApiOperationFailedException('invalid Video', Response::HTTP_BAD_REQUEST);
                 }
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date . '_' . uniqid() . '.' . $extension;
+                $fileName = $date.'_'.uniqid().'.'.$extension;
                 Storage::putFileAs($path, $file, $fileName, 'public');
             }
 
             return $fileName;
         } catch (Exception $e) {
             Log::info($e->getMessage());
+
             throw new ApiOperationFailedException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
      * @param UploadedFile $file
-     * @param string $path
+     * @param string       $path
      *
-     * @return string
      * @throws ApiOperationFailedException
      *
+     * @return string
      */
     public static function makeAttachment($file, $path)
     {
@@ -142,7 +149,7 @@ trait ImageTrait
                     throw  new ApiOperationFailedException('invalid Attachment', Response::HTTP_BAD_REQUEST);
                 }
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date . '_' . uniqid() . '.' . $extension;
+                $fileName = $date.'_'.uniqid().'.'.$extension;
                 Storage::putFileAs($path, $file, $fileName, 'public');
             }
 
