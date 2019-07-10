@@ -60,6 +60,7 @@ class User extends Authenticatable
     use Notifiable, EntrustUserTrait;
 
     public $table = 'users';
+    protected $appends = ['img_avatar'];
 
     /**
      * The attributes that are mass assignable.
@@ -144,5 +145,10 @@ class User extends Authenticatable
     public function createdUser()
     {
         return $this->belongsTo(self::class, 'created_by');
+    }
+
+    public function getImgAvatarAttribute()
+    {
+        return getUserImageInitial($this->id, $this->name);
     }
 }
