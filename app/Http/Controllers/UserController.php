@@ -32,7 +32,8 @@ class UserController extends AppBaseController
 
     /**
      * UserController constructor.
-     * @param UserRepository $userRepo
+     *
+     * @param UserRepository    $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
      */
@@ -40,8 +41,7 @@ class UserController extends AppBaseController
         UserRepository $userRepo,
         AccountRepository $accountRepository,
         ProjectRepository $projectRepository
-    )
-    {
+    ) {
         $this->userRepository = $userRepo;
         $this->accountRepository = $accountRepository;
         $this->projectRepository = $projectRepository;
@@ -52,9 +52,9 @@ class UserController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
      *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -70,8 +70,10 @@ class UserController extends AppBaseController
      * Store a newly created User in storage.
      *
      * @param CreateUserRequest $request
-     * @return JsonResponse
+     *
      * @throws \Exception
+     *
+     * @return JsonResponse
      */
     public function store(CreateUserRequest $request)
     {
@@ -89,7 +91,7 @@ class UserController extends AppBaseController
             /*
          * Send confirmation email
          */
-            $key = $user->id . '|' . $user->activation_code;
+            $key = $user->id.'|'.$user->activation_code;
             $code = Crypt::encrypt($key);
             $this->accountRepository->sendConfirmEmail(
                 $user->name,
@@ -122,11 +124,12 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param int $id
+     * @param int               $id
      * @param UpdateUserRequest $request
      *
-     * @return JsonResponse|RedirectResponse
      * @throws \Exception
+     *
+     * @return JsonResponse|RedirectResponse
      */
     public function update($id, UpdateUserRequest $request)
     {
@@ -144,7 +147,7 @@ class UserController extends AppBaseController
         }
         $user->projects()->sync($projectIds);
         if ($input['is_active'] && !$user->is_email_verified) {
-            $key = $user->id . '|' . $user->activation_code;
+            $key = $user->id.'|'.$user->activation_code;
             $code = Crypt::encrypt($key);
             $this->accountRepository->sendConfirmEmail(
                 $user->name,
@@ -158,10 +161,12 @@ class UserController extends AppBaseController
 
     /**
      * Remove the specified User from storage.
+     *
      * @param int $id
-     * @return JsonResponse
+     *
      * @throws \Exception
      *
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -174,16 +179,19 @@ class UserController extends AppBaseController
 
     /**
      * @param $id
+     *
      * @return JsonResponse
      */
     public function resendEmailVerification($id)
     {
         $this->userRepository->resendEmailVerification($id);
+
         return $this->sendSuccess('Verification email has been sent successfully.');
     }
 
     /**
      * @param UpdateUserProfileRequest $request
+     *
      * @return JsonResponse
      */
     public function profileUpdate(UpdateUserProfileRequest $request)
@@ -195,16 +203,19 @@ class UserController extends AppBaseController
             unset($input['password']);
         }
         $this->userRepository->update($input, Auth::user()->id);
+
         return $this->sendSuccess('Profile updated successfully.');
     }
 
     /**
      * @param $id
+     *
      * @return JsonResponse
      */
     public function activeDeActiveUser($id)
     {
         $this->userRepository->activeDeActiveUser($id);
+
         return $this->sendSuccess('User updated successfully.');
     }
 }

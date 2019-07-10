@@ -102,8 +102,8 @@ window.prepareUserWorkReport = function (result) {
                         if (label) {
                             label += ': ';
                         }
-                        label += Math.round(tooltipItem.yLabel * 100) / 100;
-                        return label + ' hr';
+                        result= roundToQuarterHour(tooltipItem.yLabel);
+                        return label + result;
                     }
                 }
             },
@@ -118,9 +118,30 @@ window.prepareUserWorkReport = function (result) {
                     scaleLabel: {
                         display: true,
                         labelString: 'Hours'
+                    },
+                    ticks: {
+                        min: 0,
+                        callback: function(value, index, values) {
+                            if (value > 60) {
+                                return parseInt(value / 60);
+                            } else {
+                                return value
+                            }
+                        }
                     }
                 }]
             }
         }
     });
+};
+window.roundToQuarterHour = function (totalMinutes) {
+    let hours = parseInt(totalMinutes / 60);
+    let minutes = totalMinutes % 60;
+    let format = null;
+    if (hours > 0) {
+        format = hours + 'h ' + minutes + 'm';
+    } else {
+        format = minutes + 'm';
+    }
+    return format;
 };

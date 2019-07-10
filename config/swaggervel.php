@@ -56,7 +56,7 @@ return [
       | If set to true, automatically regenerates the definitions everytime you open the UI
       |--------------------------------------------------------------------------
     */
-    "auto-generate" => true,
+    'auto-generate' => true,
 
     /*
       |--------------------------------------------------------------------------
@@ -137,7 +137,7 @@ return [
       |--------------------------------------------------------------------------
     */
     'use-basic-auth-with-access-code-grant' => false,
-    
+
     /*
       |--------------------------------------------------------------------------
       | Middleware settings to check for user authorization.
@@ -145,6 +145,6 @@ return [
     */
     'middleware' => [
         'docs' => [],
-        'api' => []
-    ]
+        'api'  => [],
+    ],
 ];

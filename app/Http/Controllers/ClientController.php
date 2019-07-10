@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class ClientController extends AppBaseController
 {
-    /** @var  ClientRepository */
+    /** @var ClientRepository */
     private $clientRepository;
     /** @var ProjectRepository $projectRep0 */
     private $projectRepo;
@@ -33,8 +33,10 @@ class ClientController extends AppBaseController
     /**
      * Display a listing of the Client.
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws Exception
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -62,18 +64,22 @@ class ClientController extends AppBaseController
 
     /**
      * @param $input
+     *
      * @return mixed
      */
     public function fill($input)
     {
         $input['email'] = is_null($input['email']) ? '' : $input['email'];
         $input['website'] = is_null($input['website']) ? '' : $input['website'];
+
         return $input;
     }
 
     /**
      * Show the form for editing the specified Client.
-     * @param  int $id
+     *
+     * @param int $id
+     *
      * @return JsonResponse
      */
     public function edit($id)
@@ -85,8 +91,10 @@ class ClientController extends AppBaseController
 
     /**
      * Update the specified Client in storage.
-     * @param  int $id
-     * @param  UpdateClientRequest $request
+     *
+     * @param int                 $id
+     * @param UpdateClientRequest $request
+     *
      * @return JsonResponse
      */
     public function update($id, UpdateClientRequest $request)
@@ -99,10 +107,12 @@ class ClientController extends AppBaseController
 
     /**
      * Remove the specified Client from storage.
-     * @param  int $id
-     * @return JsonResponse
+     *
+     * @param int $id
+     *
      * @throws Exception
      *
+     * @return JsonResponse
      */
     public function destroy($id)
     {

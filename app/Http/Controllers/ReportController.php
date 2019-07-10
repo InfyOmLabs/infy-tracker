@@ -42,9 +42,8 @@ class ReportController extends AppBaseController
     }
 
     /**
-     * Display a listing of the Report.
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
