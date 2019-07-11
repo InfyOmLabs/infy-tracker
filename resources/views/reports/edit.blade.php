@@ -16,7 +16,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            {!! Form::model($report, ['route' => ['reports.update', $report->id], 'method' => 'patch']) !!}
+                            {!! Form::model($report, ['route' => ['reports.update', $report->id], 'method' => 'post']) !!}
 
                             @include('reports.fields')
 

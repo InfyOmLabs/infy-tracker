@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\UpdateReportRequest;
+use App\Models\Report;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ReportRepository;
@@ -89,14 +90,15 @@ class ReportController extends AppBaseController
      */
     public function show($id)
     {
+        /** @var Report $report */
         $report = $this->reportRepository->find($id);
 
         if (empty($report)) {
             Flash::error('Report not found.');
             return redirect(route('reports.index'));
         }
-
-        return view('reports.show')->with('report', $report);
+        $reports = $this->reportRepository->getReport($report);
+        return view('reports.show')->with(['report' => $report, 'reports' => $reports]);
     }
 
     /**
@@ -129,6 +131,7 @@ class ReportController extends AppBaseController
      * @param int $id
      * @param UpdateReportRequest $request
      * @return Response
+     * @throws \Exception
      */
     public function update($id, UpdateReportRequest $request)
     {
@@ -143,7 +146,7 @@ class ReportController extends AppBaseController
         $this->reportRepository->updateReportFilter($input, $report);
         Flash::success('Report updated successfully.');
 
-        return redirect(route('reports.index'));
+        return redirect(route('reports.show', $id));
     }
 
     /**
