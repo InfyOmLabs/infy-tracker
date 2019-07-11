@@ -1,4 +1,10 @@
 @extends('layouts.app')
+@section('page_css')
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
+@endsection
 @section('content')
     <div class="container-fluid">
         <div class="animated fadeIn">
