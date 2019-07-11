@@ -25,7 +25,7 @@
         background-color: #fff9f1;
         padding: 10px;
     }
-    
+
     &__project-row {
         @extend %report-row;
         color: $orange;
@@ -44,10 +44,14 @@
         background: #f7f7f7;
     }
 
-    &__task-row{
+    &__task-row {
         @extend %report-row;
-        color: #888;
+        color: $gray;
         padding-right: 10px;
+
+        &:hover {
+            font-weight: bold;
+        }
     }
 
     &__project {
