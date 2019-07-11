@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
@@ -172,12 +173,14 @@ class TimeEntryController extends AppBaseController
 
     /**
      * @param int $projectId
+     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTasks($projectId)
+    public function getTasks($projectId, Request $request)
     {
-        $result = $this->timeEntryRepository->getTasksByProject($projectId);
+        $taskId = (!is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
+        $result = $this->timeEntryRepository->getTasksByProject($projectId, $taskId);
 
         return $this->sendResponse($result, 'Project Tasks retrieved successfully.');
     }

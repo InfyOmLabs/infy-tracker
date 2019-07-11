@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Class TimeEntryRepository.
@@ -85,13 +86,26 @@ class TimeEntryRepository extends BaseRepository
         ];
     }
 
-    public function getTasksByProject($projectId)
+    /**
+     * @param int $projectId
+     * @param int|null $taskId
+     *
+     * @return Collection
+     */
+    public function getTasksByProject($projectId, $taskId = null)
     {
-        $result = Task::where('project_id', '=', $projectId)
+        /** @var Builder $query */
+        $query = Task::whereProjectId($projectId)
             ->where('status', '=', Task::STATUS_ACTIVE)
             ->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
-            })->pluck('title', 'id');
+            });
+
+        if (!empty($taskId)) {
+            $query->orWhere('id', $taskId);
+        }
+
+        $result = $query->pluck('title', 'id');
 
         return $result;
     }
