@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 /**
- * App\Models\Report
+ * App\Models\Report.
  *
  * @property int $id
  * @property string $name
@@ -14,6 +14,7 @@ use Eloquent as Model;
  * @property \Illuminate\Support\Carbon $end_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Report newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Report newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Report query()
@@ -34,29 +35,31 @@ class Report extends Model
         'name',
         'owner_id',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'name' => 'string',
-        'owner_id' => 'integer',
+        'id'         => 'integer',
+        'name'       => 'string',
+        'owner_id'   => 'integer',
         'start_date' => 'date',
-        'end_date' => 'date'
+        'end_date'   => 'date',
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
+     *
      * @var array
      */
     public static $rules = [
-        'name' => 'required',
+        'name'       => 'required',
         'start_date' => 'required',
-        'end_date' => 'required',
+        'end_date'   => 'required',
     ];
 
     public function projects()

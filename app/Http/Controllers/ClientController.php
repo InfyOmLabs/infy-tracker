@@ -21,7 +21,8 @@ class ClientController extends AppBaseController
 
     /**
      * ClientController constructor.
-     * @param ClientRepository $clientRepo
+     *
+     * @param ClientRepository  $clientRepo
      * @param ProjectRepository $projectRepository
      */
     public function __construct(ClientRepository $clientRepo, ProjectRepository $projectRepository)
@@ -32,6 +33,7 @@ class ClientController extends AppBaseController
 
     /**
      * Display a listing of the Client.
+     *
      * @param Request $request
      *
      * @throws Exception
@@ -49,7 +51,9 @@ class ClientController extends AppBaseController
 
     /**
      * Store a newly created Client in storage.
+     *
      * @param CreateClientRequest $request
+     *
      * @return JsonResponse
      */
     public function store(CreateClientRequest $request)
@@ -124,6 +128,7 @@ class ClientController extends AppBaseController
 
     /**
      * @param $clientId
+     *
      * @return JsonResponse
      */
     public function projects($clientId)
@@ -132,6 +137,7 @@ class ClientController extends AppBaseController
             $clientId = null;
         }
         $projects = $this->projectRepo->getProjectsList($clientId);
+
         return $this->sendResponse($projects, 'Projects retrieved successfully.');
     }
 }

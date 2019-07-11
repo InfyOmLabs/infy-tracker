@@ -43,6 +43,7 @@ class UserRepository extends BaseRepository
 
     /**
      * @param $projectIds
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getUserList($projectIds = [])

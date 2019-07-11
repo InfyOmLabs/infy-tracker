@@ -12,8 +12,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ReportRepository
- * @package App\Repositories
+ * Class ReportRepository.
+ *
  * @version July 6, 2019, 12:12 pm UTC
  */
 class ReportRepository extends BaseRepository
@@ -24,11 +24,12 @@ class ReportRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'start_date',
-        'end_date'
+        'end_date',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
+     *
      * @return array
      */
     public function getFieldsSearchable()
@@ -37,7 +38,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -47,6 +48,7 @@ class ReportRepository extends BaseRepository
     /**
      * @param $input
      * @param Report $report
+     *
      * @return array
      */
     public function createReportFilter($input, $report)
@@ -73,6 +75,7 @@ class ReportRepository extends BaseRepository
         if (isset($input['client_id'])) {
             $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
         }
+
         return $result;
     }
 
@@ -81,14 +84,17 @@ class ReportRepository extends BaseRepository
         $filterInput['report_id'] = $reportId;
         $filterInput['param_id'] = $paramId;
         $filterInput['param_type'] = $type;
+
         return ReportFilter::create($filterInput);
     }
 
     /**
      * @param $input
      * @param $report
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function updateReportFilter($input, $report)
     {
@@ -99,31 +105,31 @@ class ReportRepository extends BaseRepository
         $input['client_id'] = isset($input['client_id']) ? $input['client_id'] : 0;
 
         $projectIds = $this->getProjectIds($report->id);
-        $ids = array_diff($input['projectIds'], (array)$projectIds);
+        $ids = array_diff($input['projectIds'], (array) $projectIds);
         foreach ($ids as $projectId) {
             $result[] = $this->createFilter($report->id, $projectId, Project::class);
         }
-        $deleteProjects = array_diff((array)$projectIds, $input['projectIds']);
+        $deleteProjects = array_diff((array) $projectIds, $input['projectIds']);
         if (!empty($deleteProjects)) {
             ReportFilter::whereParamType(Project::class)->whereParamId($deleteProjects)->delete();
         }
 
         $userIds = $this->getUserIds($report->id);
-        $ids = array_diff($input['userIds'], (array)$userIds);
+        $ids = array_diff($input['userIds'], (array) $userIds);
         foreach ($ids as $userId) {
             $result[] = $this->createFilter($report->id, $userId, User::class);
         }
-        $deleteUsers = array_diff((array)$userIds, $input['userIds']);
+        $deleteUsers = array_diff((array) $userIds, $input['userIds']);
         if (!empty($deleteUsers)) {
             ReportFilter::whereParamType(User::class)->whereParamId($deleteUsers)->delete();
         }
 
         $tagIds = $this->getTagIds($report->id);
-        $ids = array_diff($input['tagIds'], (array)$tagIds);
+        $ids = array_diff($input['tagIds'], (array) $tagIds);
         foreach ($ids as $tagId) {
             $result[] = $this->createFilter($report->id, $tagId, Tag::class);
         }
-        $deleteTags = array_diff((array)$tagIds, $input['tagIds']);
+        $deleteTags = array_diff((array) $tagIds, $input['tagIds']);
         if (!empty($deleteTags)) {
             ReportFilter::whereParamType(Tag::class)->whereParamId($deleteTags)->delete();
         }
@@ -138,13 +144,16 @@ class ReportRepository extends BaseRepository
         if (!empty($clientId) && $input['client_id'] !== $clientId) {
             ReportFilter::whereParamType(Client::class)->whereParamId($clientId)->delete();
         }
+
         return $result;
     }
 
     /**
      * @param $reportId
-     * @return bool|mixed|null
+     *
      * @throws \Exception
+     *
+     * @return bool|mixed|null
      */
     public function deleteFilter($reportId)
     {
@@ -153,6 +162,7 @@ class ReportRepository extends BaseRepository
 
     /**
      * @param $reportId
+     *
      * @return array
      */
     public function getProjectIds($reportId)
@@ -167,6 +177,7 @@ class ReportRepository extends BaseRepository
 
     /**
      * @param $reportId
+     *
      * @return array
      */
     public function getUserIds($reportId)
@@ -176,19 +187,22 @@ class ReportRepository extends BaseRepository
 
     /**
      * @param $reportId
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getClientId($reportId)
     {
         $report = ReportFilter::whereParamType(Client::class)->whereReportId($reportId)->first();
         if (empty($report)) {
-            return null;
+            return;
         }
+
         return $report->param_id;
     }
 
     /**
      * @param Report $report
+     *
      * @return TimeEntry[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
      */
     public function getReport($report)
@@ -278,11 +292,13 @@ class ReportRepository extends BaseRepository
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
         }
+
         return $result;
     }
 
     /**
      * @param int $minitues
+     *
      * @return string
      */
     private function getDurationTime($minitues)
@@ -292,14 +308,15 @@ class ReportRepository extends BaseRepository
         }
 
         if ($minitues < 60) {
-            return $minitues . ' min';
+            return $minitues.' min';
         }
 
         $hour = floor($minitues / 60);
         $min = $minitues - $hour * 60;
         if ($min === 0) {
-            return $hour . ' hr';
+            return $hour.' hr';
         }
-        return $hour . ' hr ' . $min . ' min';
+
+        return $hour.' hr '.$min.' min';
     }
 }

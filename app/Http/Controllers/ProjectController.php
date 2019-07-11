@@ -27,16 +27,16 @@ class ProjectController extends AppBaseController
 
     /**
      * ProjectController constructor.
+     *
      * @param ProjectRepository $projectRepo
-     * @param ClientRepository $clientRepo
-     * @param UserRepository $userRepository
+     * @param ClientRepository  $clientRepo
+     * @param UserRepository    $userRepository
      */
     public function __construct(
         ProjectRepository $projectRepo,
         ClientRepository $clientRepo,
         UserRepository $userRepository
-    )
-    {
+    ) {
         $this->projectRepository = $projectRepo;
         $this->clientRepository = $clientRepo;
         $this->userRepository = $userRepository;
@@ -151,6 +151,7 @@ class ProjectController extends AppBaseController
 
     /**
      * @param $projectIds
+     *
      * @return JsonResponse
      */
     public function users($projectIds)
@@ -160,6 +161,7 @@ class ProjectController extends AppBaseController
             $projectIdsArr = explode(',', $projectIds);
         }
         $users = $this->userRepository->getUserList($projectIdsArr);
+
         return $this->sendResponse($users, 'Users Retrieved successfully.');
     }
 }
