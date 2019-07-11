@@ -228,7 +228,7 @@ Dropzone.options.dropzone = {
         $(".dz-preview:last-child").children(':last-child').attr('data-file-id', attachment.id);
         $(".dz-preview:last-child").children(':last-child').attr('data-file-url', attachment.file_url);
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
-            $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
+            $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
         }
     },
