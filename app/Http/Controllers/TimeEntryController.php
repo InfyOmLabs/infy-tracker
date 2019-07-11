@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
@@ -172,7 +171,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param int $projectId
+     * @param int     $projectId
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
