@@ -87,7 +87,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param int $projectId
+     * @param int      $projectId
      * @param int|null $taskId
      *
      * @return Collection
