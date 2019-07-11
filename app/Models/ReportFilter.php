@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: Shailesh-InfyOm
  * Date: 08-07-2019
- * Time: 05:22 PM
+ * Time: 05:22 PM.
  */
 
 namespace App\Models;
@@ -11,7 +11,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\ReportFilter
+ * App\Models\ReportFilter.
  *
  * @property int $id
  * @property int $report_id
@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $param_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter query()
@@ -37,17 +38,18 @@ class ReportFilter extends Model
     public $fillable = [
         'report_id',
         'param_type',
-        'param_id'
+        'param_id',
     ];
 
     /**
      * The attributes that should be casted to native types.
+     *
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'         => 'integer',
         'param_type' => 'string',
-        'owner_id' => 'integer',
-        'param_id' => 'integer',
+        'owner_id'   => 'integer',
+        'param_id'   => 'integer',
     ];
 }

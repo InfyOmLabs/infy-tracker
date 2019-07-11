@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Report;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReportRequest extends FormRequest
 {
-
     /**
      * Determine if the user is authorized to make this request.
      *
