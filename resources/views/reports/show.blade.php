@@ -14,11 +14,10 @@
                        class="btn btn-primary filter-container__btn mr-1">
                         Edit
                     </a>
-                    <a href="{{ route('reports.destroy', $report->id) }}"
-                       class="btn btn-danger filter-container__btn mr-1">
-                        Delete
-                    </a>
-                    <a class="btn btn-secondary" href="{{url(route('reports.index'))}}">Back</a>
+                    {!! Form::open(['route' => ['reports.destroy', $report->id], 'method' => 'delete']) !!}
+                    {!! Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger',]) !!}
+                    {!! Form::close() !!}
+                    <a class="btn btn-secondary ml-1" href="{{url(route('reports.index'))}}">Back</a>
                 </div>
             </div>
             <div class="row">

@@ -112,15 +112,15 @@ class ReportController extends AppBaseController
             Flash::error('Report not found.');
             return redirect(route('reports.index'));
         }
-        $data['tags'] = $this->tagRepo->getTagList();
-        $data['users'] = $this->userRepo->getUserList();
-        $data['clients'] = $this->clientRepo->getClientList();
-        $data['projects'] = $this->projectRepo->getProjectsList();
         $data['report'] = $report;
         $data['projectIds'] = $this->reportRepository->getProjectIds($id);
         $data['tagIds'] = $this->reportRepository->getTagIds($id);
         $data['userIds'] = $this->reportRepository->getUserIds($id);
         $data['clientId'] = $this->reportRepository->getClientId($id);
+        $data['projects'] = $this->projectRepo->getProjectsList($data['clientId']);
+        $data['users'] = $this->userRepo->getUserList($data['projectIds']);
+        $data['clients'] = $this->clientRepo->getClientList();
+        $data['tags'] = $this->tagRepo->getTagList();
         return view('reports.edit')->with($data);
     }
 
@@ -138,9 +138,9 @@ class ReportController extends AppBaseController
             Flash::error('Report not found.');
             return redirect(route('reports.index'));
         }
-
-        $this->reportRepository->update($request->all(), $id);
-        $this->reportRepository->updateReportFilter($request->all(), $report);
+        $input = $request->all();
+        $this->reportRepository->update($input, $id);
+        $this->reportRepository->updateReportFilter($input, $report);
         Flash::success('Report updated successfully.');
 
         return redirect(route('reports.index'));

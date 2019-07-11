@@ -86,7 +86,7 @@ class ReportRepository extends BaseRepository
     {
         $result = [];
         if (isset($input['projectIds'])) {
-            $projectIds = $this->getProjectIds($report->id)->toArray();
+            $projectIds = $this->getProjectIds($report->id);
             $ids = array_diff($input['projectIds'], (array)$projectIds);
             foreach ($ids as $projectId) {
                 $result[] = $this->createFilter($report->id, $projectId, Project::class);
@@ -98,7 +98,7 @@ class ReportRepository extends BaseRepository
         }
 
         if (isset($input['userIds'])) {
-            $userIds = $this->getUserIds($report->id)->toArray();
+            $userIds = $this->getUserIds($report->id);
             $ids = array_diff($input['userIds'], (array)$userIds);
             foreach ($ids as $userId) {
                 $result[] = $this->createFilter($report->id, $userId, User::class);
@@ -123,12 +123,14 @@ class ReportRepository extends BaseRepository
 
         if (isset($input['client_id'])) {
             $clientId = $this->getClientId($report->id);
-            if ($input['client_id'] !== $clientId) {
-                $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+            if ($input['client_id'] != 0) {
+                if ($input['client_id'] !== $clientId) {
+                    $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+                }
             }
 
-            if (empty($clientId) && $input['client_id'] !== $clientId) {
-                ReportFilter::whereParamType(Tag::class)->whereParamId($clientId)->delete();
+            if (!empty($clientId) && $input['client_id'] !== $clientId) {
+                ReportFilter::whereParamType(Client::class)->whereParamId($clientId)->delete();
             }
         }
         return $result;
@@ -146,29 +148,25 @@ class ReportRepository extends BaseRepository
 
     /**
      * @param $reportId
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function getProjectIds($reportId)
     {
-        return ReportFilter::whereParamType(Project::class)->whereReportId($reportId)->pluck('param_id');
+        return ReportFilter::whereParamType(Project::class)->whereReportId($reportId)->pluck('param_id')->toArray();
     }
 
-    /**
-     * @param $reportId
-     * @return \Illuminate\Support\Collection
-     */
     public function getTagIds($reportId)
     {
-        return ReportFilter::whereParamType(Tag::class)->whereReportId($reportId)->pluck('param_id');
+        return ReportFilter::whereParamType(Tag::class)->whereReportId($reportId)->pluck('param_id')->toArray();
     }
 
     /**
      * @param $reportId
-     * @return \Illuminate\Support\Collection
+     * @return array
      */
     public function getUserIds($reportId)
     {
-        return ReportFilter::whereParamType(User::class)->whereReportId($reportId)->pluck('param_id');
+        return ReportFilter::whereParamType(User::class)->whereReportId($reportId)->pluck('param_id')->toArray();
     }
 
     /**

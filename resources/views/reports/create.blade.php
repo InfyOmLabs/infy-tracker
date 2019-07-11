@@ -8,11 +8,11 @@
 @section('content')
     <div class="container-fluid">
         <div class="animated fadeIn">
-            @include('coreui-templates::common.errors')
             <div class="page-header">
                 <h3>New Report</h3>
             </div>
             <div class="row">
+                @include('coreui-templates::common.errors')
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">

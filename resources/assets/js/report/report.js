@@ -1,4 +1,5 @@
-$('#client').select2({
+const clientDropDown = $('#client');
+clientDropDown.select2({
     width: '100%',
     placeholder: "Select Client",
 }).prepend($('<option>', {value: 0, text: 'None'}));
@@ -46,8 +47,11 @@ $("#start_date").on("dp.change", function (e) {
     $('#end_date').data("DateTimePicker").minDate(e.date);
 });
 
-$("#client").on('change', function () {
+clientDropDown.on('change', function () {
     $("#projectIds").empty();
+    if ($(this).val() != 0) {
+        $("#projectIds").val(null).trigger("change");
+    }
     loadProjects($(this).val());
 });
 
@@ -69,6 +73,7 @@ function loadProjects(clientId) {
 
 $("#projectIds").on('change', function () {
     $("#userIds").empty();
+    $("#userIds").val(null).trigger("change");
     loadUsers($(this).val().toString());
 });
 
