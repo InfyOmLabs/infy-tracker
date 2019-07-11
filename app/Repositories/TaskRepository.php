@@ -13,8 +13,6 @@ use DB;
 use Exception;
 use File;
 use Illuminate\Database\Eloquent\Builder;
-use League\Container\Exception\NotFoundException;
-use Storage;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -338,7 +336,6 @@ class TaskRepository extends BaseRepository
         $task = $this->findOrFail($id);
 
         try {
-
             $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
             $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
 
