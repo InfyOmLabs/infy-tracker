@@ -130,6 +130,7 @@ $('#timeEntryAddForm').submit(function (event) {
 });
 
 $('#timeEntryAddModal').on('hidden.bs.modal', function () {
+    isEdit = false;
     $('#taskId').val(null).trigger("change");
     $('#activityTypeId').val(null).trigger("change");
     $('#duration').prop('disabled', false);
