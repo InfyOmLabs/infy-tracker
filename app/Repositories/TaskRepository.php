@@ -110,17 +110,11 @@ class TaskRepository extends BaseRepository
             $input['description'] = htmlentities($input['description']);
             $task->update($input);
 
-            if (isset($input['tags']) && !empty($input['tags'])) {
-                $this->attachTags($task, $input['tags']);
-            } else {
-                $this->attachTags($task, []);
-            }
+            $tags = !empty($input['tags']) ? $input['tags'] : [];
+            $this->attachTags($task, $tags);
 
-            if (isset($input['assignees']) && !empty($input['assignees'])) {
-                $task->taskAssignee()->sync($input['assignees']);
-            } else {
-                $task->taskAssignee()->sync([]);
-            }
+            $assignees = !empty($input['assignees']) ? $input['assignees'] : [];
+            $task->taskAssignee()->sync($assignees);
 
             DB::commit();
         } catch (Exception $e) {
