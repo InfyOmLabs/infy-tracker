@@ -58,7 +58,7 @@
 </li>
 @endpermission
 
-@permission('manage_activities','manage_tags')
+@permission(['manage_activities','manage_tags',false])
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#">
         <i class="fa fa-cog nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Setting

@@ -510,3 +510,11 @@ table.dataTable {
     }
 }
 
+.animated {
+    &.fadeIn {
+        .alert {
+            margin-top: 10px;
+        }
+    }
+}
+
