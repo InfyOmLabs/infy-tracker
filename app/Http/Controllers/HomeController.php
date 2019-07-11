@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\DashboardRepository;
 use App\Repositories\UserRepository;
+use Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends AppBaseController
@@ -44,6 +45,9 @@ class HomeController extends AppBaseController
      */
     public function workReport(Request $request)
     {
+        if (!authUserHasPermission('manage_users')) {
+            $request->request->set('user_id', Auth::id());
+        }
         $data = $this->dashboardRepo->getWorkReport($request->all());
 
         return $this->sendResponse($data, 'Work Report retrieved successfully.');

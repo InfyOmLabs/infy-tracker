@@ -124,3 +124,16 @@ function getUserImageInitial($userId, $name)
 {
     return getAvatarUrl()."?name=$name&size=30&rounded=true&color=fff&background=".getRandomColor($userId);
 }
+
+/**
+ * This function return bool value if auth user has either or not permission
+ * @param $permissionName
+ * @return bool
+ */
+function authUserHasPermission($permissionName)
+{
+    if (Auth::user()->can($permissionName)) {
+        return true;
+    }
+    return false;
+}

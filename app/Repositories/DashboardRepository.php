@@ -12,6 +12,7 @@ namespace App\Repositories;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
+use Auth;
 use Carbon\Carbon;
 
 class DashboardRepository
@@ -88,7 +89,11 @@ class DashboardRepository
         $timeEntry = TimeEntry::with(['task.project'])
             ->whereBetween('start_time', [$startDate, $endDate])
             ->get();
-        $users = User::all();
+        if (!authUserHasPermission('manage_users')) {
+            $users = User::whereId(Auth::id())->get();
+        } else {
+            $users = User::all();
+        }
         $data['drilldown'] = [];
         $data['result'] = [];
         foreach ($users as $user) {
