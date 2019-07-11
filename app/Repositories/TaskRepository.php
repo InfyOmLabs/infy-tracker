@@ -7,12 +7,14 @@ use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskAttachment;
+use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use File;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use League\Container\Exception\NotFoundException;
+use Storage;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -328,7 +330,7 @@ class TaskRepository extends BaseRepository
      *
      * @throws Exception
      *
-     * @return string
+     * @return TaskAttachment
      */
     public function uploadFile($id, $file)
     {
@@ -336,15 +338,15 @@ class TaskRepository extends BaseRepository
         $task = $this->findOrFail($id);
 
         try {
-            $fileName = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
 
-            $file->move($destinationPath, $fileName);
+            $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
             $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
+
             DB::beginTransaction();
             $task->attachments()->save($attachment);
             DB::commit();
 
-            return $fileName;
+            return $attachment;
         } catch (Exception $e) {
             DB::rollBack();
             if (file_exists($destinationPath.'/'.$fileName)) {
@@ -356,32 +358,31 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $id
-     * @param $input
+     * @param int $id
+     *
+     * @throws Exception
      *
      * @return bool
      */
-    public function deleteFile($id, $input)
+    public function deleteFile($id)
     {
-        $file = $input['filename'];
-        $attachment = TaskAttachment::where('file', 'like', "%$file%")->where('task_id', '=', $id)->first();
+        /** @var TaskAttachment $attachment */
+        $attachment = TaskAttachment::find($id);
         if (empty($attachment)) {
-            throw new NotFoundException('File not found.');
+            throw new BadRequestHttpException('File not found.');
         }
-        $fileName = $attachment->getOriginal('file');
+
+        $attachment->deleteAttachment();
         $attachment->delete();
-        $destinationPath = public_path(Task::PATH);
-        if (!empty($fileName)) {
-            if (file_exists($destinationPath.'/'.$fileName)) {
-                unlink($destinationPath.'/'.$fileName);
-            }
+        if (file_exists($attachment->file_url)) {
+            unlink($attachment->file_url);
         }
 
         return true;
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return array
      */
@@ -393,12 +394,11 @@ class TaskRepository extends BaseRepository
 
         $result = [];
 
-        $destinationPath = public_path(Task::PATH);
         foreach ($attachments as $attachment) {
-            $file = $attachment->getOriginal('file');
-            $obj['name'] = $file;
-            $obj['size'] = filesize($destinationPath.'/'.$file);
-            $obj['url'] = $attachment->file;
+            $obj['id'] = $attachment->id;
+            $obj['name'] = $attachment->file;
+            $obj['size'] = filesize($attachment->file_path);
+            $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }
 
@@ -406,9 +406,9 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $input
+     * @param array $input
      *
-     * @return Comment|Comment[]|Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @return Comment
      */
     public function addComment($input)
     {

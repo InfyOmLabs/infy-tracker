@@ -144,12 +144,13 @@ Dropzone.options.dropzone = {
         thisDropzone = this;
         $.get(taskUrl+'get-attachments/'+taskId, function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size };
+                let mockFile = { name: value.name, size: value.size, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
                 thisDropzone.emit("complete", mockFile);
                 thisDropzone.emit("thumbnail",mockFile, value.url);
+                $(".dz-remove").eq(key).attr("data-file-id", value.id);
             });
         });
         this.on("thumbnail", function(file, dataUrl) {
@@ -197,19 +198,13 @@ Dropzone.options.dropzone = {
     },
     removedfile: function(file)
     {
-        let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let name = '';
-        if(typeof file.upload != "undefined" ){
-            name = fileuploded.innerHTML;
-        }else {
-            name = file.name;
-        }
+        let attachmentId = file.previewElement.querySelector("[data-file-id]").getAttribute('data-file-id');
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + taskId,
+            url: taskUrl + 'delete-attachment/' + attachmentId,
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);
@@ -221,8 +216,9 @@ Dropzone.options.dropzone = {
     },
     success: function(file, response)
     {
+        let attachment =  response.data;
         let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let fileName = response.data.fileName;
+        let fileName = attachment.file;
         let fileNameExtArr = fileName.split('.');
         let newFileName = fileNameExtArr[0];
         let newFileExt = fileNameExtArr[1];
@@ -230,6 +226,7 @@ Dropzone.options.dropzone = {
         let fileUrl = attachmentUrl + fileName;
         fileuploded.innerHTML = fileName;
 
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-id', attachment.id);
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
