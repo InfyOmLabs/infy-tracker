@@ -520,3 +520,12 @@ table.dataTable {
         background-color: #f0f3f5 !important;
     }
 }
+
+.animated {
+    &.fadeIn {
+        .alert {
+            margin-top: 10px;
+        }
+    }
+}
+
