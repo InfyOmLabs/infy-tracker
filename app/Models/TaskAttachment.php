@@ -34,7 +34,7 @@ class TaskAttachment extends Model
     const PATH = 'attachments';
 
     public $table = 'task_attachments';
-    protected $appends =  ['file_url'];
+    protected $appends = ['file_url'];
 
     public $fillable = [
         'task_id',
