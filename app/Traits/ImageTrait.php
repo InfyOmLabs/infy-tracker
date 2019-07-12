@@ -10,6 +10,7 @@ namespace App\Traits;
  * Date: 5/1/2019
  * Time: 11:18 AM
  */
+namespace App\Traits;
 
 use App\Exceptions\ApiOperationFailedException;
 use Exception;
@@ -103,36 +104,6 @@ trait ImageTrait
 
     /**
      * @param UploadedFile $file
-     * @param $path
-     *
-     * @throws ApiOperationFailedException
-     *
-     * @return string
-     */
-    public static function uploadVideo($file, $path)
-    {
-        try {
-            $fileName = '';
-            if (!empty($file)) {
-                $extension = $file->getClientOriginalExtension(); // getting image extension
-                if (!in_array(strtolower($extension), ['mp4', 'mov', 'ogg', 'qt'])) {
-                    throw  new ApiOperationFailedException('invalid Video', Response::HTTP_BAD_REQUEST);
-                }
-                $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date.'_'.uniqid().'.'.$extension;
-                Storage::putFileAs($path, $file, $fileName, 'public');
-            }
-
-            return $fileName;
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
-
-            throw new ApiOperationFailedException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
-     * @param UploadedFile $file
      * @param string       $path
      *
      * @throws ApiOperationFailedException
@@ -145,12 +116,14 @@ trait ImageTrait
             $fileName = '';
             if (!empty($file)) {
                 $extension = $file->getClientOriginalExtension(); // getting image extension
-                if (!in_array(strtolower($extension), ['doc', 'docx', 'pdf', 'zip'])) {
+                if (!in_array(strtolower($extension), ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
                     throw  new ApiOperationFailedException('invalid Attachment', Response::HTTP_BAD_REQUEST);
                 }
+
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date.'_'.uniqid().'.'.$extension;
-                Storage::putFileAs($path, $file, $fileName, 'public');
+                $fileName =  $date.'_'.uniqid().'.'.$extension;
+                $contents = file_get_contents($file->getRealPath());
+                Storage::put($path.DIRECTORY_SEPARATOR.$fileName, $contents);
             }
 
             return $fileName;

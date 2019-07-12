@@ -2,7 +2,7 @@
     <div class="col-6">
         <!-- Name Field -->
         <div class="form-group col-sm-12">
-            {!! Form::label('name', 'Name') !!}<span class="required"> *</span>
+            {!! Form::label('name', 'Name') !!}<span class="required">*</span>
             {!! Form::text('name', null, ['class' => 'form-control','required']) !!}
         </div>
 
@@ -30,5 +30,5 @@
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-    <a href="{!! route('roles.index') !!}" class="btn btn-default">Cancel</a>
+    <a href="{!! route('roles.index') !!}" class="btn btn-secondary">Cancel</a>
 </div>

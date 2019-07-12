@@ -6,19 +6,31 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Queries\ClientDataTable;
 use App\Repositories\ClientRepository;
+use App\Repositories\ProjectRepository;
 use DataTables;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ClientController extends AppBaseController
 {
     /** @var ClientRepository */
     private $clientRepository;
+    /** @var ProjectRepository $projectRepo */
+    private $projectRepo;
 
-    public function __construct(ClientRepository $clientRepo)
+    /**
+     * ClientController constructor.
+     *
+     * @param ClientRepository  $clientRepo
+     * @param ProjectRepository $projectRepository
+     */
+    public function __construct(ClientRepository $clientRepo, ProjectRepository $projectRepository)
     {
         $this->clientRepository = $clientRepo;
+        $this->projectRepo = $projectRepository;
     }
 
     /**
@@ -28,7 +40,7 @@ class ClientController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -114,5 +126,20 @@ class ClientController extends AppBaseController
         $this->clientRepository->delete($id);
 
         return $this->sendSuccess('Client deleted successfully.');
+    }
+
+    /**
+     * @param int $clientId
+     *
+     * @return JsonResponse
+     */
+    public function projects($clientId)
+    {
+        if ($clientId == 0) {
+            $clientId = null;
+        }
+        $projects = $this->projectRepo->getProjectsList($clientId);
+
+        return $this->sendResponse($projects, 'Projects retrieved successfully.');
     }
 }

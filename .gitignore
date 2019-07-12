@@ -2,6 +2,7 @@
 /public/assets
 /public/uploads
 /public/fonts
+/public/uploads
 /storage/*.key
 /vendor
 .env

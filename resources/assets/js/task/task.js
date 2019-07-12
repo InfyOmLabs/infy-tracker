@@ -144,7 +144,10 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                return '<span>' + format(row.due_date) + '</span>';
+                if(row.due_date != null && row.due_date != '' && typeof row.due_date != 'undefined'){
+                    return '<span>' + format(row.due_date) + '</span>';
+                }
+                return row.due_date;
             },
             name: 'due_date'
         },
@@ -436,7 +439,7 @@ $(document).on('click', '.entry-model', function (event) {
     let taskId = $(event.currentTarget).data('id');
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
-    getTasksByproject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+    getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
 });
 
 CKEDITOR.replace( 'description', {
