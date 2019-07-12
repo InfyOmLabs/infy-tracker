@@ -52,7 +52,6 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::resource('users', 'UserController');
         Route::post('users/{id}/update', 'UserController@update');
         Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
-        Route::post('users/{id}/update-profile', 'UserController@updateProfile');
     });
 
     Route::middleware('permission:manage_tags')->group(function () {

@@ -479,20 +479,7 @@ table.dataTable {
 .modal-content {
     border-radius: 5px !important;
 }
-.edit-profile__file-upload {
-    padding: 10px;
-    background: #20a8d8;
-    display: table;
-    color: $white;
-    border-radius: .25rem;
-    border-color: #20a8d8;
 
-    &:hover {
-        cursor: pointer;
-        background-color: #1985ac;
-        border-color: #187da0
-    }
-}
 .check-icon {
     color: $green;
     font-weight: bold;

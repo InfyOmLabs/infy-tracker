@@ -11,19 +11,16 @@ use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use App\Traits\ImageTrait;
-use Auth;
 use Crypt;
 use DataTables;
-use Exception;
-use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends AppBaseController
 {
-    use ImageTrait;
     /** @var UserRepository */
     private $userRepository;
     /** @var ProjectRepository */
@@ -211,29 +208,13 @@ class UserController extends AppBaseController
      */
     public function profileUpdate(UpdateUserProfileRequest $request)
     {
-        /** @var User $user */
-        $user = $this->userRepository->findOrFail(Auth::id());
         $input = $request->all();
         if (isset($input['password']) && !empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
             unset($input['password']);
         }
-
-        try {
-            if (isset($input['photo']) && !empty($input['photo'])) {
-                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH, ['width' => 150, 'height' => 150]);
-                $imagePath = $user->image_path;
-            }
-            if (!empty($imagePath)) {
-                $user->deleteImage();
-            }
-            $this->userRepository->update($input, Auth::id());
-        } catch (Exception $e) {
-            if (isset($input['image_url']) && !empty($input['image_url'])) {
-                $this->deleteImage(User::IMAGE_PATH.DIRECTORY_SEPARATOR.$input['image_url']);
-            }
-        }
+        $this->userRepository->update($input, Auth::user()->id);
 
         return $this->sendSuccess('Profile updated successfully.');
     }

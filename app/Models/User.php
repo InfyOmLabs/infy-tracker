@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Notifications\MailResetPasswordNotification;
-use App\Traits\ImageTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
@@ -46,11 +45,11 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ * @mixin \Eloquent
  *
- * @property string $image_path
+ * @property string|null $image_path
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
- * @mixin \Eloquent
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  *
@@ -58,13 +57,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
-    use Notifiable, EntrustUserTrait, ImageTrait;
-    use ImageTrait {
-        deleteImage as traitDeleteImage;
-    }
+    use Notifiable, EntrustUserTrait;
 
     public $table = 'users';
-    const IMAGE_PATH = 'users';
     protected $appends = ['img_avatar'];
 
     /**
@@ -81,7 +76,6 @@ class User extends Authenticatable
         'is_email_verified',
         'activation_code',
         'is_active',
-        'image_path',
     ];
 
     /**
@@ -117,7 +111,6 @@ class User extends Authenticatable
     public static $messages = [
         'phone.digits' => 'The phone number must be 10 digits long.',
         'email.regex'  => 'Please enter valid email.',
-        'photo.mimes'  => 'The profile image must be a file of type: jpeg, jpg, png.',
     ];
 
     public static $setPasswordRules = [
@@ -157,32 +150,5 @@ class User extends Authenticatable
     public function getImgAvatarAttribute()
     {
         return getUserImageInitial($this->id, $this->name);
-    }
-
-    /**
-     * @param $value
-     *
-     * @return string
-     */
-    public function getImagePathAttribute($value)
-    {
-        if (!empty($value)) {
-            return $this->imageUrl(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$value);
-        }
-
-        return asset('assets/img/user-avatar.png');
-    }
-
-    /**
-     * @return bool
-     */
-    public function deleteImage()
-    {
-        $image = $this->getOriginal('image_path');
-        if (empty($image)) {
-            return true;
-        }
-
-        return $this->traitDeleteImage(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$image);
     }
 }

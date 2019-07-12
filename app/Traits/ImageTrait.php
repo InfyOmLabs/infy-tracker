@@ -1,26 +1,20 @@
 <?php
-
-namespace App\Traits;
-
-/*
+/**
  * Company: InfyOm Technologies, Copyright 2019, All Rights Reserved.
- *
- * User: Ajay Makwana
- * Email: ajay.makwana@infyom.com
- * Date: 5/1/2019
- * Time: 11:18 AM
+ * Author: Vishal Ribdiya
+ * Email: vishal.ribdiya@infyom.com
+ * Date: 11-07-2019
+ * Time: 05:15 PM.
  */
 
 namespace App\Traits;
 
 use App\Exceptions\ApiOperationFailedException;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Carbon;
-use Image;
-use Log;
 use Storage;
-use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait ImageTrait.
@@ -44,46 +38,12 @@ trait ImageTrait
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string       $path
-     * @param array        $options
-     *
-     * @throws ApiOperationFailedException
-     *
-     * @return string
-     */
-    public static function makeImage($file, $path, $options = [])
-    {
-        try {
-            $fileName = '';
-            if (!empty($file)) {
-                $extension = $file->getClientOriginalExtension(); // getting image extension
-                if (!in_array(strtolower($extension), ['jpg', 'gif', 'png', 'jpeg'])) {
-                    throw  new ApiOperationFailedException('invalid image', Response::HTTP_BAD_REQUEST);
-                }
-                $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date.'_'.uniqid().'.'.$extension;
-                if (!empty($options)) {
-                    $imageThumb = Image::make($file->getRealPath())->fit($options['width'], $options['height']);
-                    $imageThumb = $imageThumb->stream();
-                    Storage::put($path.DIRECTORY_SEPARATOR.$fileName, $imageThumb->__toString());
-                } else {
-                    Storage::putFileAs($path, $file, $fileName, 'public');
-                }
-            }
-
-            return $fileName;
-        } catch (Exception $e) {
-            Log::info($e->getMessage());
-
-            throw new ApiOperationFailedException($e->getMessage(), $e->getCode());
-        }
-    }
-
-    /**
      * @param string $path
      *
      * @return string
+     *
+     * @internal param $type
+     * @internal param bool $full
      */
     public function imageUrl($path)
     {
@@ -120,9 +80,10 @@ trait ImageTrait
                 if (!in_array(strtolower($extension), ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
                     throw  new ApiOperationFailedException('invalid Attachment', Response::HTTP_BAD_REQUEST);
                 }
-
+                $originalName = $file->getClientOriginalName();
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName = $date.'_'.uniqid().'.'.$extension;
+                $originalName = sha1($originalName.time());
+                $fileName = $date.'_'.uniqid().'_'.$originalName.'.'.$extension;
                 $contents = file_get_contents($file->getRealPath());
                 Storage::put($path.DIRECTORY_SEPARATOR.$fileName, $contents);
             }

@@ -1,9 +1,10 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Shailesh-InfyOm
- * Date: 9/10/2016
- * Time: 3:58 PM.
+ * Company: InfyOm Technologies, Copyright 2019, All Rights Reserved.
+ * Author: Vishal Ribdiya
+ * Email: vishal.ribdiya@infyom.com
+ * Date: 11-07-2019
+ * Time: 05:16 PM.
  */
 
 namespace App\Exceptions;
