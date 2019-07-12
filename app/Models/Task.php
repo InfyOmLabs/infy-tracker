@@ -149,7 +149,7 @@ class Task extends Model
      */
     public function getPrefixTaskNumberAttribute()
     {
-        return '#' . $this->project->prefix . '-' . $this->task_number;
+        return '#'.$this->project->prefix.'-'.$this->task_number;
     }
 
     /**
