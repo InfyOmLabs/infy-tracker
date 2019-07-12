@@ -66,24 +66,12 @@ class Task extends Model
 
     const STATUS_ACTIVE = 0;
     const STATUS_COMPLETED = 1;
-    const STATUS_STARTED = 2;
-    const STATUS_IN_QA = 3;
-    const STATUS_FINISHED = 4;
-    const STATUS_INVALID = 5;
-    const STATUS_DISCUSS = 6;
-    const STATUS_REJECTED = 7;
-    const STATUS_ALL = 8;
+    const STATUS_ALL = 2;
 
     const STATUS_ARR = [
-        self::STATUS_ALL       => 'All',
-        self::STATUS_ACTIVE    => 'Not Started',
+        self::STATUS_ALL => 'All',
+        self::STATUS_ACTIVE => 'Pending',
         self::STATUS_COMPLETED => 'Accepted',
-        self::STATUS_STARTED   => 'Started',
-        self::STATUS_IN_QA     => 'In QA',
-        self::STATUS_FINISHED  => 'Finished',
-        self::STATUS_INVALID   => 'Invalid',
-        self::STATUS_DISCUSS   => 'Discuss/Block',
-        self::STATUS_REJECTED  => 'Rejected',
     ];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';
@@ -108,14 +96,14 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'id'          => 'integer',
-        'title'       => 'string',
+        'id' => 'integer',
+        'title' => 'string',
         'description' => 'string',
-        'project_id'  => 'integer',
-        'status'      => 'integer',
-        'due_date'    => 'date',
-        'deleted_by'  => 'integer',
-        'created_by'  => 'integer',
+        'project_id' => 'integer',
+        'status' => 'integer',
+        'due_date' => 'date',
+        'deleted_by' => 'integer',
+        'created_by' => 'integer',
     ];
 
     /**
@@ -124,7 +112,7 @@ class Task extends Model
      * @var array
      */
     public static $rules = [
-        'title'      => 'required',
+        'title' => 'required',
         'project_id' => 'required',
     ];
 
@@ -161,7 +149,7 @@ class Task extends Model
      */
     public function getPrefixTaskNumberAttribute()
     {
-        return '#'.$this->project->prefix.'-'.$this->task_number;
+        return '#' . $this->project->prefix . '-' . $this->task_number;
     }
 
     /**

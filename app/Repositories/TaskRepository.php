@@ -182,12 +182,6 @@ class TaskRepository extends BaseRepository
         return [
             Task::STATUS_ACTIVE    => 'badge-light',
             Task::STATUS_COMPLETED => 'badge-success',
-            Task::STATUS_STARTED   => 'badge-primary',
-            Task::STATUS_IN_QA     => 'badge-warning',
-            Task::STATUS_FINISHED  => 'badge-info',
-            Task::STATUS_INVALID   => 'badge-dark',
-            Task::STATUS_DISCUSS   => 'badge-secondary',
-            Task::STATUS_REJECTED  => 'badge-danger',
         ];
     }
 

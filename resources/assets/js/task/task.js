@@ -82,7 +82,7 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [6],
             "orderable": false,
             "className": 'text-center',
             "width": "9%"
@@ -94,16 +94,16 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [3],
+            "targets": [2],
             "orderable": false,
         },
         {
-            "targets": [5, 4],
+            "targets": [3, 4],
             "width": "10%",
             "className": 'text-center',
         },
         {
-            "targets": [6],
+            "targets": [5],
             "className": 'text-center',
         },
     ],
@@ -119,15 +119,6 @@ var tbl = $('#task_table').DataTable({
                 return '<a href="' + url + '">' + row.title + '</a>'
             },
             name: 'title'
-        },
-        {
-            data: function (row) {
-                if(typeof taskStatus[row.status] == 'undefined')
-                    return '';
-                else
-                    return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
-                },
-            name: 'status'
         },
         {
             data: function (row) {
