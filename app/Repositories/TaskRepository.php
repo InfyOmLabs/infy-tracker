@@ -182,12 +182,6 @@ class TaskRepository extends BaseRepository
         return [
             Task::STATUS_ACTIVE    => 'badge-light',
             Task::STATUS_COMPLETED => 'badge-success',
-            Task::STATUS_STARTED   => 'badge-primary',
-            Task::STATUS_IN_QA     => 'badge-warning',
-            Task::STATUS_FINISHED  => 'badge-info',
-            Task::STATUS_INVALID   => 'badge-dark',
-            Task::STATUS_DISCUSS   => 'badge-secondary',
-            Task::STATUS_REJECTED  => 'badge-danger',
         ];
     }
 
@@ -280,7 +274,7 @@ class TaskRepository extends BaseRepository
         /** @var Builder|Task $query */
         $query = Task::whereHas('taskAssignee', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
-        })->whereNotIn('status', [Task::STATUS_INVALID, Task::STATUS_FINISHED, Task::STATUS_COMPLETED]);
+        })->whereNotIn('status', [Task::STATUS_COMPLETED]);
 
         if (!empty($input['project_id'])) {
             $query->where('project_id', $input['project_id']);
