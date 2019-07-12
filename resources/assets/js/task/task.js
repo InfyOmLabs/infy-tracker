@@ -144,7 +144,10 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                return '<span>' + format(row.due_date) + '</span>';
+                if(row.due_date != null && row.due_date != '' && typeof row.due_date != 'undefined'){
+                    return '<span>' + format(row.due_date) + '</span>';
+                }
+                return row.due_date;
             },
             name: 'due_date'
         },
