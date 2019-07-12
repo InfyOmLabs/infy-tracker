@@ -257,6 +257,7 @@ class ReportRepository extends BaseRepository
 
         $entries = $query->get();
 
+        // TODO : NEED TO REFACTOR/OPTIMIZE THIS CODE
         // Prepare report data in proper format
         $result = [];
         /** @var TimeEntry $entry */
