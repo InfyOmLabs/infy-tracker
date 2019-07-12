@@ -31,8 +31,8 @@ class ProjectController extends AppBaseController
      * ProjectController constructor.
      *
      * @param ProjectRepository $projectRepo
-     * @param ClientRepository $clientRepo
-     * @param UserRepository $userRepository
+     * @param ClientRepository  $clientRepo
+     * @param UserRepository    $userRepository
      */
     public function __construct(
         ProjectRepository $projectRepo,
@@ -106,7 +106,7 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param int $id
+     * @param int                  $id
      * @param UpdateProjectRequest $request
      *
      * @return JsonResponse|RedirectResponse
