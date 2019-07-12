@@ -124,7 +124,7 @@ window.onload = function () {
     stopLoader();
 };
 
-window.format = function (dateTime, format = 'DD-MMMM-YYYY') {
+window.format = function (dateTime, format = 'DD-MMM-YYYY') {
     return moment(dateTime).format(format);
 };
 

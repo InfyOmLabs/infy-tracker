@@ -483,7 +483,7 @@ table.dataTable {
     padding: 10px;
     background: #20a8d8;
     display: table;
-    color: #fff;
+    color: $white;
     border-radius: .25rem;
     border-color: #20a8d8;
 
@@ -504,10 +504,21 @@ table.dataTable {
 
 .role-checkbox__label {
     vertical-align: bottom;
+    font-weight: bold;
 }
 
 .assignee__avatar {
     padding: 2px;
+}
+
+.select2-selection {
+    &--multiple {
+        border: 1px solid #e4e7ea !important;
+    }
+
+    &--single {
+        border: 1px solid #e4e7ea !important;
+    }
 }
 
 .sa-confirm-button-container {
@@ -520,6 +531,14 @@ table.dataTable {
     .cancel {
         color: #83888c;
         background-color: #f0f3f5 !important;
+    }
+}
+
+.animated {
+    &.fadeIn {
+        .alert {
+            margin-top: 10px;
+        }
     }
 }
 

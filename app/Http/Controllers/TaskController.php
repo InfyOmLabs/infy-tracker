@@ -15,6 +15,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 
 class TaskController extends AppBaseController
@@ -210,14 +211,15 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param $id
-     * @param Request $request
+     * @param int $id
+     *
+     * @throws Exception
      *
      * @return JsonResponse
      */
-    public function deleteAttachment($id, Request $request)
+    public function deleteAttachment($id)
     {
-        $this->taskRepository->deleteFile($id, $request->all());
+        $this->taskRepository->deleteFile($id);
 
         return $this->sendSuccess('File has been deleted successfully.');
     }
@@ -233,14 +235,15 @@ class TaskController extends AppBaseController
     public function addAttachment($id, Request $request)
     {
         $input = $request->all();
+        /** @var UploadedFile $file */
         $file = $input['file'];
         $extension = $file->getClientOriginalExtension();
         if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
             return $this->sendError('You can not upload this file.');
         }
-        $fileName = $this->taskRepository->uploadFile($id, $input['file']);
+        $result = $this->taskRepository->uploadFile($id, $input['file']);
 
-        return $this->sendResponse(['fileName' => $fileName], 'File has been uploaded successfully.');
+        return $this->sendResponse($result, 'File has been uploaded successfully.');
     }
 
     /**
