@@ -6,6 +6,8 @@ use App\Models\User;
 use Crypt;
 use Exception;
 use Hash;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Class UserRepository.
@@ -42,15 +44,16 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param $projectIds
+     * @param array $projectIds
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getUserList($projectIds = [])
     {
+        /** @var Builder $query */
         $query = User::orderBy('name');
         if (!empty($projectIds)) {
-            $query = $query->whereHas('projects', function ($query) use ($projectIds) {
+            $query = $query->whereHas('projects', function (Builder $query) use ($projectIds) {
                 $query->whereIn('projects.id', $projectIds);
             });
         }

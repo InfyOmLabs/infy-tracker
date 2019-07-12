@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Edit Report
+@endsection
 @section('page_css')
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">

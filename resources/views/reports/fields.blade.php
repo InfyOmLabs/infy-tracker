@@ -10,13 +10,13 @@
     <!-- Start Time Field -->
     <div class="form-group col-sm-3">
         {!! Form::label('start_date', 'Start Date') !!}<span class="required">*</span>
-        {!! Form::text('start_date', null, ['class' => 'form-control','id'=>'start_date','required']) !!}
+        {!! Form::text('start_date', null, ['class' => 'form-control','id'=>'start_date','required', 'autocomplete' => 'off']) !!}
     </div>
 
     <!-- End Time Field -->
     <div class="form-group col-sm-3">
         {!! Form::label('end_date', 'End Date') !!}<span class="required">*</span>
-        {!! Form::text('end_date', null, ['class' => 'form-control','id'=>'end_date','required']) !!}
+        {!! Form::text('end_date', null, ['class' => 'form-control','id'=>'end_date','required', 'autocomplete' => 'off']) !!}
     </div>
 </div>
 <div class="row">
@@ -50,6 +50,6 @@
     <!-- Submit Field -->
     <div class="form-group col-sm-12">
         {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-        <a href="{!! route('reports.index') !!}" class="btn btn-default">Cancel</a>
+        <a href="{!! route('reports.index') !!}" class="btn btn-secondary">Cancel</a>
     </div>
 </div>

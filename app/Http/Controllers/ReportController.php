@@ -11,8 +11,10 @@ use App\Repositories\ReportRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 use Auth;
+use Exception;
 use Flash;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Response;
 
 class ReportController extends AppBaseController
@@ -43,11 +45,9 @@ class ReportController extends AppBaseController
     }
 
     /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
-    public function index(Request $request)
+    public function index()
     {
         $reports = $this->reportRepository->all();
 
@@ -79,7 +79,8 @@ class ReportController extends AppBaseController
     public function store(CreateReportRequest $request)
     {
         $input = $request->all();
-        $input['owner_id'] = Auth::user()->id;
+        $input['owner_id'] = Auth::id();
+        /** @var Report $report */
         $report = $this->reportRepository->create($input);
         $this->reportRepository->createReportFilter($input, $report);
 
@@ -142,10 +143,10 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param int                 $id
+     * @param int $id
      * @param UpdateReportRequest $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Response
      */
@@ -171,7 +172,7 @@ class ReportController extends AppBaseController
      *
      * @param int $id
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Response
      */

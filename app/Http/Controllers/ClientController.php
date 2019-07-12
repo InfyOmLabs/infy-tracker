@@ -9,14 +9,16 @@ use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
 use DataTables;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ClientController extends AppBaseController
 {
     /** @var ClientRepository */
     private $clientRepository;
-    /** @var ProjectRepository $projectRep0 */
+    /** @var ProjectRepository $projectRepo */
     private $projectRepo;
 
     /**
@@ -38,7 +40,7 @@ class ClientController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -127,7 +129,7 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param $clientId
+     * @param int $clientId
      *
      * @return JsonResponse
      */

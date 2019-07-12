@@ -9,7 +9,9 @@ use App\Models\ReportFilter;
 use App\Models\Tag;
 use App\Models\TimeEntry;
 use App\Models\User;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Class ReportRepository.
@@ -46,7 +48,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param $input
+     * @param array $input
      * @param Report $report
      *
      * @return array
@@ -79,6 +81,13 @@ class ReportRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param int $reportId
+     * @param int $paramId
+     * @param string $type
+     *
+     * @return ReportFilter
+     */
     private function createFilter($reportId, $paramId, $type)
     {
         $filterInput['report_id'] = $reportId;
@@ -89,10 +98,10 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param $input
-     * @param $report
+     * @param array $input
+     * @param Report $report
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -149,9 +158,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param $reportId
+     * @param int $reportId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|mixed|null
      */
@@ -161,7 +170,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -170,13 +179,18 @@ class ReportRepository extends BaseRepository
         return ReportFilter::whereParamType(Project::class)->whereReportId($reportId)->pluck('param_id')->toArray();
     }
 
+    /**
+     * @param int $reportId
+     *
+     * @return array
+     */
     public function getTagIds($reportId)
     {
         return ReportFilter::whereParamType(Tag::class)->whereReportId($reportId)->pluck('param_id')->toArray();
     }
 
     /**
-     * @param $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -186,9 +200,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param $reportId
+     * @param int $reportId
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection|void
      */
     public function getClientId($reportId)
     {
@@ -203,7 +217,7 @@ class ReportRepository extends BaseRepository
     /**
      * @param Report $report
      *
-     * @return TimeEntry[]|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     * @return TimeEntry[]|Builder[]
      */
     public function getReport($report)
     {
@@ -297,22 +311,22 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $minitues
+     * @param int $minutes
      *
      * @return string
      */
-    private function getDurationTime($minitues)
+    private function getDurationTime($minutes)
     {
-        if ($minitues == 0) {
+        if ($minutes == 0) {
             return '0 hr';
         }
 
-        if ($minitues < 60) {
-            return $minitues.' min';
+        if ($minutes < 60) {
+            return $minutes.' min';
         }
 
-        $hour = floor($minitues / 60);
-        $min = $minitues - $hour * 60;
+        $hour = floor($minutes / 60);
+        $min = $minutes - $hour * 60;
         if ($min === 0) {
             return $hour.' hr';
         }

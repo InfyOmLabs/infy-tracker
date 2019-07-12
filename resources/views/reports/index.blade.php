@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@section('title')
+    Reports
+@endsection
 @section('page_css')
     <link href="{{mix('assets/style/css/report.css')}}" rel="stylesheet" type="text/css"/>
 @endsection

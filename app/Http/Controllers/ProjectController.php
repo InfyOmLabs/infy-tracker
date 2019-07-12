@@ -12,7 +12,9 @@ use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProjectController extends AppBaseController
 {
@@ -29,8 +31,8 @@ class ProjectController extends AppBaseController
      * ProjectController constructor.
      *
      * @param ProjectRepository $projectRepo
-     * @param ClientRepository  $clientRepo
-     * @param UserRepository    $userRepository
+     * @param ClientRepository $clientRepo
+     * @param UserRepository $userRepository
      */
     public function __construct(
         ProjectRepository $projectRepo,
@@ -49,7 +51,7 @@ class ProjectController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(Request $request)
     {
@@ -90,7 +92,7 @@ class ProjectController extends AppBaseController
      *
      * @param int $id
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function edit($id)
     {
@@ -104,10 +106,10 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param int                  $id
+     * @param int $id
      * @param UpdateProjectRequest $request
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function update($id, UpdateProjectRequest $request)
     {
@@ -150,7 +152,7 @@ class ProjectController extends AppBaseController
     }
 
     /**
-     * @param $projectIds
+     * @param int|array $projectIds
      *
      * @return JsonResponse
      */
