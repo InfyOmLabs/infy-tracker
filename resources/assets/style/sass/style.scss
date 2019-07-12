@@ -497,6 +497,16 @@ table.dataTable {
     padding: 2px;
 }
 
+.select2-selection {
+    &--multiple {
+        border: 1px solid #e4e7ea !important;
+    }
+
+    &--single {
+        border: 1px solid #e4e7ea !important;
+    }
+}
+
 .sa-confirm-button-container {
     .confirm {
         background-color: $blue !important;
@@ -509,4 +519,3 @@ table.dataTable {
         background-color: #f0f3f5 !important;
     }
 }
-
