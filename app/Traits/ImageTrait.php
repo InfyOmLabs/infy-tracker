@@ -10,6 +10,7 @@ namespace App\Traits;
  * Date: 5/1/2019
  * Time: 11:18 AM
  */
+
 namespace App\Traits;
 
 use App\Exceptions\ApiOperationFailedException;
@@ -121,7 +122,7 @@ trait ImageTrait
                 }
 
                 $date = Carbon::now()->format('Y-m-d');
-                $fileName =  $date.'_'.uniqid().'.'.$extension;
+                $fileName = $date.'_'.uniqid().'.'.$extension;
                 $contents = file_get_contents($file->getRealPath());
                 Storage::put($path.DIRECTORY_SEPARATOR.$fileName, $contents);
             }
