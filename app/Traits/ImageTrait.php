@@ -13,10 +13,9 @@ use App\Exceptions\ApiOperationFailedException;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Response;
-use Illuminate\Http\UploadedFile;
-use Storage;
 use Image;
 use Log;
+use Storage;
 
 /**
  * Trait ImageTrait.
@@ -43,8 +42,10 @@ trait ImageTrait
      * @param $file
      * @param $path
      * @param array $options
-     * @return string
+     *
      * @throws ApiOperationFailedException
+     *
+     * @return string
      */
     public static function makeImage($file, $path, $options = [])
     {
@@ -65,15 +66,18 @@ trait ImageTrait
                     Storage::putFileAs($path, $file, $fileName, 'public');
                 }
             }
+
             return $fileName;
         } catch (Exception $e) {
             Log::info($e->getMessage());
+
             throw new ApiOperationFailedException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
      * @param $path
+     *
      * @return mixed
      */
     public function imageUrl($path)
@@ -83,6 +87,7 @@ trait ImageTrait
 
     /**
      * @param string $url
+     *
      * @return mixed
      */
     public function urlEncoding($url)
@@ -96,8 +101,10 @@ trait ImageTrait
     /**
      * @param $file
      * @param $path
-     * @return string
+     *
      * @throws ApiOperationFailedException
+     *
+     * @return string
      */
     public static function makeAttachment($file, $path)
     {
