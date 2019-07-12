@@ -1,4 +1,5 @@
 /node_modules
+/public/assets
 /public/fonts
 /public/uploads
 /storage/*.key
