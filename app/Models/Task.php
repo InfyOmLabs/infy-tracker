@@ -69,8 +69,8 @@ class Task extends Model
     const STATUS_ALL = 2;
 
     const STATUS_ARR = [
-        self::STATUS_ALL => 'All',
-        self::STATUS_ACTIVE => 'Pending',
+        self::STATUS_ALL       => 'All',
+        self::STATUS_ACTIVE    => 'Pending',
         self::STATUS_COMPLETED => 'Accepted',
     ];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
@@ -96,14 +96,14 @@ class Task extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'title' => 'string',
+        'id'          => 'integer',
+        'title'       => 'string',
         'description' => 'string',
-        'project_id' => 'integer',
-        'status' => 'integer',
-        'due_date' => 'date',
-        'deleted_by' => 'integer',
-        'created_by' => 'integer',
+        'project_id'  => 'integer',
+        'status'      => 'integer',
+        'due_date'    => 'date',
+        'deleted_by'  => 'integer',
+        'created_by'  => 'integer',
     ];
 
     /**
@@ -112,7 +112,7 @@ class Task extends Model
      * @var array
      */
     public static $rules = [
-        'title' => 'required',
+        'title'      => 'required',
         'project_id' => 'required',
     ];
 
