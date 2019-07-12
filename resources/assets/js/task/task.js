@@ -439,7 +439,7 @@ $(document).on('click', '.entry-model', function (event) {
     let taskId = $(event.currentTarget).data('id');
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
-    getTasksByproject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+    getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
 });
 
 CKEDITOR.replace( 'description', {
