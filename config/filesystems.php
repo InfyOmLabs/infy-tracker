@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('APP_STORAGE', 'local'),
 
     /*
     |--------------------------------------------------------------------------

@@ -5,7 +5,9 @@ $('#editProfileForm').submit(function (event) {
     $.ajax({
         url: usersUrl + 'profile-update',
         type: 'post',
-        data: $(this).serialize(),
+        data: new FormData($(this)[0]),
+        processData: false,
+        contentType: false,
         success: function (result) {
             if (result.success) {
                 $('#EditProfileModal').modal('hide');
@@ -13,7 +15,7 @@ $('#editProfileForm').submit(function (event) {
             }
         },
         error: function (result) {
-            printErrorMessage("#editValidationErrorsBox", result);
+            manageAjaxErrors(result,'editProfileValidationErrorsBox');
         },
         complete: function () {
             loadingButton.button('reset');
@@ -22,13 +24,22 @@ $('#editProfileForm').submit(function (event) {
 });
 
 $('#EditProfileModal').on('hidden.bs.modal', function () {
-    resetModalForm('#editProfileForm', '#editValidationErrorsBox');
+    resetModalForm('#editProfileForm', '#editProfileValidationErrorsBox');
 });
 
 // open edit user profile model
 $(document).on('click', '.edit-profile', function (event) {
     let userId = $(event.currentTarget).data('id');
     renderProfileData(usersUrl + userId + '/edit');
+});
+$(document).on('change', '#pfImage', function () {
+    let ext = $(this).val().split('.').pop().toLowerCase();
+    if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+        $(this).val('');
+        $('#editProfileValidationErrorsBox').html('The profile image must be a file of type: jpeg, jpg, png.').show();
+    } else {
+        displayPhoto(this, '#edit_preview_photo');
+    }
 });
 
 window.renderProfileData = function (usersUrl) {
@@ -42,11 +53,31 @@ window.renderProfileData = function (usersUrl) {
                 $('#pfName').val(user.name);
                 $('#pfEmail').val(user.email);
                 $('#pfPhone').val(user.phone);
+                $('#edit_preview_photo').attr('src',user.image_path);
                 $('#EditProfileModal').modal('show');
             }
         }
     });
 };
+window.displayPhoto = function (input, selector) {
+    let displayPreview = true;
+    if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            let image = new Image();
+            image.src = e.target.result;
+            image.onload = function () {
+                $(selector).attr('src', e.target.result);
+                displayPreview = true;
+            };
+        };
+        if (displayPreview) {
+            reader.readAsDataURL(input.files[0]);
+            $(selector).show();
+        }
+    }
+};
+
 $(document).on('keyup', '#name', function (e) {
     let txtVal = $(this).val().trim();
     if ((e.charCode === 8 || (e.charCode >= 65 && e.charCode <= 90) || (e.charCode >= 95 && e.charCode <= 122)) || (e.charCode === 0 || (e.charCode >= 48 && e.charCode <= 57))) {
