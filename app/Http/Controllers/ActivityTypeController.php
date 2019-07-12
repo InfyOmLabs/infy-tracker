@@ -15,7 +15,7 @@ use Illuminate\View\View;
 
 class ActivityTypeController extends AppBaseController
 {
-    /** @var  ActivityTypeRepository */
+    /** @var ActivityTypeRepository */
     private $activityTypeRepository;
 
     public function __construct(ActivityTypeRepository $activityTypeRepo)
@@ -28,16 +28,16 @@ class ActivityTypeController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return Factory|View
-     *
      * @throws Exception
      *
+     * @return Factory|View
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
             return DataTables::of((new ActivityTypeDataTable())->get($request->only(['name'])))->make(true);
         }
+
         return view('activity_types.index');
     }
 
@@ -74,7 +74,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Update the specified ActivityType in storage.
      *
-     * @param int $id
+     * @param int                       $id
      * @param UpdateActivityTypeRequest $request
      *
      * @return JsonResponse
@@ -93,9 +93,9 @@ class ActivityTypeController extends AppBaseController
      *
      * @param int $id
      *
-     * @return JsonResponse
      * @throws Exception
      *
+     * @return JsonResponse
      */
     public function destroy($id)
     {

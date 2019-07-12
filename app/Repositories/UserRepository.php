@@ -6,10 +6,12 @@ use App\Models\User;
 use Crypt;
 use Exception;
 use Hash;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
- * Class UserRepository
- * @package App\Repositories
+ * Class UserRepository.
+ *
  * @version May 2, 2019, 12:42 pm UTC
  */
 class UserRepository extends BaseRepository
@@ -20,11 +22,11 @@ class UserRepository extends BaseRepository
     protected $fieldSearchable = [
         'name',
         'email',
-        'phone'
+        'phone',
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -34,7 +36,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -42,17 +44,29 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @param array $projectIds
+     *
+     * @return Collection
      */
-    public function getUserList()
+    public function getUserList($projectIds = [])
     {
-        return User::orderBy('name')->pluck('name', 'id');
+        /** @var Builder $query */
+        $query = User::orderBy('name');
+        if (!empty($projectIds)) {
+            $query = $query->whereHas('projects', function (Builder $query) use ($projectIds) {
+                $query->whereIn('projects.id', $projectIds);
+            });
+        }
+
+        return $query->pluck('name', 'id');
     }
 
     /**
-     * @param  array $input
-     * @return bool
+     * @param array $input
+     *
      * @throws Exception
+     *
+     * @return bool
      */
     public function setUserPassword($input)
     {
@@ -65,6 +79,7 @@ class UserRepository extends BaseRepository
         $user->save();
 
         \Auth::login($user);
+
         return true;
     }
 
@@ -78,18 +93,20 @@ class UserRepository extends BaseRepository
         $user->activation_code = $activation_code;
         $user->save();
 
-        $key = $user->id . '|' . $activation_code;
+        $key = $user->id.'|'.$activation_code;
         $code = Crypt::encrypt($key);
         $accountRepository->sendConfirmEmail(
             $user->name,
             $user->email,
             $code
         );
+
         return true;
     }
 
     /**
      * @param $id
+     *
      * @return User
      */
     public function activeDeActiveUser($id)
@@ -98,6 +115,7 @@ class UserRepository extends BaseRepository
         $user = $this->findOrFail($id);
         $user->is_active = !$user->is_active;
         $user->save();
+
         return $user;
     }
 }

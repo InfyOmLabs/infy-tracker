@@ -4,22 +4,21 @@ namespace App\Repositories;
 
 use App\Models\ActivityType;
 use App\Models\Comment;
-use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskAttachment;
+use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
+use File;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
-use League\Container\Exception\NotFoundException;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class TaskRepository
- * @package App\Repositories
+ * Class TaskRepository.
+ *
  * @version May 3, 2019, 5:05 am UTC
  */
 class TaskRepository extends BaseRepository
@@ -33,7 +32,7 @@ class TaskRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -43,7 +42,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -51,7 +50,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $columns
      *
      * @return Task
@@ -73,6 +72,7 @@ class TaskRepository extends BaseRepository
         try {
             DB::beginTransaction();
             $input['created_by'] = getLoggedInUserId();
+            $input['description'] = htmlentities($input['description']);
             $task = Task::create($input);
 
             if (isset($input['tags']) && !empty($input['tags'])) {
@@ -83,17 +83,18 @@ class TaskRepository extends BaseRepository
                 $task->taskAssignee()->sync($input['assignees']);
             }
             DB::commit();
-
         } catch (Exception $e) {
             DB::rollBack();
+
             throw new BadRequestHttpException($e->getMessage());
         }
+
         return $task;
     }
 
     /**
      * @param array $input
-     * @param int $id
+     * @param int   $id
      *
      * @throws Exception
      *
@@ -106,23 +107,19 @@ class TaskRepository extends BaseRepository
 
         try {
             DB::beginTransaction();
+            $input['description'] = htmlentities($input['description']);
             $task->update($input);
 
-            if (isset($input['tags']) && !empty($input['tags'])) {
-                $this->attachTags($task, $input['tags']);
-            } else {
-                $this->attachTags($task, []);
-            }
+            $tags = !empty($input['tags']) ? $input['tags'] : [];
+            $this->attachTags($task, $tags);
 
-            if (isset($input['assignees']) && !empty($input['assignees'])) {
-                $task->taskAssignee()->sync($input['assignees']);
-            } else {
-                $task->taskAssignee()->sync([]);
-            }
+            $assignees = !empty($input['assignees']) ? $input['assignees'] : [];
+            $task->taskAssignee()->sync($assignees);
 
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
+
             throw new BadRequestHttpException($e->getMessage());
         }
 
@@ -165,14 +162,32 @@ class TaskRepository extends BaseRepository
         $activityTypeRepo = app(ActivityTypeRepository::class);
         $data['activityTypes'] = $activityTypeRepo->getActivityTypeList();
 
-        $data['status'] = Task::STATUS_ARR;
+        $statusArr = Task::STATUS_ARR;
+        asort($statusArr);
+        $data['status'] = $statusArr;
+        unset($statusArr[Task::STATUS_ALL]);
+        $data['taskStatus'] = $statusArr;
         $data['tasks'] = $this->getTaskList($loginUserProjects);
         $data['priority'] = Task::PRIORITY;
+        $data['taskBadges'] = $this->getStatusBadge();
+
         return $data;
     }
 
     /**
+     * @return array
+     */
+    public function getStatusBadge()
+    {
+        return [
+            Task::STATUS_ACTIVE    => 'badge-light',
+            Task::STATUS_COMPLETED => 'badge-success',
+        ];
+    }
+
+    /**
      * @param $loginUserProjects
+     *
      * @return mixed
      */
     public function getTaskList($loginUserProjects = [])
@@ -181,6 +196,7 @@ class TaskRepository extends BaseRepository
         if (!empty($loginUserProjects)) {
             $query = $query->whereIn('project_id', array_keys($loginUserProjects));
         }
+
         return $query->pluck('title', 'id');
     }
 
@@ -199,7 +215,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task $task
+     * @param Task  $task
      * @param array $tags
      */
     public function attachTags($task, $tags)
@@ -222,13 +238,11 @@ class TaskRepository extends BaseRepository
         $tagIds = [];
         foreach ($newTags as $tag) {
             $tagIds[] = Tag::create([
-                'name' => $tag,
-                'created_by' => getLoggedInUserId()
+                'name'       => $tag,
+                'created_by' => getLoggedInUserId(),
             ])->id;
         }
         $task->tags()->attach($tagIds);
-
-        return;
     }
 
     /**
@@ -243,7 +257,7 @@ class TaskRepository extends BaseRepository
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
         if ($minutes > 1) {
-            $totalDuration = sprintf("%02d Hours and %02d Minutes", floor($minutes / 60), $minutes % 60);
+            $totalDuration = sprintf('%02d Hours and %02d Minutes', floor($minutes / 60), $minutes % 60);
         }
         $task->totalDuration = $totalDuration;
 
@@ -257,9 +271,10 @@ class TaskRepository extends BaseRepository
      */
     public function myTasks($input = [])
     {
+        /** @var Builder|Task $query */
         $query = Task::whereHas('taskAssignee', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
-        })->whereStatus(Task::STATUS_ACTIVE);
+        })->whereNotIn('status', [Task::STATUS_COMPLETED]);
 
         if (!empty($input['project_id'])) {
             $query->where('project_id', $input['project_id']);
@@ -269,25 +284,26 @@ class TaskRepository extends BaseRepository
 
         return [
             'activities' => ActivityType::get(['name', 'id']),
-            'tasks' => $assignedTasks,
+            'tasks'      => $assignedTasks,
         ];
     }
 
     /**
      * @param $projectId
+     *
      * @return int|string|null
      */
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::whereProjectId($projectId)->where('task_number', '!=', "")->latest('created_at')->first();
+        $task = Task::whereProjectId($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
             $task = Task::whereProjectId($projectId)->where('task_number', '=', $uniqueNumber)->first();
-            if(empty($task)){
+            if (empty($task)) {
                 $isUnique = true;
-            }else {
+            } else {
                 $uniqueNumber++;
             }
         }
@@ -298,57 +314,62 @@ class TaskRepository extends BaseRepository
     /**
      * @param $id
      * @param $file
-     * @return string
+     *
      * @throws Exception
+     *
+     * @return TaskAttachment
      */
     public function uploadFile($id, $file)
     {
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
-        try {
-            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            $file->move($destinationPath, $fileName);
+        try {
+            $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
             $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
+
             DB::beginTransaction();
             $task->attachments()->save($attachment);
             DB::commit();
-            return $fileName;
+
+            return $attachment;
         } catch (Exception $e) {
             DB::rollBack();
-            if (file_exists($destinationPath . '/' . $fileName)) {
-                unlink($destinationPath . '/' . $fileName);
+            if (file_exists($destinationPath.'/'.$fileName)) {
+                unlink($destinationPath.'/'.$fileName);
             }
+
             throw new UploadException($e->getMessage(), $e->getCode());
         }
     }
 
     /**
-     * @param $id
-     * @param $input
+     * @param int $id
+     *
+     * @throws Exception
+     *
      * @return bool
      */
-
-    public function deleteFile($id, $input)
+    public function deleteFile($id)
     {
-        $file = $input['filename'];
-        $attachment = TaskAttachment::where('file', 'like', "%$file%")->where('task_id', '=', $id)->first();
+        /** @var TaskAttachment $attachment */
+        $attachment = TaskAttachment::find($id);
         if (empty($attachment)) {
-            throw new NotFoundException('File not found.');
+            throw new BadRequestHttpException('File not found.');
         }
-        $fileName = $attachment->getOriginal('file');
+
+        $attachment->deleteAttachment();
         $attachment->delete();
-        $destinationPath = public_path(Task::PATH);
-        if (!empty($fileName)) {
-            if (file_exists($destinationPath . '/' . $fileName)) {
-                unlink($destinationPath . '/' . $fileName);
-            }
+        if (file_exists($attachment->file_url)) {
+            unlink($attachment->file_url);
         }
+
         return true;
     }
 
     /**
-     * @param $id
+     * @param int $id
+     *
      * @return array
      */
     public function getAttachments($id)
@@ -359,25 +380,28 @@ class TaskRepository extends BaseRepository
 
         $result = [];
 
-        $destinationPath = public_path(Task::PATH);
         foreach ($attachments as $attachment) {
-            $file = $attachment->getOriginal('file');
-            $obj['name'] = $file;
-            $obj['size'] = filesize($destinationPath . '/' . $file);
-            $obj['url'] = $attachment->file;
+            $obj['id'] = $attachment->id;
+            $obj['name'] = $attachment->file;
+            $obj['size'] = filesize($attachment->file_path);
+            $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }
+
         return $result;
     }
 
     /**
-     * @param $input
-     * @return Comment|Comment[]|Builder|Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
+     * @param array $input
+     *
+     * @return Comment
      */
-    public function addComment($input){
+    public function addComment($input)
+    {
         $input['created_by'] = Auth::id();
         $input['comment'] = htmlentities($input['comment']);
         $comment = Comment::create($input);
+
         return Comment::with('createdUser')->findOrFail($comment->id);
     }
 }

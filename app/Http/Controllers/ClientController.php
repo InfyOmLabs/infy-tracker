@@ -6,27 +6,41 @@ use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Queries\ClientDataTable;
 use App\Repositories\ClientRepository;
+use App\Repositories\ProjectRepository;
 use DataTables;
 use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ClientController extends AppBaseController
 {
-    /** @var  ClientRepository */
+    /** @var ClientRepository */
     private $clientRepository;
+    /** @var ProjectRepository $projectRepo */
+    private $projectRepo;
 
-    public function __construct(ClientRepository $clientRepo)
+    /**
+     * ClientController constructor.
+     *
+     * @param ClientRepository  $clientRepo
+     * @param ProjectRepository $projectRepository
+     */
+    public function __construct(ClientRepository $clientRepo, ProjectRepository $projectRepository)
     {
         $this->clientRepository = $clientRepo;
+        $this->projectRepo = $projectRepository;
     }
 
     /**
      * Display a listing of the Client.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
      * @throws Exception
+     *
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -56,19 +70,21 @@ class ClientController extends AppBaseController
 
     /**
      * @param $input
+     *
      * @return mixed
      */
     public function fill($input)
     {
         $input['email'] = is_null($input['email']) ? '' : $input['email'];
         $input['website'] = is_null($input['website']) ? '' : $input['website'];
+
         return $input;
     }
 
     /**
      * Show the form for editing the specified Client.
      *
-     * @param  int  $id
+     * @param int $id
      *
      * @return JsonResponse
      */
@@ -82,8 +98,8 @@ class ClientController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param  int  $id
-     * @param  UpdateClientRequest $request
+     * @param int                 $id
+     * @param UpdateClientRequest $request
      *
      * @return JsonResponse
      */
@@ -98,11 +114,11 @@ class ClientController extends AppBaseController
     /**
      * Remove the specified Client from storage.
      *
-     * @param  int  $id
+     * @param int $id
      *
-     * @return JsonResponse
      * @throws Exception
      *
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -110,5 +126,20 @@ class ClientController extends AppBaseController
         $this->clientRepository->delete($id);
 
         return $this->sendSuccess('Client deleted successfully.');
+    }
+
+    /**
+     * @param int $clientId
+     *
+     * @return JsonResponse
+     */
+    public function projects($clientId)
+    {
+        if ($clientId == 0) {
+            $clientId = null;
+        }
+        $projects = $this->projectRepo->getProjectsList($clientId);
+
+        return $this->sendResponse($projects, 'Projects retrieved successfully.');
     }
 }

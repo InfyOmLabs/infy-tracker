@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
+use Auth;
 use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class TimeEntryController extends AppBaseController
 {
-    /** @var  TimeEntryRepository */
+    /** @var TimeEntryRepository */
     private $timeEntryRepository;
 
     public function __construct(TimeEntryRepository $timeEntryRepo)
@@ -26,8 +28,9 @@ class TimeEntryController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \Exception
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -76,7 +79,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param int $id
+     * @param int     $id
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -84,12 +87,18 @@ class TimeEntryController extends AppBaseController
     public function update($id, Request $request)
     {
         $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($id);
-
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
-
+        $existEntry = $entry->only(['id', 'task_id', 'activity_type_id', 'user_id', 'start_time', 'end_time', 'duration', 'note']);
+        $inputDiff = array_diff($existEntry, $input);
+        if (!empty($inputDiff)) {
+            Log::info('Entry Id: '.$entry->id);
+            Log::info('Task Id: '.$entry->task_id);
+            Log::info('fields changed: ', $inputDiff);
+            Log::info('Entry updated by: '.Auth::user()->name);
+        }
         $this->timeEntryRepository->updateTimeEntry($input, $id);
 
         return $this->sendSuccess('Time Entry updated successfully.');
@@ -97,8 +106,10 @@ class TimeEntryController extends AppBaseController
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
@@ -160,12 +171,15 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param int $projectId
+     * @param int     $projectId
+     * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTasks($projectId)
+    public function getTasks($projectId, Request $request)
     {
-        $result = $this->timeEntryRepository->getTasksByProject($projectId);
+        $taskId = (!is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
+        $result = $this->timeEntryRepository->getTasksByProject($projectId, $taskId);
 
         return $this->sendResponse($result, 'Project Tasks retrieved successfully.');
     }

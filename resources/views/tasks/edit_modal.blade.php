@@ -26,8 +26,8 @@
                         {!! Form::select('priority',$priority, null, ['class' => 'form-control','id'=>'editPriority','required']) !!}
                     </div>
                     <div class="form-group col-sm-6">
-                        {!! Form::label('assign_to', 'Assign To') !!}
-                        {!! Form::select('assignees[]',$assignees, null, ['class' => 'form-control','id'=>'editAssignee', 'multiple' => true]) !!}
+                        {!! Form::label('status', 'Status') !!}
+                        {!! Form::select('status',$taskStatus, null, ['class' => 'form-control','id'=>'editStatus']) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -42,18 +42,14 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        {!! Form::label('description', 'Description') !!}
-                        {!! Form::textarea('description', null, ['id' => 'editDesc', 'class' => 'form-control', 'rows' => 5]) !!}
+                        {!! Form::label('assign_to', 'Assign To') !!}
+                        {!! Form::select('assignees[]',$assignees, null, ['class' => 'form-control','id'=>'editAssignee', 'multiple' => true]) !!}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-sm-12" style="display: flex">
-                        <div>
-                            {!! Form::checkbox('status', 1, false, ['id' => 'editStatus', 'class' => 'chkStatus']) !!}
-                        </div>
-                        <div style="margin-left: 5px">
-                            Completed
-                        </div>
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('description', 'Description') !!}
+                        {!! Form::textarea('description', null, ['id' => 'editDesc', 'class' => 'form-control', 'rows' => 5]) !!}
                     </div>
                 </div>
                 <div class="text-right">

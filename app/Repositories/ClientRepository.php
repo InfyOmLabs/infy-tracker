@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Models\Client;
 
 /**
- * Class ClientRepository
- * @package App\Repositories
+ * Class ClientRepository.
+ *
  * @version May 2, 2019, 10:16 am UTC
  */
 class ClientRepository extends BaseRepository
@@ -21,7 +21,7 @@ class ClientRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -31,7 +31,7 @@ class ClientRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -39,7 +39,7 @@ class ClientRepository extends BaseRepository
     }
 
     /**
-     * get clients
+     * get clients.
      *
      * @return \Illuminate\Support\Collection
      */

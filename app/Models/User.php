@@ -5,9 +5,10 @@ namespace App\Models;
 use App\Notifications\MailResetPasswordNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
- * App\Models\User
+ * App\Models\User.
  *
  * @property int $id
  * @property string $name
@@ -26,6 +27,7 @@ use Illuminate\Notifications\Notifiable;
  * @property-read \App\Models\User|null $createdUser
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
@@ -44,14 +46,21 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @mixin \Eloquent
+ *
  * @property string|null $image_path
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
  */
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, EntrustUserTrait;
 
     public $table = 'users';
+    protected $appends = ['img_avatar'];
 
     /**
      * The attributes that are mass assignable.
@@ -89,31 +98,32 @@ class User extends Authenticatable
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
         'name'     => 'required|unique:users,name',
         'email'    => 'required|email|unique:users,email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'phone' => 'nullable|numeric|digits:10',
+        'phone'    => 'nullable|numeric|digits:10',
     ];
 
     public static $messages = [
         'phone.digits' => 'The phone number must be 10 digits long.',
-        'email.regex' => 'Please enter valid email.'
+        'email.regex'  => 'Please enter valid email.',
     ];
 
     public static $setPasswordRules = [
-        'user_id' => 'required',
-        'password' => 'min:6|required_with:password_confirmation|same:password_confirmation',
-        'password_confirmation' => 'min:6'
+        'user_id'               => 'required',
+        'password'              => 'min:6|required_with:password_confirmation|same:password_confirmation',
+        'password_confirmation' => 'min:6',
     ];
 
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token)
@@ -134,6 +144,11 @@ class User extends Authenticatable
      */
     public function createdUser()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(self::class, 'created_by');
+    }
+
+    public function getImgAvatarAttribute()
+    {
+        return getUserImageInitial($this->id, $this->name);
     }
 }

@@ -5,10 +5,11 @@ namespace App\Repositories;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 /**
- * Class TimeEntryRepository
- * @package App\Repositories
+ * Class TimeEntryRepository.
+ *
  * @version May 3, 2019, 9:46 am UTC
  */
 class TimeEntryRepository extends BaseRepository
@@ -26,7 +27,7 @@ class TimeEntryRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -36,7 +37,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
@@ -75,42 +76,61 @@ class TimeEntryRepository extends BaseRepository
         /** @var TimeEntry $timeEntry */
         $timeEntry = TimeEntry::whereUserId(getLoggedInUserId())->latest()->first();
         if (empty($timeEntry)) {
-            return null;
+            return;
         }
-        return [
-            'task_id' => $timeEntry->task_id,
-            'activity_id' => $timeEntry->activity_type_id,
-            'project_id' => $timeEntry->task->project_id
-        ];
 
+        return [
+            'task_id'     => $timeEntry->task_id,
+            'activity_id' => $timeEntry->activity_type_id,
+            'project_id'  => $timeEntry->task->project_id,
+        ];
     }
 
-    public function getTasksByProject($projectId){
-        $result = Task::where('project_id','=',$projectId)
+    /**
+     * @param int      $projectId
+     * @param int|null $taskId
+     *
+     * @return Collection
+     */
+    public function getTasksByProject($projectId, $taskId = null)
+    {
+        /** @var Builder $query */
+        $query = Task::whereProjectId($projectId)
+            ->where('status', '=', Task::STATUS_ACTIVE)
             ->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
-            })->pluck('title','id');
+            });
+
+        if (!empty($taskId)) {
+            $query->orWhere('id', $taskId);
+        }
+
+        $result = $query->pluck('title', 'id');
 
         return $result;
     }
 
-    public function getTimeEntryDetail($id){
-        $result = TimeEntry::leftJoin('tasks as t', 't.id','=','time_entries.task_id')
-            ->where('time_entries.id','=',$id)
-            ->select('time_entries.*','t.project_id')
+    public function getTimeEntryDetail($id)
+    {
+        $result = TimeEntry::leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
+            ->where('time_entries.id', '=', $id)
+            ->select('time_entries.*', 't.project_id')
             ->first();
+
         return $result;
     }
 
-    public function updateTimeEntry($input, $id){
+    public function updateTimeEntry($input, $id)
+    {
         $timeEntry = $this->find($id);
-        if((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
+        if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {
                 $input['start_time'] = '';
                 $input['end_time'] = '';
             }
         }
         $this->update($input, $id);
+
         return true;
     }
 }

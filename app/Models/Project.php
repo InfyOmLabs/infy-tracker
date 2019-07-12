@@ -5,7 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 /**
- * App\Models\Project
+ * App\Models\Project.
  *
  * @property int $id
  * @property string $name
@@ -17,6 +17,7 @@ use Eloquent as Model;
  * @property-read \App\Models\Client|null $client
  * @property-read \App\Models\User|null $createdUser
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project query()
@@ -28,7 +29,9 @@ use Eloquent as Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
  * @mixin \Eloquent
+ *
  * @property string $prefix
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project wherePrefix($value)
  */
 class Project extends Model
@@ -43,7 +46,7 @@ class Project extends Model
         'description',
         'client_id',
         'created_by',
-        'prefix'
+        'prefix',
     ];
 
     /**
@@ -61,16 +64,16 @@ class Project extends Model
     ];
 
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
     public static $rules = [
-        'name' => 'required|unique:projects,name',
+        'name'      => 'required|unique:projects,name',
         'client_id' => 'required',
     ];
     public static $editRules = [
-        'client_id' => 'required'
+        'client_id' => 'required',
     ];
 
     public static $messages = [

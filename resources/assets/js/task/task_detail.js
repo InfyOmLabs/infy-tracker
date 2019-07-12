@@ -7,9 +7,26 @@ $(function () {
         width: '100%',
         placeholder: "Select Project"
     });
-    $('#editTagIds,#editAssignee').select2({
+    $('#editAssignee').select2({
+        width: '100%'
+    });
+    $('#editTagIds').select2({
         width: '100%',
-        tags: true
+        tags: true,
+        createTag: function (tag) {
+            var found = false;
+            $("#editTagIds option").each(function() {
+                if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                return {
+                    id: tag.term,
+                    text: tag.term
+                };
+            }
+        }
     });
     $('#editPriority').select2({
         width: '100%',
@@ -40,15 +57,14 @@ $(document).on('click', '.edit-btn', function (event) {
         success: function (result) {
             if (result.success) {
                 var task = result.data;
+                let desc = $('<div/>').html(task.description).text();
+                CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);
                 $('#editTitle').val(task.title);
                 $('#editDesc').val(task.description);
                 $('#editDueDate').val(task.due_date);
                 $('#editProjectId').val(task.project.id).trigger("change");
-                if (task.status == 1) {
-                    $('#editStatus').prop('checked', true);
-                }
-
+                $('#editStatus').val(task.status);
                 var tagsIds = [];
                 var userIds = [];
                 $(task.tags).each(function (i, e) {
@@ -73,10 +89,17 @@ $('#editForm').submit(function (event) {
     var loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
     var id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = CKEDITOR.instances.editDesc.getData();
+    $.each(formdata, function (i, val) {
+        if(val.name == 'description'){
+            formdata[i].value = desc;
+        }
+    });
     $.ajax({
         url: taskUrl + id + '/update',
         type: 'post',
-        data: $(this).serialize(),
+        data: formdata,
         success: function (result) {
             if (result.success) {
                 location.reload();
@@ -90,6 +113,7 @@ $('#editForm').submit(function (event) {
 });
 
 $('#EditModal').on('hidden.bs.modal', function () {
+    CKEDITOR.instances.editDesc.setData('');
     resetModalForm('#editForm', '#editValidationErrorsBox');
 });
 
@@ -120,12 +144,14 @@ Dropzone.options.dropzone = {
         thisDropzone = this;
         $.get(taskUrl+'get-attachments/'+taskId, function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size };
+                let mockFile = { name: value.name, size: value.size, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
                 thisDropzone.emit("complete", mockFile);
                 thisDropzone.emit("thumbnail",mockFile, value.url);
+                $(".dz-remove").eq(key).attr("data-file-id", value.id);
+                $(".dz-remove").eq(key).attr("data-file-url", value.url);
             });
         });
         this.on("thumbnail", function(file, dataUrl) {
@@ -137,8 +163,7 @@ Dropzone.options.dropzone = {
             let previewEle = '';
 
             if($.inArray( ext, [ "jpg", "jpeg", "png"] ) > -1){
-                let fileUrl = attachmentUrl + file.name;
-                previewEle = '<a class="'+fileName+'" data-fancybox="gallery" href="'+fileUrl+'" data-toggle="lightbox" data-gallery="example-gallery"></a>';
+                previewEle = '<a class="'+fileName+'" data-fancybox="gallery" href="'+dataUrl+'" data-toggle="lightbox" data-gallery="example-gallery"></a>';
                 $(".previewEle").append(previewEle);
             }
 
@@ -149,8 +174,7 @@ Dropzone.options.dropzone = {
                     let onlyFileName = fileName.split('.')[0];
                     $("." + onlyFileName).trigger('click');
                 } else {
-                    let fileUrl = attachmentUrl + fileName;
-                    window.open(fileUrl, '_blank');
+                    window.open(dataUrl, '_blank');
                 }
             });
         });
@@ -173,19 +197,13 @@ Dropzone.options.dropzone = {
     },
     removedfile: function(file)
     {
-        let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let name = '';
-        if(typeof file.upload != "undefined" ){
-            name = fileuploded.innerHTML;
-        }else {
-            name = file.name;
-        }
+        let attachmentId = file.previewElement.querySelector("[data-file-id]").getAttribute('data-file-id');
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + taskId,
+            url: taskUrl + 'delete-attachment/' + attachmentId,
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);
@@ -197,8 +215,9 @@ Dropzone.options.dropzone = {
     },
     success: function(file, response)
     {
+        let attachment =  response.data;
         let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let fileName = response.data.fileName;
+        let fileName = attachment.file;
         let fileNameExtArr = fileName.split('.');
         let newFileName = fileNameExtArr[0];
         let newFileExt = fileNameExtArr[1];
@@ -206,8 +225,10 @@ Dropzone.options.dropzone = {
         let fileUrl = attachmentUrl + fileName;
         fileuploded.innerHTML = fileName;
 
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-id', attachment.id);
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-url', attachment.file_url);
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
-            $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
+            $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
         }
     },
@@ -231,7 +252,8 @@ function addCommentSection(comment) {
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
         '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
-        '                    <a class="pull-right edit-comment comment-edit-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="pull-right edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
+        '                    <a class="pull-right save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
         '            <span class="user__description">just now</span>\n' +
@@ -246,7 +268,7 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
-    let loadingButton = jQuery(this).find("#btnComment");
+    let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
     if(comment == '' || comment.trim() == ''){
@@ -275,25 +297,50 @@ $('#btnComment').click(function (event) {
 
 $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
-    $.ajax({
-        url: baseUrl + 'comments/' + commentId + '/delete',
-        type: 'get',
-        success: function (result) {
-            if (result.success) {
-                let commetDiv = 'comment__'+commentId;
-                $("#"+commetDiv).remove();
-            }
+    swal({
+            title: "Delete !",
+            text: "Are you sure you want to delete this Comment?",
+            type: "warning",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#5cb85c',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes'
         },
-        error: function (result) {
-            printErrorMessage("#taskValidationErrorsBox", result);
-        }
-    });
+        function () {
+            $.ajax({
+                url: baseUrl + 'comments/' + commentId + '/delete',
+                type: 'get',
+                success: function (result) {
+                    if (result.success) {
+                        let commetDiv = 'comment__'+commentId;
+                        $("#"+commetDiv).remove();
+                    }
+                    swal({
+                        title: 'Deleted!',
+                        text: 'Comment has been deleted.',
+                        type: 'success',
+                        timer: 2000
+                    });
+                },
+                error: function (data) {
+                    swal({
+                        title: '',
+                        text: data.responseJSON.message,
+                        type: 'error',
+                        timer: 5000
+                    });
+                }
+            });
+        });
 });
 
-$(document).on('click', ".comment-display" ,function () {
+$(document).on('click', ".comment-display,.edit-comment" ,function () {
     let commentId = $(this).data('id');
     let commentClass = "comment-edit-"+commentId;
-    $(this).addClass('d-none');
+    $('.comment-display-'+commentId).addClass('d-none');
 
     if (!CKEDITOR.instances[commentClass]) {
         CKEDITOR.replace( commentClass, {
@@ -303,7 +350,7 @@ $(document).on('click', ".comment-display" ,function () {
     }
 
     $(".comment-edit-"+commentId).removeClass('d-none');
-    $(".comment-edit-icon-"+commentId).removeClass('d-none');
+    $(".comment-save-icon-"+commentId).removeClass('d-none');
     $(".comment-cancel-icon-"+commentId).removeClass('d-none');
 });
 
@@ -312,10 +359,10 @@ $(document).on('click', ".cancel-comment", function (event) {
     $(this).addClass('d-none');
     $(".comment-display-"+commentId).removeClass('d-none');
     $(".comment-edit-"+commentId).addClass('d-none');
-    $(".comment-edit-icon-"+commentId).addClass('d-none');
+    $(".comment-save-icon-"+commentId).addClass('d-none');
 });
 
-$(document).on('click', ".edit-comment", function (event) {
+$(document).on('click', ".save-comment", function (event) {
     let commentId = $(this).data('id');
     let commentClass = "comment-edit-"+commentId;
     let comment = CKEDITOR.instances[commentClass].getData();
@@ -330,7 +377,7 @@ $(document).on('click', ".edit-comment", function (event) {
             if (result.success) {
                 $(".comment-display-"+commentId).html(comment).removeClass('d-none');
                 $(".comment-edit-"+commentId).addClass('d-none');
-                $(".comment-edit-icon-"+commentId).addClass('d-none');
+                $(".comment-save-icon-"+commentId).addClass('d-none');
                 $(".comment-cancel-icon-"+commentId).addClass('d-none');
             }
         },
@@ -342,13 +389,24 @@ $(document).on('click', ".edit-comment", function (event) {
 
 $(document).on('mouseenter', ".comments__information", function () {
     $(this).find('.del-comment').removeClass('d-none');
+    $(this).find('.edit-comment').removeClass('d-none');
 });
 
 $(document).on('mouseleave', ".comments__information", function () {
     $(this).find('.del-comment').addClass('d-none');
+    $(this).find('.edit-comment').addClass('d-none');
 });
 
 CKEDITOR.replace( 'comment', {
     language: 'en',
-    height: '100px',
+    height: '150px',
+});
+
+CKEDITOR.replace( 'editDesc', {
+    language: 'en',
+    height: '150px',
+});
+
+$(document).on('click', '#btnCancel', function () {
+    CKEDITOR.instances.comment.setData('');
 });

@@ -1,12 +1,12 @@
-<?php namespace App\Queries;
+<?php
+
+namespace App\Queries;
 
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
 
-
 /**
- * Class ClientDataTable
- * @package App\Queries
+ * Class ClientDataTable.
  */
 class TimeEntryDataTable
 {

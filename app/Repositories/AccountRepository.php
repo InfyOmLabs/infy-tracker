@@ -10,9 +10,10 @@ use URL;
 class AccountRepository
 {
     /**
-     * @param  string  $username
-     * @param  string  $email
-     * @param  string  $activateCode
+     * @param string $username
+     * @param string $email
+     * @param string $activateCode
+     *
      * @throws Exception
      */
     public function sendConfirmEmail($username, $email, $activateCode)
@@ -26,7 +27,6 @@ class AccountRepository
                     $message->subject('Activate your account');
                     $message->to($email);
                 });
-
         } catch (\Exception $e) {
             throw new Exception('Account created, but unable to send email');
         }

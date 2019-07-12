@@ -12,10 +12,6 @@ $('#clients_table').DataTable({
             "className": 'text-center',
             "width": "5%"
         },
-        {
-            "targets": [2],
-            "width": "12%"
-        },
     ],
     columns: [
         {

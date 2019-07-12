@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Repositories\TaskRepository;
 use Illuminate\Http\Request;
-use App\Models\Comment;
 
 class CommentController extends AppBaseController
 {
-    /** @var  TaskRepository */
+    /** @var TaskRepository */
     private $taskRepository;
 
     public function __construct(TaskRepository $taskRepo)
@@ -18,32 +18,42 @@ class CommentController extends AppBaseController
 
     /**
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addComment(Request $request) {
+    public function addComment(Request $request)
+    {
         $comment = $this->taskRepository->addComment($request->all());
+
         return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteComment($id){
+    public function deleteComment($id)
+    {
         Comment::findOrFail($id)->delete();
+
         return $this->sendSuccess('Comment has been deleted successfully.');
     }
 
     /**
      * @param $id
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editComment($id, Request $request){
+    public function editComment($id, Request $request)
+    {
         $comment = Comment::findOrFail($id);
         $comment->comment = htmlentities($request->get('comment'));
         $comment->save();
+
         return $this->sendSuccess('Comment has been updated successfully.');
     }
 }

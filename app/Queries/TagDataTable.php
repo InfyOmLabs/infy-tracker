@@ -6,8 +6,7 @@ use App\Models\Tag;
 use Illuminate\Database\Query\Builder;
 
 /**
- * Class TagDataTable
- * @package App\DataTables
+ * Class TagDataTable.
  */
 class TagDataTable
 {

@@ -12,7 +12,9 @@ use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProjectController extends AppBaseController
 {
@@ -25,6 +27,13 @@ class ProjectController extends AppBaseController
     /** @var UserRepository */
     private $userRepository;
 
+    /**
+     * ProjectController constructor.
+     *
+     * @param ProjectRepository $projectRepo
+     * @param ClientRepository  $clientRepo
+     * @param UserRepository    $userRepository
+     */
     public function __construct(
         ProjectRepository $projectRepo,
         ClientRepository $clientRepo,
@@ -38,9 +47,11 @@ class ProjectController extends AppBaseController
     /**
      * Display a listing of the Project.
      *
-     * @param  Request $request
-     * @return \Illuminate\View\View
+     * @param Request $request
+     *
      * @throws Exception
+     *
+     * @return View
      */
     public function index(Request $request)
     {
@@ -59,7 +70,7 @@ class ProjectController extends AppBaseController
     /**
      * Store a newly created Project in storage.
      *
-     * @param  CreateProjectRequest $request
+     * @param CreateProjectRequest $request
      *
      * @return JsonResponse
      */
@@ -79,9 +90,9 @@ class ProjectController extends AppBaseController
     /**
      * Show the form for editing the specified Project.
      *
-     * @param  int $id
+     * @param int $id
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function edit($id)
     {
@@ -95,10 +106,10 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param  int $id
-     * @param  UpdateProjectRequest $request
+     * @param int                  $id
+     * @param UpdateProjectRequest $request
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function update($id, UpdateProjectRequest $request)
     {
@@ -116,10 +127,11 @@ class ProjectController extends AppBaseController
     /**
      * Remove the specified Project from storage.
      *
-     * @param  int $id
+     * @param int $id
+     *
+     * @throws Exception
      *
      * @return JsonResponse
-     * @throws Exception
      */
     public function destroy($id)
     {
@@ -137,5 +149,21 @@ class ProjectController extends AppBaseController
         $projects = $this->projectRepository->getMyProjects();
 
         return $this->sendResponse($projects, 'Project Retrieved successfully.');
+    }
+
+    /**
+     * @param int|array $projectIds
+     *
+     * @return JsonResponse
+     */
+    public function users($projectIds)
+    {
+        $projectIdsArr = [];
+        if ($projectIds != 0) {
+            $projectIdsArr = explode(',', $projectIds);
+        }
+        $users = $this->userRepository->getUserList($projectIdsArr);
+
+        return $this->sendResponse($users, 'Users Retrieved successfully.');
     }
 }

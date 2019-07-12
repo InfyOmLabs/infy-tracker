@@ -32,9 +32,11 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  \Exception  $exception
-     * @return void
+     * @param \Exception $exception
+     *
      * @throws Exception
+     *
+     * @return void
      */
     public function report(Exception $exception)
     {
@@ -44,8 +46,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $exception
+     *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
@@ -65,6 +68,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson() or $request->isXmlHttpRequest()) {
             if ($exception instanceof ValidationException) {
                 $validator = $exception->validator;
+
                 return Response::json([
                     'success' => false,
                     'message' => $validator->errors()->first(),

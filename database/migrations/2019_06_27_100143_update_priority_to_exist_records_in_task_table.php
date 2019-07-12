@@ -28,6 +28,5 @@ class UpdatePriorityToExistRecordsInTaskTable extends Migration
      */
     public function down()
     {
-
     }
 }
