@@ -1,7 +1,4 @@
 <?php
-
-namespace App\Traits;
-
 /*
  * Company: InfyOm Technologies, Copyright 2019, All Rights Reserved.
  *
