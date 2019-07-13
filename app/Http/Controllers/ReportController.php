@@ -172,9 +172,8 @@ class ReportController extends AppBaseController
      *
      * @param int $id
      *
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      * @throws Exception
-     *
-     * @return Response
      */
     public function destroy($id)
     {
@@ -190,6 +189,9 @@ class ReportController extends AppBaseController
         $this->reportRepository->deleteFilter($id);
 
         Flash::success('Report deleted successfully.');
+        if (request()->ajax()) {
+            return $this->sendSuccess('User deleted successfully.');
+        }
 
         return redirect(route('reports.index'));
     }
