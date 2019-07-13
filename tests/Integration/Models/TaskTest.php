@@ -5,13 +5,12 @@ namespace Tests\Integration\Models;
 use App\Models\Project;
 use App\Models\Task;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
+    use DatabaseTransactions;
 
     /** @test */
     public function get_due_date_in_date_string_format()

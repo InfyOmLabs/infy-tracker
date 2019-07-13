@@ -42,7 +42,7 @@ return [
 
         'sqlite_testing' => [
             'driver'                  => 'sqlite',
-            'database'                => ':memory:',
+            'database'                => database_path('testing.sqlite'),
             'prefix'                  => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
