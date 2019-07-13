@@ -49,7 +49,13 @@ class TaskController extends AppBaseController
                 'filter_user',
             ])))->editColumn('title', function (Task $task) {
                 return $task->prefix_task_number.' '.$task->title;
-            })->make(true);
+            })->filterColumn('title', function ($query, $search){
+                $query->where(function ($query) use($search){
+                    $query->where('title','like',"%$search%")
+                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",["%$search%"]);
+                });
+            })
+            ->make(true);
         }
         $taskData = $this->taskRepository->getTaskData();
 
