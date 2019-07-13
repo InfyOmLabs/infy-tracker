@@ -1,0 +1,80 @@
+@import "variables";
+
+%report-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.report__heading {
+    text-decoration: none !important;
+    padding: 10px 50px 10px 0;
+}
+
+.reports {
+
+    &__container {
+        max-width: 70%;
+        padding-bottom: 10px;
+        margin-bottom: 16px;
+        border-radius: 8px;
+    }
+
+    &__client-row {
+        @extend %report-row;
+        color: $blue;
+        background-color: #fff9f1;
+        padding: 10px;
+    }
+
+    &__project-row {
+        @extend %report-row;
+        color: $orange;
+        font-size: 16px;
+        font-weight: 500;
+        background-color: #f2fcff;
+        padding: 4px 10px;
+        margin-bottom: 1px;
+    }
+
+    &__developer-row {
+        @extend %report-row;
+        font-size: 15px;
+        color: #3c3c3c;
+        padding: 4px 10px;
+        background: #f7f7f7;
+    }
+
+    &__task-row {
+        @extend %report-row;
+        color: $gray;
+        padding-right: 10px;
+
+        &:hover {
+            font-weight: bold;
+        }
+    }
+
+    &__project {
+        &-header {
+            margin-left: 3%;
+        }
+    }
+
+    &__developer-task {
+        margin-bottom: 8px;
+    }
+
+    &__developer {
+        margin-bottom: 4px;
+
+        &-header {
+            margin-left: 6%;
+        }
+    }
+
+    &__task {
+        &-header {
+            margin-left: 9%;
+        }
+    }
+}

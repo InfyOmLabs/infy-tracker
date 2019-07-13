@@ -3,8 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 
 /**
  * Class ProjectRepository.
@@ -64,10 +65,18 @@ class ProjectRepository extends BaseRepository
     /**
      * get clients.
      *
-     * @return \Illuminate\Support\Collection
+     * @param int|null $clientId
+     *
+     * @return Collection
      */
-    public function getProjectsList()
+    public function getProjectsList($clientId = null)
     {
-        return Project::orderBy('name')->pluck('name', 'id');
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name');
+        if (!is_null($clientId)) {
+            $query = $query->whereClientId($clientId);
+        }
+
+        return $query->pluck('name', 'id');
     }
 }

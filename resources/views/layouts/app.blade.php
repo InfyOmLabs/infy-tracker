@@ -29,7 +29,7 @@
     </button>
     <a class="navbar-brand" href="#">
         <img class="navbar-brand-full" src="{{asset('assets/img/logo-red-black.png')}}" width="50px"
-             alt="Infyom Logo">&nbsp;&nbsp;<span>InfyOm</span>
+             alt="Infyom Logo">&nbsp;&nbsp;<span class="navbar-brand-full">InfyOm</span>
         <img class="navbar-brand-minimized" src="{{asset('assets/img/logo-red-black.png')}}" width="50px"
              alt="InfyOm Logo">
     </a>
@@ -105,6 +105,8 @@
     let closeWatchImg = "{{asset('assets/img/close.png')}}";
     let stopWatchImg = "{{asset('assets/img/stopwatch.png')}}";
     let usersUrl = "{{ url('users') }}/";
+    let clientsUrl = "{{ url('clients') }}/";
+    let projectsUrl = "{{ url('projects') }}/";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

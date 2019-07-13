@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $due_date
  * @property int|null $created_by
  * @property int|null $deleted_by
+ * @property string $time_entries_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -65,24 +66,12 @@ class Task extends Model
 
     const STATUS_ACTIVE = 0;
     const STATUS_COMPLETED = 1;
-    const STATUS_STARTED = 2;
-    const STATUS_IN_QA = 3;
-    const STATUS_FINISHED = 4;
-    const STATUS_INVALID = 5;
-    const STATUS_DISCUSS = 6;
-    const STATUS_REJECTED = 7;
-    const STATUS_ALL = 8;
+    const STATUS_ALL = 2;
 
     const STATUS_ARR = [
         self::STATUS_ALL       => 'All',
-        self::STATUS_ACTIVE    => 'Not Started',
+        self::STATUS_ACTIVE    => 'Pending',
         self::STATUS_COMPLETED => 'Accepted',
-        self::STATUS_STARTED   => 'Started',
-        self::STATUS_IN_QA     => 'In QA',
-        self::STATUS_FINISHED  => 'Finished',
-        self::STATUS_INVALID   => 'Invalid',
-        self::STATUS_DISCUSS   => 'Discuss/Block',
-        self::STATUS_REJECTED  => 'Rejected',
     ];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';

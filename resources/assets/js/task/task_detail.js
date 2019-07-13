@@ -64,10 +64,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $('#editDesc').val(task.description);
                 $('#editDueDate').val(task.due_date);
                 $('#editProjectId').val(task.project.id).trigger("change");
-                if (task.status == 1) {
-                    $('#editStatus').prop('checked', true);
-                }
-
+                $('#editStatus').val(task.status);
                 var tagsIds = [];
                 var userIds = [];
                 $(task.tags).each(function (i, e) {
@@ -147,12 +144,14 @@ Dropzone.options.dropzone = {
         thisDropzone = this;
         $.get(taskUrl+'get-attachments/'+taskId, function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size };
+                let mockFile = { name: value.name, size: value.size, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
                 thisDropzone.emit("complete", mockFile);
                 thisDropzone.emit("thumbnail",mockFile, value.url);
+                $(".dz-remove").eq(key).attr("data-file-id", value.id);
+                $(".dz-remove").eq(key).attr("data-file-url", value.url);
             });
         });
         this.on("thumbnail", function(file, dataUrl) {
@@ -164,8 +163,7 @@ Dropzone.options.dropzone = {
             let previewEle = '';
 
             if($.inArray( ext, [ "jpg", "jpeg", "png"] ) > -1){
-                let fileUrl = attachmentUrl + file.name;
-                previewEle = '<a class="'+fileName+'" data-fancybox="gallery" href="'+fileUrl+'" data-toggle="lightbox" data-gallery="example-gallery"></a>';
+                previewEle = '<a class="'+fileName+'" data-fancybox="gallery" href="'+dataUrl+'" data-toggle="lightbox" data-gallery="example-gallery"></a>';
                 $(".previewEle").append(previewEle);
             }
 
@@ -176,8 +174,7 @@ Dropzone.options.dropzone = {
                     let onlyFileName = fileName.split('.')[0];
                     $("." + onlyFileName).trigger('click');
                 } else {
-                    let fileUrl = attachmentUrl + fileName;
-                    window.open(fileUrl, '_blank');
+                    window.open(dataUrl, '_blank');
                 }
             });
         });
@@ -200,19 +197,13 @@ Dropzone.options.dropzone = {
     },
     removedfile: function(file)
     {
-        let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let name = '';
-        if(typeof file.upload != "undefined" ){
-            name = fileuploded.innerHTML;
-        }else {
-            name = file.name;
-        }
+        let attachmentId = file.previewElement.querySelector("[data-file-id]").getAttribute('data-file-id');
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + taskId,
+            url: taskUrl + 'delete-attachment/' + attachmentId,
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);
@@ -224,8 +215,9 @@ Dropzone.options.dropzone = {
     },
     success: function(file, response)
     {
+        let attachment =  response.data;
         let fileuploded = file.previewElement.querySelector("[data-dz-name]");
-        let fileName = response.data.fileName;
+        let fileName = attachment.file;
         let fileNameExtArr = fileName.split('.');
         let newFileName = fileNameExtArr[0];
         let newFileExt = fileNameExtArr[1];
@@ -233,8 +225,10 @@ Dropzone.options.dropzone = {
         let fileUrl = attachmentUrl + fileName;
         fileuploded.innerHTML = fileName;
 
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-id', attachment.id);
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-url', attachment.file_url);
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
-            $(".previewEle").find('.' + prevFileName).attr('href', fileUrl);
+            $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
         }
     },

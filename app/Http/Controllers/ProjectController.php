@@ -12,7 +12,9 @@ use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProjectController extends AppBaseController
 {
@@ -25,6 +27,13 @@ class ProjectController extends AppBaseController
     /** @var UserRepository */
     private $userRepository;
 
+    /**
+     * ProjectController constructor.
+     *
+     * @param ProjectRepository $projectRepo
+     * @param ClientRepository  $clientRepo
+     * @param UserRepository    $userRepository
+     */
     public function __construct(
         ProjectRepository $projectRepo,
         ClientRepository $clientRepo,
@@ -42,7 +51,7 @@ class ProjectController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function index(Request $request)
     {
@@ -83,7 +92,7 @@ class ProjectController extends AppBaseController
      *
      * @param int $id
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function edit($id)
     {
@@ -100,7 +109,7 @@ class ProjectController extends AppBaseController
      * @param int                  $id
      * @param UpdateProjectRequest $request
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
     public function update($id, UpdateProjectRequest $request)
     {
@@ -140,5 +149,21 @@ class ProjectController extends AppBaseController
         $projects = $this->projectRepository->getMyProjects();
 
         return $this->sendResponse($projects, 'Project Retrieved successfully.');
+    }
+
+    /**
+     * @param int|array $projectIds
+     *
+     * @return JsonResponse
+     */
+    public function users($projectIds)
+    {
+        $projectIdsArr = [];
+        if ($projectIds != 0) {
+            $projectIdsArr = explode(',', $projectIds);
+        }
+        $users = $this->userRepository->getUserList($projectIdsArr);
+
+        return $this->sendResponse($users, 'Users Retrieved successfully.');
     }
 }
