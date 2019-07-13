@@ -18,7 +18,7 @@ class TimeEntryDataTable
     public function get($input)
     {
         /** @var TimeEntry $query */
-        $query = TimeEntry::with(['task', 'user', 'activityType'])->select('time_entries.*');
+        $query = TimeEntry::with(['task.project', 'user', 'activityType'])->select('time_entries.*');
 
         $query->when(isset($input['filter_activity']) && !empty($input['filter_activity']),
             function (Builder $q) use ($input) {

@@ -57,8 +57,13 @@ let tbl = $('#timeEntryTable').DataTable({
             name: 'user.name'
         },
         {
-            data: 'task.title',
-            name: 'task.title',
+            data: function (row) {
+                let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
+                let url = taskUrl + taskPrefix;
+                
+                return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
+            },
+            name: 'title'
         },
         {
             data: 'activity_type.name',

@@ -51,6 +51,7 @@
 
 @section('scripts')
     <script>
+        let taskUrl = '{{url('tasks')}}/';
         let timeEntryUrl = "{{url('timeEntries')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
     </script>
