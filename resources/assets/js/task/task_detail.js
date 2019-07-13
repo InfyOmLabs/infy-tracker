@@ -230,6 +230,10 @@ Dropzone.options.dropzone = {
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
+        } else {
+            file.previewElement.addEventListener("click", function() {
+                window.open(attachment.file_url, '_blank');
+            });
         }
     },
     error: function(file, response)
