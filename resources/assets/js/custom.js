@@ -146,3 +146,12 @@ $(document).on('keydown', function (e) {
         $('.modal').modal('hide');
     }
 });
+window.displaySuccessMessage = function (message) {
+    $.toast({
+        heading: 'Success',
+        text: message,
+        showHideTransition: 'slide',
+        icon: 'success',
+        position: 'top-right',
+    });
+};
