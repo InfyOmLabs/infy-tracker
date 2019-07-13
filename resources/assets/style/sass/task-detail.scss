@@ -206,3 +206,24 @@ $priority: ("highest": #FF0000, "high": #FF3333, "medium": #FF8000, "low": #3366
         max-height: 92vh;
     }
 }
+
+.dropzone.dz-clickable * {
+  cursor: pointer !important;
+}
+
+.dropzone {
+
+  .dz-image {
+    img {
+      cursor: pointer !important;
+    }
+  }
+
+  .dz-image {
+    background: unset !important;
+  }
+}
+
+.dz-filename {
+  opacity: 0;
+}

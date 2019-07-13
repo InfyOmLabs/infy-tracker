@@ -71,7 +71,7 @@ class Task extends Model
     const STATUS_ARR = [
         self::STATUS_ALL       => 'All',
         self::STATUS_ACTIVE    => 'Pending',
-        self::STATUS_COMPLETED => 'Accepted',
+        self::STATUS_COMPLETED => 'Completed',
     ];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';
