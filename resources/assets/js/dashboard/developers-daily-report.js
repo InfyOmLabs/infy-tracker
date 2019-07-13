@@ -83,27 +83,24 @@ window.prepareDeveloperWorkReport = function (result) {
                     scaleLabel: {
                         display: true,
                         labelString: 'Hours'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function (label, index, labels) {
+                           return getTotalHours(label);
+                        }
                     }
                 }]
             }
         }
     });
 };
-window.convertToTimeFormat = function (total) {
-    let hours = 0;
-    let minutes = 0;
-    let totalArr = total.toString().split('.');
-    let totalHr = parseInt(totalArr[0]);
-    if (typeof totalArr[1] !== 'undefined') {
-        hours = parseInt(totalArr[1] / 60);
-        minutes = totalArr[1] % 60;
-    }
-    let format = null;
-    if (totalHr > 0) {
-        hours += totalHr;
-        format = hours + 'h ' + minutes + 'm';
-    } else {
-        format = minutes + 'm';
-    }
-    return format;
+window.convertToTimeFormat = function (totalMinutes) {
+    let hours = Math.floor(totalMinutes / 60);
+    let minutes = Math.floor(totalMinutes % 60);
+    return hours + 'h' + " " + minutes + 'm';
+};
+window.getTotalHours = function (totalMinutes) {
+    let hours = Math.floor(totalMinutes / 60);
+    return hours;
 };

@@ -125,7 +125,7 @@ class DashboardRepository
 
             $data['result'][] = (object) [
                 'name'        => ucfirst($user->name),
-                'total_hours' => round($totalDuration / 60, 2),
+                'total_hours' => $totalDuration,
                 'drilldown'   => $totalDuration === 0 ? null : ucfirst($user->name),
             ];
         }
