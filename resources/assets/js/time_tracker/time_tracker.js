@@ -203,8 +203,14 @@ function loadTimerData(projectId) {
             $('#tmTaskId').find('option').remove().end().append('<option value="">Select Task</option>');
             $('#tmTaskId').val("").trigger('change');
 
+            let drpTaskId = localStorage.getItem('task_id');
+            let drpActivityId = localStorage.getItem('activity_id');
+            let isTaskEmpty = true;
             $(result.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
+                if (e.id == drpTaskId) {
+                    isTaskEmpty = false;
+                }
             });
 
             $('#tmActivityId').find('option').remove().end().append('<option value="">Select Activity</option>');
@@ -216,14 +222,18 @@ function loadTimerData(projectId) {
             $("#tmTaskId").removeAttr('disabled');
             // if timer is running then set values as it is
             if (localStorage.getItem('clockRunning') !== null) {
-                $('#tmActivityId').val(localStorage.getItem('activity_id')).trigger("change");
-                $('#tmTaskId').val(localStorage.getItem('task_id')).trigger("change");
+                $('#tmActivityId').val(drpActivityId).trigger("change");
+                $('#tmTaskId').val(drpTaskId).trigger("change");
 
                 $('#tmTaskId').attr('disabled', true);
                 $('#tmActivityId').attr('disabled', true);
             } else {
-                $('#tmActivityId').val(localStorage.getItem('activity_id')).trigger("change");
-                $('#tmTaskId').val(localStorage.getItem('task_id')).trigger("change");
+                $('#tmActivityId').val(drpActivityId).trigger("change");
+                $('#tmTaskId').val(drpTaskId).trigger("change");
+            }
+
+            if (isTaskEmpty) {
+                $('#tmTaskId').val($('#tmTaskId option:first').val()).trigger("change");
             }
         }
     });
