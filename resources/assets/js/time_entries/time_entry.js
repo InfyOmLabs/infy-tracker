@@ -17,6 +17,8 @@ $('#activityTypeId,#editActivityTypeId').select2({
     placeholder: "Select Activity Type"
 });
 
+let isEdit = false;
+let editTaskId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
@@ -55,8 +57,13 @@ let tbl = $('#timeEntryTable').DataTable({
             name: 'user.name'
         },
         {
-            data: 'task.title',
-            name: 'task.title',
+            data: function (row) {
+                let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
+                let url = taskUrl + taskPrefix;
+                
+                return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
+            },
+            name: 'title'
         },
         {
             data: 'activity_type.name',
@@ -128,6 +135,7 @@ $('#timeEntryAddForm').submit(function (event) {
 });
 
 $('#timeEntryAddModal').on('hidden.bs.modal', function () {
+    isEdit = false;
     $('#taskId').val(null).trigger("change");
     $('#activityTypeId').val(null).trigger("change");
     $('#duration').prop('disabled', false);
@@ -159,7 +167,7 @@ $('#dvDuration').on("click", function () {
     $('#duration').removeAttr('disabled');
 });
 
-$('#duration').on("keyup",function () {
+$('#duration').on("keyup", function () {
     $('#startTime').val(null);
     $('#endTime').val(null);
 });
@@ -187,7 +195,7 @@ $('#dvEditDuration').on("click", function () {
     $('#editDuration').removeAttr('disabled');
 });
 
-$('#editDuration').on("keyup",function () {
+$('#editDuration').on("keyup", function () {
     $('#editStartTime').val(null);
     $('#editEndTime').val(null);
 });
@@ -252,6 +260,7 @@ window.renderTimeEntry = function (id) {
         success: function (result) {
             if (result.success) {
                 let timeEntry = result.data;
+                editTaskId = timeEntry.task_id;
                 $('#editTimeProjectId').val(timeEntry.project_id).trigger('change');
                 $('#entryId').val(timeEntry.id);
                 $('#editTaskId').val(timeEntry.task_id).trigger("change");
@@ -279,12 +288,15 @@ $(document).on('click', '.btn-delete', function (event) {
     deleteItem(timeEntryUrl + timeId, '#timeEntryTable', 'Time Entry');
 });
 
-window.getTasksByproject = function (projectId, taskId, selectedId, errorBoxId) {
+window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) {
     if (!(projectId > 0)) {
         return false;
     }
+    let taskURL = getTaskUrl + projectId;
+    taskURL = (isEdit) ? taskURL + '?task_id='+editTaskId : taskURL;
+
     $.ajax({
-        url: getTaskUrl + projectId,
+        url: taskURL,
         type: 'get',
         async: false,
         success: function (result) {
@@ -302,7 +314,7 @@ window.getTasksByproject = function (projectId, taskId, selectedId, errorBoxId) 
                 }
             });
             $(taskId).html(options);
-            if(selectedId > 0){
+            if (selectedId > 0) {
                 $(taskId).val(selectedId).trigger("change");
             }
         },
@@ -315,18 +327,19 @@ window.getTasksByproject = function (projectId, taskId, selectedId, errorBoxId) 
 $("#timeProjectId").on('change', function () {
     $("#taskId").select2("val", "");
     var projectId = $(this).val();
-    getTasksByproject(projectId, '#taskId', 0, '#tmValidationErrorsBox');
+    getTasksByProject(projectId, '#taskId', 0, '#tmValidationErrorsBox');
 });
 
 $("#editTimeProjectId").on('change', function () {
     $("#editTaskId").select2("val", "");
     var projectId = $(this).val();
-    getTasksByproject(projectId, '#editTaskId', 0, '#teEditValidationErrorsBox');
+    isEdit = true;
+    getTasksByProject(projectId, '#editTaskId', 0, '#teEditValidationErrorsBox');
 });
 
 $("#new_entry").click(function () {
     var tracketProjectId = localStorage.getItem('project_id');
     $("#timeProjectId").val(tracketProjectId);
     $("#timeProjectId").trigger('change');
-    getTasksByproject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox');
+    getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox');
 });

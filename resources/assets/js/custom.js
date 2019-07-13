@@ -124,7 +124,7 @@ window.onload = function () {
     stopLoader();
 };
 
-window.format = function (dateTime, format = 'DD-MMMM-YYYY') {
+window.format = function (dateTime, format = 'DD-MMM-YYYY') {
     return moment(dateTime).format(format);
 };
 
@@ -146,3 +146,12 @@ $(document).on('keydown', function (e) {
         $('.modal').modal('hide');
     }
 });
+window.displaySuccessMessage = function (message) {
+    $.toast({
+        heading: 'Success',
+        text: message,
+        showHideTransition: 'slide',
+        icon: 'success',
+        position: 'top-right',
+    });
+};

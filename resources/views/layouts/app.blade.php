@@ -29,7 +29,7 @@
     </button>
     <a class="navbar-brand" href="#">
         <img class="navbar-brand-full" src="{{asset('assets/img/logo-red-black.png')}}" width="50px"
-             alt="Infyom Logo">&nbsp;&nbsp;<span>InfyOm</span>
+             alt="Infyom Logo">&nbsp;&nbsp;<span class="navbar-brand-full">InfyOm</span>
         <img class="navbar-brand-minimized" src="{{asset('assets/img/logo-red-black.png')}}" width="50px"
              alt="InfyOm Logo">
     </a>

@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\ImageTrait;
 use Illuminate\Database\Eloquent\Model;
+use Storage;
 
 /**
  * App\Models\TaskAttachment.
  *
  * @property int $id
  * @property int $task_id
- * @property \Illuminate\Contracts\Routing\UrlGenerator|string $file
+ * @property string|null $file
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $file_path
+ * @property-read mixed $file_url
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newQuery()
@@ -25,24 +29,36 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TaskAttachment extends Model
 {
+    use ImageTrait;
+
+    const PATH = 'attachments';
+
     public $table = 'task_attachments';
+    protected $appends = ['file_url'];
 
     public $fillable = [
         'task_id',
         'file',
     ];
 
-    /**
-     * @param $value
-     *
-     * @return \Illuminate\Contracts\Routing\UrlGenerator|string
-     */
-    public function getFileAttribute($value)
+    public function getFilePathAttribute()
     {
-        if (isset($value) && !empty($value)) {
-            return url('attachments').'/'.$value;
-        }
+        return Storage::path('attachments'.DIRECTORY_SEPARATOR.$this->file);
+    }
 
-        return url('assets').'/img/default_image.png';
+    public function getFileUrlAttribute()
+    {
+        return $this->imageUrl(self::PATH.DIRECTORY_SEPARATOR.$this->file);
+    }
+
+    /**
+     * @return bool
+     */
+    public function deleteAttachment()
+    {
+        $original = $this->getOriginal('file');
+        if (!empty($original)) {
+            return $this->deleteImage(self::PATH.DIRECTORY_SEPARATOR.$original);
+        }
     }
 }

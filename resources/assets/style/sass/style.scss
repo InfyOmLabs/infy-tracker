@@ -496,6 +496,7 @@ table.dataTable {
 
 .role-checkbox__label {
     vertical-align: bottom;
+    font-weight: bold;
 }
 
 .assignee__avatar {
@@ -524,3 +525,12 @@ table.dataTable {
         background-color: #f0f3f5 !important;
     }
 }
+
+.animated {
+    &.fadeIn {
+        .alert {
+            margin-top: 10px;
+        }
+    }
+}
+

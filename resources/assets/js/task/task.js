@@ -82,7 +82,7 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [6],
             "orderable": false,
             "className": 'text-center',
             "width": "9%"
@@ -94,16 +94,16 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [3],
+            "targets": [2],
             "orderable": false,
         },
         {
-            "targets": [5, 4],
+            "targets": [3, 4],
             "width": "10%",
             "className": 'text-center',
         },
         {
-            "targets": [6],
+            "targets": [5],
             "className": 'text-center',
         },
     ],
@@ -122,15 +122,6 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                if(typeof taskStatus[row.status] == 'undefined')
-                    return '';
-                else
-                    return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
-                },
-            name: 'status'
-        },
-        {
-            data: function (row) {
                 let imgStr = '';
                 $(row.task_assignee).each(function (i, e) {
                     imgStr += '<img class="assignee__avatar" src="'+e.img_avatar+'" data-toggle="tooltip" title="'+e.name+'">';
@@ -144,7 +135,10 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                return '<span>' + format(row.due_date) + '</span>';
+                if(row.due_date != null && row.due_date != '' && typeof row.due_date != 'undefined'){
+                    return '<span>' + format(row.due_date) + '</span>';
+                }
+                return row.due_date;
             },
             name: 'due_date'
         },
@@ -292,6 +286,7 @@ $('#addNewForm').submit(function (event) {
         data: formdata,
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
             }
@@ -323,6 +318,7 @@ $('#editForm').submit(function (event) {
         data: formdata,
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
             }
@@ -436,7 +432,7 @@ $(document).on('click', '.entry-model', function (event) {
     let taskId = $(event.currentTarget).data('id');
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
-    getTasksByproject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+    getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
 });
 
 CKEDITOR.replace( 'description', {
