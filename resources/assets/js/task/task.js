@@ -181,7 +181,10 @@ var tbl = $('#task_table').DataTable({
 });
 
 $('#task_table').on('draw.dt', function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    $(".tooltip").tooltip("hide");
+    setTimeout(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 });
 
 // open edit user model
