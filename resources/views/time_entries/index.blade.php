@@ -17,11 +17,11 @@
                 <h3>Time Entries</h3>
                 <div class="filter-container">
                     <div class="mr-2">
-                        <label for="projects" class="lbl-block"><b>Assign To</b></label>
+                        <label for="projects" class="lbl-block"><b>User</b></label>
                         {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
                     <div class="mr-2">
-                        <label for="projects" class="lbl-block"><b>Activity</b></label>
+                        <label for="projects" class="lbl-block"><b>Activity Type</b></label>
                         {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
                     <a href="#" class="btn btn-primary filter-container__btn" id="new_entry" data-toggle="modal"
