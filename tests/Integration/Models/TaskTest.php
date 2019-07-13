@@ -27,7 +27,7 @@ class TaskTest extends TestCase
         $project = factory(Project::class)->create(['prefix' => 'ToDo']);
 
         factory(Task::class)->create([
-            'project_id' => $project->id,
+            'project_id'  => $project->id,
             'task_number' => 1,
         ]);
 

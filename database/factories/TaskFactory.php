@@ -6,14 +6,13 @@ use App\Models\Task;
 use Faker\Generator as Faker;
 
 $factory->define(Task::class, function (Faker $faker) {
-
     $project = factory(\App\Models\Project::class)->create();
 
     return [
-        'title' => $faker->sentence,
+        'title'       => $faker->sentence,
         'description' => $faker->sentence,
-        'project_id' => $project->id,
-        'due_date' => $faker->dateTime,
+        'project_id'  => $project->id,
+        'due_date'    => $faker->dateTime,
         'task_number' => $faker->randomDigit,
     ];
 });

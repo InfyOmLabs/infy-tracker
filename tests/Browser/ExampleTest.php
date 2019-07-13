@@ -2,9 +2,9 @@
 
 namespace Tests\Browser;
 
-use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
 
 class ExampleTest extends DuskTestCase
 {
@@ -13,8 +13,9 @@ class ExampleTest extends DuskTestCase
     /**
      * A basic browser test example.
      *
-     * @return void
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testBasicExample()
     {
