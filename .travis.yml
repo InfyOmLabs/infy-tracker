@@ -4,5 +4,5 @@ php:
   - '7.2'
   - '7.3'
 sudo: false
-install: travis_retry composer install --no-interaction --prefer-dist --no-dev
+install: travis_retry composer install --no-interaction --prefer-dist
 script: vendor/bin/phpunit --verbose
