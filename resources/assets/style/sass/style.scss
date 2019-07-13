@@ -200,6 +200,11 @@ div.dataTables_wrapper {
     }
 }
 
+.icheckbox_flat-blue,
+.icheckbox_flat-blue .checked {
+    background-image: url("../../img/blue-custom.png") !important;
+}
+
 .featured_btn {
     width: 5px;
     height: 5px;
