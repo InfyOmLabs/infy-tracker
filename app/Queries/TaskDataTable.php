@@ -20,7 +20,7 @@ class TaskDataTable
     {
         $loginUserProjects = Auth::user()->projects()->get()->pluck('name', 'id')->toArray();
         $query = Task::whereIn('project_id', array_keys($loginUserProjects))
-            ->leftJoin('projects as p','p.id', '=', 'tasks.project_id')
+            ->leftJoin('projects as p', 'p.id', '=', 'tasks.project_id')
             ->with(['project', 'taskAssignee', 'createdUser'])
             ->select(['tasks.*']);
 
