@@ -60,6 +60,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read mixed $prefix_task_number
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task ofProject($projectId)
  */
 class Task extends Model
@@ -196,7 +197,7 @@ class Task extends Model
 
     /**
      * @param Builder $query
-     * @param int $projectId
+     * @param int     $projectId
      *
      * @return Builder
      */

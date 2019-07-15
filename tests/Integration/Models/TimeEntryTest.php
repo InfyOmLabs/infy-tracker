@@ -4,7 +4,7 @@
  * Author: Vishal Ribdiya
  * Email: vishal.ribdiya@infyom.com
  * Date: 15-07-2019
- * Time: 03:32 PM
+ * Time: 03:32 PM.
  */
 
 namespace Tests\Integration\Models;
@@ -13,6 +13,7 @@ use App\Models\TimeEntry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+
 class TimeEntryTest extends TestCase
 {
     use DatabaseTransactions;
