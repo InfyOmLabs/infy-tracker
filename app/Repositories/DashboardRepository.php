@@ -59,7 +59,7 @@ class DashboardRepository
                 $totalRecords = $totalRecords + $duration;
                 $item['backgroundColor'] = getColor(0.7);
             }
-            $data[] = (object)$item;
+            $data[] = (object) $item;
             $index++;
         }
 
@@ -72,7 +72,7 @@ class DashboardRepository
         $result['projects'] = array_keys($projects);
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
-        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y') . ' - ' . Carbon::parse($input['end_date'])->format('d M, Y');
+        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '. Carbon::parse($input['end_date'])->format('d M, Y');
 
         return $result;
     }
@@ -100,7 +100,7 @@ class DashboardRepository
             }
 
             $data['result'][] = (object)[
-                'name' => ucfirst($user->name),
+                'name'        => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
             $color = getColorCode();
@@ -111,7 +111,7 @@ class DashboardRepository
         foreach ($data['result'] as $item) {
             $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
-        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
+        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
         return $data;
@@ -144,9 +144,9 @@ class DashboardRepository
             $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
         }
         $data = [
-            'dateArr' => $dateArr,
+            'dateArr'   => $dateArr,
             'startDate' => $subStartDate,
-            'endDate' => $subEndDate,
+            'endDate'   => $subEndDate,
         ];
 
         return $data;
