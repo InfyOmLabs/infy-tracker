@@ -145,7 +145,7 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param int $id
+     * @param int               $id
      * @param UpdateTaskRequest $request
      *
      * @throws Exception

@@ -46,6 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withoutTrashed()
  * @mixin \Eloquent
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
  */
 class TimeEntry extends Model
@@ -120,7 +121,7 @@ class TimeEntry extends Model
 
     /**
      * @param Builder $query
-     * @param int $userId
+     * @param int     $userId
      *
      * @return Builder
      */
