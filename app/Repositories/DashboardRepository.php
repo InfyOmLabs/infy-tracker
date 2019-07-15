@@ -55,7 +55,7 @@ class DashboardRepository
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
                 $duration = isset($entry[$date]) ? $entry[$date] : 0;
-                $item['data'][] = $duration;
+                $item['data'][] = round($duration/60,2);
                 $totalRecords = $totalRecords + $duration;
             }
             $data[] = (object) $item;

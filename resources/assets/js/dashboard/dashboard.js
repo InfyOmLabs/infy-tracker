@@ -97,12 +97,12 @@ window.prepareUserWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': ';
                         }
-                        result= roundToQuarterHour(tooltipItem.yLabel);
+                        result = roundToQuarterHour(tooltipItem.yLabel);
                         return label + result;
                     }
                 }
@@ -119,29 +119,22 @@ window.prepareUserWorkReport = function (result) {
                         display: true,
                         labelString: 'Hours'
                     },
-                    ticks: {
-                        min: 0,
-                        callback: function(value, index, values) {
-                            if (value > 60) {
-                                return parseInt(value / 60);
-                            } else {
-                                return value
-                            }
-                        }
-                    }
                 }]
             }
         }
     });
 };
-window.roundToQuarterHour = function (totalMinutes) {
-    let hours = parseInt(totalMinutes / 60);
-    let minutes = totalMinutes % 60;
-    let format = null;
-    if (hours > 0) {
-        format = hours + 'h ' + minutes + 'm';
-    } else {
-        format = minutes + 'm';
+
+window.roundToQuarterHour = function (duration) {
+    const totalTime = duration.toString().split('.');
+    const hours = parseInt(totalTime[0]);
+    const minutes = Math.floor((duration * 60)) - Math.floor((hours * 60));
+    if (hours === 0) {
+        return minutes + 'min';
     }
-    return format;
+
+    if (minutes > 0) {
+        return hours + 'hr ' + minutes + 'min';
+    }
+    return hours + 'hr';
 };
