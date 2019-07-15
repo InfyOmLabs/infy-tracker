@@ -68,6 +68,7 @@ window.loadUserWorkReport = function (startDate, endDate, userId) {
 window.prepareUserWorkReport = function (result) {
     $('#daily-work-report').html('');
     let data = result.data;
+    console.log(result);
     if (data.totalRecords === 0) {
         $('#work-report-container').html('');
         $('#work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
@@ -80,7 +81,6 @@ window.prepareUserWorkReport = function (result) {
     let barChartData = {
         labels: data.date,
         datasets: data.data
-
     };
     let ctx = document.getElementById('daily-work-report').getContext('2d');
     ctx.canvas.style.height = '400px';
@@ -110,6 +110,7 @@ window.prepareUserWorkReport = function (result) {
             responsive: false,
             maintainAspectRatio: false,
             scales: {
+
                 xAxes: [{
                     stacked: true,
                 }],

@@ -67,7 +67,7 @@ window.prepareDeveloperWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': ';
@@ -79,28 +79,26 @@ window.prepareDeveloperWorkReport = function (result) {
             },
             scales: {
                 yAxes: [{
-                    stacked: true,
                     scaleLabel: {
                         display: true,
                         labelString: 'Hours'
                     },
-                    ticks: {
-                        beginAtZero: true,
-                        callback: function (label, index, labels) {
-                           return getTotalHours(label);
-                        }
-                    }
                 }]
             }
         }
     });
 };
-window.convertToTimeFormat = function (totalMinutes) {
-    let hours = Math.floor(totalMinutes / 60);
-    let minutes = Math.floor(totalMinutes % 60);
-    return hours + 'h' + " " + minutes + 'm';
+window.convertToTimeFormat = function (duration) {
+    const totalTime = duration.toString().split('.');
+    const hours = parseInt(totalTime[0]);
+    const minutes = Math.floor((duration * 60)) - Math.floor((hours * 60));
+    if (hours === 0) {
+        return minutes + 'min';
+    }
+
+    if (minutes > 0) {
+        return hours + 'hr ' + minutes + 'min';
+    }
+    return hours + 'hr';
 };
-window.getTotalHours = function (totalMinutes) {
-    let hours = Math.floor(totalMinutes / 60);
-    return hours;
-};
+
