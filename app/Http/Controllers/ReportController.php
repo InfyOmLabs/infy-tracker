@@ -190,7 +190,7 @@ class ReportController extends AppBaseController
 
         Flash::success('Report deleted successfully.');
         if (request()->ajax()) {
-            return $this->sendSuccess('User deleted successfully.');
+            return $this->sendSuccess('Report deleted successfully.');
         }
 
         return redirect(route('reports.index'));
