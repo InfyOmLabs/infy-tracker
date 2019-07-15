@@ -74,7 +74,7 @@ class TimeEntryRepository extends BaseRepository
     public function myLastTask()
     {
         /** @var TimeEntry $timeEntry */
-        $timeEntry = TimeEntry::whereUserId(getLoggedInUserId())->latest()->first();
+        $timeEntry = TimeEntry::ofUser(getLoggedInUserId())->latest()->first();
         if (empty($timeEntry)) {
             return;
         }
@@ -95,7 +95,7 @@ class TimeEntryRepository extends BaseRepository
     public function getTasksByProject($projectId, $taskId = null)
     {
         /** @var Builder $query */
-        $query = Task::whereProjectId($projectId)
+        $query = Task::ofProject($projectId)
             ->where('status', '=', Task::STATUS_ACTIVE)
             ->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());

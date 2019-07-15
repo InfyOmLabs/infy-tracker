@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -45,6 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
  */
 class TimeEntry extends Model
 {
@@ -114,5 +116,16 @@ class TimeEntry extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * @param Builder $query
+     * @param int $userId
+     *
+     * @return Builder
+     */
+    public function scopeOfUser(Builder $query, $userId)
+    {
+        return $query->where('user_id', $userId);
     }
 }

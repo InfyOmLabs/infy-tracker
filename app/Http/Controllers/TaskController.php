@@ -108,7 +108,16 @@ class TaskController extends AppBaseController
             return redirect()->back();
         }
         /** @var Task $task */
-        $task = Task::whereTaskNumber($taskNumber)->whereProjectId($project->id)->with(['tags', 'project', 'taskAssignee', 'attachments', 'comments', 'comments.createdUser', 'timeEntries'])->first();
+        $task = Task::ofProject($project->id)->whereTaskNumber($taskNumber)
+            ->with([
+                'tags',
+                'project',
+                'taskAssignee',
+                'attachments',
+                'comments',
+                'comments.createdUser',
+                'timeEntries',
+            ])->first();
         if (empty($task)) {
             return redirect()->back();
         }
@@ -136,7 +145,7 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param int               $id
+     * @param int $id
      * @param UpdateTaskRequest $request
      *
      * @throws Exception
