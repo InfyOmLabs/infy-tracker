@@ -95,3 +95,48 @@ function loadUsers(projectIds) {
         }
     });
 }
+// open delete confirmation model
+$(document).on('click', '.delete-btn', function (event) {
+    let reportId = $(event.currentTarget).data('id');
+    deleteReport(reportUrl + reportId);
+});
+window.deleteReport = function (url) {
+    swal({
+        title: "Delete !",
+        text: "Are you sure you want to delete this report?",
+        type: "warning",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+        confirmButtonColor: '#5cb85c',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'No',
+        confirmButtonText: 'Yes'
+    }, function () {
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function success(obj) {
+                if (obj.success) {
+                    location.href = reportUrl;
+                }
+
+                swal({
+                    title: 'Deleted!',
+                    text: 'Report has been deleted.',
+                    type: 'success',
+                    timer: 2000
+                });
+            },
+            error: function error(data) {
+                swal({
+                    title: '',
+                    text: data.responseJSON.message,
+                    type: 'error',
+                    timer: 5000
+                });
+            }
+        });
+    });
+};
