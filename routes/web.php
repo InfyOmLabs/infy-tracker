@@ -71,15 +71,15 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment');
         Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment');
         Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment');
-        Route::post('comments/new', 'CommentController@addComment');
-        Route::post('comments/{id}/update', 'CommentController@editComment');
-        Route::get('comments/{id}/delete', 'CommentController@deleteComment');
+        Route::post('comments', 'CommentController@addComment');
+        Route::post('comments/{comment}/update', 'CommentController@editComment');
+        Route::get('comments/{comment}/delete', 'CommentController@deleteComment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails');
     });
 
     Route::middleware('permission:manage_time_entries')->group(function () {
         Route::resource('time-entries', 'TimeEntryController');
-        Route::post('time-entries/{id}/update', 'TimeEntryController@update');
+        Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
     });
 
     Route::middleware('permission:manage_reports')->group(function () {
@@ -91,12 +91,12 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
 
     Route::get('my-tasks', 'TaskController@myTasks');
     Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask');
-    Route::get('get-tasks/{projectId}', 'TimeEntryController@getTasks');
+    Route::get('projects/{project}/tasks', 'TimeEntryController@getTasks');
     Route::get('my-projects', 'ProjectController@getMyProjects');
 
     Route::middleware('permission:manage_roles')->group(function () {
         Route::resource('roles', 'RoleController');
-        Route::post('roles/{id}/update', 'RoleController@update');
+        Route::post('roles/{role}/update', 'RoleController@update');
     });
 });
 

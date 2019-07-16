@@ -279,7 +279,7 @@ $('#btnComment').click(function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/new',
+        url: baseUrl + 'comments',
         type: 'post',
         data: { 'comment': comment, 'task_id': taskId },
         success: function (result) {

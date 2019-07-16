@@ -29,28 +29,27 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param $id
+     * @param Comment $comment
      *
      * @throws \Exception
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function deleteComment($id)
+    public function deleteComment(Comment $comment)
     {
-        Comment::findOrFail($id)->delete();
+        $comment->delete();
 
         return $this->sendSuccess('Comment has been deleted successfully.');
     }
 
     /**
-     * @param $id
+     * @param Comment $comment
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function editComment($id, Request $request)
+    public function editComment(Comment $comment, Request $request)
     {
-        $comment = Comment::findOrFail($id);
         $comment->comment = htmlentities($request->get('comment'));
         $comment->save();
 

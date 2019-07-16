@@ -292,7 +292,7 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
     if (!(projectId > 0)) {
         return false;
     }
-    let taskURL = getTaskUrl + projectId;
+    let taskURL = projectsURL + projectId + '/tasks';
     taskURL = (isEdit) ? taskURL + '?task_id='+editTaskId : taskURL;
 
     $.ajax({

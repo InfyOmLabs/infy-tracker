@@ -53,6 +53,7 @@
     <script>
         let taskUrl = '{{url('tasks')}}/';
         let timeEntryUrl = "{{url('time-entries')}}/";
+        let projectsURL = "{{url('projects')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
     </script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>

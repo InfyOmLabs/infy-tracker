@@ -92,37 +92,30 @@ class RoleController extends AppBaseController
     /**
      * Show the form for editing the specified Roles.
      *
-     * @param int $id
+     * @param Role $role
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        $roles = $this->rolesRepository->find($id);
-        if (empty($roles)) {
-            Flash::error('Role not found');
-
-            return redirect(route('roles.index'));
-        }
         /** @var Permission $permissions */
         $permissions = $this->permissionRepository->permissionList();
 
-        return view('roles.edit')->with(['roles' => $roles, 'permissions' => $permissions]);
+        return view('roles.edit')->with(['roles' => $role, 'permissions' => $permissions]);
     }
 
     /**
-     * @param $id
+     * @param Role $role
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update($id, UpdateRoleRequest $request)
+    public function update(Role $role, UpdateRoleRequest $request)
     {
         $permissions = [];
-        $this->rolesRepository->find($id);
         $input = $request->all();
         /** @var Role $roles */
-        $roles = $this->rolesRepository->update($input, $id);
+        $roles = $this->rolesRepository->update($input, $role->id);
         if (isset($input['permissions']) && !empty($input['permissions'])) {
             $permissions = $input['permissions'];
         }
@@ -133,25 +126,22 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param $id
+     * @param Role $role
      *
      * @throws Exception
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        /** @var Role $roles */
-        $roles = $this->rolesRepository->find($id);
-        if (empty($roles)) {
-            Flash::error('Role not found');
-
-            return redirect(route('roles.index'));
+        if ($role->users()->count() > 0) {
+            throw new BadRequestHttpException(
+                'This user role could not be deleted, because it’s assigned to a user.',
+                null,
+                \Illuminate\Http\Response::HTTP_BAD_REQUEST
+            );
         }
-        if ($roles->users()->count() > 0) {
-            throw new BadRequestHttpException('This user role could not be deleted, because it’s assigned to a user.', null, \Illuminate\Http\Response::HTTP_BAD_REQUEST);
-        }
-        $this->rolesRepository->delete($id);
+        $role->delete();
 
         return $this->sendSuccess('Role deleted successfully.');
     }
