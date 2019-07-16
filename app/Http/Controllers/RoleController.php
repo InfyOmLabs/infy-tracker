@@ -105,7 +105,7 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role $role
+     * @param Role    $role
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
