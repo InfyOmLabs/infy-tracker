@@ -4,8 +4,8 @@ $('#userId').select2({
 });
 let timeRange = $('#time_range');
 const today = moment();
-let start = today.clone().startOf('week');
-let end = today.clone().endOf('week');
+let start = today.clone().startOf('month');
+let end = today.clone().endOf('month');
 let userId = $('#userId').val();
 let isPickerApply = false;
 $(window).on("load", function () {
@@ -35,10 +35,10 @@ timeRange.daterangepicker({
     autoUpdateInput: false,
     ranges: {
         'Today': [moment(), moment()],
-        'This Week': [start, end],
+        'This Week': [moment().startOf('week'), moment().endOf('week')],
         'Next Week': [moment().endOf('week').add(1, 'days'), moment().endOf('week').add(7, 'days')],
         'Last Week': [moment().startOf('week').subtract(7, 'days'), moment().startOf('week').subtract(1, 'days')],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'This Month': [start, end],
         'Last Month': [lastMonth.clone().startOf('month'), lastMonth.clone().endOf('month')]
     }
 }, cb);
