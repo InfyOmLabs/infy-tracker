@@ -97,7 +97,7 @@ class ClientController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param Client                 $client
+     * @param Client              $client
      * @param UpdateClientRequest $request
      *
      * @return JsonResponse

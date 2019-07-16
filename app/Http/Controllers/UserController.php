@@ -100,7 +100,7 @@ class UserController extends AppBaseController
         if ($input['is_active']) {
             $key = $user->id.'|'.$user->activation_code;
             $code = Crypt::encrypt($key);
-            /** Send confirmation email */
+            /* Send confirmation email */
             $this->accountRepository->sendConfirmEmail(
                 $user->name,
                 $user->email,
@@ -130,7 +130,7 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param User               $user
+     * @param User              $user
      * @param UpdateUserRequest $request
      *
      * @throws \Exception
