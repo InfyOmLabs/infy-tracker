@@ -33,7 +33,7 @@ class UpdateClientRequest extends FormRequest
     public function rules()
     {
         $rules = Client::$editRules;
-        $rules['name'] = 'required|unique:clients,name,'.$this->route('id');
+        $rules['name'] = 'required|unique:clients,name,'.$this->route('client')->id;
 
         return $rules;
     }
