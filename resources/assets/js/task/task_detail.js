@@ -279,9 +279,9 @@ $('#btnComment').click(function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments',
+        url: baseUrl + 'tasks/' + taskId+ '/comments',
         type: 'post',
-        data: { 'comment': comment, 'task_id': taskId },
+        data: { 'comment': comment},
         success: function (result) {
             if (result.success) {
                 let commentId = result.data.comment.id;
@@ -315,8 +315,8 @@ $(document).on('click', '.del-comment', function (event) {
         },
         function () {
             $.ajax({
-                url: baseUrl + 'comments/' + commentId + '/delete',
-                type: 'get',
+                url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId,
+                type: 'DELETE',
                 success: function (result) {
                     if (result.success) {
                         let commetDiv = 'comment__'+commentId;
@@ -374,7 +374,7 @@ $(document).on('click', ".save-comment", function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/' + commentId + '/update',
+        url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId + '/update',
         type: 'post',
         data: { 'comment': comment.trim() },
         success: function (result) {
