@@ -31,7 +31,7 @@ class UpdateTagRequest extends FormRequest
      */
     public function rules()
     {
-        $rules['name'] = 'required|unique:tags,name,'.$this->route('id');
+        $rules['name'] = 'required|unique:tags,name,'.$this->route('tag')->id;
 
         return $rules;
     }

@@ -56,25 +56,25 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
 
     Route::middleware('permission:manage_tags')->group(function () {
         Route::resource('tags', 'TagController');
-        Route::post('tags/{id}/update', 'TagController@update');
+        Route::post('tags/{tag}/update', 'TagController@update');
     });
 
     Route::middleware('permission:manage_projects')->group(function () {
         Route::resource('projects', 'ProjectController');
-        Route::post('projects/{id}/update', 'ProjectController@update');
+        Route::post('projects/{project}/update', 'ProjectController@update')->where('project', '\d+');
     });
 
     Route::middleware('permission:manage_all_tasks')->group(function () {
         Route::resource('tasks', 'TaskController');
-        Route::post('tasks/{id}/update', 'TaskController@update');
-        Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
-        Route::post('tasks/add-attachment/{id}', 'TaskController@addAttachment');
-        Route::post('tasks/delete-attachment/{id}', 'TaskController@deleteAttachment');
-        Route::get('tasks/get-attachments/{id}', 'TaskController@getAttachment');
+        Route::post('tasks/{task}/update', 'TaskController@update');
+        Route::post('tasks/{task}/update-status', 'TaskController@updateStatus');
+        Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment');
+        Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment');
+        Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment');
         Route::post('comments/new', 'CommentController@addComment');
         Route::post('comments/{id}/update', 'CommentController@editComment');
         Route::get('comments/{id}/delete', 'CommentController@deleteComment');
-        Route::get('task-details/{task_id}', 'TaskController@getTaskDetails');
+        Route::get('task-details/{task}', 'TaskController@getTaskDetails');
     });
 
     Route::middleware('permission:manage_time_entries')->group(function () {

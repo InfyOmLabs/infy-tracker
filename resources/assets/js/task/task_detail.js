@@ -142,7 +142,7 @@ Dropzone.options.dropzone = {
     timeout: 50000,
     init: function() {
         thisDropzone = this;
-        $.get(taskUrl+'get-attachments/'+taskId, function(data) {
+        $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
                 let mockFile = { name: value.name, size: value.size, id:value.id};
 
@@ -203,7 +203,7 @@ Dropzone.options.dropzone = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + attachmentId,
+            url: taskUrl + attachmentId +  '/delete-attachment',
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);

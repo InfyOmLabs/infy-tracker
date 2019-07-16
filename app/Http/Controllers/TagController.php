@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use App\Models\Tag;
 use App\Queries\TagDataTable;
 use App\Repositories\TagRepository;
 use DataTables;
@@ -62,30 +63,26 @@ class TagController extends AppBaseController
     /**
      * Show the form for editing the specified Tag.
      *
-     * @param int $id
+     * @param Tag $tag
      *
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(Tag $tag)
     {
-        $tag = $this->tagRepository->findOrFail($id);
-
         return $this->sendResponse($tag, 'Tag retrieved successfully.');
     }
 
     /**
      * Update the specified Tag in storage.
      *
-     * @param int              $id
+     * @param Tag              $tag
      * @param UpdateTagRequest $request
      *
      * @return JsonResponse
      */
-    public function update($id, UpdateTagRequest $request)
+    public function update(Tag $tag, UpdateTagRequest $request)
     {
-        $this->tagRepository->findOrFail($id);
-
-        $this->tagRepository->update($request->all(), $id);
+        $this->tagRepository->update($request->all(), $tag->id);
 
         return $this->sendSuccess('Tag updated successfully.');
     }
@@ -93,17 +90,15 @@ class TagController extends AppBaseController
     /**
      * Remove the specified Tag from storage.
      *
-     * @param int $id
+     * @param Tag $tag
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Tag $tag)
     {
-        $this->tagRepository->findOrFail($id);
-
-        $this->tagRepository->delete($id);
+        $tag->delete();
 
         return $this->sendSuccess('Tag deleted successfully.');
     }

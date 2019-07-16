@@ -6,6 +6,7 @@ use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskAttachment;
 use App\Queries\TaskDataTable;
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
@@ -14,7 +15,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 
@@ -91,17 +91,17 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param $id
+     * @param string $slug
      *
      * @return Factory|JsonResponse|View
      */
-    public function show($id)
+    public function show($slug)
     {
-        if (count(explode('-', $id)) != 2) {
+        if (count(explode('-', $slug)) != 2) {
             return redirect()->back();
         }
-        $projectPrefix = explode('-', $id)[0];
-        $taskNumber = explode('-', $id)[1];
+        $projectPrefix = explode('-', $slug)[0];
+        $taskNumber = explode('-', $slug)[1];
         /** @var Project $project */
         $project = Project::wherePrefix($projectPrefix)->first();
         if (empty($project)) {
@@ -122,13 +122,16 @@ class TaskController extends AppBaseController
     /**
      * Show the form for editing the specified Task.
      *
-     * @param int $id
+     * @param Task $task
      *
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        $task = $this->taskRepository->find($id);
+        $task->tags;
+        $task->project;
+        $task->taskAssignee;
+        $task->attachments;
 
         return $this->sendResponse($task, 'Task retrieved successfully.');
     }
@@ -136,18 +139,18 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param int               $id
+     * @param Task              $task
      * @param UpdateTaskRequest $request
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function update($id, UpdateTaskRequest $request)
+    public function update(Task $task, UpdateTaskRequest $request)
     {
         $input = $request->all();
 
-        $this->taskRepository->update($this->fill($input), $id);
+        $this->taskRepository->update($this->fill($input), $task->id);
 
         return $this->sendSuccess('Task updated successfully.');
     }
@@ -155,50 +158,44 @@ class TaskController extends AppBaseController
     /**
      * Remove the specified Task from storage.
      *
-     * @param int $id
+     * @param Task $task
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        /** @var Task $task */
-        $task = Task::find($id);
-        if (empty($task)) {
-            return $this->sendError('Task not found.', Response::HTTP_NOT_FOUND);
-        }
-
         if ($task->timeEntries()->count() > 0) {
             return $this->sendError('Task has one or more time entries');
         }
 
         $task->update(['deleted_by' => getLoggedInUserId()]);
-        $this->taskRepository->delete($id);
+        $task->delete();
 
         return $this->sendSuccess('Task deleted successfully.');
     }
 
     /**
-     * @param int $id
+     * @param Task $task
      *
      * @return JsonResponse
      */
-    public function updateStatus($id)
+    public function updateStatus(Task $task)
     {
-        $this->taskRepository->updateStatus($id);
+        $this->taskRepository->updateStatus($task->id);
 
         return $this->sendSuccess('Task status Update successfully.');
     }
 
     /**
-     * @param int $id
+     * @param Task $task
      *
      * @return JsonResponse
      */
-    public function getTaskDetails($id)
+    public function getTaskDetails(Task $task)
     {
-        $taskDetails = $this->taskRepository->getTaskDetails($id);
+        $taskDetails = $this->taskRepository->getTaskDetails($task->id);
 
         return $this->sendResponse($taskDetails, 'Task retrieved successfully.');
     }
@@ -217,28 +214,28 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param int $id
+     * @param TaskAttachment $taskAttachment
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function deleteAttachment($id)
+    public function deleteAttachment(TaskAttachment $taskAttachment)
     {
-        $this->taskRepository->deleteFile($id);
+        $this->taskRepository->deleteFile($taskAttachment->id);
 
         return $this->sendSuccess('File has been deleted successfully.');
     }
 
     /**
-     * @param $id
+     * @param Task    $task
      * @param Request $request
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function addAttachment($id, Request $request)
+    public function addAttachment(Task $task, Request $request)
     {
         $input = $request->all();
         /** @var UploadedFile $file */
@@ -247,19 +244,19 @@ class TaskController extends AppBaseController
         if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
             return $this->sendError('You can not upload this file.');
         }
-        $result = $this->taskRepository->uploadFile($id, $input['file']);
+        $result = $this->taskRepository->uploadFile($task->id, $input['file']);
 
         return $this->sendResponse($result, 'File has been uploaded successfully.');
     }
 
     /**
-     * @param $id
+     * @param $task
      *
      * @return JsonResponse
      */
-    public function getAttachment($id)
+    public function getAttachment(Task $task)
     {
-        $result = $this->taskRepository->getAttachments($id);
+        $result = $this->taskRepository->getAttachments($task->id);
 
         return $this->sendResponse($result, 'Task retrieved successfully.');
     }
