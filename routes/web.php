@@ -85,8 +85,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::middleware('permission:manage_reports')->group(function () {
         Route::post('reports/{report}', 'ReportController@update');
         Route::resource('reports', 'ReportController');
-        Route::get('projects/{id}/users', 'ProjectController@users');
-        Route::get('clients/{id}/projects', 'ClientController@projects');
+        Route::get('projects-users', 'ProjectController@users');
+        Route::get('clients-projects', 'ClientController@projects');
     });
 
     Route::get('my-tasks', 'TaskController@myTasks');

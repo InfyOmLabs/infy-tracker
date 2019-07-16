@@ -149,14 +149,16 @@ class ProjectController extends AppBaseController
     }
 
     /**
-     * @param int|array $projectIds
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function users($projectIds)
+    public function users(Request $request)
     {
+        $projectIds = $request->get('projectIds', null);
+
         $projectIdsArr = [];
-        if ($projectIds != 0) {
+        if (!is_null($projectIds)) {
             $projectIdsArr = explode(',', $projectIds);
         }
         $users = $this->userRepository->getUserList($projectIdsArr);

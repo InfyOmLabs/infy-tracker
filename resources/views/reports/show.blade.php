@@ -36,6 +36,8 @@
 @section('scripts')
     <script>
         let reportUrl = "{{ url('reports') }}/";
+        let projectUsers = "{{ url('projects-users') }}";
+        let clientProjects = "{{ url('clients-projects') }}";
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
 @endsection

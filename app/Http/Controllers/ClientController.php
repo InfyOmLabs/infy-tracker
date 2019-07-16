@@ -126,15 +126,13 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param int $clientId
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function projects($clientId)
+    public function projects(Request $request)
     {
-        if ($clientId == 0) {
-            $clientId = null;
-        }
+        $clientId = $request->get('client_id', null);
         $projects = $this->projectRepo->getProjectsList($clientId);
 
         return $this->sendResponse($projects, 'Projects retrieved successfully.');

@@ -36,5 +36,9 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 @endsection
 @section('scripts')
+    <script>
+        let projectUsers = "{{ url('projects-users') }}";
+        let clientProjects = "{{ url('clients-projects') }}";
+    </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
 @endsection
