@@ -67,7 +67,7 @@ window.prepareDeveloperWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': ';
@@ -79,31 +79,26 @@ window.prepareDeveloperWorkReport = function (result) {
             },
             scales: {
                 yAxes: [{
-                    stacked: true,
                     scaleLabel: {
                         display: true,
                         labelString: 'Hours'
-                    }
+                    },
                 }]
             }
         }
     });
 };
-window.convertToTimeFormat = function (total) {
-    let hours = 0;
-    let minutes = 0;
-    let totalArr = total.toString().split('.');
-    let totalHr = parseInt(totalArr[0]);
-    if (typeof totalArr[1] !== 'undefined') {
-        hours = parseInt(totalArr[1] / 60);
-        minutes = totalArr[1] % 60;
+window.convertToTimeFormat = function (duration) {
+    const totalTime = duration.toString().split('.');
+    const hours = parseInt(totalTime[0]);
+    const minutes = Math.floor((duration * 60)) - Math.floor((hours * 60));
+    if (hours === 0) {
+        return minutes + 'min';
     }
-    let format = null;
-    if (totalHr > 0) {
-        hours += totalHr;
-        format = hours + 'h ' + minutes + 'm';
-    } else {
-        format = minutes + 'm';
+
+    if (minutes > 0) {
+        return hours + 'hr ' + minutes + 'min';
     }
-    return format;
+    return hours + 'hr';
 };
+
