@@ -8,7 +8,7 @@
             </div>
             {!! Form::open(['id'=>'editProfileForm','files'=>true]) !!}
             <div class="modal-body">
-                <div class="alert alert-danger" style="display: none" id="editValidationErrorsBox"></div>
+                <div class="alert alert-danger" style="display: none" id="editProfileValidationErrorsBox"></div>
                 {!! Form::hidden('user_id',null,['id'=>'pfUserId']) !!}
                 {{csrf_field()}}
                 <div class="row">

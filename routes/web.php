@@ -37,49 +37,49 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
     Route::middleware('permission:manage_activities')->group(function () {
-        Route::resource('activityTypes', 'ActivityTypeController');
-        Route::post('activityTypes/{id}/update', 'ActivityTypeController@update');
+        Route::resource('activity-types', 'ActivityTypeController');
+        Route::post('activity-types/{activity_type}/update', 'ActivityTypeController@update');
     });
 
     Route::middleware('permission:manage_clients')->group(function () {
         Route::resource('clients', 'ClientController');
-        Route::post('clients/{id}/update', 'ClientController@update');
+        Route::post('clients/{client}/update', 'ClientController@update');
     });
 
     Route::middleware('permission:manage_users')->group(function () {
         Route::post('users/profile-update', 'UserController@profileUpdate');
-        Route::post('users/{id}/active-de-active', 'UserController@activeDeActiveUser');
+        Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
         Route::resource('users', 'UserController');
-        Route::post('users/{id}/update', 'UserController@update');
-        Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
+        Route::post('users/{user}/update', 'UserController@update')->where('user', '\d+');
+        Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
     });
 
     Route::middleware('permission:manage_tags')->group(function () {
         Route::resource('tags', 'TagController');
-        Route::post('tags/{id}/update', 'TagController@update');
+        Route::post('tags/{tag}/update', 'TagController@update');
     });
 
     Route::middleware('permission:manage_projects')->group(function () {
         Route::resource('projects', 'ProjectController');
-        Route::post('projects/{id}/update', 'ProjectController@update');
+        Route::post('projects/{project}/update', 'ProjectController@update')->where('project', '\d+');
     });
 
     Route::middleware('permission:manage_all_tasks')->group(function () {
         Route::resource('tasks', 'TaskController');
-        Route::post('tasks/{id}/update', 'TaskController@update');
-        Route::post('tasks/{id}/update-status', 'TaskController@updateStatus');
-        Route::post('tasks/add-attachment/{id}', 'TaskController@addAttachment');
-        Route::post('tasks/delete-attachment/{id}', 'TaskController@deleteAttachment');
-        Route::get('tasks/get-attachments/{id}', 'TaskController@getAttachment');
+        Route::post('tasks/{task}/update', 'TaskController@update');
+        Route::post('tasks/{task}/update-status', 'TaskController@updateStatus');
+        Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment');
+        Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment');
+        Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment');
         Route::post('comments/new', 'CommentController@addComment');
         Route::post('comments/{id}/update', 'CommentController@editComment');
         Route::get('comments/{id}/delete', 'CommentController@deleteComment');
-        Route::get('task-details/{task_id}', 'TaskController@getTaskDetails');
+        Route::get('task-details/{task}', 'TaskController@getTaskDetails');
     });
 
     Route::middleware('permission:manage_time_entries')->group(function () {
-        Route::resource('timeEntries', 'TimeEntryController');
-        Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
+        Route::resource('time-entries', 'TimeEntryController');
+        Route::post('time-entries/{id}/update', 'TimeEntryController@update');
     });
 
     Route::middleware('permission:manage_reports')->group(function () {
