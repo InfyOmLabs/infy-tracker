@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @mixin \Eloquent
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofCurrentUser()
  */
 class TimeEntry extends Model
 {
@@ -128,5 +129,15 @@ class TimeEntry extends Model
     public function scopeOfUser(Builder $query, $userId)
     {
         return $query->where('user_id', $userId);
+    }
+
+    /**
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeOfCurrentUser(Builder $query)
+    {
+        return $query->ofUser(getLoggedInUserId());
     }
 }

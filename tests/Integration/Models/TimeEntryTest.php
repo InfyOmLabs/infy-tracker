@@ -30,4 +30,18 @@ class TimeEntryTest extends TestCase
         $timeEntry = TimeEntry::ofUser($user1->id)->first();
         $this->assertEquals($user1->id, $timeEntry->user_id);
     }
+
+    /** @test */
+    public function get_time_entry_of_logged_in_user()
+    {
+        $user1 = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
+
+        factory(TimeEntry::class)->create(['user_id' => $user1->id]);
+        factory(TimeEntry::class)->create(['user_id' => $user2->id]);
+        $this->actingAs($user2); // logged in user-2
+
+        $timeEntry = TimeEntry::ofCurrentUser()->first();
+        $this->assertEquals($user2->id, $timeEntry->user_id);
+    }
 }
