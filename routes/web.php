@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     });
 
     Route::middleware('permission:manage_reports')->group(function () {
-        Route::post('reports/{id}', 'ReportController@update');
+        Route::post('reports/{report}', 'ReportController@update');
         Route::resource('reports', 'ReportController');
         Route::get('projects/{id}/users', 'ProjectController@users');
         Route::get('clients/{id}/projects', 'ClientController@projects');
