@@ -83,12 +83,20 @@ class UserRepository extends BaseRepository
         return true;
     }
 
+    /**
+     * @param int $id
+     *
+     * @throws Exception
+     *
+     * @return bool
+     */
     public function resendEmailVerification($id)
     {
         /** @var AccountRepository $accountRepository */
         $accountRepository = new AccountRepository();
         $activation_code = uniqid();
 
+        /** @var User $user */
         $user = $this->find($id);
         $user->activation_code = $activation_code;
         $user->save();

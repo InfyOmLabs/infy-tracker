@@ -54,30 +54,32 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
         $code = $exception->getCode();
+        $message = $exception->getMessage();
         if ($code < 100 || $code >= 600) {
             $code = \Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
         if ($exception instanceof ModelNotFoundException) {
-            return Response::json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ], \Illuminate\Http\Response::HTTP_NOT_FOUND);
+            $message = $exception->getMessage();
+            $code = \Illuminate\Http\Response::HTTP_NOT_FOUND;
+
+            if (preg_match('@\\\\(\w+)\]@', $message, $matches)) {
+                $model = $matches[1];
+                $model = preg_replace('/Table/i', '', $model);
+                $message = "{$model} not found.";
+            }
+        }
+
+        if ($exception instanceof ValidationException) {
+            $validator = $exception->validator;
+            $message = $validator->errors()->first();
+            $code = \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY;
         }
 
         if ($request->expectsJson() or $request->isXmlHttpRequest()) {
-            if ($exception instanceof ValidationException) {
-                $validator = $exception->validator;
-
-                return Response::json([
-                    'success' => false,
-                    'message' => $validator->errors()->first(),
-                ], \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
             return Response::json([
                 'success' => false,
-                'message' => $exception->getMessage(),
+                'message' => $message,
             ], $code);
         }
 

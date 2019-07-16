@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateActivityTypeRequest;
 use App\Http\Requests\UpdateActivityTypeRequest;
+use App\Models\ActivityType;
 use App\Queries\ActivityTypeDataTable;
 use App\Repositories\ActivityTypeRepository;
 use DataTables;
@@ -60,30 +61,26 @@ class ActivityTypeController extends AppBaseController
     /**
      * Show the form for editing the specified ActivityType.
      *
-     * @param int $id
+     * @param ActivityType $activityType
      *
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(ActivityType $activityType)
     {
-        $activityType = $this->activityTypeRepository->findOrFail($id);
-
         return $this->sendResponse($activityType, 'Activity Type retrieved successfully.');
     }
 
     /**
      * Update the specified ActivityType in storage.
      *
-     * @param int                       $id
+     * @param ActivityType              $activityType
      * @param UpdateActivityTypeRequest $request
      *
      * @return JsonResponse
      */
-    public function update($id, UpdateActivityTypeRequest $request)
+    public function update(ActivityType $activityType, UpdateActivityTypeRequest $request)
     {
-        $this->activityTypeRepository->findOrFail($id);
-
-        $this->activityTypeRepository->update($request->all(), $id);
+        $this->activityTypeRepository->update($request->all(), $activityType->id);
 
         return $this->sendSuccess('Activity Type updated successfully.');
     }
@@ -91,17 +88,15 @@ class ActivityTypeController extends AppBaseController
     /**
      * Remove the specified ActivityType from storage.
      *
-     * @param int $id
+     * @param ActivityType $activityType
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(ActivityType $activityType)
     {
-        $this->activityTypeRepository->findOrFail($id);
-
-        $this->activityTypeRepository->delete($id);
+        $activityType->delete();
 
         return $this->sendSuccess('Activity Type deleted successfully.');
     }

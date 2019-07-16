@@ -38,20 +38,20 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
 
     Route::middleware('permission:manage_activities')->group(function () {
         Route::resource('activity-types', 'ActivityTypeController');
-        Route::post('activity-types/{id}/update', 'ActivityTypeController@update');
+        Route::post('activity-types/{activity_type}/update', 'ActivityTypeController@update');
     });
 
     Route::middleware('permission:manage_clients')->group(function () {
         Route::resource('clients', 'ClientController');
-        Route::post('clients/{id}/update', 'ClientController@update');
+        Route::post('clients/{client}/update', 'ClientController@update');
     });
 
     Route::middleware('permission:manage_users')->group(function () {
         Route::post('users/profile-update', 'UserController@profileUpdate');
-        Route::post('users/{id}/active-de-active', 'UserController@activeDeActiveUser');
+        Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
         Route::resource('users', 'UserController');
-        Route::post('users/{id}/update', 'UserController@update');
-        Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
+        Route::post('users/{user}/update', 'UserController@update')->where('user', '\d+');
+        Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
     });
 
     Route::middleware('permission:manage_tags')->group(function () {
