@@ -164,12 +164,12 @@ class TaskController extends AppBaseController
     public function destroy($id)
     {
         /** @var Task $task */
-        $task = Task::withCount('timeEntries')->find($id);
+        $task = Task::find($id);
         if (empty($task)) {
             return $this->sendError('Task not found.', Response::HTTP_NOT_FOUND);
         }
 
-        if ($task->time_entries_count > 0) {
+        if ($task->timeEntries()->count() > 0) {
             return $this->sendError('Task has one or more time entries');
         }
 
