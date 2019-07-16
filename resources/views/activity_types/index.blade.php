@@ -34,8 +34,8 @@
 @endsection
 @section('scripts')
     <script>
-       let activityCreateUrl='{{route('activityTypes.store')}}';
-       let activityUrl='{{url('activityTypes')}}/';
+       let activityCreateUrl='{{route('activity-types.store')}}';
+       let activityUrl='{{url('activity-types')}}/';
     </script>
     <script src="{{ mix('assets/js/activity_types/activity.js') }}"></script>
 @endsection
