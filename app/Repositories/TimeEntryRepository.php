@@ -74,7 +74,7 @@ class TimeEntryRepository extends BaseRepository
     public function myLastTask()
     {
         /** @var TimeEntry $timeEntry */
-        $timeEntry = TimeEntry::ofUser(getLoggedInUserId())->latest()->first();
+        $timeEntry = TimeEntry::ofCurrentUser()->latest()->first();
         if (empty($timeEntry)) {
             return;
         }
