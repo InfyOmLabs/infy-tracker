@@ -78,8 +78,8 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param TimeEntry     $timeEntry
-     * @param Request $request
+     * @param TimeEntry $timeEntry
+     * @param Request   $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
