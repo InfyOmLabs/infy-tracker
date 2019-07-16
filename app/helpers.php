@@ -53,7 +53,7 @@ function time_elapsed_string($datetime, $full = false)
     ];
     foreach ($string as $k => &$v) {
         if ($diff->$k) {
-            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+            $v = $diff->$k.' '.$v.($diff->$k > 1 ? 's' : '');
         } else {
             unset($string[$k]);
         }
@@ -63,7 +63,7 @@ function time_elapsed_string($datetime, $full = false)
         $string = array_slice($string, 0, 1);
     }
 
-    return $string ? implode(', ', $string) . ' ago' : 'just now';
+    return $string ? implode(', ', $string).' ago' : 'just now';
 }
 
 function roundToQuarterHour($totalMinutes)
@@ -83,12 +83,12 @@ function getColor($opacity = 1, $colorCode = null)
         $colorCode = getColorCode();
     }
 
-    return 'rgba(' . $colorCode . ', ' . $opacity . ')';
+    return 'rgba('.$colorCode.', '.$opacity.')';
 }
 
 function getColorCode()
 {
-    return rand(0, 255) . ', ' . rand(0, 255) . ', ' . rand(1, 255);
+    return rand(0, 255).', '.rand(0, 255).', '.rand(1, 255);
 }
 
 /**
@@ -119,12 +119,12 @@ function getAvatarUrl()
 /**
  * return avatar full url.
  *
- * @param int $userId
+ * @param int    $userId
  * @param string $name
  *
  * @return string
  */
 function getUserImageInitial($userId, $name)
 {
-    return getAvatarUrl() . "?name=$name&size=30&rounded=true&color=fff&background=" . getRandomColor($userId);
+    return getAvatarUrl()."?name=$name&size=30&rounded=true&color=fff&background=".getRandomColor($userId);
 }

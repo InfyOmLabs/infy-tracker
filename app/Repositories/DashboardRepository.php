@@ -72,7 +72,7 @@ class DashboardRepository
         $result['projects'] = array_keys($projects);
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
-        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '. Carbon::parse($input['end_date'])->format('d M, Y');
+        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '.Carbon::parse($input['end_date'])->format('d M, Y');
 
         return $result;
     }
@@ -99,7 +99,7 @@ class DashboardRepository
                 }
             }
 
-            $data['result'][] = (object)[
+            $data['result'][] = (object) [
                 'name'        => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
@@ -114,6 +114,7 @@ class DashboardRepository
         $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
+
         return $data;
     }
 
