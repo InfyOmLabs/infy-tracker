@@ -37,8 +37,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     Route::post('logout', 'Auth\LoginController@logout');
 
     Route::middleware('permission:manage_activities')->group(function () {
-        Route::resource('activityTypes', 'ActivityTypeController');
-        Route::post('activityTypes/{id}/update', 'ActivityTypeController@update');
+        Route::resource('activity-types', 'ActivityTypeController');
+        Route::post('activity-types/{id}/update', 'ActivityTypeController@update');
     });
 
     Route::middleware('permission:manage_clients')->group(function () {
@@ -78,8 +78,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     });
 
     Route::middleware('permission:manage_time_entries')->group(function () {
-        Route::resource('timeEntries', 'TimeEntryController');
-        Route::post('timeEntries/{id}/update', 'TimeEntryController@update');
+        Route::resource('time-entries', 'TimeEntryController');
+        Route::post('time-entries/{id}/update', 'TimeEntryController@update');
     });
 
     Route::middleware('permission:manage_reports')->group(function () {

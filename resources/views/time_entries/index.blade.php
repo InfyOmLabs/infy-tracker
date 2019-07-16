@@ -52,7 +52,7 @@
 @section('scripts')
     <script>
         let taskUrl = '{{url('tasks')}}/';
-        let timeEntryUrl = "{{url('timeEntries')}}/";
+        let timeEntryUrl = "{{url('time-entries')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
     </script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>

@@ -97,7 +97,7 @@
 @yield('page_js')
 <script src="{{mix('assets/js/custom.js')}}" type="text/javascript"></script>
 <script>
-    let storeTimeEntriesUrl = "{{route('timeEntries.store')}}";
+    let storeTimeEntriesUrl = "{{route('time-entries.store')}}";
     let myTasksUrl = "{{url('my-tasks')}}";
     let myProjectsUrl = "{{url('my-projects')}}";
     let lastTaskWorkUrl = "{{url('user-last-task-work')}}";
