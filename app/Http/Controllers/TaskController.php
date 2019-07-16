@@ -15,7 +15,6 @@ use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\View\View;
 
@@ -140,7 +139,7 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param Task               $task
+     * @param Task              $task
      * @param UpdateTaskRequest $request
      *
      * @throws Exception
@@ -229,7 +228,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param Task    $task
      * @param Request $request
      *
      * @throws Exception

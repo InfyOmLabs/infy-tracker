@@ -105,7 +105,7 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param Project                  $project
+     * @param Project              $project
      * @param UpdateProjectRequest $request
      *
      * @return JsonResponse|RedirectResponse
