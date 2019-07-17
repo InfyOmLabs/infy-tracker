@@ -277,7 +277,7 @@ class TaskRepository extends BaseRepository
         })->whereNotIn('status', [Task::STATUS_COMPLETED]);
 
         if (!empty($input['project_id'])) {
-            $query->where('project_id', $input['project_id']);
+            $query->ofProject($input['project_id']);
         }
 
         $assignedTasks = $query->get(['title', 'id']);
@@ -296,11 +296,11 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::whereProjectId($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
+        $task = Task::ofProject($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
-            $task = Task::whereProjectId($projectId)->where('task_number', '=', $uniqueNumber)->first();
+            $task = Task::ofProject($projectId)->where('task_number', '=', $uniqueNumber)->first();
             if (empty($task)) {
                 $isUnique = true;
             } else {

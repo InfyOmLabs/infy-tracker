@@ -85,7 +85,7 @@ class TimeEntryController extends AppBaseController
      */
     public function update(TimeEntry $timeEntry, Request $request)
     {
-        $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($timeEntry->id);
+        $entry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
