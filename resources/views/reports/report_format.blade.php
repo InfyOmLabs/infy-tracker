@@ -24,7 +24,7 @@
                             <i class="fa fa-folder-open mr-2"></i>
                             {{ucwords($project['name'])}}
                         </div>
-                        <span>{{$project['time']}}  ({{round($project['duration'] * 100 / $client['duration'], 2)}} %)</span>
+                        <span>{{$project['time']}} ({{round($project['duration'] * 100 / $client['duration'], 2)}} %)</span>
                     </div>
                     @foreach($project['users'] as $user)
                         <div class="reports__developer-task">
