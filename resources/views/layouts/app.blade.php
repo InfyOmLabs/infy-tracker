@@ -107,6 +107,8 @@
     let usersUrl = "{{ url('users') }}/";
     let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
+    let usersOfProjects = "{{ url('users-of-projects') }}";
+    let projectsOfClient = "{{ url('projects-of-client') }}";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

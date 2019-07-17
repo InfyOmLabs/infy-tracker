@@ -56,7 +56,8 @@ clientDropDown.on('change', function () {
 });
 
 function loadProjects(clientId) {
-    let url = clientsUrl + clientId + '/projects';
+    clientId  = (clientId == 0) ? '' : clientId;
+    let url = projectsOfClient+ '?client_id='+clientId;
     $.ajax({
         url: url,
         type: 'GET',
@@ -78,10 +79,7 @@ $("#projectIds").on('change', function () {
 });
 
 function loadUsers(projectIds) {
-    if (projectIds === '') {
-        projectIds = 0;
-    }
-    let url = projectsUrl + projectIds + '/users'
+    let url = usersOfProjects + '?projectIds='+projectIds;
     $.ajax({
         url: url,
         type: 'GET',
