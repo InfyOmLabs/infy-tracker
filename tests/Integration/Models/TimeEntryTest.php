@@ -24,11 +24,16 @@ class TimeEntryTest extends TestCase
         $user1 = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 
-        factory(TimeEntry::class)->create(['user_id' => $user1->id]);
+        $timeEntry1 = factory(TimeEntry::class)->create(['user_id' => $user1->id]);
         factory(TimeEntry::class)->create(['user_id' => $user2->id]);
 
-        $timeEntry = TimeEntry::ofUser($user1->id)->first();
-        $this->assertEquals($user1->id, $timeEntry->user_id);
+        $timeEntries = TimeEntry::ofUser($user1->id)->get();
+        $this->assertCount(1, $timeEntries);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = $timeEntries->first();
+        $this->assertEquals($timeEntry1->id, $firstTimeEntry->id);
+        $this->assertEquals($user1->id, $firstTimeEntry->user_id);
     }
 
     /** @test */
@@ -38,10 +43,15 @@ class TimeEntryTest extends TestCase
         $user2 = factory(User::class)->create();
 
         factory(TimeEntry::class)->create(['user_id' => $user1->id]);
-        factory(TimeEntry::class)->create(['user_id' => $user2->id]);
+        $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $user2->id]);
         $this->actingAs($user2); // logged in user-2
 
-        $timeEntry = TimeEntry::ofCurrentUser()->first();
-        $this->assertEquals($user2->id, $timeEntry->user_id);
+        $timeEntries = TimeEntry::ofCurrentUser()->get();
+        $this->assertCount(1, $timeEntries);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = $timeEntries->first();
+        $this->assertEquals($timeEntry2->id, $firstTimeEntry->id);
+        $this->assertEquals($user2->id, $firstTimeEntry->user_id);
     }
 }
