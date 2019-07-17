@@ -4,7 +4,7 @@
  * Author: Vishal Ribdiya
  * Email: vishal.ribdiya@infyom.com
  * Date: 17-07-2019
- * Time: 02:44 PM
+ * Time: 02:44 PM.
  */
 
 namespace Tests\Integration\Models;
@@ -16,6 +16,7 @@ use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+
 class ReportFilterTest extends TestCase
 {
     use DatabaseTransactions;
