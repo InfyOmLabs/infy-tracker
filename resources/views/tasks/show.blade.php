@@ -110,7 +110,7 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
-                                <form method="post" action="{{url("tasks/add-attachment/$task->id")}}"
+                                <form method="post" action="{{url("tasks/".$task->id."/add-attachment")}}"
                                       enctype="multipart/form-data"
                                       class="dropzone" id="dropzone">
                                     {{csrf_field()}}

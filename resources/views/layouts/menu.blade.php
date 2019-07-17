@@ -37,8 +37,8 @@
 @endpermission
 
 @permission('manage_time_entries')
-<li class="nav-item {{ Request::is('timeEntries*') ? 'active' : '' }}">
-    <a class="nav-link" href="{!! route('timeEntries.index') !!}">
+<li class="nav-item {{ Request::is('time-entries*') ? 'active' : '' }}">
+    <a class="nav-link" href="{!! route('time-entries.index') !!}">
         <i class="fas fa-user-clock nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Time Entries
     </a>
 </li>
@@ -72,8 +72,8 @@
             </li>
         @endpermission
         @permission('manage_activities')
-            <li class="nav-item {{ Request::is('activityTypes*') ? 'active' : '' }}">
-                <a class="nav-link" href="{!! route('activityTypes.index') !!}">
+            <li class="nav-item {{ Request::is('activity-types*') ? 'active' : '' }}">
+                <a class="nav-link" href="{!! route('activity-types.index') !!}">
                     <i class="fas fa-clipboard-list nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Activity Types
                 </a>
             </li>

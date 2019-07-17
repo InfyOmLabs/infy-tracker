@@ -17,9 +17,7 @@
                        class="btn btn-primary filter-container__btn mr-1">
                         Edit
                     </a>
-                    {!! Form::open(['route' => ['reports.destroy', $report->id], 'method' => 'delete']) !!}
-                    {!! Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger',]) !!}
-                    {!! Form::close() !!}
+                    <button class="btn btn-danger delete-btn" data-id="{{$report->id}}">Delete</button>
                     <a class="btn btn-secondary ml-1" href="{{url(route('reports.index'))}}">Back</a>
                 </div>
             </div>
@@ -30,4 +28,14 @@
             </div>
         </div>
     </div>
+@endsection
+@section('page_js')
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+@endsection
+@section('scripts')
+    <script>
+        let reportUrl = "{{ url('reports') }}/";
+    </script>
+    <script src="{{ mix('assets/js/report/report.js') }}"></script>
 @endsection

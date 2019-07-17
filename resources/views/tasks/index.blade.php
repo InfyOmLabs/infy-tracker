@@ -64,8 +64,9 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskDetailUrl = '{{url('task-details')}}';
         let createTaskUrl = '{{route('tasks.store')}}';
-        let timeEntryUrl = "{{url('timeEntries')}}/";
+        let timeEntryUrl = "{{url('time-entries')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
+        let projectsURL = "{{url('projects')}}/";
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
         let taskStatus = $.parseJSON(taskStatusJson)
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';

@@ -57,8 +57,13 @@ let tbl = $('#timeEntryTable').DataTable({
             name: 'user.name'
         },
         {
-            data: 'task.title',
-            name: 'task.title',
+            data: function (row) {
+                let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
+                let url = taskUrl + taskPrefix;
+                
+                return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
+            },
+            name: 'title'
         },
         {
             data: 'activity_type.name',
@@ -287,7 +292,7 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
     if (!(projectId > 0)) {
         return false;
     }
-    let taskURL = getTaskUrl + projectId;
+    let taskURL = projectsURL + projectId + '/tasks';
     taskURL = (isEdit) ? taskURL + '?task_id='+editTaskId : taskURL;
 
     $.ajax({

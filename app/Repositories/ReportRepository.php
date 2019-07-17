@@ -120,7 +120,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteProjects = array_diff((array) $projectIds, $input['projectIds']);
         if (!empty($deleteProjects)) {
-            ReportFilter::whereParamType(Project::class)->whereParamId($deleteProjects)->delete();
+            ReportFilter::whereParamType(Project::class)->whereIn('param_id', $deleteProjects)->delete();
         }
 
         $userIds = $this->getUserIds($report->id);
@@ -130,7 +130,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteUsers = array_diff((array) $userIds, $input['userIds']);
         if (!empty($deleteUsers)) {
-            ReportFilter::whereParamType(User::class)->whereParamId($deleteUsers)->delete();
+            ReportFilter::whereParamType(User::class)->whereIn('param_id', $deleteUsers)->delete();
         }
 
         $tagIds = $this->getTagIds($report->id);
@@ -140,7 +140,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteTags = array_diff((array) $tagIds, $input['tagIds']);
         if (!empty($deleteTags)) {
-            ReportFilter::whereParamType(Tag::class)->whereParamId($deleteTags)->delete();
+            ReportFilter::whereParamType(Tag::class)->whereIn('param_id', $deleteTags)->delete();
         }
 
         $clientId = $this->getClientId($report->id);
@@ -316,7 +316,7 @@ class ReportRepository extends BaseRepository
      *
      * @return string
      */
-    private function getDurationTime($minutes)
+    public function getDurationTime($minutes)
     {
         if ($minutes == 0) {
             return '0 hr';

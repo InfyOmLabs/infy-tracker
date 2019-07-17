@@ -20,12 +20,13 @@ class TaskDataTable
     {
         $loginUserProjects = Auth::user()->projects()->get()->pluck('name', 'id')->toArray();
         $query = Task::whereIn('project_id', array_keys($loginUserProjects))
+            ->leftJoin('projects as p', 'p.id', '=', 'tasks.project_id')
             ->with(['project', 'taskAssignee', 'createdUser'])
             ->select(['tasks.*']);
 
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
             function (Builder $q) use ($input) {
-                $q->where('project_id', $input['filter_project']);
+                $q->ofProject($input['filter_project']);
             });
 
         $query->when(isset($input['filter_status']) && $input['filter_status'] != Task::STATUS_ALL,

@@ -162,14 +162,14 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
-                    '<i class="cui-pencil action-icon"></i>' + '</a>' +
-                    '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete mr-1" data-task-id="' + row.id + '">' +
-                    '<i class="cui-trash action-icon"></i></a>' +
-                    '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
+                return '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
                     '<i class="fa fa-user-clock action-icon"></i></a>' +
-                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
-                    '<i class="fa fa-clock action-icon"></i></a>'
+                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails mr-1"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
+                    '<i class="fa fa-clock action-icon"></i></a>'+
+                    '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
+                    '<i class="cui-pencil action-icon"></i>' + '</a>' +
+                    '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete" data-task-id="' + row.id + '">' +
+                    '<i class="cui-trash action-icon"></i></a>'
             }, name: 'id'
         }
     ],
@@ -181,7 +181,10 @@ var tbl = $('#task_table').DataTable({
 });
 
 $('#task_table').on('draw.dt', function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    $(".tooltip").tooltip("hide");
+    setTimeout(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 });
 
 // open edit user model

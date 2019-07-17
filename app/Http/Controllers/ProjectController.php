@@ -90,14 +90,13 @@ class ProjectController extends AppBaseController
     /**
      * Show the form for editing the specified Project.
      *
-     * @param int $id
+     * @param Project $project
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        /** @var Project $project */
-        $project = $this->projectRepository->findOrFail($id, ['users']);
+        $project->users;
         $users = $project->users->pluck('id')->toArray();
 
         return $this->sendResponse(['project' => $project, 'users' => $users], 'Project retrieved successfully.');
@@ -106,19 +105,18 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param int                  $id
+     * @param Project              $project
      * @param UpdateProjectRequest $request
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function update($id, UpdateProjectRequest $request)
+    public function update(Project $project, UpdateProjectRequest $request)
     {
-        $this->projectRepository->findOrFail($id);
         $input = $request->all();
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
         /** @var Project $project */
-        $project = $this->projectRepository->update($input, $id);
+        $project = $this->projectRepository->update($input, $project->id);
         $project->users()->sync($input['user_ids']);
 
         return $this->sendSuccess('Project updated successfully.');
@@ -127,16 +125,15 @@ class ProjectController extends AppBaseController
     /**
      * Remove the specified Project from storage.
      *
-     * @param int $id
+     * @param Project $project
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        $this->projectRepository->findOrFail($id);
-        $this->projectRepository->delete($id);
+        $project->delete();
 
         return $this->sendSuccess('Project deleted successfully.');
     }
@@ -152,14 +149,16 @@ class ProjectController extends AppBaseController
     }
 
     /**
-     * @param int|array $projectIds
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function users($projectIds)
+    public function users(Request $request)
     {
+        $projectIds = $request->get('projectIds', null);
+
         $projectIdsArr = [];
-        if ($projectIds != 0) {
+        if (!is_null($projectIds)) {
             $projectIdsArr = explode(',', $projectIds);
         }
         $users = $this->userRepository->getUserList($projectIdsArr);

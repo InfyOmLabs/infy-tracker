@@ -142,7 +142,7 @@ Dropzone.options.dropzone = {
     timeout: 50000,
     init: function() {
         thisDropzone = this;
-        $.get(taskUrl+'get-attachments/'+taskId, function(data) {
+        $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
                 let mockFile = { name: value.name, size: value.size, id:value.id};
 
@@ -203,7 +203,7 @@ Dropzone.options.dropzone = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + attachmentId,
+            url: taskUrl + attachmentId +  '/delete-attachment',
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);
@@ -230,6 +230,10 @@ Dropzone.options.dropzone = {
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
+        } else {
+            file.previewElement.addEventListener("click", function() {
+                window.open(attachment.file_url, '_blank');
+            });
         }
     },
     error: function(file, response)
@@ -275,9 +279,9 @@ $('#btnComment').click(function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/new',
+        url: baseUrl + 'tasks/' + taskId+ '/comments',
         type: 'post',
-        data: { 'comment': comment, 'task_id': taskId },
+        data: { 'comment': comment},
         success: function (result) {
             if (result.success) {
                 let commentId = result.data.comment.id;
@@ -311,8 +315,8 @@ $(document).on('click', '.del-comment', function (event) {
         },
         function () {
             $.ajax({
-                url: baseUrl + 'comments/' + commentId + '/delete',
-                type: 'get',
+                url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId,
+                type: 'DELETE',
                 success: function (result) {
                     if (result.success) {
                         let commetDiv = 'comment__'+commentId;
@@ -370,7 +374,7 @@ $(document).on('click', ".save-comment", function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/' + commentId + '/update',
+        url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId + '/update',
         type: 'post',
         data: { 'comment': comment.trim() },
         success: function (result) {

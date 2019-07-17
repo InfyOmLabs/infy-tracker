@@ -64,14 +64,13 @@ class TimeEntryController extends AppBaseController
     /**
      * Show the form for editing the specified TimeEntry.
      *
-     * @param int $id
+     * @param TimeEntry $timeEntry
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function edit($id)
+    public function edit(TimeEntry $timeEntry)
     {
-        $this->timeEntryRepository->findOrFail($id);
-        $timeEntryDetails = $this->timeEntryRepository->getTimeEntryDetail($id);
+        $timeEntryDetails = $this->timeEntryRepository->getTimeEntryDetail($timeEntry->id);
 
         return $this->sendResponse($timeEntryDetails, 'Time Entry retrieved successfully.');
     }
@@ -79,14 +78,14 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param int     $id
-     * @param Request $request
+     * @param TimeEntry $timeEntry
+     * @param Request   $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update($id, Request $request)
+    public function update(TimeEntry $timeEntry, Request $request)
     {
-        $entry = TimeEntry::whereUserId(getLoggedInUserId())->find($id);
+        $entry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
@@ -99,24 +98,22 @@ class TimeEntryController extends AppBaseController
             Log::info('fields changed: ', $inputDiff);
             Log::info('Entry updated by: '.Auth::user()->name);
         }
-        $this->timeEntryRepository->updateTimeEntry($input, $id);
+        $this->timeEntryRepository->updateTimeEntry($input, $timeEntry->id);
 
         return $this->sendSuccess('Time Entry updated successfully.');
     }
 
     /**
-     * @param $id
+     * @param TimeEntry $timeEntry
      *
      * @throws \Exception
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(TimeEntry $timeEntry)
     {
-        $timeEntry = $this->timeEntryRepository->findOrFail($id);
-
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
-        $this->timeEntryRepository->delete($id);
+        $timeEntry->delete();
 
         return response()->json(['success' => true], 200);
     }

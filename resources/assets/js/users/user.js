@@ -216,7 +216,7 @@ $(function () {
 
     $(document).on('click', '.email-btn', function (event) {
         let userId = $(event.currentTarget).data('id');
-        sendVerificationEmail(usersUrl + 'send-email/' + userId);
+        sendVerificationEmail(usersUrl + userId + '/send-email');
     });
 });
 

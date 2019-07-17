@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Client;
 use App\Queries\ClientDataTable;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
@@ -84,29 +85,26 @@ class ClientController extends AppBaseController
     /**
      * Show the form for editing the specified Client.
      *
-     * @param int $id
+     * @param Client $client
      *
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(Client $client)
     {
-        $client = $this->clientRepository->findOrFail($id);
-
         return $this->sendResponse($client, 'Client retrieved successfully.');
     }
 
     /**
      * Update the specified Client in storage.
      *
-     * @param int                 $id
+     * @param Client              $client
      * @param UpdateClientRequest $request
      *
      * @return JsonResponse
      */
-    public function update($id, UpdateClientRequest $request)
+    public function update(Client $client, UpdateClientRequest $request)
     {
-        $this->clientRepository->findOrFail($id);
-        $this->clientRepository->update($this->fill($request->all()), $id);
+        $this->clientRepository->update($this->fill($request->all()), $client->id);
 
         return $this->sendSuccess('Client updated successfully.');
     }
@@ -114,30 +112,27 @@ class ClientController extends AppBaseController
     /**
      * Remove the specified Client from storage.
      *
-     * @param int $id
+     * @param Client $client
      *
      * @throws Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
-        $this->clientRepository->findOrFail($id);
-        $this->clientRepository->delete($id);
+        $client->delete();
 
         return $this->sendSuccess('Client deleted successfully.');
     }
 
     /**
-     * @param int $clientId
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function projects($clientId)
+    public function projects(Request $request)
     {
-        if ($clientId == 0) {
-            $clientId = null;
-        }
+        $clientId = $request->get('client_id', null);
         $projects = $this->projectRepo->getProjectsList($clientId);
 
         return $this->sendResponse($projects, 'Projects retrieved successfully.');
