@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Eloquent as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -58,6 +59,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read mixed $prefix_task_number
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task ofProject($projectId)
  */
 class Task extends Model
 {
@@ -189,5 +192,16 @@ class Task extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class, 'task_id');
+    }
+
+    /**
+     * @param Builder $query
+     * @param int     $projectId
+     *
+     * @return Builder
+     */
+    public function scopeOfProject(Builder $query, $projectId)
+    {
+        return $query->where('project_id', $projectId);
     }
 }

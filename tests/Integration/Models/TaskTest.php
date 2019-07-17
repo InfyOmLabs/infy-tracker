@@ -34,4 +34,27 @@ class TaskTest extends TestCase
         $task = Task::first();
         $this->assertEquals('#TODO-1', $task->prefix_task_number);
     }
+
+    /** @test */
+    public function get_task_of_specific_project()
+    {
+        $project1 = factory(Project::class)->create();
+        $project2 = factory(Project::class)->create();
+
+        factory(Task::class)->create([
+            'project_id'  => $project1->id,
+        ]);
+
+        $task2 = factory(Task::class)->create([
+            'project_id'  => $project2->id,
+        ]);
+
+        $tasks = Task::ofProject($project2->id)->get();
+        $this->assertCount(1, $tasks);
+
+        /** @var Task $firstTask */
+        $firstTask = $tasks->first();
+        $this->assertEquals($task2->id, $firstTask->id);
+        $this->assertEquals($project2->id, $firstTask->project_id);
+    }
 }

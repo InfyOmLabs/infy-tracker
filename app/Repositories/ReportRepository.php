@@ -316,7 +316,7 @@ class ReportRepository extends BaseRepository
      *
      * @return string
      */
-    private function getDurationTime($minutes)
+    public function getDurationTime($minutes)
     {
         if ($minutes == 0) {
             return '0 hr';
