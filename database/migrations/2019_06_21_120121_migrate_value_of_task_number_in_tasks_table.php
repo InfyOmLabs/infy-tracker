@@ -16,7 +16,7 @@ class MigrateValueOfTaskNumberInTasksTable extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $projects = \App\Models\Project::all()->pluck('id')->toArray();
             foreach ($projects as $project) {
-                $tasks = \App\Models\Task::withTrashed()->whereProjectId($project)->get();
+                $tasks = \App\Models\Task::withTrashed()->ofProject($project)->get();
                 $taskNumber = 1;
                 foreach ($tasks as $task) {
                     $task->task_number = $taskNumber;

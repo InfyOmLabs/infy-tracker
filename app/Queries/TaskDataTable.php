@@ -26,7 +26,7 @@ class TaskDataTable
 
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
             function (Builder $q) use ($input) {
-                $q->where('project_id', $input['filter_project']);
+                $q->ofProject($input['filter_project']);
             });
 
         $query->when(isset($input['filter_status']) && $input['filter_status'] != Task::STATUS_ALL,
