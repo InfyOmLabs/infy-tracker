@@ -130,8 +130,10 @@ function getUserImageInitial($userId, $name)
 }
 
 /**
- * This function return bool value if auth user has either or not permission
+ * This function return bool value if auth user has either or not permission.
+ *
  * @param $permissionName
+ *
  * @return bool
  */
 function authUserHasPermission($permissionName)
@@ -139,5 +141,6 @@ function authUserHasPermission($permissionName)
     if (Auth::user()->can($permissionName)) {
         return true;
     }
+
     return false;
 }

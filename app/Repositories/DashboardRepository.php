@@ -103,8 +103,8 @@ class DashboardRepository
                 }
             }
 
-            $data['result'][] = (object)[
-                'name' => ucfirst($user->name),
+            $data['result'][] = (object) [
+                'name'        => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
             $color = getColorCode();
@@ -115,9 +115,10 @@ class DashboardRepository
         foreach ($data['result'] as $item) {
             $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
-        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
+        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
+
         return $data;
     }
 
