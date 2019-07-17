@@ -10,6 +10,7 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\ReportRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
+use Arr;
 use Auth;
 use Exception;
 use Flash;
@@ -107,8 +108,16 @@ class ReportController extends AppBaseController
             return redirect(route('reports.index'));
         }
         $reports = $this->reportRepository->getReport($report);
+        $duration = array_sum(Arr::pluck($reports, 'duration'));
+        $totalHours = $this->reportRepository->getDurationTime($duration);
+        $data = [
+            'report'       => $report,
+            'reports'      => $reports,
+            'totalHours'   => $totalHours,
+            'totalMinutes' => $duration,
+        ];
 
-        return view('reports.show')->with(['report' => $report, 'reports' => $reports]);
+        return view('reports.show')->with($data);
     }
 
     /**
