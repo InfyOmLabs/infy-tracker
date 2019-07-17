@@ -33,7 +33,7 @@
                                     <i class="fa fa-users mr-2"></i>
                                     {{ucwords($user['name'])}}
                                 </div>
-                                <span>{{$user['time']}}</span>
+                                <span>{{$user['time']}} ({{round($user['duration'] * 100 / $project['duration'], 2)}} %)</span>
                             </div>
                             @foreach($user['tasks'] as $task)
                                 <div class="reports__task-row">
