@@ -57,7 +57,7 @@ clientDropDown.on('change', function () {
 
 function loadProjects(clientId) {
     clientId  = (clientId == 0) ? '' : clientId;
-    let url = clientProjects+ '?client_id='+clientId;
+    let url = projectsOfClient+ '?client_id='+clientId;
     $.ajax({
         url: url,
         type: 'GET',
@@ -79,7 +79,7 @@ $("#projectIds").on('change', function () {
 });
 
 function loadUsers(projectIds) {
-    let url = projectUsers + '?projectIds='+projectIds;
+    let url = usersOfProjects + '?projectIds='+projectIds;
     $.ajax({
         url: url,
         type: 'GET',
