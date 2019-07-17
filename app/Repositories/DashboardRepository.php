@@ -12,6 +12,7 @@ namespace App\Repositories;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
+use Auth;
 use Carbon\Carbon;
 
 class DashboardRepository
@@ -48,7 +49,6 @@ class DashboardRepository
         $data = [];
         $totalRecords = 0;
         $index = 0;
-
         /** @var TimeEntry $entry */
         foreach ($projects as $key => $entry) {
             $item['label'] = $entry['name'];
@@ -87,7 +87,11 @@ class DashboardRepository
         $startDate = Carbon::parse($input['start_date'])->startOfDay()->format('Y-m-d H:i:s');
         $endDate = Carbon::parse($input['start_date'])->endOfDay()->format('Y-m-d H:i:s');
         $timeEntry = TimeEntry::whereBetween('start_time', [$startDate, $endDate])->get();
-        $users = User::all();
+        if (!authUserHasPermission('manage_users')) {
+            $users = User::whereId(Auth::id())->get();
+        } else {
+            $users = User::all();
+        }
         $data['result'] = [];
         foreach ($users as $user) {
             $totalDuration = 0;
