@@ -13,7 +13,7 @@ $('#editProfileForm').submit(function (event) {
             }
         },
         error: function (result) {
-            printErrorMessage("#editValidationErrorsBox", result);
+            printErrorMessage("#editProfileValidationErrorsBox", result);
         },
         complete: function () {
             loadingButton.button('reset');
@@ -22,7 +22,7 @@ $('#editProfileForm').submit(function (event) {
 });
 
 $('#EditProfileModal').on('hidden.bs.modal', function () {
-    resetModalForm('#editProfileForm', '#editValidationErrorsBox');
+    resetModalForm('#editProfileForm', '#editProfileValidationErrorsBox');
 });
 
 // open edit user profile model

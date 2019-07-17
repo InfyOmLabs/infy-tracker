@@ -25,7 +25,7 @@ class DashboardRepository
     public function getWorkReport($input)
     {
         $dates = $this->getDate($input['start_date'], $input['end_date']);
-        $colors = getChartColors();
+
         $timeEntry = TimeEntry::with('task.project')
             ->whereUserId($input['user_id'])
             ->whereBetween('start_time', [$dates['startDate'], $dates['endDate']])
@@ -50,14 +50,14 @@ class DashboardRepository
         $totalRecords = 0;
         $index = 0;
         /** @var TimeEntry $entry */
-        foreach ($projects as $entry) {
+        foreach ($projects as $key => $entry) {
             $item['label'] = $entry['name'];
-            $item['backgroundColor'] = $colors[$index];
             $item['data'] = [];
             foreach ($dates['dateArr'] as $date) {
                 $duration = isset($entry[$date]) ? $entry[$date] : 0;
-                $item['data'][] = $duration;
+                $item['data'][] = round($duration / 60, 2);
                 $totalRecords = $totalRecords + $duration;
+                $item['backgroundColor'] = getColor(0.7);
             }
             $data[] = (object) $item;
             $index++;
@@ -86,64 +86,38 @@ class DashboardRepository
     {
         $startDate = Carbon::parse($input['start_date'])->startOfDay()->format('Y-m-d H:i:s');
         $endDate = Carbon::parse($input['start_date'])->endOfDay()->format('Y-m-d H:i:s');
-        $timeEntry = TimeEntry::with(['task.project'])
-            ->whereBetween('start_time', [$startDate, $endDate])
-            ->get();
+        $timeEntry = TimeEntry::whereBetween('start_time', [$startDate, $endDate])->get();
         if (!authUserHasPermission('manage_users')) {
             $users = User::whereId(Auth::id())->get();
         } else {
             $users = User::all();
         }
-        $data['drilldown'] = [];
         $data['result'] = [];
         foreach ($users as $user) {
             $totalDuration = 0;
-            $projectData = [];
+
             /** @var TimeEntry $entry */
             foreach ($timeEntry as $entry) {
                 if ($entry->user_id === $user->id) {
-                    $projectId = $entry->task->project_id;
                     $totalDuration = $totalDuration + $entry->duration;
-                    if (!isset($projectData[$projectId])) {
-                        $projectData[$projectId] = [
-                            ucfirst($entry->task->project->name),
-                            0,
-                        ];
-                    }
-                    $projectData[$projectId][1] = $projectData[$projectId][1] + $entry->duration;
                 }
             }
 
-            $proData = [];
-            foreach ($projectData as $item) {
-                $item[1] = round($item[1] / 60, 2);
-                $proData[] = $item;
-            }
-            if (count($proData) > 0) {
-                $data['drilldown'][] =
-                    (object) [
-                        'name' => ucfirst($user->name),
-                        'id'   => ucfirst($user->name),
-                        'data' => $proData,
-                    ];
-            }
-
-            $data['result'][] = (object) [
-                'name'        => ucfirst($user->name),
+            $data['result'][] = (object)[
+                'name' => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
-                'drilldown'   => $totalDuration === 0 ? null : ucfirst($user->name),
             ];
+            $color = getColorCode();
+            $data['data']['backgroundColor'][] = getColor(0.2, $color);
+            $data['data']['borderColor'][] = getColor(1, $color);
         }
         $data['totalRecords'] = 0;
         foreach ($data['result'] as $item) {
             $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
-        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
+        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
-        $data['data']['backgroundColor'] = array_values(getBarChartColors());
-        $data['data']['borderColor'] = array_keys(getBarChartColors());
-        //unset($data['result']);
         return $data;
     }
 

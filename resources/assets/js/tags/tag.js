@@ -39,6 +39,7 @@ $('#addNewForm').submit(function (event) {
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#tags_table').DataTable().ajax.reload(null, false);
             }
@@ -63,6 +64,7 @@ $('#editForm').submit(function (event) {
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#tags_table').DataTable().ajax.reload(null, false);
             }

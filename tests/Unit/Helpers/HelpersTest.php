@@ -6,7 +6,8 @@ use Tests\TestCase;
 
 class HelpersTest extends TestCase
 {
-    public function testExplodeTrimRemoveEmptyValuesFromArray()
+    /** @test */
+    public function explode_trim_remove_empty_values_from_array()
     {
         $result = explode_trim_remove_empty_values_from_array(' hello   ');
         $this->assertEquals(['hello'], $result);
