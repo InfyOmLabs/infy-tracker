@@ -114,7 +114,7 @@ class ReportController extends AppBaseController
             'report'       => $report,
             'reports'      => $reports,
             'totalHours'   => $totalHours,
-            'totalMinutes' => $duration
+            'totalMinutes' => $duration,
         ];
         return view('reports.show')->with($data);
     }
