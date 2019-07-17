@@ -21,7 +21,7 @@ class ReportFilterTest extends TestCase
     use DatabaseTransactions;
 
     /** @test */
-    public function get_filter_of_specific_report()
+    public function get_filters_of_specific_report()
     {
         $report1 = factory(Report::class)->create();
         $report2 = factory(Report::class)->create();
@@ -51,7 +51,7 @@ class ReportFilterTest extends TestCase
     }
 
     /** @test */
-    public function get_filter_of_specific_param_type()
+    public function get_filters_of_specific_param_type()
     {
         $reportFilter1 = factory(ReportFilter::class)->create(['param_type' => Tag::class]);
         $reportFilter2 = factory(ReportFilter::class)->create(['param_type' => User::class]);
@@ -66,7 +66,7 @@ class ReportFilterTest extends TestCase
     }
 
     /** @test */
-    public function return_empty_when_no_filter_available_for_specific_type()
+    public function return_empty_when_no_filters_available_for_specific_type()
     {
         factory(ReportFilter::class)->create(['param_type' => Tag::class]);
         factory(ReportFilter::class)->create(['param_type' => User::class]);
