@@ -17,9 +17,11 @@
             <div class="page-header">
                 <h3>Dashboard</h3>
                 <div id="rightData" class="d-flex align-items-center">
+                    @permission('manage_users')
                     <div class="mr-4">
                         {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
                     </div>
+                    @endpermission
                     <div id="time_range" class="time_range">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
                             class="caret"></b>
