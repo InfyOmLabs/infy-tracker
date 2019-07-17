@@ -93,20 +93,12 @@ class ReportController extends AppBaseController
     /**
      * Display the specified Report.
      *
-     * @param int $id
+     * @param Report $report
      *
      * @return Response
      */
-    public function show($id)
+    public function show(Report $report)
     {
-        /** @var Report $report */
-        $report = $this->reportRepository->find($id);
-
-        if (empty($report)) {
-            Flash::error('Report not found.');
-
-            return redirect(route('reports.index'));
-        }
         $reports = $this->reportRepository->getReport($report);
         $duration = array_sum(Arr::pluck($reports, 'duration'));
         $totalHours = $this->reportRepository->getDurationTime($duration);
@@ -123,19 +115,13 @@ class ReportController extends AppBaseController
     /**
      * Show the form for editing the specified Report.
      *
-     * @param int $id
+     * @param Report $report
      *
      * @return Response
      */
-    public function edit($id)
+    public function edit(Report $report)
     {
-        $report = $this->reportRepository->find($id);
-
-        if (empty($report)) {
-            Flash::error('Report not found.');
-
-            return redirect(route('reports.index'));
-        }
+        $id = $report->id;
         $data['report'] = $report;
         $data['projectIds'] = $this->reportRepository->getProjectIds($id);
         $data['tagIds'] = $this->reportRepository->getTagIds($id);
@@ -152,51 +138,36 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param int                 $id
+     * @param Report              $report
      * @param UpdateReportRequest $request
      *
      * @throws Exception
      *
      * @return Response
      */
-    public function update($id, UpdateReportRequest $request)
+    public function update(Report $report, UpdateReportRequest $request)
     {
-        $report = $this->reportRepository->find($id);
-
-        if (empty($report)) {
-            Flash::error('Report not found.');
-
-            return redirect(route('reports.index'));
-        }
         $input = $request->all();
-        $this->reportRepository->update($input, $id);
+        $this->reportRepository->update($input, $report->id);
         $this->reportRepository->updateReportFilter($input, $report);
         Flash::success('Report updated successfully.');
 
-        return redirect(route('reports.show', $id));
+        return redirect(route('reports.show', $report));
     }
 
     /**
      * Remove the specified Report from storage.
      *
-     * @param int $id
+     * @param Report $report
      *
      * @throws Exception
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function destroy($id)
+    public function destroy(Report $report)
     {
-        $report = $this->reportRepository->find($id);
-
-        if (empty($report)) {
-            Flash::error('Report not found.');
-
-            return redirect(route('reports.index'));
-        }
-
-        $this->reportRepository->delete($id);
-        $this->reportRepository->deleteFilter($id);
+        $report->delete();
+        $this->reportRepository->deleteFilter($report->id);
 
         Flash::success('Report deleted successfully.');
         if (request()->ajax()) {
