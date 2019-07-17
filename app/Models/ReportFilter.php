@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereUpdatedAt($value)
  * @mixin \Eloquent
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofParamType($paramType)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofReport($reportId)
  */
@@ -58,7 +59,7 @@ class ReportFilter extends Model
 
     /**
      * @param Builder $query
-     * @param string $paramType
+     * @param string  $paramType
      *
      * @return Builder
      */
@@ -69,7 +70,7 @@ class ReportFilter extends Model
 
     /**
      * @param Builder $query
-     * @param int $reportId
+     * @param int     $reportId
      *
      * @return Builder
      */
