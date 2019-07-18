@@ -280,10 +280,10 @@ class TaskRepository extends BaseRepository
             $query->ofProject($input['project_id']);
         }
 
-        $assignedTasks = $query->get(['title', 'id']);
+        $assignedTasks = $query->orderBy('title')->get(['title', 'id']);
 
         return [
-            'activities' => ActivityType::get(['name', 'id']),
+            'activities' => ActivityType::orderBy('name')->get(['name', 'id']),
             'tasks'      => $assignedTasks,
         ];
     }

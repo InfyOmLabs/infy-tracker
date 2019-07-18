@@ -57,7 +57,7 @@ class ProjectRepository extends BaseRepository
         });
 
         /** @var Project[] $projects */
-        $projects = $query->latest()->get();
+        $projects = $query->orderBy('name')->get();
 
         return $projects;
     }
