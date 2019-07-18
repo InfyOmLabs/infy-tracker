@@ -38,6 +38,10 @@ let tbl = $('#timeEntryTable').DataTable({
             "width": '5%'
         },
         {
+            "targets": [8, 9],
+            "visible": false,
+        },
+        {
             "targets": [5],
             "width": "9%"
         },
@@ -63,7 +67,7 @@ let tbl = $('#timeEntryTable').DataTable({
                 
                 return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
             },
-            name: 'title'
+            name: 'task.title'
         },
         {
             data: 'activity_type.name',
@@ -97,7 +101,15 @@ let tbl = $('#timeEntryTable').DataTable({
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-delete" data-id="' + row.id + '" >' +
                     '<i class="cui-trash action-icon"></i></a>'
             }, name: 'id'
-        }
+        },
+        {
+            data: 'task.project.prefix',
+            name: 'task.project.prefix'
+        },
+        {
+            data: 'task.task_number',
+            name: 'task.task_number'
+        },
     ],
     "fnInitComplete": function () {
         $('#filterActivity,#filterUser,#filterTask').change(function () {
