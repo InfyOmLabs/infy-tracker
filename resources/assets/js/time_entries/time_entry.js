@@ -18,7 +18,7 @@ $('#activityTypeId,#editActivityTypeId').select2({
 });
 
 let isEdit = false;
-let editTaskId = null;
+let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
@@ -261,6 +261,7 @@ window.renderTimeEntry = function (id) {
             if (result.success) {
                 let timeEntry = result.data;
                 editTaskId = timeEntry.task_id;
+                editProjectId = timeEntry.project_id;
                 $('#editTimeProjectId').val(timeEntry.project_id).trigger('change');
                 $('#entryId').val(timeEntry.id);
                 $('#editTaskId').val(timeEntry.task_id).trigger("change");
@@ -333,7 +334,7 @@ $("#timeProjectId").on('change', function () {
 $("#editTimeProjectId").on('change', function () {
     $("#editTaskId").select2("val", "");
     var projectId = $(this).val();
-    isEdit = true;
+    isEdit = (editProjectId == projectId) ? true : false;
     getTasksByProject(projectId, '#editTaskId', 0, '#teEditValidationErrorsBox');
 });
 
