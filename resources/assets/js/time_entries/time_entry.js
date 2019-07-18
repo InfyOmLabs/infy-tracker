@@ -335,7 +335,7 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
             printErrorMessage(errorBoxId, result);
         }
     });
-}
+};
 
 $("#timeProjectId").on('change', function () {
     $("#taskId").select2("val", "");
