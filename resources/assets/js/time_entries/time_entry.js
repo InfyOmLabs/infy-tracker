@@ -20,7 +20,7 @@ $('#activityTypeId,#editActivityTypeId').select2({
 });
 
 let isEdit = false;
-let editTaskId = null;
+let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
@@ -38,6 +38,10 @@ let tbl = $('#timeEntryTable').DataTable({
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
+        },
+        {
+            "targets": [8, 9],
+            "visible": false,
         },
         {
             "targets": [5],
@@ -65,7 +69,7 @@ let tbl = $('#timeEntryTable').DataTable({
 
                 return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
             },
-            name: 'title'
+            name: 'task.title'
         },
         {
             data: 'activity_type.name',
@@ -99,7 +103,15 @@ let tbl = $('#timeEntryTable').DataTable({
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-delete" data-id="' + row.id + '" >' +
                     '<i class="cui-trash action-icon"></i></a>'
             }, name: 'id'
-        }
+        },
+        {
+            data: 'task.project.prefix',
+            name: 'task.project.prefix'
+        },
+        {
+            data: 'task.task_number',
+            name: 'task.task_number'
+        },
     ],
     "fnInitComplete": function () {
         $('#filterActivity,#filterUser,#filterTask').change(function () {
@@ -238,6 +250,7 @@ window.renderTimeEntry = function (id) {
             if (result.success) {
                 let timeEntry = result.data;
                 editTaskId = timeEntry.task_id;
+                editProjectId = timeEntry.project_id;
                 $('#editTimeProjectId').val(timeEntry.project_id).trigger('change');
                 $('#entryId').val(timeEntry.id);
                 $('#editTaskId').val(timeEntry.task_id).trigger("change");
@@ -310,7 +323,8 @@ $("#timeProjectId").on('change', function () {
 $("#editTimeProjectId").on('change', function () {
     $("#editTaskId").select2("val", "");
     const projectId = $(this).val();
-    isEdit = true;
+    isEdit = (editProjectId == projectId) ? true : false;
+
     getTasksByProject(projectId, '#editTaskId', 0, '#teEditValidationErrorsBox');
 });
 
