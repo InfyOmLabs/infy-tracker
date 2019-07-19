@@ -162,14 +162,28 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
-                    '<i class="fa fa-user-clock action-icon"></i></a>' +
+                let taskAssignee = [];
+                $.each(row.task_assignee, function (key, value) {
+                    taskAssignee.push(value.id);
+                });
+                let actionString = '';
+                if ($.inArray(loggedInUserId, taskAssignee) > -1) {
+                    actionString = '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
+                        '<i class="fa fa-user-clock action-icon"></i></a>';
+                } else {
+                    actionString = '<a data-toggle="tooltip" title="This task is not assigned to you" class="btn btn-secondary action-btn btn-sm entry-model mr-1">' +
+                        '<i class="fa fa-user-clock action-icon"></i></a>';
+                }
+
+                actionString  +=
                     '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails mr-1"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
                     '<i class="fa fa-clock action-icon"></i></a>'+
                     '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete" data-task-id="' + row.id + '">' +
-                    '<i class="cui-trash action-icon"></i></a>'
+                    '<i class="cui-trash action-icon"></i></a>';
+
+                return actionString;
             }, name: 'id'
         }
     ],
@@ -436,6 +450,11 @@ $(document).on('click', '.entry-model', function (event) {
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
     getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+
+    setTimeout(function () {
+        console.log(taskId);
+        $('#taskId').val(taskId).trigger("change");
+    }, 1500);
 });
 
 CKEDITOR.replace( 'description', {

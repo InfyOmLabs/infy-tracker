@@ -195,6 +195,9 @@ Dropzone.options.dropzone = {
             $('.dz-image').last().find('img').attr({width: '100%', height: '100%'});
         }
     },
+    processing: function() {
+        $('.dz-remove').html('x');
+    },
     removedfile: function(file)
     {
         let attachmentId = file.previewElement.querySelector("[data-file-id]").getAttribute('data-file-id');

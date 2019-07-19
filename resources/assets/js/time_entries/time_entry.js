@@ -3,6 +3,8 @@ $('#taskId,#editTaskId').select2({
     placeholder: "Select Task"
 });
 
+$('#duration').prop('disabled', true);
+
 $('#timeProjectId,#editTimeProjectId').select2({
     width: '100%',
     placeholder: "Select Project"
@@ -18,7 +20,7 @@ $('#activityTypeId,#editActivityTypeId').select2({
 });
 
 let isEdit = false;
-let editTaskId = null;
+let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
@@ -36,6 +38,10 @@ let tbl = $('#timeEntryTable').DataTable({
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
+        },
+        {
+            "targets": [8, 9],
+            "visible": false,
         },
         {
             "targets": [5],
@@ -60,10 +66,10 @@ let tbl = $('#timeEntryTable').DataTable({
             data: function (row) {
                 let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
                 let url = taskUrl + taskPrefix;
-                
+
                 return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
             },
-            name: 'title'
+            name: 'task.title'
         },
         {
             data: 'activity_type.name',
@@ -97,7 +103,15 @@ let tbl = $('#timeEntryTable').DataTable({
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-delete" data-id="' + row.id + '" >' +
                     '<i class="cui-trash action-icon"></i></a>'
             }, name: 'id'
-        }
+        },
+        {
+            data: 'task.project.prefix',
+            name: 'task.project.prefix'
+        },
+        {
+            data: 'task.task_number',
+            name: 'task.task_number'
+        },
     ],
     "fnInitComplete": function () {
         $('#filterActivity,#filterUser,#filterTask').change(function () {
@@ -113,7 +127,7 @@ $('#timeEntryTable').on('draw.dt', function () {
 $('#timeEntryAddForm').submit(function (event) {
     event.preventDefault();
     $('#taskId').removeAttr('disabled');
-    var loadingButton = jQuery(this).find("#btnSave");
+    const loadingButton = jQuery(this).find("#btnSave");
     loadingButton.button('loading');
     $.ajax({
         url: storeTimeEntriesUrl,
@@ -145,15 +159,18 @@ $('#timeEntryAddModal').on('hidden.bs.modal', function () {
 });
 
 $('#startTime,#endTime').on('dp.change', function () {
-    var startTime = $('#startTime').val();
-    var endTime = $('#endTime').val();
-    var minutes = 0;
+    const startTime = $('#startTime').val();
+    const endTime = $('#endTime').val();
+    let minutes = 0;
     if (endTime) {
-        var diff = new Date(Date.parse(endTime) - Date.parse(startTime));
+        const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
     }
     $('#duration').val(minutes).prop('disabled', true);
 });
+
+$("#startTime").attr("placeholder", 'YYYY-MM-DD HH:mm:ss');
+$("#endTime").attr("placeholder", 'YYYY-MM-DD HH:mm:ss');
 
 $('#dvStartTime,#dvEndTime').on("click", function () {
     $('#startTime').removeAttr('disabled');
@@ -161,43 +178,15 @@ $('#dvStartTime,#dvEndTime').on("click", function () {
     $('#duration').prop('disabled', true);
 });
 
-$('#dvDuration').on("click", function () {
-    $('#startTime').prop('disabled', true);
-    $('#endTime').prop('disabled', true);
-    $('#duration').removeAttr('disabled');
-});
-
-$('#duration').on("keyup", function () {
-    $('#startTime').val(null);
-    $('#endTime').val(null);
-});
-
 $('#editStartTime,#editEndTime').on('dp.change', function () {
-    var startTime = $('#editStartTime').val();
-    var endTime = $('#editEndTime').val();
-    var minutes = 0;
+    const startTime = $('#editStartTime').val();
+    const endTime = $('#editEndTime').val();
+    let minutes = 0;
     if (endTime) {
-        var diff = new Date(Date.parse(endTime) - Date.parse(startTime));
+        const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
     }
     $('#editDuration').val(minutes).prop('disabled', true);
-});
-
-$('#dvEditStartTime,#dvEditEndTime').on("click", function () {
-    $('#editStartTime').removeAttr('disabled');
-    $('#editEndTime').removeAttr('disabled');
-    $('#editDuration').prop('disabled', true);
-});
-
-$('#dvEditDuration').on("click", function () {
-    $('#editStartTime').prop('disabled', true);
-    $('#editEndTime').prop('disabled', true);
-    $('#editDuration').removeAttr('disabled');
-});
-
-$('#editDuration').on("keyup", function () {
-    $('#editStartTime').val(null);
-    $('#editEndTime').val(null);
 });
 
 $('#startTime,#editStartTime').datetimepicker({
@@ -221,9 +210,9 @@ $('#endTime,#editEndTime').datetimepicker({
 
 $('#editTimeEntryForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnEditSave");
+    const loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
-    var id = $('#entryId').val();
+    const id = $('#entryId').val();
     $.ajax({
         url: timeEntryUrl + id + '/update',
         type: 'post',
@@ -261,6 +250,7 @@ window.renderTimeEntry = function (id) {
             if (result.success) {
                 let timeEntry = result.data;
                 editTaskId = timeEntry.task_id;
+                editProjectId = timeEntry.project_id;
                 $('#editTimeProjectId').val(timeEntry.project_id).trigger('change');
                 $('#entryId').val(timeEntry.id);
                 $('#editTaskId').val(timeEntry.task_id).trigger("change");
@@ -293,7 +283,7 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
         return false;
     }
     let taskURL = projectsURL + projectId + '/tasks';
-    taskURL = (isEdit) ? taskURL + '?task_id='+editTaskId : taskURL;
+    taskURL = (isEdit) ? taskURL + '?task_id=' + editTaskId : taskURL;
 
     $.ajax({
         url: taskURL,
@@ -322,18 +312,19 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
             printErrorMessage(errorBoxId, result);
         }
     });
-}
+};
 
 $("#timeProjectId").on('change', function () {
     $("#taskId").select2("val", "");
-    var projectId = $(this).val();
+    const projectId = $(this).val();
     getTasksByProject(projectId, '#taskId', 0, '#tmValidationErrorsBox');
 });
 
 $("#editTimeProjectId").on('change', function () {
     $("#editTaskId").select2("val", "");
-    var projectId = $(this).val();
-    isEdit = true;
+    const projectId = $(this).val();
+    isEdit = (editProjectId == projectId) ? true : false;
+
     getTasksByProject(projectId, '#editTaskId', 0, '#teEditValidationErrorsBox');
 });
 
