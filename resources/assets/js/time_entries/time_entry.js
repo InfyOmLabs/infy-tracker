@@ -150,6 +150,8 @@ $('#timeEntryAddForm').submit(function (event) {
 
 $('#timeEntryAddModal').on('hidden.bs.modal', function () {
     isEdit = false;
+    $("#startTime").data("DateTimePicker").date(null);
+    $("#endTime").data("DateTimePicker").date(null);
     $('#taskId').val(null).trigger("change");
     $('#activityTypeId').val(null).trigger("change");
     $('#duration').prop('disabled', false);
@@ -196,7 +198,8 @@ $('#startTime,#editStartTime').datetimepicker({
         up: "icon-angle-up",
         down: "icon-angle-down"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
 });
 $('#endTime,#editEndTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
@@ -205,7 +208,8 @@ $('#endTime,#editEndTime').datetimepicker({
         up: "icon-angle-up",
         down: "icon-angle-down"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
 });
 
 $('#editTimeEntryForm').submit(function (event) {
