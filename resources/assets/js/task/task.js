@@ -500,4 +500,3 @@ function loadProjectAssignees(projectId, selector) {
         }
     });
 }
-
