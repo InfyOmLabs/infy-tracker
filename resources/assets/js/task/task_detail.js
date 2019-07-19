@@ -253,14 +253,13 @@ Dropzone.options.dropzone = {
 
 function addCommentSection(comment) {
     let id = comment.id;
-    let imgUrl = baseUrl +'/assets/img/user-avatar.png';
     return '<div class="comments__information clearfix" id="comment__'+id+'">\n' +
         '        <div class="user">\n' +
-        '            <img class="user__img" src="'+ imgUrl +'" alt="User Image">\n' +
+        '            <img class="user__img" src="'+ comment.user_avatar +'" alt="User Image">\n' +
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
-        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
-        '                    <a class="pull-right edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
+        '                    <a class="user__icons del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
+        '                    <a class="user__icons edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
         '                    <a class="pull-right save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
