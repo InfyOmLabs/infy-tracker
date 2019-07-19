@@ -256,7 +256,7 @@ $(document).on('click', '.delete-btn', function (event) {
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
     let id = $(event.currentTarget).data('id');
-    startLoader()
+    startLoader();
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
     $.ajax({
@@ -313,6 +313,7 @@ $('#addNewForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (result) {
@@ -345,6 +346,7 @@ $('#editForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (error) {
@@ -388,6 +390,7 @@ $(function () {
             success: function (result) {
                 if (result.success) {
                     $('#task_table').DataTable().ajax.reload(null, false);
+                    revokerTracker();
                 }
             }
         });
