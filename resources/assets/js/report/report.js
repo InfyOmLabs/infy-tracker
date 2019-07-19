@@ -28,7 +28,8 @@ $('#start_date').datetimepicker({
         next: "icon-angle-right",
         previous: "icon-angle-left"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment()
 });
 
 $('#end_date').datetimepicker({
@@ -40,7 +41,8 @@ $('#end_date').datetimepicker({
         next: "icon-angle-right",
         previous: "icon-angle-left"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment()
 });
 
 $("#start_date").on("dp.change", function (e) {
