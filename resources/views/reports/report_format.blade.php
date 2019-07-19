@@ -1,6 +1,7 @@
 <div class="card">
     <div class="card-body reports">
         <h4>{{$report->name}} ({{$totalHours}})</h4>
+        <h2>{{ $report->formatted_date }}</h2>
         @if(empty($reports))
             <div class="d-flex justify-content-center">
                 <span>No record available.</span>

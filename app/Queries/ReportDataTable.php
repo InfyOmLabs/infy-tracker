@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Report;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class ReportDataTable.
@@ -10,10 +11,18 @@ use App\Models\Report;
 class ReportDataTable
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @param array $input
+     *
+     * @return Report|Builder|\Illuminate\Database\Query\Builder
      */
-    public function get()
+    public function get($input = [])
     {
-        return Report::with('user')->select('reports.*');
+        $query  = Report::with('user')->select('reports.*');
+
+        $query->when(!empty($input['filter_created_by']), function (Builder $query) use ($input) {
+            $query->where('owner_id', $input['filter_created_by']);
+        });
+
+        return $query;
     }
 }
