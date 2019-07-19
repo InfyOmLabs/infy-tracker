@@ -296,7 +296,7 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::ofProject($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
+        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=', '')->orderByDesc('task_number')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {

@@ -108,6 +108,7 @@
     let usersUrl = "{{ url('users') }}/";
     let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
+    let reporstUrl = "{{ url('reports') }}";
     let usersOfProjects = "{{ url('users-of-projects') }}";
     let projectsOfClient = "{{ url('projects-of-client') }}";
 </script>

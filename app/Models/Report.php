@@ -71,4 +71,9 @@ class Report extends Model
     {
         return $this->belongsToMany(Project::class, 'report_filters', 'report_id', 'param_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
 }
