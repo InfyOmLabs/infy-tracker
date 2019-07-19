@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Report;
+use App\Queries\ReportDataTable;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ReportRepository;
@@ -12,10 +13,10 @@ use App\Repositories\TagRepository;
 use App\Repositories\UserRepository;
 use Arr;
 use Auth;
+use DataTables;
 use Exception;
 use Flash;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Response;
 
 class ReportController extends AppBaseController
@@ -36,8 +37,8 @@ class ReportController extends AppBaseController
         UserRepository $userRepository,
         ProjectRepository $projectRepository,
         ClientRepository $clientRepository,
-        TagRepository $tagRepository)
-    {
+        TagRepository $tagRepository
+    ) {
         $this->reportRepository = $reportRepo;
         $this->userRepo = $userRepository;
         $this->clientRepo = $clientRepository;
@@ -46,13 +47,21 @@ class ReportController extends AppBaseController
     }
 
     /**
-     * @return Factory|View
+     * Display a listing of the Reports.
+     *
+     * @param Request $request
+     *
+     * @throws Exception
+     *
+     * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $reports = $this->reportRepository->all();
+        if ($request->ajax()) {
+            return Datatables::of((new ReportDataTable())->get())->make(true);
+        }
 
-        return view('reports.index')->with('reports', $reports);
+        return view('reports.index');
     }
 
     /**
@@ -138,7 +147,7 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param Report              $report
+     * @param Report $report
      * @param UpdateReportRequest $request
      *
      * @throws Exception
