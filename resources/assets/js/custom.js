@@ -45,7 +45,7 @@ $(document).on('click', '.btn-task-delete', function (event) {
 window.deleteItem = function (url, tableId, header, callFunction = null) {
     swal({
             title: "Delete !",
-            text: "Are you sure you want to delete this " + header + "?",
+            text: 'Are you sure you want to delete this "' + header + '" ?',
             type: "warning",
             showCancelButton: true,
             closeOnConfirm: false,
