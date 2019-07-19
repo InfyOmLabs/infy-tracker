@@ -165,6 +165,9 @@ $('#startTime,#endTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
+        if (!Number.isInteger(minutes))  {
+            minutes = minutes.toFixed(2);
+        }
     }
     $('#duration').val(minutes).prop('disabled', true);
 });
