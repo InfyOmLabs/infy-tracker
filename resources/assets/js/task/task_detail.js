@@ -144,7 +144,7 @@ Dropzone.options.dropzone = {
         thisDropzone = this;
         $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size, id:value.id};
+                let mockFile = { name: value.name, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
@@ -197,6 +197,7 @@ Dropzone.options.dropzone = {
     },
     processing: function() {
         $('.dz-remove').html('x');
+        $('.dz-details').hide();
     },
     removedfile: function(file)
     {

@@ -383,7 +383,7 @@ class TaskRepository extends BaseRepository
         foreach ($attachments as $attachment) {
             $obj['id'] = $attachment->id;
             $obj['name'] = $attachment->file;
-            $obj['size'] = filesize($attachment->file_path);
+//            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
             $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }
