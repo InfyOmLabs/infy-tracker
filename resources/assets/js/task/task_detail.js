@@ -276,6 +276,7 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
+    $('.no_comments').hide();
     let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
@@ -307,7 +308,7 @@ $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
     swal({
             title: "Delete !",
-            text: "Are you sure you want to delete this Comment?",
+            text: 'Are you sure you want to delete this "Comment" ?',
             type: "warning",
             showCancelButton: true,
             closeOnConfirm: false,
