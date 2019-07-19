@@ -1,8 +1,10 @@
 <div class="table-responsive-sm">
     <div class="list-group">
         @foreach($reports as $key => $report)
-            @if($key % 2 ===0 )
-                <div class="list-group-item list-group-item-action list-group-item-secondary">
+            @php
+                $className  = ($key % 2 == 0) ?  'list-group-item-secondary' : 'list-group-item-light'
+            @endphp
+                <div class="list-group-item list-group-item-action {{ $className }}">
                     <div class="row">
                         <div class="col-11">
                             <a class="report__heading" href="{!! route('reports.show',$report->id) !!}">
@@ -16,13 +18,6 @@
                         </div>
                     </div>
                 </div>
-            @else
-                <div class="list-group-item list-group-item-action list-group-item-light">
-                    <a class="report__heading" href="{!! route('reports.show',$report->id) !!}">
-                        {{$report->name}}
-                    </a>
-                </div>
-            @endif
         @endforeach
     </div>
 </div>
