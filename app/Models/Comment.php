@@ -45,6 +45,8 @@ class Comment extends Model
         'created_by',
     ];
 
+    protected $appends = ['user_avatar'];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -59,5 +61,10 @@ class Comment extends Model
     public function task()
     {
         return $this->belongsTo(Task::class, 'task_id');
+    }
+
+    public function getUserAvatarAttribute()
+    {
+        return getUserImageInitial($this->created_by, $this->createdUser->name);
     }
 }

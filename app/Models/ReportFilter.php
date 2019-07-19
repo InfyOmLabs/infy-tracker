@@ -8,6 +8,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -30,6 +31,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereUpdatedAt($value)
  * @mixin \Eloquent
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofParamType($paramType)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofReport($reportId)
  */
 class ReportFilter extends Model
 {
@@ -52,4 +56,26 @@ class ReportFilter extends Model
         'owner_id'   => 'integer',
         'param_id'   => 'integer',
     ];
+
+    /**
+     * @param Builder $query
+     * @param string  $paramType
+     *
+     * @return Builder
+     */
+    public function scopeOfParamType(Builder $query, $paramType)
+    {
+        return $query->where('param_type', $paramType);
+    }
+
+    /**
+     * @param Builder $query
+     * @param int     $reportId
+     *
+     * @return Builder
+     */
+    public function scopeOfReport(Builder $query, $reportId)
+    {
+        return $query->where('report_id', $reportId);
+    }
 }

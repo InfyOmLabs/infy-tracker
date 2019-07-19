@@ -10,6 +10,7 @@
     <div class="container-fluid">
         <div class="animated fadeIn">
             @include('coreui-templates::common.errors')
+            @include('flash::message')
             <div class="page-header">
                 <h3>View Report</h3>
                 <div class="filter-container">

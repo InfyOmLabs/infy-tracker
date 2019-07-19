@@ -97,6 +97,7 @@
 @yield('page_js')
 <script src="{{mix('assets/js/custom.js')}}" type="text/javascript"></script>
 <script>
+    let loggedInUserId = "{{ getLoggedInUserId() }}";
     let storeTimeEntriesUrl = "{{route('time-entries.store')}}";
     let myTasksUrl = "{{url('my-tasks')}}";
     let myProjectsUrl = "{{url('my-projects')}}";
@@ -107,6 +108,7 @@
     let usersUrl = "{{ url('users') }}/";
     let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
+    let reporstUrl = "{{ url('reports') }}";
     let usersOfProjects = "{{ url('users-of-projects') }}";
     let projectsOfClient = "{{ url('projects-of-client') }}";
 </script>

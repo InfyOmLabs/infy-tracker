@@ -36,7 +36,6 @@ timeRange.daterangepicker({
     ranges: {
         'Today': [moment(), moment()],
         'This Week': [moment().startOf('week'), moment().endOf('week')],
-        'Next Week': [moment().endOf('week').add(1, 'days'), moment().endOf('week').add(7, 'days')],
         'Last Week': [moment().startOf('week').subtract(7, 'days'), moment().startOf('week').subtract(1, 'days')],
         'This Month': [start, end],
         'Last Month': [lastMonth.clone().startOf('month'), lastMonth.clone().endOf('month')]

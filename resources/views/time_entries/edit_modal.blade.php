@@ -46,7 +46,7 @@
                     <div class="form-group col-sm-12">
                         {!! Form::label('duration', 'Duration (minutes)') !!}
                         <div id="dvEditDuration">
-                            {!! Form::number('duration', null, ['class' => 'form-control','id' => 'editDuration']) !!}
+                            {!! Form::number('duration', null, ['class' => 'form-control','id' => 'editDuration', 'readonly']) !!}
                         </div>
                     </div>
                 </div>

@@ -144,7 +144,7 @@ Dropzone.options.dropzone = {
         thisDropzone = this;
         $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size, id:value.id};
+                let mockFile = { name: value.name, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
@@ -194,6 +194,10 @@ Dropzone.options.dropzone = {
 
             $('.dz-image').last().find('img').attr({width: '100%', height: '100%'});
         }
+    },
+    processing: function() {
+        $('.dz-remove').html('x');
+        $('.dz-details').hide();
     },
     removedfile: function(file)
     {
@@ -272,6 +276,7 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
+    $('.no_comments').hide();
     let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
@@ -303,7 +308,7 @@ $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
     swal({
             title: "Delete !",
-            text: "Are you sure you want to delete this Comment?",
+            text: 'Are you sure you want to delete this "Comment" ?',
             type: "warning",
             showCancelButton: true,
             closeOnConfirm: false,

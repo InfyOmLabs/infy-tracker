@@ -1,7 +1,7 @@
 {
   "name": "infyomlabs/infy-tracker",
   "type": "project",
-  "version": "1.5.0-alpha",
+  "version": "1.5.1-alpha",
   "description": "Create Projects / Tasks, Track Time, Show Daily Reports",
     "keywords": [
       "time",
