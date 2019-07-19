@@ -231,7 +231,14 @@ $(document).on('click', '.edit-btn', function (event) {
 
                 $("#editAssignee").val(userIds).trigger('change');
                 $("#editPriority").val(task.priority).trigger('change');
-                $('#EditModal').modal('show');
+
+                setTimeout(function () {
+                    $.each(task.task_assignee, function(i,e){
+                        $("#editAssignee option[value='" + e.id + "']").prop("selected", true).trigger('change');
+                    });
+                    $('#EditModal').modal('show');
+
+                }, 1500);
             }
         },
         error: function (error) {
@@ -466,3 +473,31 @@ CKEDITOR.replace( 'editDesc', {
     language: 'en',
     height: '150px',
 });
+
+$(document).on('change', '#projectId', function (event) {
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'assignee')
+});
+
+$(document).on('change', '#editProjectId', function (event) {
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'editAssignee')
+});
+
+function loadProjectAssignees(projectId, selector) {
+    let url = usersOfProjects + '?projectIds='+projectId;
+    $('#'+selector).empty();
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (result) {
+            const users = result.data;
+            for (const key in users) {
+                if (users.hasOwnProperty(key)) {
+                    $('#'+selector).append($('<option>', {value: key, text: users[key]}));
+                }
+            }
+        }
+    });
+}
+

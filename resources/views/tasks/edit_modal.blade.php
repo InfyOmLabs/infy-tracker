@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('assign_to', 'Assign To') !!}
-                        {!! Form::select('assignees[]',$assignees, null, ['class' => 'form-control','id'=>'editAssignee', 'multiple' => true]) !!}
+                        {!! Form::select('assignees[]',[], null, ['class' => 'form-control','id'=>'editAssignee', 'multiple' => true]) !!}
                     </div>
                 </div>
                 <div class="row">
