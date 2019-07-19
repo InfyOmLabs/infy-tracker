@@ -102,8 +102,8 @@ class TaskRepository extends BaseRepository
      */
     public function update($input, $id)
     {
-        $this->validateTaskData($input);
         $task = $this->findOrFail($id);
+        $this->validateTaskData($input, $task);
 
         try {
             DB::beginTransaction();
@@ -128,13 +128,18 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param array $input
+     * @param Task|null $task
      *
      * @return bool
      */
-    public function validateTaskData($input)
+    public function validateTaskData($input, $task = null)
     {
+        if (!empty($task) && $input['due_date'] == $task->due_date) {
+            return true;
+        }
+
         if (Carbon::parse($input['due_date'])->toDateString() < Carbon::now()->toDateString()) {
-            throw new BadRequestHttpException('due_date must be greater than today\'s date');
+            throw new BadRequestHttpException('due_date must be greater than today\'s date.');
         }
 
         return true;
