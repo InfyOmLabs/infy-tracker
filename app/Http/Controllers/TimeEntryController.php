@@ -139,7 +139,7 @@ class TimeEntryController extends AppBaseController
         $startTime = Carbon::parse($input['start_time']);
         $endTime = Carbon::parse($input['end_time']);
 
-        $now  = Carbon::now();
+        $now = Carbon::now();
         if ($startTime > $now) {
             throw new BadRequestHttpException('Start time must be less than or equal to current time.');
         }
