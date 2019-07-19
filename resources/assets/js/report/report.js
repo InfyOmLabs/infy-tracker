@@ -104,7 +104,7 @@ $(document).on('click', '.delete-btn', function (event) {
 window.deleteReport = function (url) {
     swal({
         title: "Delete !",
-        text: "Are you sure you want to delete this report?",
+        text: 'Are you sure you want to delete this "Report" ?',
         type: "warning",
         showCancelButton: true,
         closeOnConfirm: false,
