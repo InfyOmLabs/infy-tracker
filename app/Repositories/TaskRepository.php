@@ -102,8 +102,8 @@ class TaskRepository extends BaseRepository
      */
     public function update($input, $id)
     {
-        $this->validateTaskData($input);
         $task = $this->findOrFail($id);
+        $this->validateTaskData($input, $task);
 
         try {
             DB::beginTransaction();
@@ -127,14 +127,19 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array     $input
+     * @param Task|null $task
      *
      * @return bool
      */
-    public function validateTaskData($input)
+    public function validateTaskData($input, $task = null)
     {
+        if (!empty($task) && $input['due_date'] == $task->due_date) {
+            return true;
+        }
+
         if (Carbon::parse($input['due_date'])->toDateString() < Carbon::now()->toDateString()) {
-            throw new BadRequestHttpException('due_date must be greater than today\'s date');
+            throw new BadRequestHttpException('due_date must be greater than today\'s date.');
         }
 
         return true;
@@ -296,7 +301,7 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::ofProject($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
+        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=', '')->orderByDesc('task_number')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
@@ -383,7 +388,7 @@ class TaskRepository extends BaseRepository
         foreach ($attachments as $attachment) {
             $obj['id'] = $attachment->id;
             $obj['name'] = $attachment->file;
-            $obj['size'] = filesize($attachment->file_path);
+//            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
             $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }

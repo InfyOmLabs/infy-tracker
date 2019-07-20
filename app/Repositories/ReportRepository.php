@@ -120,7 +120,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteProjects = array_diff((array) $projectIds, $input['projectIds']);
         if (!empty($deleteProjects)) {
-            ReportFilter::whereParamType(Project::class)->whereIn('param_id', $deleteProjects)->delete();
+            ReportFilter::ofParamType(Project::class)->whereIn('param_id', $deleteProjects)->delete();
         }
 
         $userIds = $this->getUserIds($report->id);
@@ -130,7 +130,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteUsers = array_diff((array) $userIds, $input['userIds']);
         if (!empty($deleteUsers)) {
-            ReportFilter::whereParamType(User::class)->whereIn('param_id', $deleteUsers)->delete();
+            ReportFilter::ofParamType(User::class)->whereIn('param_id', $deleteUsers)->delete();
         }
 
         $tagIds = $this->getTagIds($report->id);
@@ -140,7 +140,7 @@ class ReportRepository extends BaseRepository
         }
         $deleteTags = array_diff((array) $tagIds, $input['tagIds']);
         if (!empty($deleteTags)) {
-            ReportFilter::whereParamType(Tag::class)->whereIn('param_id', $deleteTags)->delete();
+            ReportFilter::ofParamType(Tag::class)->whereIn('param_id', $deleteTags)->delete();
         }
 
         $clientId = $this->getClientId($report->id);
@@ -151,7 +151,7 @@ class ReportRepository extends BaseRepository
         }
 
         if (!empty($clientId) && $input['client_id'] !== $clientId) {
-            ReportFilter::whereParamType(Client::class)->whereParamId($clientId)->delete();
+            ReportFilter::ofParamType(Client::class)->whereParamId($clientId)->delete();
         }
 
         return $result;
@@ -166,7 +166,7 @@ class ReportRepository extends BaseRepository
      */
     public function deleteFilter($reportId)
     {
-        return ReportFilter::whereReportId($reportId)->delete();
+        return ReportFilter::ofReport($reportId)->delete();
     }
 
     /**
@@ -176,7 +176,7 @@ class ReportRepository extends BaseRepository
      */
     public function getProjectIds($reportId)
     {
-        return ReportFilter::whereParamType(Project::class)->whereReportId($reportId)->pluck('param_id')->toArray();
+        return ReportFilter::ofParamType(Project::class)->ofReport($reportId)->pluck('param_id')->toArray();
     }
 
     /**
@@ -186,7 +186,7 @@ class ReportRepository extends BaseRepository
      */
     public function getTagIds($reportId)
     {
-        return ReportFilter::whereParamType(Tag::class)->whereReportId($reportId)->pluck('param_id')->toArray();
+        return ReportFilter::ofParamType(Tag::class)->ofReport($reportId)->pluck('param_id')->toArray();
     }
 
     /**
@@ -196,7 +196,7 @@ class ReportRepository extends BaseRepository
      */
     public function getUserIds($reportId)
     {
-        return ReportFilter::whereParamType(User::class)->whereReportId($reportId)->pluck('param_id')->toArray();
+        return ReportFilter::ofParamType(User::class)->ofReport($reportId)->pluck('param_id')->toArray();
     }
 
     /**
@@ -206,7 +206,7 @@ class ReportRepository extends BaseRepository
      */
     public function getClientId($reportId)
     {
-        $report = ReportFilter::whereParamType(Client::class)->whereReportId($reportId)->first();
+        $report = ReportFilter::ofParamType(Client::class)->ofReport($reportId)->first();
         if (empty($report)) {
             return;
         }

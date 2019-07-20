@@ -16,7 +16,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Task detail</h3>
+                <h3>Task Detail</h3>
                 <div class="filter-container__btn">
                     <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}"
                             data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">
@@ -93,14 +93,22 @@
                                 </div>
                             @endif
                         </div>
+                        @if(!empty($task->description))
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
                                 <span class="task-detail__description-heading">Description</span>
                             </div>
+
                             <div class="col-lg-8 col-sm-12">
-                                <div><?php echo html_entity_decode($task->description) ?></div>
+                                    <div>{!! html_entity_decode($task->description) !!}</div>
                             </div>
                         </div>
+                        @else
+                            <div class="mb-3 d-flex task-detail__item">
+                                <span class="task-detail__due-date-heading">Description</span>
+                                <span class="flex-1">N/A</span>
+                            </div>
+                        @endif
                         <div class="row">
                             <div class="col-lg-8 col-sm-12">
                                 <div class="mb-3 d-flex">
@@ -123,12 +131,15 @@
                                     <div>
                                         <div class="mb-3 d-flex">
                                             <span class="font-weight-bold">Comments</span>
+                                            @if($task->comments->isEmpty())
+                                                <span class="flex-1 ml-5 no_comments">No comments added yet</span>
+                                            @endif
                                         </div>
                                     </div>
                                     @foreach($task->comments as $comment)
                                         <div class="comments__information clearfix" id="{{ 'comment__'.$comment->id }}">
                                             <div class="user">
-                                                <img class="user__img" src="{{url('/assets/img/user-avatar.png')}}" alt="User Image">
+                                                <img class="user__img" src=" {{ $comment->user_avatar }}" alt="User Image">
                                                 <span class="user__username">
                                                     <a>{{isset($comment->createdUser->name) ? $comment->createdUser->name : ''}}</a>
                                                     @if($comment->created_by == Auth::id())
@@ -153,7 +164,8 @@
                                 </div>
                                 <div>
                                     <div class="row">
-                                        <div class="form-group col-sm-8">
+                                        <div class="form-group col-sm-12">
+                                            <strong>{!! Form::label('add_comment', 'Add comment') !!}</strong>
                                             {!! Form::textarea('comment', null, ['class' => 'form-control comment-editor', 'id'=>'comment', 'rows' => 5, 'placeholder' => 'Add a comment...']) !!}
                                         </div>
                                     </div>

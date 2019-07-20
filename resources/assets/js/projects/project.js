@@ -73,6 +73,7 @@ $('#addNewForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#projects_table').DataTable().ajax.reload(null, false);
+                revokerTracker();
             }
         },
         error: function (result) {
@@ -98,6 +99,7 @@ $('#editForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#projects_table').DataTable().ajax.reload(null, false);
+                revokerTracker();
             }
         },
         error: function (result) {
@@ -152,6 +154,9 @@ $(document).on('click', '.edit-btn', function (event) {
 $(document).on('click', '.delete-btn', function (event) {
     let projectId = $(event.currentTarget).data('id');
     deleteItem(projectUrl + projectId, '#projects_table', 'Project');
+    setTimeout(function () {
+        revokerTracker();
+    }, 1000)
 });
 
 $('#user_ids,#edit_user_ids').select2({

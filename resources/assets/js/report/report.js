@@ -2,7 +2,7 @@ const clientDropDown = $('#client');
 clientDropDown.select2({
     width: '100%',
     placeholder: "Select Client",
-}).prepend($('<option>', {value: 0, text: 'None'}));
+}).prepend($('<option>', { value: 0, text: 'None' }));
 
 $('#projectIds').select2({
     width: '100%',
@@ -58,8 +58,8 @@ clientDropDown.on('change', function () {
 });
 
 function loadProjects(clientId) {
-    clientId  = (clientId == 0) ? '' : clientId;
-    let url = projectsOfClient+ '?client_id='+clientId;
+    clientId = (clientId == 0) ? '' : clientId;
+    let url = projectsOfClient + '?client_id=' + clientId;
     $.ajax({
         url: url,
         type: 'GET',
@@ -67,7 +67,7 @@ function loadProjects(clientId) {
             const projects = result.data;
             for (const key in projects) {
                 if (projects.hasOwnProperty(key)) {
-                    $('#projectIds').append($('<option>', {value: key, text: projects[key]}));
+                    $('#projectIds').append($('<option>', { value: key, text: projects[key] }));
                 }
             }
         }
@@ -81,7 +81,7 @@ $("#projectIds").on('change', function () {
 });
 
 function loadUsers(projectIds) {
-    let url = usersOfProjects + '?projectIds='+projectIds;
+    let url = usersOfProjects + '?projectIds=' + projectIds;
     $.ajax({
         url: url,
         type: 'GET',
@@ -89,12 +89,13 @@ function loadUsers(projectIds) {
             const users = result.data;
             for (const key in users) {
                 if (users.hasOwnProperty(key)) {
-                    $('#userIds').append($('<option>', {value: key, text: users[key]}));
+                    $('#userIds').append($('<option>', { value: key, text: users[key] }));
                 }
             }
         }
     });
 }
+
 // open delete confirmation model
 $(document).on('click', '.delete-btn', function (event) {
     let reportId = $(event.currentTarget).data('id');
@@ -103,7 +104,7 @@ $(document).on('click', '.delete-btn', function (event) {
 window.deleteReport = function (url) {
     swal({
         title: "Delete !",
-        text: "Are you sure you want to delete this report?",
+        text: 'Are you sure you want to delete this "Report" ?',
         type: "warning",
         showCancelButton: true,
         closeOnConfirm: false,
@@ -140,3 +141,49 @@ window.deleteReport = function (url) {
         });
     });
 };
+
+let tbl = $('#report_table').DataTable({
+    processing: true,
+    serverSide: true,
+    "order": [[0, "asc"]],
+    ajax: {
+        url: reporstUrl,
+    },
+    columnDefs: [
+        {
+            "targets": [1],
+            "width": '12%'
+        },
+        {
+            "targets": [2],
+            "orderable": false,
+            "className": 'text-center',
+            "width": '8%'
+        }
+    ],
+    columns: [
+        {
+            data: 'name',
+            name: 'name'
+        },
+        {
+            data: 'user.name',
+            name: 'user.name'
+        },
+        {
+            data: function (row) {
+                return '<a title="Run Report" class="btn action-btn btn-success btn-sm mr-1" href="' + reportUrl + row.id + '">' +
+                    '<i class="icon-refresh icons action-icon"></i>' + '</a>' +
+                    '<a title="Edit" class="btn action-btn btn-primary btn-sm edit-btn mr-1" href="' + reportUrl + row.id + '/edit">' +
+                    '<i class="cui-pencil action-icon"></i>' + '</a>' +
+                    '<a title="Delete" class="btn action-btn btn-danger btn-sm delete-btn" data-id="' + row.id + '">' +
+                    '<i class="cui-trash action-icon" ></i></a>'
+            }, name: 'id'
+        }
+    ],
+    "fnInitComplete": function () {
+        $('#filterClient').change(function () {
+            tbl.ajax.reload();
+        });
+    }
+});

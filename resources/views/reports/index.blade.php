@@ -22,11 +22,6 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            @if(empty($reports->toArray()))
-                                <div class="d-flex justify-content-center">
-                                    <span> No reports available.</span>
-                                </div>
-                            @endif
                             @include('reports.table')
                         </div>
                     </div>
@@ -37,7 +32,7 @@
 @endsection
 @section('page_js')
     <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 @endsection
 @section('scripts')
     <script>

@@ -52,10 +52,11 @@ class TaskController extends AppBaseController
             })->filterColumn('title', function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%$search%")
-                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?", ["%$search%"]);
+                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
+                            ["%$search%"]);
                 });
             })
-            ->make(true);
+                ->make(true);
         }
         $taskData = $this->taskRepository->getTaskData();
 
@@ -75,9 +76,9 @@ class TaskController extends AppBaseController
     {
         $input = $request->all();
         /** @var Task $task */
-        $task = $this->taskRepository->store($this->fill($input));
-        $indexNumber = $this->taskRepository->getIndex($task->project_id);
-        $task->update(['task_number' => $indexNumber]);
+        $indexNumber = $this->taskRepository->getIndex($input['project_id']);
+        $input['task_number'] = $indexNumber;
+        $this->taskRepository->store($this->fill($input));
 
         return $this->sendSuccess('Task created successfully.');
     }
