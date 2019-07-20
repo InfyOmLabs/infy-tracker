@@ -79,7 +79,7 @@ class TimeEntryController extends AppBaseController
      * Update the specified TimeEntry in storage.
      *
      * @param TimeEntry $timeEntry
-     * @param Request $request
+     * @param Request   $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -189,7 +189,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param int $projectId
+     * @param int     $projectId
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse

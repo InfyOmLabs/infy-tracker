@@ -26,7 +26,7 @@ class ClientController extends AppBaseController
     /**
      * ClientController constructor.
      *
-     * @param ClientRepository $clientRepo
+     * @param ClientRepository  $clientRepo
      * @param ProjectRepository $projectRepository
      */
     public function __construct(ClientRepository $clientRepo, ProjectRepository $projectRepository)
@@ -98,7 +98,7 @@ class ClientController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param Client $client
+     * @param Client              $client
      * @param UpdateClientRequest $request
      *
      * @return JsonResponse

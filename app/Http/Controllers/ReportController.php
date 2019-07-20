@@ -151,7 +151,7 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param Report $report
+     * @param Report              $report
      * @param UpdateReportRequest $request
      *
      * @throws Exception

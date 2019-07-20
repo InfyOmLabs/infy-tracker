@@ -50,7 +50,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param int   $id
      * @param array $columns
      *
      * @return Task
@@ -94,7 +94,7 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param array $input
-     * @param int $id
+     * @param int   $id
      *
      * @throws Exception
      *
@@ -127,7 +127,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array     $input
      * @param Task|null $task
      *
      * @return bool
@@ -220,7 +220,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task $task
+     * @param Task  $task
      * @param array $tags
      */
     public function attachTags($task, $tags)
