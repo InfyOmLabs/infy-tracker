@@ -127,7 +127,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array     $input
      * @param Task|null $task
      *
      * @return bool
