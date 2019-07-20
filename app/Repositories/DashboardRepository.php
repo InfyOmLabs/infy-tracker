@@ -29,7 +29,6 @@ class DashboardRepository
         $timeEntry = TimeEntry::with('task.project')
             ->ofUser($input['user_id'])
             ->whereBetween('start_time', [$dates['startDate'], $dates['endDate']])
-            ->where('duration', '!=', 0)
             ->get();
 
         $projects = [];
