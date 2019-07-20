@@ -22,6 +22,8 @@ class TaskController extends AppBaseController
 {
     /** @var TaskRepository */
     private $taskRepository;
+
+    /** @var UserRepository $userRepo */
     private $userRepo;
 
     public function __construct(TaskRepository $taskRepo, UserRepository $userRepository)
@@ -149,7 +151,7 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param Task              $task
+     * @param Task $task
      * @param UpdateTaskRequest $request
      *
      * @throws Exception
@@ -238,7 +240,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
+     * @param Task $task
      * @param Request $request
      *
      * @throws Exception

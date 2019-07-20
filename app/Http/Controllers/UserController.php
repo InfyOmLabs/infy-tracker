@@ -23,22 +23,25 @@ class UserController extends AppBaseController
 {
     /** @var UserRepository */
     private $userRepository;
+
     /** @var ProjectRepository */
     private $projectRepository;
+
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+
     /** @var RoleRepository */
     private $roleRepository;
 
     /**
      * UserController constructor.
      *
-     * @param UserRepository    $userRepo
+     * @param UserRepository $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
-     * @param RoleRepository    $roleRepository
+     * @param RoleRepository $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
@@ -130,7 +133,7 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param User              $user
+     * @param User $user
      * @param UpdateUserRequest $request
      *
      * @throws \Exception

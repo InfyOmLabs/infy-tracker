@@ -11,13 +11,15 @@ class HomeController extends AppBaseController
 {
     /** @var DashboardRepository $dashboardRepo */
     private $dashboardRepo;
+
+    /** @var UserRepository  $userRepository */
     private $userRepository;
 
     /**
      * HomeController constructor.
      *
      * @param DashboardRepository $dashboardRepository
-     * @param UserRepository      $userRepository
+     * @param UserRepository $userRepository
      */
     public function __construct(DashboardRepository $dashboardRepository, UserRepository $userRepository)
     {

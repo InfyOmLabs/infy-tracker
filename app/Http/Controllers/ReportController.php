@@ -23,12 +23,16 @@ class ReportController extends AppBaseController
 {
     /** @var ReportRepository $reportRepository */
     private $reportRepository;
+
     /** @var UserRepository $userRepo */
     private $userRepo;
+
     /** @var TagRepository $tagRepo */
     private $tagRepo;
+
     /** @var ClientRepository $clientRepo */
     private $clientRepo;
+
     /** @var ProjectRepository $projectRepository */
     private $projectRepo;
 
@@ -147,7 +151,7 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param Report              $report
+     * @param Report $report
      * @param UpdateReportRequest $request
      *
      * @throws Exception
