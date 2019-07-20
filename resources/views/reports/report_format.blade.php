@@ -1,7 +1,11 @@
 <div class="card">
     <div class="card-body reports">
+    <div class="page-header mt-0">
         <h4>{{$report->name}} ({{$totalHours}})</h4>
-        <h2>{{ $report->formatted_date }}</h2>
+        <div class="text-right">
+            <h4>{{$report->formatted_date}}</h4>
+        </div>
+    </div>
         @if(empty($reports))
             <div class="d-flex justify-content-center">
                 <span>No record available.</span>
