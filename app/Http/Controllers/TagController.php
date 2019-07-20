@@ -75,7 +75,7 @@ class TagController extends AppBaseController
     /**
      * Update the specified Tag in storage.
      *
-     * @param Tag $tag
+     * @param Tag              $tag
      * @param UpdateTagRequest $request
      *
      * @return JsonResponse

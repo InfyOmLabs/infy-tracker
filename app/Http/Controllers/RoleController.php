@@ -30,7 +30,7 @@ class RoleController extends AppBaseController
     /**
      * RoleController constructor.
      *
-     * @param RoleRepository $rolesRepo
+     * @param RoleRepository       $rolesRepo
      * @param PermissionRepository $permissionRepository
      */
     public function __construct(RoleRepository $rolesRepo, PermissionRepository $permissionRepository)
@@ -106,7 +106,7 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role $role
+     * @param Role    $role
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector

@@ -73,7 +73,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Update the specified ActivityType in storage.
      *
-     * @param ActivityType $activityType
+     * @param ActivityType              $activityType
      * @param UpdateActivityTypeRequest $request
      *
      * @return JsonResponse

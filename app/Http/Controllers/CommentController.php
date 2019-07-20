@@ -18,7 +18,7 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param Task    $task
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -33,7 +33,7 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param Task    $task
      * @param Comment $comment
      *
      * @throws \Exception
@@ -48,7 +48,7 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param Task    $task
      * @param Comment $comment
      * @param Request $request
      *
