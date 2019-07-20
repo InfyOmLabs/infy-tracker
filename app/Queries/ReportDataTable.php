@@ -17,7 +17,7 @@ class ReportDataTable
      */
     public function get($input = [])
     {
-        $query  = Report::with('user')->select('reports.*');
+        $query = Report::with('user')->select('reports.*');
 
         $query->when(!empty($input['filter_created_by']), function (Builder $query) use ($input) {
             $query->where('owner_id', $input['filter_created_by']);

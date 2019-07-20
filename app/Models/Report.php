@@ -90,10 +90,10 @@ class Report extends Model
             return Carbon::parse($this->start_date)->format('jS M Y');
         } elseif ($startDate->format('Y-m-d') == $startOfMonth && $endDate->format('Y-m-d') == $endOfMonth) {
             return $startDate->format('M Y');
-        }else if ($startDate->month == $endDate->month) {
+        } elseif ($startDate->month == $endDate->month) {
             return $startDate->format('jS').' - '.$endDate->format('jS M Y');
-        } else if ($startDate->month != $endDate->month) {
-            return  $startDate->format('jS M'). ' - '.$endDate->format('jS M Y');
+        } elseif ($startDate->month != $endDate->month) {
+            return  $startDate->format('jS M').' - '.$endDate->format('jS M Y');
         }
     }
 }
