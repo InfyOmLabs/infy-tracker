@@ -33,7 +33,7 @@ class ActivityTypeRepositoryTest extends TestCase
         // we already have 5 default activity types via seeder
         $this->assertCount(8, $activityTypesResult);
 
-        $activityTypes->map(function (ActivityType $activityType) use($activityTypesResult) {
+        $activityTypes->map(function (ActivityType $activityType) use ($activityTypesResult) {
             $this->assertContains($activityType->name, $activityTypesResult);
         });
     }
