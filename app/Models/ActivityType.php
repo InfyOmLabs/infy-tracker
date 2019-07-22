@@ -42,7 +42,7 @@ class ActivityType extends Model
         'name' => 'string',
     ];
 
-    const ACTIVITY_TYPE = [
+    const ACTIVITY_TYPES = [
         'Development',
         'Management',
         'Code Review',
