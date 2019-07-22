@@ -42,6 +42,14 @@ class ActivityType extends Model
         'name' => 'string',
     ];
 
+    const ACTIVITY_TYPE = [
+        'Development',
+        'Management',
+        'Code Review',
+        'Testing',
+        'Documentation',
+    ];
+
     /**
      * Validation rules.
      *

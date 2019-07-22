@@ -1,16 +1,14 @@
 <?php
-
 use App\Models\ActivityType;
-use Illuminate\Database\Migrations\Migration;
-
-class AddDefaultActivityTypes extends Migration
+use Illuminate\Database\Seeder;
+class DefaultActivityTypeSeeder extends Seeder
 {
     /**
-     * Run the migrations.
+     * Run the database seeds.
      *
      * @return void
      */
-    public function up()
+    public function run()
     {
         $defaultActivityTypes = [
             'Development',
@@ -23,15 +21,5 @@ class AddDefaultActivityTypes extends Migration
         foreach ($defaultActivityTypes as $activityType) {
             ActivityType::create(['name' => $activityType]);
         }
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        DB::table('activity_types')->truncate();
     }
 }
