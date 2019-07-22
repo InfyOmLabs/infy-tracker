@@ -37,7 +37,17 @@ window.revokerTracker = function() {
     }, 1500);
 };
 
+window.showStartTimeButton= function(){
+    $("#stopTimer").hide();
+    $("#timer").html('<h3><b>00:00:00</b></h3>');
+    $("#startTimer").show();
+};
+
 window.startWatch = function () {
+    if(localStorage.getItem('clockRunning') == null) {
+        showStartTimeButton();
+        return;
+    }
     $("#startTimer").hide();
     $("#stopTimer").show();
 

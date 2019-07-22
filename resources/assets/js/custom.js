@@ -123,12 +123,12 @@ window.manageCheckbox = function (input) {
 };
 window.onload = function () {
     window.startLoader = function () {
-        $('#infyLoader').show();
-    }
+        $('.infy-loader').show();
+    };
 
     window.stopLoader = function () {
-        $('#infyLoader').hide();
-    }
+        $('.infy-loader').hide();
+    };
 
 // infy loader js
     stopLoader();
