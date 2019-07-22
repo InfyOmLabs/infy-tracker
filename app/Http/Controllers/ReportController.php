@@ -24,12 +24,16 @@ class ReportController extends AppBaseController
 {
     /** @var ReportRepository $reportRepository */
     private $reportRepository;
+
     /** @var UserRepository $userRepo */
     private $userRepo;
+
     /** @var TagRepository $tagRepo */
     private $tagRepo;
+
     /** @var ClientRepository $clientRepo */
     private $clientRepo;
+
     /** @var ProjectRepository $projectRepository */
     private $projectRepo;
 

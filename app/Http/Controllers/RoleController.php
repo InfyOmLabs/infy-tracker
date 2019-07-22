@@ -23,6 +23,7 @@ class RoleController extends AppBaseController
 {
     /** @var RoleRepository */
     private $rolesRepository;
+
     /** @var PermissionRepository */
     private $permissionRepository;
 

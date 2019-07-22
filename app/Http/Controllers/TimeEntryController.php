@@ -90,7 +90,16 @@ class TimeEntryController extends AppBaseController
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
-        $existEntry = $entry->only(['id', 'task_id', 'activity_type_id', 'user_id', 'start_time', 'end_time', 'duration', 'note']);
+        $existEntry = $entry->only([
+            'id',
+            'task_id',
+            'activity_type_id',
+            'user_id',
+            'start_time',
+            'end_time',
+            'duration',
+            'note',
+        ]);
         $inputDiff = array_diff($existEntry, $input);
         if (!empty($inputDiff)) {
             Log::info('Entry Id: '.$entry->id);

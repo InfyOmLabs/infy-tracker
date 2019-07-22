@@ -110,6 +110,11 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function getTimeEntryDetail($id)
     {
         $result = TimeEntry::leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
@@ -120,6 +125,12 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param array $input
+     * @param int   $id
+     *
+     * @return bool
+     */
     public function updateTimeEntry($input, $id)
     {
         $timeEntry = $this->find($id);
