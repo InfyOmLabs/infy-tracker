@@ -301,7 +301,8 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=', '')->orderByDesc('task_number')->first();
+        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=',
+            '')->orderByDesc('task_number')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
@@ -388,7 +389,7 @@ class TaskRepository extends BaseRepository
         foreach ($attachments as $attachment) {
             $obj['id'] = $attachment->id;
             $obj['name'] = $attachment->file;
-//            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
+            //            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
             $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }

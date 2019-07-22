@@ -42,6 +42,9 @@ class ProjectRepository extends BaseRepository
         return Project::class;
     }
 
+    /***
+     * @return mixed
+     */
     public function getLoginUserAssignProjectsArr()
     {
         return Auth::user()->projects()->orderBy('name')->get()->pluck('name', 'id')->toArray();

@@ -11,6 +11,8 @@ class HomeController extends AppBaseController
 {
     /** @var DashboardRepository $dashboardRepo */
     private $dashboardRepo;
+
+    /** @var UserRepository $userRepository */
     private $userRepository;
 
     /**
@@ -50,7 +52,7 @@ class HomeController extends AppBaseController
         }
         $data = $this->dashboardRepo->getWorkReport($request->all());
 
-        return $this->sendResponse($data, 'Work Report retrieved successfully.');
+        return $this->sendResponse($data, 'Custom Report retrieved successfully.');
     }
 
     /**
@@ -62,6 +64,6 @@ class HomeController extends AppBaseController
     {
         $data = $this->dashboardRepo->getDeveloperWorkReport($request->all());
 
-        return $this->sendResponse($data, 'Developer Work Report retrieved successfully.');
+        return $this->sendResponse($data, 'Daily Work Report retrieved successfully.');
     }
 }

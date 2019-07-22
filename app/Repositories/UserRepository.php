@@ -113,7 +113,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return User
      */
