@@ -63,7 +63,7 @@ class ActivityTypeControllerTest extends TestCase
 
         $response = $this->getJson('activity-types/'.$activityType->id.'/edit');
 
-        $this->assertSuccessDataResponse($response,  $activityType->toArray(),'Activity Type retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $activityType->toArray(), 'Activity Type retrieved successfully.');
     }
 
     /** @test */
@@ -102,7 +102,7 @@ class ActivityTypeControllerTest extends TestCase
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
-            'message' => 'ActivityType not found.'
+            'message' => 'ActivityType not found.',
         ]);
     }
 }
