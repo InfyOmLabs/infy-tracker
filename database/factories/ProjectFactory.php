@@ -7,7 +7,6 @@ use App\Models\Project;
 use Faker\Generator as Faker;
 
 $factory->define(Project::class, function (Faker $faker) {
-
     $client = factory(Client::class)->create();
 
     return [
