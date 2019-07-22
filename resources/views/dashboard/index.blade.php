@@ -32,7 +32,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5>Work Report</h5>
+                            <h5>Custom Report</h5>
                             <div id="work-report-container" class="pt-2">
                                 <canvas id="daily-work-report"></canvas>
                             </div>
@@ -45,7 +45,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="page-header">
-                                <h5>Developers Daily Work Report</h5>
+                                <h5>Daily Work Report</h5>
                                 <div id="rightData">
                                     <div id="developers-report-date-picker" class="time_range">
                                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;
