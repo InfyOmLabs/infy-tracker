@@ -7,8 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ProjectControllerValidationTest
- * @package Tests\Controllers\Validations
+ * Class ProjectControllerValidationTest.
  */
 class ProjectControllerValidationTest extends TestCase
 {
