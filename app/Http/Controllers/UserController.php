@@ -23,12 +23,15 @@ class UserController extends AppBaseController
 {
     /** @var UserRepository */
     private $userRepository;
+
     /** @var ProjectRepository */
     private $projectRepository;
+
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+
     /** @var RoleRepository */
     private $roleRepository;
 

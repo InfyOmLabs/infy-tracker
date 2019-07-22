@@ -12,6 +12,10 @@
             <div class="page-header">
                 <h3>Reports</h3>
                 <div class="filter-container">
+                    <div class="mr-2">
+                        <label class="lbl-block"><b>Created By</b></label>
+                        {!!Form::select('created_by',$users,null,['id'=>'filterCreatedBy','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                    </div>
                     <a href="{!! route('reports.create') !!}" class="btn btn-primary filter-container__btn">
                         New Report
                     </a>

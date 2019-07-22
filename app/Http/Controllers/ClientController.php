@@ -19,6 +19,7 @@ class ClientController extends AppBaseController
 {
     /** @var ClientRepository */
     private $clientRepository;
+
     /** @var ProjectRepository $projectRepo */
     private $projectRepo;
 

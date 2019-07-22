@@ -2,6 +2,8 @@
     <thead>
     <tr>
         <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
         <th>Created By</th>
         <th>Action</th>
     </tr>
