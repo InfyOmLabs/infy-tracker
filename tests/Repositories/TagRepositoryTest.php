@@ -36,4 +36,18 @@ class TagRepositoryTest extends TestCase
             $this->assertContains($tag->name, $tagResult);
         });
     }
+
+    /** @test */
+    public function it_can_store_bulk_tags()
+    {
+        $tags = [
+            'name'      => 'random,string',
+            'bulk_tags' => true,
+        ];
+
+        $tagResult = $this->tagRepo->store($tags);
+
+        $this->assertTrue($tagResult);
+    }
+
 }
