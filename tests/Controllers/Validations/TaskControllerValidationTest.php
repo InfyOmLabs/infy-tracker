@@ -47,7 +47,7 @@ class TaskControllerValidationTest extends TestCase
         $task = factory(Task::class)->create();
 
         $this->put('tasks/'.$task->id, ['title' => 'random string', 'project_id' => ''])
-            ->assertSessionHasErrors(['project_id' => 'The project_id field is required.']);
+            ->assertSessionHasErrors(['project_id' => 'The project id field is required.']);
     }
 
     /** @test */
