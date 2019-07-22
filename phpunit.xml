@@ -20,7 +20,7 @@
         <testsuite name="Repositories">
             <directory suffix="Test.php">./tests/Repositories</directory>
         </testsuite>
-        
+
         <testsuite name="Controllers">
             <directory suffix="Test.php">./tests/Controllers</directory>
         </testsuite>
