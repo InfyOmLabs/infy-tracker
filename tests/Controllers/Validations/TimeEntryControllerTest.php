@@ -9,8 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TimeEntryControllerTest
- * @package Tests\Controllers\Validations
+ * Class TimeEntryControllerTest.
  */
 class TimeEntryControllerTest extends TestCase
 {

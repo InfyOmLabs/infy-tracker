@@ -122,7 +122,7 @@ class TimeEntry extends Model
 
     /**
      * @param Builder $query
-     * @param int $userId
+     * @param int     $userId
      *
      * @return Builder
      */
