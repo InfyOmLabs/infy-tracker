@@ -2,6 +2,7 @@
 
 namespace Tests\Controllers\Validations;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -45,28 +46,8 @@ class TaskControllerValidationTest extends TestCase
     {
         $task = factory(Task::class)->create();
 
-        $this->put('tasks/'.$task->id, ['project_id' => ''])
+        $this->put('tasks/'.$task->id, ['title' => 'random string', 'project_id' => ''])
             ->assertSessionHasErrors(['project_id' => 'The project_id field is required.']);
-    }
-
-    /** @test */
-    public function update_task_fails_when_title_is_duplicate()
-    {
-        $task1 = factory(Task::class)->create();
-        $task2 = factory(Task::class)->create();
-
-        $this->put('tasks/'.$task2->id, ['title' => $task1->title])
-            ->assertSessionHasErrors(['title' => 'Task with same title already exist']);
-    }
-
-    /** @test */
-    public function update_task_fails_when_project_id_is_duplicate()
-    {
-        $task1 = factory(Task::class)->create();
-        $task2 = factory(Task::class)->create();
-
-        $this->put('tasks/'.$task2->id, ['project_id' => $task1->project_id])
-            ->assertSessionHasErrors(['project_id' => 'Task with same title already exist']);
     }
 
     /** @test */
@@ -74,8 +55,9 @@ class TaskControllerValidationTest extends TestCase
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
+        $project = factory(Project::class)->create();
 
-        $this->put('tasks/'.$task->id, ['title' => 'Any Dummy Title'])
+        $this->put('tasks/'.$task->id, ['title' => 'Any Dummy Title', 'project_id' => $project->id])
             ->assertSessionHasNoErrors();
 
         $this->assertEquals('Any Dummy Title', $task->fresh()->title);
@@ -86,11 +68,12 @@ class TaskControllerValidationTest extends TestCase
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
+        $project = factory(Project::class)->create();
 
-        $this->put('tasks/'.$task->id, ['project_id' => 1])
+        $this->put('tasks/'.$task->id, ['title' => 'random string', 'project_id' => $project->id])
             ->assertSessionHasNoErrors();
 
-        $this->assertEquals(1, $task->fresh()->project_id);
+        $this->assertEquals($project->id, $task->fresh()->project_id);
     }
 
     /** @test */
