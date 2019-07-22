@@ -11,8 +11,7 @@ use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
- * Class ProjectRepositoryTest
- * @package Tests\Repositories
+ * Class ProjectRepositoryTest.
  */
 class ProjectRepositoryTest extends TestCase
 {
