@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\UpdateReportRequest;
 use App\Models\Report;
+use App\Models\User;
 use App\Queries\ReportDataTable;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
@@ -58,10 +59,11 @@ class ReportController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of((new ReportDataTable())->get())->make(true);
+            return Datatables::of((new ReportDataTable())->get($request->only(['filter_created_by'])))->make(true);
         }
+        $users = User::orderBy('name')->pluck('name', 'id');
 
-        return view('reports.index');
+        return view('reports.index', compact('users'));
     }
 
     /**
