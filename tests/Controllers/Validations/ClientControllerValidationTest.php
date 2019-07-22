@@ -81,7 +81,7 @@ class ClientControllerValidationTest extends TestCase
     /** @test */
     public function create_client_with_created_by_details()
     {
-        $this->post('clients', ['name' => 'Dummy Client'])
+        $this->post('clients', ['name' => 'Dummy Client', 'email' => '', 'website' => ''])
             ->assertSessionHasNoErrors();
 
         $client = Client::whereName('Dummy Client')->first();
