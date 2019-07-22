@@ -51,13 +51,14 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function allow_update_task_with_valid_title()
+    public function allow_update_task_with_valid_input()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
-        $project = factory(Project::class)->create();
 
-        $this->put('tasks/'.$task->id, ['title' => 'Any Dummy Title', 'project_id' => $project->id])
+        $inputs = array_merge($task->toArray(), ['title' => 'Any Dummy Title']);
+
+        $this->put('tasks/'.$task->id, $inputs)
             ->assertSessionHasNoErrors();
 
         $this->assertEquals('Any Dummy Title', $task->fresh()->title);
@@ -69,8 +70,9 @@ class TaskControllerValidationTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
         $project = factory(Project::class)->create();
+        $inputs = array_merge($task->toArray(), ['project_id' => $project->id]);
 
-        $this->put('tasks/'.$task->id, ['title' => 'random string', 'project_id' => $project->id])
+        $this->put('tasks/'.$task->id, $inputs)
             ->assertSessionHasNoErrors();
 
         $this->assertEquals($project->id, $task->fresh()->project_id);
@@ -80,10 +82,10 @@ class TaskControllerValidationTest extends TestCase
     public function update_task_status()
     {
         /** @var Task $task */
-        $task = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
 
         $this->post("tasks/$task->id/update-status", [])->assertSessionHasNoErrors();
 
-        $this->assertEquals(Task::STATUS_ACTIVE, $task->fresh()->status);
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->fresh()->status);
     }
 }
