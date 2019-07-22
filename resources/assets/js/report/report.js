@@ -18,6 +18,7 @@ $('#tagIds').select2({
     width: '100%',
     placeholder: "Select Tags"
 });
+$('#filterCreatedBy').select2();
 
 $('#start_date').datetimepicker({
     format: 'YYYY-MM-DD',
@@ -148,14 +149,18 @@ let tbl = $('#report_table').DataTable({
     "order": [[0, "asc"]],
     ajax: {
         url: reporstUrl,
+        data: function (data) {
+            data.filter_created_by = $('#filterCreatedBy').find('option:selected').val();
+        }
     },
     columnDefs: [
         {
-            "targets": [1],
-            "width": '12%'
+            "targets": [1,2,3],
+            "width": '10%',
+            "className": 'text-center',
         },
         {
-            "targets": [2],
+            "targets": [4],
             "orderable": false,
             "className": 'text-center',
             "width": '8%'
@@ -167,13 +172,25 @@ let tbl = $('#report_table').DataTable({
             name: 'name'
         },
         {
+            data: function (row) {
+                return format(row.start_date, 'YYYY-MMM-DD');
+            },
+            name: 'start_date'
+        },
+        {
+            data: function (row) {
+                return format(row.start_date, 'YYYY-MMM-DD');
+            },
+            name: 'end_date'
+        },
+        {
             data: 'user.name',
             name: 'user.name'
         },
         {
             data: function (row) {
                 return '<a title="Run Report" class="btn action-btn btn-success btn-sm mr-1" href="' + reportUrl + row.id + '">' +
-                    '<i class="icon-refresh icons action-icon"></i>' + '</a>' +
+                    '<i class="fas fa-eye action-icon"></i>' + '</a>' +
                     '<a title="Edit" class="btn action-btn btn-primary btn-sm edit-btn mr-1" href="' + reportUrl + row.id + '/edit">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm delete-btn" data-id="' + row.id + '">' +
@@ -182,7 +199,7 @@ let tbl = $('#report_table').DataTable({
         }
     ],
     "fnInitComplete": function () {
-        $('#filterClient').change(function () {
+        $('#filterClient,#filterCreatedBy').change(function () {
             tbl.ajax.reload();
         });
     }
