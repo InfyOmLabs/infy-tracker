@@ -13,8 +13,7 @@ use App\Models\TimeEntry;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateTimeEntryRequest
- * @package App\Http\Requests
+ * Class UpdateTimeEntryRequest.
  */
 class UpdateTimeEntryRequest extends FormRequest
 {
