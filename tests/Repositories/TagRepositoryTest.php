@@ -48,5 +48,8 @@ class TagRepositoryTest extends TestCase
         $tagResult = $this->tagRepo->store($tags);
 
         $this->assertTrue($tagResult);
+
+        $getTags = Tag::get();
+        $this->assertCount(2, $getTags);
     }
 }
