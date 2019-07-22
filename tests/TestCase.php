@@ -32,7 +32,7 @@ abstract class TestCase extends BaseTestCase
             ->assertJson([
                 'success' => true,
                 'message' => $message,
-                'data' => $data
+                'data'    => $data,
             ]);
     }
 }
