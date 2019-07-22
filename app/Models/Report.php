@@ -83,8 +83,8 @@ class Report extends Model
     {
         $startDate = Carbon::parse($this->start_date);
         $endDate = Carbon::parse($this->end_date);
-        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
+        $startOfMonth = Carbon::parse($startDate)->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::parse($endDate)->endOfMonth()->format('Y-m-d');
 
         if ($startDate == $endDate) {
             return Carbon::parse($this->start_date)->format('jS M Y');
