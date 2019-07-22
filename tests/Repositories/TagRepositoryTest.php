@@ -49,5 +49,4 @@ class TagRepositoryTest extends TestCase
 
         $this->assertTrue($tagResult);
     }
-
 }
