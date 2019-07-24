@@ -31,7 +31,7 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function get_all_projects_list()
+    public function it_can_retrieve_all_projects()
     {
         $projects = factory(Project::class)->times(3)->create();
 
@@ -44,15 +44,19 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function get_projects_of_particular_client()
+    public function it_can_retrieve_projects_of_client_mitul()
     {
-        $client = factory(Client::class)->create();
+        $clientVishal = factory(Client::class)->create();
+        $clientMitul = factory(Client::class)->create();
 
-        $projects = factory(Project::class)->times(3)->create(['client_id' => $client->id]);
-        factory(Project::class)->times(2); // of another client
+        $projects = factory(Project::class)->times(3)->create(['client_id' => $clientVishal->id]);
+        factory(Project::class)->times(2)->create(['client_id' => $clientMitul->id]); // of another client
 
-        $result = $this->projectRepo->getProjectsList($client->id);
-        $this->assertCount(3, $projects);
+        $allProjects = $this->projectRepo->getProjectsList();
+        $this->assertCount(5, $allProjects);
+
+        $result = $this->projectRepo->getProjectsList($clientVishal->id);
+        $this->assertCount(3, $result);
 
         $projects->map(function (Project $project) use ($result) {
             $this->assertContains($project->name, $result);
@@ -60,11 +64,11 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function get_projects_of_logged_in_user()
+    public function it_can_retrieve_projects_of_logged_in_user()
     {
-        $anotherUser = factory(User::class)->create();
+        $mitul = factory(User::class)->create();
         $project = factory(Project::class)->create();
-        $project->users()->sync([$anotherUser->id]);
+        $project->users()->sync([$mitul->id]);
 
         // projects of logged in user
         $projectIds = [];
@@ -74,7 +78,9 @@ class ProjectRepositoryTest extends TestCase
             $projectIds[] = $project->id;
         }
 
-        /** @var Collection $myProjects */
+        $totalProjects = $this->projectRepo->getProjectsList();
+        $this->assertCount(4, $totalProjects);
+
         $myProjects = $this->projectRepo->getMyProjects();
         $this->assertCount(3, $myProjects);
 
@@ -85,18 +91,20 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function get_projects_list_array_of_logged_in_user()
+    public function it_can_retrieve_projects_list_array_of_logged_in_user()
     {
-        $anotherUser = factory(User::class)->create();
+        $mitul = factory(User::class)->create();
         $project = factory(Project::class)->create();
-        $project->users()->sync([$anotherUser->id]);
+        $project->users()->sync([$mitul->id]);
 
-        // projects of logged in user
         $projectsOfLoggedInUser = factory(Project::class)->create();
         $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
 
         $myProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
         $this->assertCount(1, $myProjects);
+
+        $totalProjects = $this->projectRepo->getProjectsList();
+        $this->assertCount(2, $totalProjects);
 
         $this->assertArrayHasKey($projectsOfLoggedInUser->id, $myProjects);
         $this->assertContains($projectsOfLoggedInUser->name, $myProjects);
