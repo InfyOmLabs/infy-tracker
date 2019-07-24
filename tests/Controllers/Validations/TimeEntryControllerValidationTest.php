@@ -11,9 +11,11 @@ use Tests\TestCase;
 /**
  * Class TimeEntryControllerTest.
  */
-class TimeEntryControllerTest extends TestCase
+class TimeEntryControllerValidationTest extends TestCase
 {
     use DatabaseTransactions;
+
+    private $defaultUserId = 1;
 
     public function setUp(): void
     {
@@ -88,7 +90,7 @@ class TimeEntryControllerTest extends TestCase
         $this->assertNotEmpty($timeEntry);
         $this->assertEquals($inputs['start_time'], $timeEntry->start_time);
         $this->assertEquals($inputs['end_time'], $timeEntry->end_time);
-        $this->assertEquals(getLoggedInUserId(), $timeEntry->user_id);
+        $this->assertEquals($this->defaultUserId, $timeEntry->user_id);
     }
 
     /** @test */
@@ -104,7 +106,7 @@ class TimeEntryControllerTest extends TestCase
     public function update_time_entry_fails_when_user_try_to_update_another_users_entry()
     {
         $timeEntry1 = factory(TimeEntry::class)->create();
-        $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => getLoggedInUserId()]);
+        $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $response = $this->put('time-entries/'.$timeEntry1->id, $this->timeEntryInputs());
 
@@ -115,14 +117,14 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function user_can_update_his_time_entries()
     {
-        $timeEntry = factory(TimeEntry::class)->create(['user_id' => getLoggedInUserId()]);
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $inputs = $this->timeEntryInputs();
         $this->put('time-entries/'.$timeEntry->id, $inputs)->assertSessionHasNoErrors();
 
         $timeEntry = TimeEntry::latest()->first();
         $this->assertNotEmpty($timeEntry);
-        $this->assertEquals(getLoggedInUserId(), $timeEntry->user_id);
+        $this->assertEquals($this->defaultUserId, $timeEntry->user_id);
         $this->assertEquals($inputs['start_time'], $timeEntry->start_time);
         $this->assertEquals($inputs['end_time'], $timeEntry->end_time);
     }
