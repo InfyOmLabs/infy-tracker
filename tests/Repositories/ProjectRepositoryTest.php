@@ -43,18 +43,18 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_projects_of_client_mitul()
+    public function it_can_retrieve_projects_of_mitul()
     {
-        $clientVishal = factory(Client::class)->create();
-        $clientMitul = factory(Client::class)->create();
+        $vishal = factory(Client::class)->create();
+        $mitul = factory(Client::class)->create();
 
-        $projects = factory(Project::class)->times(3)->create(['client_id' => $clientVishal->id]);
-        factory(Project::class)->times(2)->create(['client_id' => $clientMitul->id]); // of another client
+        $projects = factory(Project::class)->times(3)->create(['client_id' => $vishal->id]);
+        factory(Project::class)->times(2)->create(['client_id' => $mitul->id]); // of another client
 
         $allProjects = $this->projectRepo->getProjectsList();
         $this->assertCount(5, $allProjects);
 
-        $result = $this->projectRepo->getProjectsList($clientVishal->id);
+        $result = $this->projectRepo->getProjectsList($vishal->id);
         $this->assertCount(3, $result);
 
         $projects->map(function (Project $project) use ($result) {
