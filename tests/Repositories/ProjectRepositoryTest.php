@@ -20,6 +20,8 @@ class ProjectRepositoryTest extends TestCase
     /** @var ProjectRepository */
     protected $projectRepo;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -68,7 +70,7 @@ class ProjectRepositoryTest extends TestCase
         $projectIds = [];
         $projects = factory(Project::class)->times(3)->create();
         foreach ($projects as $project) {
-            $project->users()->sync([getLoggedInUserId()]);
+            $project->users()->sync([$this->defaultUserId]);
             $projectIds[] = $project->id;
         }
 
@@ -77,7 +79,7 @@ class ProjectRepositoryTest extends TestCase
         $this->assertCount(3, $myProjects);
 
         $myProjects->map(function (Project $project) use ($projectIds) {
-            $this->assertEquals($project->users->first()->id, getLoggedInUserId());
+            $this->assertEquals($project->users->first()->id, $this->defaultUserId);
             $this->assertContains($project->id, $projectIds);
         });
     }
@@ -91,7 +93,7 @@ class ProjectRepositoryTest extends TestCase
 
         // projects of logged in user
         $projectsOfLoggedInUser = factory(Project::class)->create();
-        $projectsOfLoggedInUser->users()->sync([getLoggedInUserId()]);
+        $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
 
         $myProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
         $this->assertCount(1, $myProjects);
