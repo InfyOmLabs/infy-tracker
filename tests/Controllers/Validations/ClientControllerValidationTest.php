@@ -13,6 +13,8 @@ class ClientControllerValidationTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -88,6 +90,6 @@ class ClientControllerValidationTest extends TestCase
         $this->assertNotEmpty($client);
 
         $this->assertEquals('Dummy Client', $client->name);
-        $this->assertEquals(getLoggedInUserId(), $client->created_by);
+        $this->assertEquals($this->defaultUserId, $client->created_by);
     }
 }
