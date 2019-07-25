@@ -13,6 +13,8 @@ class ClientControllerValidationTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -21,14 +23,14 @@ class ClientControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_client_fails_when_name_is_not_passed()
+    public function test_create_client_fails_when_name_is_not_passed()
     {
         $this->post('clients', ['name' => ''])
             ->assertSessionHasErrors('name');
     }
 
     /** @test */
-    public function update_client_fails_when_name_is_not_passed()
+    public function test_update_client_fails_when_name_is_not_passed()
     {
         $client = factory(Client::class)->create();
 
@@ -37,7 +39,7 @@ class ClientControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_client_fails_when_name_is_duplicate()
+    public function test_update_client_fails_when_name_is_duplicate()
     {
         $client1 = factory(Client::class)->create();
         $client2 = factory(Client::class)->create();
@@ -47,21 +49,21 @@ class ClientControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_client_fails_when_email_is_invalid()
+    public function test_create_client_fails_when_email_is_invalid()
     {
         $this->post('clients', ['name' => 'Client 1', 'email' => 'dummyEmail'])
             ->assertSessionHasErrors(['email' => 'Please enter valid email.']);
     }
 
     /** @test */
-    public function create_client_fails_when_website_url_is_invalid()
+    public function test_create_client_fails_when_website_url_is_invalid()
     {
-        $this->post('clients', ['name' => 'Client 2', 'website' => 'http::URL'])
+        $this->post('clients', ['website' => 'http::URL'])
             ->assertSessionHasErrors(['website' => 'Please enter valid url.']);
     }
 
     /** @test */
-    public function allow_update_client_with_valid_email_and_url()
+    public function it_can_update_client_with_valid_email_and_url()
     {
         /** @var Client $client */
         $client = factory(Client::class)->create();
@@ -79,7 +81,7 @@ class ClientControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_client_with_created_by_details()
+    public function it_can_create_client_with_created_by_details()
     {
         $this->post('clients', ['name' => 'Dummy Client', 'email' => '', 'website' => ''])
             ->assertSessionHasNoErrors();
@@ -88,6 +90,6 @@ class ClientControllerValidationTest extends TestCase
         $this->assertNotEmpty($client);
 
         $this->assertEquals('Dummy Client', $client->name);
-        $this->assertEquals(getLoggedInUserId(), $client->created_by);
+        $this->assertEquals($this->defaultUserId, $client->created_by);
     }
 }
