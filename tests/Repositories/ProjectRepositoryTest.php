@@ -43,7 +43,7 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_projects_of_mitul()
+    public function it_can_retrieve_projects_of_given_client()
     {
         $vishal = factory(Client::class)->create();
         $mitul = factory(Client::class)->create();
