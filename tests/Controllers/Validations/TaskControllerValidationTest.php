@@ -19,21 +19,21 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_task_fails_when_title_is_not_passed()
+    public function test_create_task_fails_when_title_is_not_passed()
     {
         $this->post('tasks', ['title' => ''])
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
-    public function create_task_fails_when_project_id_is_not_passed()
+    public function test_create_task_fails_when_project_id_is_not_passed()
     {
         $this->post('tasks', ['project_id' => ''])
             ->assertSessionHasErrors('project_id');
     }
 
     /** @test */
-    public function update_task_fails_when_title_is_not_passed()
+    public function test_update_task_fails_when_title_is_not_passed()
     {
         $task = factory(Task::class)->create();
 
@@ -42,7 +42,7 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_task_fails_when_project_id_is_not_passed()
+    public function test_update_task_fails_when_project_id_is_not_passed()
     {
         $task = factory(Task::class)->create();
 
@@ -51,7 +51,7 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function allow_update_task_with_valid_input()
+    public function it_can_update_task_with_valid_input()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -65,7 +65,7 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function allow_update_task_with_valid_project_id()
+    public function it_can_update_task_with_valid_project_id()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -79,7 +79,7 @@ class TaskControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_task_status()
+    public function it_can_update_task_status_from_active_to_completed()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
