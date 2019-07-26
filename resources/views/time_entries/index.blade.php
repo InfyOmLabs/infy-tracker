@@ -16,10 +16,12 @@
             <div class="page-header">
                 <h3>Time Entries</h3>
                 <div class="filter-container">
+                    @permission('manage_time_entries')
                     <div class="mr-2">
                         <label for="projects" class="lbl-block"><b>User</b></label>
                         {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
+                    @endpermission
                     <div class="mr-2">
                         <label for="projects" class="lbl-block"><b>Activity Type</b></label>
                         {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
