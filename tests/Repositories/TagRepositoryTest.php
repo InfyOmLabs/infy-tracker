@@ -12,7 +12,7 @@ class TagRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @var TagRepositoryTest */
+    /** @var TagRepository */
     protected $tagRepo;
 
     public function setUp(): void
@@ -48,5 +48,13 @@ class TagRepositoryTest extends TestCase
         $tagResult = $this->tagRepo->store($tags);
 
         $this->assertTrue($tagResult);
+
+        $getTags = Tag::get();
+        $this->assertCount(2, $getTags);
+
+        $explodeTags = explode(',', $tags['name']);
+
+        $this->assertEquals($explodeTags[0], $getTags[0]['name']);
+        $this->assertEquals($explodeTags[1], $getTags[1]['name']);
     }
 }
