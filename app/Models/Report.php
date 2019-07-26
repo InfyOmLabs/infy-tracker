@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Eloquent as Model;
 
 /**
@@ -32,6 +33,7 @@ use Eloquent as Model;
 class Report extends Model
 {
     public $table = 'reports';
+    protected $appends = ['formatted_date'];
 
     public $fillable = [
         'name',
@@ -75,5 +77,23 @@ class Report extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function getFormattedDateAttribute()
+    {
+        $startDate = Carbon::parse($this->start_date);
+        $endDate = Carbon::parse($this->end_date);
+        $startOfMonth = Carbon::parse($startDate)->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::parse($endDate)->endOfMonth()->format('Y-m-d');
+
+        if ($startDate == $endDate) {
+            return Carbon::parse($this->start_date)->format('jS M Y');
+        } elseif ($startDate->format('Y-m-d') == $startOfMonth && $endDate->format('Y-m-d') == $endOfMonth) {
+            return $startDate->format('M Y');
+        } elseif ($startDate->month == $endDate->month) {
+            return $startDate->format('jS').' - '.$endDate->format('jS M Y');
+        } elseif ($startDate->month != $endDate->month) {
+            return  $startDate->format('jS M').' - '.$endDate->format('jS M Y');
+        }
     }
 }
