@@ -10,8 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class UserRepositoryTest
- * @package Tests\Repositories
+ * Class UserRepositoryTest.
  */
 class UserRepositoryTest extends TestCase
 {
