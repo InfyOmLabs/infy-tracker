@@ -2,7 +2,6 @@
 
 namespace Tests\Repositories;
 
-use App\Models\Client;
 use App\Models\Role;
 use App\Repositories\RoleRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
