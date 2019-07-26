@@ -8,8 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class PermissionRepositoryTest
- * @package Tests\Repositories
+ * Class PermissionRepositoryTest.
  */
 class PermissionRepositoryTest extends TestCase
 {
