@@ -25,21 +25,21 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function add_time_entry_fails_when_task_id_is_not_passed()
+    public function test_add_time_entry_fails_when_task_id_is_not_passed()
     {
         $this->post('time-entries', ['task_id' => ''])
             ->assertSessionHasErrors(['task_id' => 'The task id field is required.']);
     }
 
     /** @test */
-    public function add_time_entry_fails_when_invalid_start_time_given()
+    public function test_add_time_entry_fails_when_invalid_start_time_given()
     {
         $this->post('time-entries', ['start_time' => date('Y-m-d')])
             ->assertSessionHasErrors(['start_time' => 'The start time does not match the format Y-m-d H:i:s.']);
     }
 
     /** @test */
-    public function add_time_entry_fails_when_start_time_is_greater_than_end_time()
+    public function test_add_time_entry_fails_when_start_time_is_greater_than_end_time()
     {
         $startTime = date('Y-m-d H:i:s');
         $endTime = date('Y-m-d H:i:s', strtotime('-1 day'));
@@ -52,7 +52,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function add_time_entry_fails_when_start_time_is_greater_than_current_time()
+    public function test_add_time_entry_fails_when_start_time_is_greater_than_current_time()
     {
         $startTime = date('Y-m-d H:i:s', strtotime('+1 day'));
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+2 days'));
@@ -67,7 +67,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function add_time_entry_fail_when_end_time_is_greater_than_current_time()
+    public function test_add_time_entry_fail_when_end_time_is_greater_than_current_time()
     {
         $startTime = date('Y-m-d H:i:s');
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+2 days'));
@@ -81,7 +81,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function add_time_entry_of_logged_in_user()
+    public function it_can_add_time_entry_of_logged_in_user()
     {
         $inputs = $this->timeEntryInputs();
         $this->post('time-entries', $inputs)->assertSessionHasNoErrors();
@@ -94,7 +94,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_time_entry_fails_when_task_id_is_not_passed()
+    public function test_update_time_entry_fails_when_task_id_is_not_passed()
     {
         $timeEntry = factory(TimeEntry::class)->create();
 
@@ -103,7 +103,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_time_entry_fails_when_user_try_to_update_another_users_entry()
+    public function test_update_time_entry_fails_when_user_try_to_update_another_users_entry()
     {
         $timeEntry1 = factory(TimeEntry::class)->create();
         $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
@@ -115,7 +115,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function user_can_update_his_time_entries()
+    public function it_can_update_time_entry()
     {
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
