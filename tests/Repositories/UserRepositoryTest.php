@@ -7,14 +7,17 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
+/**
+ * Class UserRepositoryTest
+ * @package Tests\Repositories
+ */
 class UserRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @var UserRepositoryTest */
+    /** @var UserRepository */
     protected $userRepo;
 
     public function setUp(): void
@@ -25,18 +28,16 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_users()
+    public function it_can_get_users_of_given_projects()
     {
         /** @var Collection $users */
         $users = factory(User::class)->times(2)->create();
 
-        $project1 = factory(Project::class)->create(['created_by' => $users[0]->id]);
-        $project2 = factory(Project::class)->create(['created_by' => $users[1]->id]);
+        $project1 = factory(Project::class)->create();
+        $project2 = factory(Project::class)->create();
 
-        DB::table('project_user')->insert([
-            ['project_id' => $project1->id, 'user_id' => $users[0]->id],
-            ['project_id' => $project2->id, 'user_id' => $users[1]->id],
-        ]);
+        $users[0]->projects()->attach($project1->id);
+        $users[1]->projects()->attach($project2->id);
 
         $getUsers = $this->userRepo->getUserList([$project1->id, $project2->id]);
 
@@ -46,7 +47,21 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_active_user()
+    public function it_can_get_all_users()
+    {
+        /** @var Collection $users */
+        $users = factory(User::class)->times(2)->create();
+
+        $getUsers = $this->userRepo->getUserList();
+
+        // +1 default user
+        $this->assertCount(3, $getUsers);
+        $this->assertContains($users[0]->name, $getUsers);
+        $this->assertContains($users[1]->name, $getUsers);
+    }
+
+    /** @test */
+    public function test_can_activate_user()
     {
         /** @var Collection $user */
         $user = factory(User::class)->create(['is_active' => false]);
@@ -58,7 +73,7 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_de_active_user()
+    public function test_can_de_activate_user()
     {
         /** @var Collection $user */
         $user = factory(User::class)->create(['is_active' => true]);
