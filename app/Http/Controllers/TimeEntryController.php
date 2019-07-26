@@ -143,16 +143,21 @@ class TimeEntryController extends AppBaseController
             throw new BadRequestHttpException('Invalid start time and end time.');
         }
 
-        $startTime = $startTime->format('Y-m-d');
-        $endTime = $endTime->format('Y-m-d');
-
         $now = Carbon::now()->format('Y-m-d');
-        if ($startTime > $now) {
+        if ($startTime->format('Y-m-d') > $now) {
             throw new BadRequestHttpException('Start time must be less than or equal to current time.');
         }
 
-        if ($endTime > $now) {
+        if ($endTime->format('Y-m-d') > $now) {
             throw new BadRequestHttpException('End time must be less than or equal to current time.');
+        }
+
+        if ($input['duration'] > 720) {
+            throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
+        }
+
+        if ($input['duration'] < 1) {
+            throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
         }
 
         $input['user_id'] = getLoggedInUserId();

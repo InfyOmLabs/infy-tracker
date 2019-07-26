@@ -81,6 +81,34 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function test_add_time_entry_fail_when_duration_is_greater_than_12_hours()
+    {
+        $startTime = date('Y-m-d H:i:s', strtotime('-12 hours'));
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+ 13 hours'));
+
+        $response = $this->post(
+            'time-entries',
+            $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
+        );
+
+        $this->assertEquals('Time Entry must be less than 12 hours.', $response->exception->getMessage());
+    }
+
+    /** @test */
+    public function test_add_time_entry_fail_when_duration_is_less_than_1_minutes()
+    {
+        $startTime = date('Y-m-d H:i:s', strtotime('-45 seconds'));
+        $endTime = date('Y-m-d H:i:s', strtotime('-10 seconds'));
+
+        $response = $this->post(
+            'time-entries',
+            $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
+        );
+
+        $this->assertEquals('Minimum Entry time should be 1 minute.', $response->exception->getMessage());
+    }
+
+    /** @test */
     public function it_can_add_time_entry_of_logged_in_user()
     {
         $inputs = $this->timeEntryInputs();
@@ -112,6 +140,36 @@ class TimeEntryControllerValidationTest extends TestCase
 
         $this->assertEquals('Time Entry not found.',
             $response->original['message']);
+    }
+
+    /** @test */
+    public function test_update_time_entry_fails_when_duration_is_greater_than_12_hours()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+        $startTime = date('Y-m-d H:i:s', strtotime('-12 hours'));
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+ 13 hours'));
+
+        $response = $this->put(
+            'time-entries/'.$timeEntry->id,
+            $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
+        );
+
+        $this->assertEquals('Time Entry must be less than 12 hours.', $response->exception->getMessage());
+    }
+
+    /** @test */
+    public function test_update_time_entry_fails_when_duration_is_less_than_1_minutes()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+        $startTime = date('Y-m-d H:i:s', strtotime('-45 seconds'));
+        $endTime = date('Y-m-d H:i:s', strtotime('-10 seconds'));
+
+        $response = $this->put(
+            'time-entries/'.$timeEntry->id,
+            $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
+        );
+
+        $this->assertEquals('Minimum Entry time should be 1 minute.', $response->exception->getMessage());
     }
 
     /** @test */
