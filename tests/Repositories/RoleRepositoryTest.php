@@ -33,8 +33,8 @@ class RoleRepositoryTest extends TestCase
         // 1 default Admin role
         $this->assertCount(4, $roles);
 
-        $roles->map(function ($client) use ($roles) {
-            $this->assertContains($client, $roles);
+        $roles->map(function ($role) use ($roles) {
+            $this->assertContains($role, $roles);
         });
     }
 }

@@ -7,7 +7,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Role::class, function (Faker $faker) {
     return [
-        'name'         => $faker->name,
+        'name'         => $faker->unique()->name,
         'display_name' => $faker->name,
         'description'  => $faker->text,
     ];
