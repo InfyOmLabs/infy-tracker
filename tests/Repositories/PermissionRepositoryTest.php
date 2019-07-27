@@ -33,8 +33,10 @@ class PermissionRepositoryTest extends TestCase
         // 9 default permission
         $this->assertCount(10, $permissions);
 
-        $permissions->map(function ($permission) use ($permissions) {
-            $this->assertContains($permission, $permissions);
+        $allPermissions = Permission::all();
+
+        $allPermissions->map(function (Permission $allPermissions) use ($permissions) {
+            $this->assertContains($allPermissions->display_name, $permissions);
         });
     }
 }
