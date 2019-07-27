@@ -152,8 +152,8 @@ class ReportRepositoryTest extends TestCase
     }
 
     /**
-     * @param int $reportId
-     * @param int $paramId
+     * @param int    $reportId
+     * @param int    $paramId
      * @param string $type
      *
      * @return array
