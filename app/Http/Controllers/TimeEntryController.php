@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\UnauthorizedException;
 use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -123,6 +124,10 @@ class TimeEntryController extends AppBaseController
      */
     public function destroy(TimeEntry $timeEntry)
     {
+        $user = Auth::user();
+        if (!$user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
+            throw new UnauthorizedException('You are not allow to delete this entry.', 402);
+        }
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
