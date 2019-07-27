@@ -48,7 +48,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
+     * @param array $input
      * @param Report $report
      *
      * @return array
@@ -82,8 +82,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int    $reportId
-     * @param int    $paramId
+     * @param int $reportId
+     * @param int $paramId
      * @param string $type
      *
      * @return ReportFilter
@@ -98,7 +98,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
+     * @param array $input
      * @param Report $report
      *
      * @throws Exception
@@ -327,7 +327,7 @@ class ReportRepository extends BaseRepository
         }
 
         $hour = floor($minutes / 60);
-        $min = $minutes - $hour * 60;
+        $min = intval($minutes - $hour * 60);
         if ($min === 0) {
             return $hour.' hr';
         }
