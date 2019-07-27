@@ -48,7 +48,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array  $input
      * @param Report $report
      *
      * @return array
@@ -82,8 +82,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
-     * @param int $paramId
+     * @param int    $reportId
+     * @param int    $paramId
      * @param string $type
      *
      * @return ReportFilter
@@ -98,7 +98,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array  $input
      * @param Report $report
      *
      * @throws Exception
