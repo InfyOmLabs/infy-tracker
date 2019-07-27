@@ -32,23 +32,16 @@ class ReportRepositoryTest extends TestCase
     public function it_can_retrieve_project_ids_of_report()
     {
         $report = factory(Report::class)->create();
+        $user = factory(User::class)->create();
         $projects = factory(Project::class)->times(2)->create();
 
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $projects[0]->id,
-            'param_type' => Project::class,
-        ]);
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $projects[1]->id,
-            'param_type' => Project::class,
-        ]);
+        $this->generateReportFilter($report->id, $projects[0]->id, Project::class);
+        $this->generateReportFilter($report->id, $projects[1]->id, Project::class);
+        $this->generateReportFilter($report->id, $user->id, User::class);
 
         $projectIds = $this->reportRepo->getProjectIds($report->id);
 
         $this->assertCount(2, $projectIds);
-
         $this->assertEquals($projects[0]->id, $projectIds[0]);
         $this->assertEquals($projects[1]->id, $projectIds[1]);
     }
@@ -58,22 +51,14 @@ class ReportRepositoryTest extends TestCase
     {
         $report = factory(Report::class)->create();
         $tags = factory(Tag::class)->times(2)->create();
-
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $tags[0]->id,
-            'param_type' => Tag::class,
-        ]);
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $tags[1]->id,
-            'param_type' => Tag::class,
-        ]);
+        $user = factory(User::class)->create();
+        $this->generateReportFilter($report->id, $tags[0]->id, Tag::class);
+        $this->generateReportFilter($report->id, $tags[1]->id, Tag::class);
+        $this->generateReportFilter($report->id, $user->id, User::class);
 
         $tagIds = $this->reportRepo->getTagIds($report->id);
 
         $this->assertCount(2, $tagIds);
-
         $this->assertEquals($tags[0]->id, $tagIds[0]);
         $this->assertEquals($tags[1]->id, $tagIds[1]);
     }
@@ -83,22 +68,14 @@ class ReportRepositoryTest extends TestCase
     {
         $report = factory(Report::class)->create();
         $users = factory(User::class)->times(2)->create();
-
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $users[0]->id,
-            'param_type' => User::class,
-        ]);
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $users[1]->id,
-            'param_type' => User::class,
-        ]);
+        $project = factory(Project::class)->create();
+        $this->generateReportFilter($report->id, $users[0]->id, User::class);
+        $this->generateReportFilter($report->id, $users[1]->id, User::class);
+        $this->generateReportFilter($report->id, $project->id, Project::class);
 
         $userIds = $this->reportRepo->getUserIds($report->id);
 
         $this->assertCount(2, $userIds);
-
         $this->assertEquals($users[0]->id, $userIds[0]);
         $this->assertEquals($users[1]->id, $userIds[1]);
     }
@@ -106,31 +83,22 @@ class ReportRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_client_id_of_report()
     {
-        $report = factory(Report::class)->create();
-        $client = factory(Client::class)->create();
+        $reports = factory(Report::class)->times(2)->create();
+        $clients = factory(Client::class)->times(2)->create();
+        $this->generateReportFilter($reports[0]->id, $clients[0]->id, Client::class);
+        $this->generateReportFilter($reports[1]->id, $clients[1]->id, Client::class);
 
-        factory(ReportFilter::class)->create([
-            'report_id'  => $report->id,
-            'param_id'   => $client->id,
-            'param_type' => Client::class,
-        ]);
-
-        $clientId = $this->reportRepo->getClientId($report->id);
+        $clientId = $this->reportRepo->getClientId($reports[0]->id);
 
         $this->assertNotEmpty($clientId);
-        $this->assertEquals($client->id, $clientId);
+        $this->assertEquals($clients[0]->id, $clientId);
     }
 
     /** @test */
     public function it_will_return_empty_without_param_type()
     {
         $report = factory(Report::class)->create();
-        $client = factory(Client::class)->create();
-
-        factory(ReportFilter::class)->create([
-            'report_id' => $report->id,
-            'param_id'  => $client->id,
-        ]);
+        $this->generateReportFilter($report->id, '', '');
 
         $clientId = $this->reportRepo->getClientId($report->id);
 
@@ -138,15 +106,12 @@ class ReportRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_report_filter_for_report()
+    public function it_can_delete_report_filter_of_given_report()
     {
-        $report = factory(Report::class)->create();
+        $reportFilter = factory(ReportFilter::class)->create();
 
-        $reportFilter = factory(ReportFilter::class)->create(['report_id' => $report->id]);
+        $this->reportRepo->deleteFilter($reportFilter->report_id);
 
-        $deleteFilter = $this->reportRepo->deleteFilter($report->id);
-
-        $this->assertEquals($reportFilter->id, $deleteFilter);
         $this->assertNull(ReportFilter::find($reportFilter->id));
     }
 
@@ -178,11 +143,27 @@ class ReportRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_return_hours_from_minutes_when_calculated_minutes_is_zero()
+    public function it_can_return_only_hours_when_no_remaining_minutes_are_left()
     {
         $duration = $this->reportRepo->getDurationTime(120);
 
         $this->assertNotEmpty($duration);
         $this->assertEquals('2 hr', $duration);
+    }
+
+    /**
+     * @param int $reportId
+     * @param int $paramId
+     * @param string $type
+     *
+     * @return array
+     */
+    public function generateReportFilter($reportId, $paramId, $type)
+    {
+        return factory(ReportFilter::class)->create([
+            'report_id'  => $reportId,
+            'param_id'   => $paramId,
+            'param_type' => $type,
+        ]);
     }
 }
