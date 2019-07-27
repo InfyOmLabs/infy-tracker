@@ -28,8 +28,8 @@ class TagControllerValidationTest extends TestCase
     {
         $tag = factory(Tag::class)->create();
 
-        $this->post('tags/'.$tag->id, ['name' => 'Tag'])
-            ->assertSessionHasErrors(['name' => 'Tag with same name already exist']);
+        $this->post('tags', ['name' => $tag->name])
+            ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
     /** @test */
@@ -48,7 +48,7 @@ class TagControllerValidationTest extends TestCase
         $tag2 = factory(Tag::class)->create();
 
         $this->post('tags/'.$tag2->id.'/update', ['name' => $tag1->name])
-            ->assertSessionHasErrors(['name' => 'Tag with same name already exist']);
+            ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
     /** @test */
