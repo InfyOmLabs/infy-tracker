@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateTimeEntryRequest;
+use App\Http\Requests\UpdateTimeEntryRequest;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
@@ -10,6 +12,7 @@ use Carbon\Carbon;
 use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\UnauthorizedException;
 use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -48,11 +51,11 @@ class TimeEntryController extends AppBaseController
     /**
      * Store a newly created TimeEntry in storage.
      *
-     * @param Request $request
+     * @param CreateTimeEntryRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateTimeEntryRequest $request)
     {
         $input = $this->validateInput($request->all());
 
@@ -78,12 +81,12 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param TimeEntry $timeEntry
-     * @param Request   $request
+     * @param TimeEntry              $timeEntry
+     * @param UpdateTimeEntryRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(TimeEntry $timeEntry, Request $request)
+    public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
         $entry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         if (empty($entry)) {
@@ -121,6 +124,10 @@ class TimeEntryController extends AppBaseController
      */
     public function destroy(TimeEntry $timeEntry)
     {
+        $user = Auth::user();
+        if (!$user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
+            throw new UnauthorizedException('You are not allow to delete this entry.', 402);
+        }
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
@@ -134,26 +141,19 @@ class TimeEntryController extends AppBaseController
      */
     public function validateInput($input)
     {
-        if (empty($input['duration']) && (empty($input['start_time']) || empty($input['end_time']))) {
-            throw new BadRequestHttpException('duration  OR start time & end time required');
+        $startTime = Carbon::parse($input['start_time']);
+        $endTime = Carbon::parse($input['end_time']);
+        $input['duration'] = $endTime->diffInMinutes($startTime);
+        if ($startTime > $endTime) {
+            throw new BadRequestHttpException('Invalid start time and end time.');
         }
-
-        if (!empty($input['start_time']) && !empty($input['end_time'])) {
-            if (Carbon::parse($input['start_time']) > Carbon::parse($input['end_time'])) {
-                throw new BadRequestHttpException('Invalid start time and end time.');
-            }
-            $input['duration'] = Carbon::parse($input['end_time'])->diffInMinutes($input['start_time']);
-        }
-
-        $startTime = Carbon::parse($input['start_time'])->format('Y-m-d');
-        $endTime = Carbon::parse($input['end_time'])->format('Y-m-d');
 
         $now = Carbon::now()->format('Y-m-d');
-        if ($startTime > $now) {
+        if ($startTime->format('Y-m-d') > $now) {
             throw new BadRequestHttpException('Start time must be less than or equal to current time.');
         }
 
-        if ($endTime > $now) {
+        if ($endTime->format('Y-m-d') > $now) {
             throw new BadRequestHttpException('End time must be less than or equal to current time.');
         }
 
@@ -166,11 +166,6 @@ class TimeEntryController extends AppBaseController
         }
 
         $input['user_id'] = getLoggedInUserId();
-        $message = $this->validateRules($input, TimeEntry::$rules);
-        if (!empty($message)) {
-            throw new BadRequestHttpException($message);
-        }
-
         if (!isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
