@@ -33,6 +33,18 @@ class TagControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_create_tags()
+    {
+        $this->post('tags', ['name' => 'random tags'])
+            ->assertSessionHasNoErrors();
+
+        $tag = Tag::whereName('random tags')->first();
+
+        $this->assertNotEmpty($tag);
+        $this->assertEquals('random tags', $tag->name);
+    }
+
+    /** @test */
     public function test_update_tag_fails_when_name_is_not_passed()
     {
         $tag = factory(Tag::class)->create();
