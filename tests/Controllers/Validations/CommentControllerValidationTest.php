@@ -13,9 +13,9 @@ use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+
 /**
- * Class CommentControllerValidationTest
- * @package Tests\Controllers\Validations
+ * Class CommentControllerValidationTest.
  */
 class CommentControllerValidationTest extends TestCase
 {
