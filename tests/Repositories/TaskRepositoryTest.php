@@ -79,7 +79,7 @@ class TaskRepositoryTest extends TestCase
             'title'       => $this->faker->title,
             'description' => $this->faker->text,
             'project_id'  => $project->id,
-            'due_date'    => date('Y-m-d h:i:s', strtotime("+3 days")),
+            'due_date'    => date('Y-m-d h:i:s', strtotime('+3 days')),
             'task_number' => $this->faker->randomDigitNotNull,
             'tags'        => [$tag->id],
             'assignees'   => [$assignees[0]->id, $assignees[1]->id],
