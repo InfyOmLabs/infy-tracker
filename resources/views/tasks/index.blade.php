@@ -18,7 +18,7 @@
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Assign To</b></label>
-                        {!!Form::select('drp_users',$assignees,null,['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Project</b></label>
