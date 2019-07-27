@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ClientControllerValidationTest.
+ * Class ReportControllerValidationTest.
  */
 class ReportControllerValidationTest extends TestCase
 {
