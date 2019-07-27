@@ -13,7 +13,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class RoleRepositoryTest.
+ * Class ReportRepositoryTest.
  */
 class ReportRepositoryTest extends TestCase
 {
