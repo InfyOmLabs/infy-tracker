@@ -30,11 +30,13 @@ class RoleRepositoryTest extends TestCase
 
         $roles = $this->roleRepo->getRolesList();
 
+        $allRoles = Role::all();
+
         // 1 default Admin role
         $this->assertCount(4, $roles);
 
-        $roles->map(function ($role) use ($roles) {
-            $this->assertContains($role, $roles);
+        $allRoles->map(function (Role $allRoles) use ($roles) {
+            $this->assertContains($allRoles->name, $roles);
         });
     }
 }
