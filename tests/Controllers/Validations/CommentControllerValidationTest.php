@@ -34,7 +34,7 @@ class CommentControllerValidationTest extends TestCase
         $task = factory(Task::class)->create();
         $result = $this->delete('tasks/'.$task->id.'/comments/999');
 
-        $this->assertNotFound($result, 'Comment not found.');
+        $result->assertStatus(404);
     }
 
     /** @test */
@@ -45,7 +45,7 @@ class CommentControllerValidationTest extends TestCase
 
         $result = $this->delete('tasks/'.$task->id.'/comments/'.$comment->id);
 
-        $this->assertFailMessageResponse($result, 'Unable to delete comment.');
+        $this->assertExceptionMessage($result, 'Unable to delete comment.');
     }
 
     /** @test */
@@ -67,7 +67,7 @@ class CommentControllerValidationTest extends TestCase
 
         $result = $this->post('tasks/'.$task->id.'/comments/'.$comment->id.'/update');
 
-        $this->assertFailMessageResponse($result, 'Unable to update comment.');
+        $this->assertExceptionMessage($result, 'Unable to update comment.');
     }
 
     /** @test */

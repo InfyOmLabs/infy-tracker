@@ -46,21 +46,9 @@ abstract class TestCase extends BaseTestCase
             ]);
     }
 
-    public function assertFailMessageResponse(TestResponse $response, string $message)
+    public function assertExceptionMessage(TestResponse $response, string $message)
     {
-        $response->assertJson([
-            'success' => false,
-            'message' => $message,
-        ]);
-    }
-
-    public function assertNotFound(TestResponse $response, string $message)
-    {
-        $response->assertStatus(404)
-            ->assertJson([
-                'success' => false,
-                'message' => $message,
-            ]);
+        $this->assertEquals($message, $response->exception->getMessage());
     }
 
     /**
