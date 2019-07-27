@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
+use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -20,10 +21,17 @@ class TaskRepositoryTest extends TestCase
     /** @var TaskRepository */
     protected $taskRepo;
 
+    /** @var ProjectRepository */
+    protected $projectRepo;
+
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->taskRepo = app(TaskRepository::class);
+        $this->projectRepo = app(ProjectRepository::class);
+        $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
@@ -62,6 +70,40 @@ class TaskRepositoryTest extends TestCase
         $this->assertCount(2, $getTask->taskAssignee);
         $this->assertEquals($prepareTask['assignees'][0], $getTask->taskAssignee[0]->id);
         $this->assertEquals($prepareTask['assignees'][1], $getTask->taskAssignee[1]->id);
+    }
+
+    /** @test */
+    public function it_can_retrieve_task_list()
+    {
+        $project = factory(Project::class)->create();
+        $tasks = factory(Task::class)->times(2)->create(['project_id' => $project]);
+
+        $getTask = $this->taskRepo->getTaskList();
+
+        $this->assertCount(2, $getTask);
+        $this->assertContains($tasks[0]->title, $getTask);
+        $this->assertContains($tasks[1]->title, $getTask);
+    }
+
+    /** @test */
+    public function it_can_retrieve_task_list_of_logged_in_user()
+    {
+        $projectsOfLoggedInUser = factory(Project::class)->create();
+        $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
+
+        $tasks = factory(Task::class)->times(2)->create([
+            'project_id' => $projectsOfLoggedInUser->id,
+        ]);
+
+        $loginUserProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
+
+        $getTask = $this->taskRepo->getTaskList($loginUserProjects);
+
+        $this->assertCount(2, $getTask);
+        $this->assertContains($tasks[0]->title, $getTask);
+        $this->assertContains($tasks[1]->title, $getTask);
+
+        $this->assertArrayHasKey($projectsOfLoggedInUser->id, $getTask);
     }
 
     /**
