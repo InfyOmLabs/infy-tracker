@@ -49,7 +49,7 @@ class TagControllerValidationTest extends TestCase
     {
         $tag = factory(Tag::class)->create();
 
-        $this->post('tags/'.$tag->id.'/update', ['name' => ''])
+        $this->put('tags/'.$tag->id, ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -59,7 +59,7 @@ class TagControllerValidationTest extends TestCase
         $tag1 = factory(Tag::class)->create();
         $tag2 = factory(Tag::class)->create();
 
-        $this->post('tags/'.$tag2->id.'/update', ['name' => $tag1->name])
+        $this->put('tags/'.$tag2->id, ['name' => $tag1->name])
             ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
@@ -69,9 +69,7 @@ class TagControllerValidationTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $inputs = array_merge($tag->toArray(), ['name' => 'Any Dummy Name']);
-
-        $this->post('tags/'.$tag->id.'/update', $inputs)
+        $this->put('tags/'.$tag->id, ['name' => 'Any Dummy Name'])
             ->assertSessionHasNoErrors();
 
         $this->assertEquals('Any Dummy Name', $tag->fresh()->name);
