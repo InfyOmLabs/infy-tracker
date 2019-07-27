@@ -6,7 +6,6 @@ use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
-use App\Repositories\ProjectRepository;
 use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -21,21 +20,14 @@ class TaskRepositoryTest extends TestCase
     /** @var TaskRepository */
     protected $taskRepo;
 
-    /** @var ProjectRepository */
-    protected $projectRepo;
-
-    private $defaultUserId = 1;
-
     public function setUp(): void
     {
         parent::setUp();
         $this->taskRepo = app(TaskRepository::class);
-        $this->projectRepo = app(ProjectRepository::class);
-        $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
-    public function it_can_store_task_with_tags_and_its_assigned_user()
+    public function test_can_store_task_with_tags_and_assignees()
     {
         $task = $this->generateTaskInputs();
 
@@ -52,7 +44,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_task_with_tags_and_its_assigned_user()
+    public function test_can_update_task_with_tags_and_assignees()
     {
         $task = factory(Task::class)->create();
 
@@ -76,34 +68,33 @@ class TaskRepositoryTest extends TestCase
     public function it_can_retrieve_task_list()
     {
         $project = factory(Project::class)->create();
-        $tasks = factory(Task::class)->times(2)->create(['project_id' => $project]);
+        $tasks = factory(Task::class)->times(2)->create(['project_id' => $project->id]);
 
         $getTask = $this->taskRepo->getTaskList();
 
         $this->assertCount(2, $getTask);
-        $this->assertContains($tasks[0]->title, $getTask);
-        $this->assertContains($tasks[1]->title, $getTask);
+
+        $tasks->map(function (Task $task) use ($getTask) {
+            $this->assertContains($task->title, $getTask);
+        });
     }
 
     /** @test */
-    public function it_can_retrieve_task_list_of_logged_in_user()
+    public function it_can_retrieve_task_list_of_given_projects()
     {
-        $projectsOfLoggedInUser = factory(Project::class)->create();
-        $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
-
+        $project = factory(Project::class)->create();
         $tasks = factory(Task::class)->times(2)->create([
-            'project_id' => $projectsOfLoggedInUser->id,
+            'project_id' => $project->id,
         ]);
 
-        $loginUserProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
-
-        $getTask = $this->taskRepo->getTaskList($loginUserProjects);
+        $getTask = $this->taskRepo->getTaskList([$project->id => $project->name]);
 
         $this->assertCount(2, $getTask);
-        $this->assertContains($tasks[0]->title, $getTask);
-        $this->assertContains($tasks[1]->title, $getTask);
+        $tasks->map(function (Task $task) use ($getTask) {
+            $this->assertContains($task->title, $getTask);
+        });
 
-        $this->assertArrayHasKey($projectsOfLoggedInUser->id, $getTask);
+        $this->assertArrayHasKey($project->id, $getTask);
     }
 
     /**
