@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
@@ -25,5 +26,18 @@ abstract class TestCase extends BaseTestCase
         $user = User::first();
 
         return $this->actingAs($user);
+    }
+
+    /**
+     * @param string $string
+     * @param string $timezone
+     *
+     * @return Carbon
+     */
+    protected function mockTime($string, $timezone = 'UTC')
+    {
+        Carbon::setTestNow(Carbon::parse($string, $timezone));
+
+        return Carbon::now();
     }
 }
