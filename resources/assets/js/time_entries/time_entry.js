@@ -119,6 +119,9 @@ let tbl = $('#timeEntryTable').DataTable({
         });
     }
 });
+if (!canManageEntries) {
+    tbl.columns([0]).visible(false);
+}
 
 $('#timeEntryTable').on('draw.dt', function () {
     $('[data-toggle="tooltip"]').tooltip();
