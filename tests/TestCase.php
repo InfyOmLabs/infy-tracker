@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
@@ -34,5 +35,18 @@ abstract class TestCase extends BaseTestCase
                 'message' => $message,
                 'data'    => $data,
             ]);
+    }
+
+    /**
+     * @param string $string
+     * @param string $timezone
+     *
+     * @return Carbon
+     */
+    protected function mockTime($string, $timezone = 'UTC')
+    {
+        Carbon::setTestNow(Carbon::parse($string, $timezone));
+
+        return Carbon::now();
     }
 }
