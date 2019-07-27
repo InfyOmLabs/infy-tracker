@@ -4,12 +4,21 @@ namespace Tests;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\TestResponse;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    public $faker;
+
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->faker = Factory::create();
+    }
 
     public function signInWithDefaultAdminUser()
     {
@@ -34,6 +43,23 @@ abstract class TestCase extends BaseTestCase
                 'success' => true,
                 'message' => $message,
                 'data'    => $data,
+            ]);
+    }
+
+    public function assertFailMessageResponse(TestResponse $response, string $message)
+    {
+        $response->assertJson([
+            'success' => false,
+            'message' => $message,
+        ]);
+    }
+
+    public function assertNotFound(TestResponse $response, string $message)
+    {
+        $response->assertStatus(404)
+            ->assertJson([
+                'success' => false,
+                'message' => $message,
             ]);
     }
 

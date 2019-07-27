@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler
             $code = \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY;
         }
 
-        if ($request->expectsJson() or $request->isXmlHttpRequest()) {
+        if ($request->expectsJson() or $request->isXmlHttpRequest() || $request->acceptsJson()) {
             return Response::json([
                 'success' => false,
                 'message' => $message,
