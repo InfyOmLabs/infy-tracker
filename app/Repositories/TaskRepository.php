@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\ActivityType;
 use App\Models\Comment;
+use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TaskAttachment;
@@ -50,7 +51,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
+     * @param int $id
      * @param array $columns
      *
      * @return Task
@@ -94,7 +95,7 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param array $input
-     * @param int   $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -127,13 +128,15 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array     $input
+     * @param array $input
      * @param Task|null $task
      *
      * @return bool
      */
     public function validateTaskData($input, $task = null)
     {
+        Project::findOrFail($input['project_id']);
+
         if (!empty($task) && $input['due_date'] == $task->due_date) {
             return true;
         }
@@ -220,7 +223,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task  $task
+     * @param Task $task
      * @param array $tags
      */
     public function attachTags($task, $tags)
