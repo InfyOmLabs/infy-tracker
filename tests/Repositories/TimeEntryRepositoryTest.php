@@ -11,8 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TimeEntryRepositoryTest
- * @package Tests\Repositories
+ * Class TimeEntryRepositoryTest.
  */
 class TimeEntryRepositoryTest extends TestCase
 {
