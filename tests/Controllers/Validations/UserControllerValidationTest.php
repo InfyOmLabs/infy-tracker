@@ -56,6 +56,20 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_create_user()
+    {
+        $input = [
+            'name'  => 'random string',
+            'email' => 'dummy@gmail.com',
+        ];
+        $this->post('users', $input)->assertSessionHasNoErrors();
+
+        $user = User::whereName('random string')->first();
+        $this->assertNotEmpty($user);
+        $this->assertEquals('random string', $user->name);
+    }
+
+    /** @test */
     public function update_user_fails_when_name_is_not_passed()
     {
         $user = factory(User::class)->create();
@@ -101,5 +115,20 @@ class UserControllerValidationTest extends TestCase
         $this->put('users/'.$user->id, ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
         ]);
+    }
+
+    /** @test */
+    public function it_can_update_tag_with_valid_input()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $input = [
+            'name'  => 'random string',
+            'email' => 'dummy@gmail.com',
+        ];
+
+        $this->put('users/'.$user->id, $input)->assertSessionHasNoErrors();
+
+        $this->assertEquals('random string', $user->fresh()->name);
     }
 }
