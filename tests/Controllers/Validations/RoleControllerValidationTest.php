@@ -68,9 +68,11 @@ class RoleControllerValidationTest extends TestCase
     public function allow_update_role_with_valid_input()
     {
         $role = factory(Role::class)->create();
-
         $inputs = array_merge($role->toArray(), ['name' => 'Any Role Name']);
+        
         $this->put('roles/'.$role->id, $inputs)
             ->assertSessionHasNoErrors();
+
+        $this->assertEquals('Any Role Name', $role->fresh()->name);
     }
 }
