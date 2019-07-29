@@ -132,7 +132,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_return_index_one_when_task_does_not_have_task_number()
+    public function test_can_return_task_number_one_when_no_tasks_on_given_project()
     {
         $project = factory(Project::class)->create();
         factory(Task::class)->create([
@@ -146,7 +146,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_my_tasks_of_given_project_id()
+    public function test_can_get_tasks_of_logged_in_user_for_given_project_id()
     {
         $user = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -160,17 +160,14 @@ class TaskRepositoryTest extends TestCase
 
         $getMyTasks = $this->taskRepo->myTasks(['project_id' => $loggedInUserTask1->project_id]);
 
-        $this->assertCount(5, $getMyTasks['activities']);
-
         $this->assertCount(1, $getMyTasks['tasks']);
         $this->assertEquals($loggedInUserTask1->id, $getMyTasks['tasks'][0]->id);
-        $this->assertEquals($loggedInUserTask1->title, $getMyTasks['tasks'][0]->title);
         $this->assertNotEquals(Task::STATUS_COMPLETED, $getMyTasks['tasks'][0]->status);
         $this->assertEquals($this->defaultUserId, $loggedInUserTask1->fresh()->taskAssignee[0]->id);
     }
 
     /** @test */
-    public function test_can_get_my_tasks()
+    public function test_can_get_task_of_logged_in_user()
     {
         $user = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -193,23 +190,11 @@ class TaskRepositoryTest extends TestCase
     public function test_can_get_task_details_with_task_duration()
     {
         $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
-        factory(TimeEntry::class)->create();
 
         $getMyTask = $this->taskRepo->getTaskDetails($timeEntry->task_id);
 
         $this->assertEquals($timeEntry->task_id, $getMyTask->id);
         $this->assertEquals('00 Hours and 05 Minutes', $getMyTask->totalDuration);
-    }
-
-    /** @test */
-    public function test_can_get_task_details_when_duration_is_zero()
-    {
-        $timeEntry = factory(TimeEntry::class)->create(['duration' => 0]);
-
-        $getMyTask = $this->taskRepo->getTaskDetails($timeEntry->task_id);
-
-        $this->assertEquals($timeEntry->task_id, $getMyTask->id);
-        $this->assertEquals(0, $getMyTask->totalDuration);
     }
 
     /**
