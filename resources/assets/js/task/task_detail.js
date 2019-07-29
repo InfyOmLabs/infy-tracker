@@ -332,6 +332,16 @@ $(document).on('click', '.del-comment', function (event) {
                         type: 'success',
                         timer: 2000
                     });
+
+                    $.ajax({
+                        url: baseUrl + 'tasks/' + taskId + '/comments-count',
+                        type: 'GET',
+                        success: function (result) {
+                            if (result.data == 0) {
+                                $('.no_comments').show();
+                            }
+                        },
+                    });
                 },
                 error: function (data) {
                     swal({
