@@ -272,4 +272,14 @@ class TaskController extends AppBaseController
 
         return $this->sendResponse($result, 'Task retrieved successfully.');
     }
+
+    /**
+     * @param Task $task
+     *
+     * @return JsonResponse
+     */
+    public function getCommentsCount(Task $task)
+    {
+        return $this->sendResponse($task->comments()->count(), 'Comments count retrieved successfully.');
+    }
 }
