@@ -22,6 +22,8 @@ class ReportRepositoryTest extends TestCase
     /** @var ReportRepository */
     protected $reportRepo;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -95,13 +97,15 @@ class ReportRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_will_return_empty_without_param_type()
+    public function it_will_return_empty_when_client_filter_not_exist_on_given_report()
     {
-        $report = factory(Report::class)->create();
-        $user = factory(User::class)->create();
-        $this->generateReportFilter($report->id, $user->id, User::class);
+        $reports = factory(Report::class)->times(2)->create();
+        $vishal = factory(Client::class)->create();
 
-        $clientId = $this->reportRepo->getClientId($report->id);
+        $this->generateReportFilter($reports[0]->id, $vishal->id, Client::class); // client filter on another report
+        $this->generateReportFilter($reports[1]->id, $this->defaultUserId, User::class);
+
+        $clientId = $this->reportRepo->getClientId($reports[1]->id);
 
         $this->assertEmpty($clientId);
     }
