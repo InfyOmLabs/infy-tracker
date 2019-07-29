@@ -36,10 +36,10 @@ class UserController extends AppBaseController
     /**
      * UserController constructor.
      *
-     * @param UserRepository $userRepo
+     * @param UserRepository    $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
-     * @param RoleRepository $roleRepository
+     * @param RoleRepository    $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
@@ -131,7 +131,7 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param User $user
+     * @param User              $user
      * @param UpdateUserRequest $request
      *
      * @throws \Exception
@@ -206,7 +206,6 @@ class UserController extends AppBaseController
         $input = $request->all();
 
         $this->userRepository->profileUpdate($input);
-
 
         return $this->sendSuccess('Profile updated successfully.');
     }
