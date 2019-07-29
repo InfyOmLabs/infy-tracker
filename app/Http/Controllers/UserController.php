@@ -11,19 +11,14 @@ use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use App\Traits\ImageTrait;
-use Auth;
 use Crypt;
 use DataTables;
-use Exception;
-use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends AppBaseController
 {
-    use ImageTrait;
     /** @var UserRepository */
     private $userRepository;
 

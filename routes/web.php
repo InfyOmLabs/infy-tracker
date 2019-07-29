@@ -50,8 +50,8 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::post('users/profile-update', 'UserController@profileUpdate');
         Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
         Route::resource('users', 'UserController');
-        Route::post('users/{id}/update', 'UserController@update');
-        Route::get('users/send-email/{id}', 'UserController@resendEmailVerification');
+        Route::post('users/{user}/update', 'UserController@update')->where('user', '\d+');
+        Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
     });
 
     Route::middleware('permission:manage_tags')->group(function () {
