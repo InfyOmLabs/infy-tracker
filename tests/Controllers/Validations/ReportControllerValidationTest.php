@@ -35,7 +35,7 @@ class ReportControllerValidationTest extends TestCase
         ];
 
         $this->post('reports', $input)->assertSessionHasErrors([
-            'start_date' => 'The start_date field is required.',
+            'start_date' => 'The start date field is required.',
         ]);
     }
 
@@ -49,7 +49,7 @@ class ReportControllerValidationTest extends TestCase
         ];
 
         $this->post('reports', $input)->assertSessionHasErrors([
-            'end_date' => 'The end_date field is required.',
+            'end_date' => 'The end date field is required.',
         ]);
     }
 
@@ -72,7 +72,7 @@ class ReportControllerValidationTest extends TestCase
         ];
 
         $this->put('reports/'.$report->id, $input)
-            ->assertSessionHasErrors(['name' => 'The start_date field is required.']);
+            ->assertSessionHasErrors(['start_date' => 'The start date field is required.']);
     }
 
     /** @test */
@@ -86,6 +86,6 @@ class ReportControllerValidationTest extends TestCase
         ];
 
         $this->put('reports/'.$report->id, $input)
-            ->assertSessionHasErrors(['name' => 'The end_date field is required.']);
+            ->assertSessionHasErrors(['end_date' => 'The end date field is required.']);
     }
 }
