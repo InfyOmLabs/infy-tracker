@@ -14,6 +14,8 @@ abstract class TestCase extends BaseTestCase
 
     public $faker;
 
+    public $loggedInUserId;
+
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -23,6 +25,7 @@ abstract class TestCase extends BaseTestCase
     public function signInWithDefaultAdminUser()
     {
         $user = User::first();
+        $this->loggedInUserId = $user->id;
 
         return $this->actingAs($user);
     }
