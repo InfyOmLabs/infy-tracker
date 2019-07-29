@@ -47,6 +47,9 @@ function getSpinner() {
 $(document).on('click', '.btn-task-delete', function (event) {
     var taskId = $(event.currentTarget).data('task-id');
     deleteItem('tasks/' + taskId, '#task_table', 'Task');
+    setTimeout(function () {
+        revokerTracker();
+    }, 1000);
 });
 
 window.deleteItem = function (url, tableId, header, callFunction = null) {
@@ -120,12 +123,12 @@ window.manageCheckbox = function (input) {
 };
 window.onload = function () {
     window.startLoader = function () {
-        $('#infyLoader').show();
-    }
+        $('.infy-loader').show();
+    };
 
     window.stopLoader = function () {
-        $('#infyLoader').hide();
-    }
+        $('.infy-loader').hide();
+    };
 
 // infy loader js
     stopLoader();

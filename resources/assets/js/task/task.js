@@ -84,7 +84,6 @@ var tbl = $('#task_table').DataTable({
         {
             "targets": [6],
             "orderable": false,
-            "className": 'text-center',
             "width": "9%"
         },
         {
@@ -166,22 +165,18 @@ var tbl = $('#task_table').DataTable({
                 $.each(row.task_assignee, function (key, value) {
                     taskAssignee.push(value.id);
                 });
-                let actionString = '';
-                if ($.inArray(loggedInUserId, taskAssignee) > -1) {
-                    actionString = '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
-                        '<i class="fa fa-user-clock action-icon"></i></a>';
-                } else {
-                    actionString = '<a data-toggle="tooltip" title="This task is not assigned to you" class="btn btn-secondary action-btn btn-sm entry-model mr-1">' +
-                        '<i class="fa fa-user-clock action-icon"></i></a>';
-                }
-
-                actionString  +=
+                let actionString  =
                     '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails mr-1"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
                     '<i class="fa fa-clock action-icon"></i></a>'+
                     '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete" data-task-id="' + row.id + '">' +
                     '<i class="cui-trash action-icon"></i></a>';
+
+                if ($.inArray(loggedInUserId, taskAssignee) > -1) {
+                    actionString += '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model ml-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
+                        '<i class="fa fa-user-clock action-icon"></i></a>';
+                }
 
                 return actionString;
             }, name: 'id'
@@ -256,7 +251,7 @@ $(document).on('click', '.delete-btn', function (event) {
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
     let id = $(event.currentTarget).data('id');
-    startLoader()
+    startLoader();
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
     $.ajax({
@@ -313,6 +308,7 @@ $('#addNewForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (result) {
@@ -345,6 +341,7 @@ $('#editForm').submit(function (event) {
                 displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (error) {
@@ -388,6 +385,7 @@ $(function () {
             success: function (result) {
                 if (result.success) {
                     $('#task_table').DataTable().ajax.reload(null, false);
+                    revokerTracker();
                 }
             }
         });

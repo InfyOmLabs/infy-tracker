@@ -22,6 +22,8 @@ class TaskController extends AppBaseController
 {
     /** @var TaskRepository */
     private $taskRepository;
+
+    /** @var UserRepository $userRepo */
     private $userRepo;
 
     public function __construct(TaskRepository $taskRepo, UserRepository $userRepository)

@@ -119,6 +119,9 @@ let tbl = $('#timeEntryTable').DataTable({
         });
     }
 });
+if (!canManageEntries) {
+    tbl.columns([0]).visible(false);
+}
 
 $('#timeEntryTable').on('draw.dt', function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -150,6 +153,8 @@ $('#timeEntryAddForm').submit(function (event) {
 
 $('#timeEntryAddModal').on('hidden.bs.modal', function () {
     isEdit = false;
+    $("#startTime").data("DateTimePicker").date(null);
+    $("#endTime").data("DateTimePicker").date(null);
     $('#taskId').val(null).trigger("change");
     $('#activityTypeId').val(null).trigger("change");
     $('#duration').prop('disabled', false);
@@ -165,6 +170,9 @@ $('#startTime,#endTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
+        if (!Number.isInteger(minutes))  {
+            minutes = minutes.toFixed(2);
+        }
     }
     $('#duration').val(minutes).prop('disabled', true);
 });
@@ -196,7 +204,8 @@ $('#startTime,#editStartTime').datetimepicker({
         up: "icon-angle-up",
         down: "icon-angle-down"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
 });
 $('#endTime,#editEndTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
@@ -205,7 +214,8 @@ $('#endTime,#editEndTime').datetimepicker({
         up: "icon-angle-up",
         down: "icon-angle-down"
     },
-    sideBySide: true
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
 });
 
 $('#editTimeEntryForm').submit(function (event) {
