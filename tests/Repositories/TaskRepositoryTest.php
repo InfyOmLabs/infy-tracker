@@ -37,8 +37,8 @@ class TaskRepositoryTest extends TestCase
         $this->assertEquals($task['tags'][0], $getTask->tags[0]->id);
 
         $assignees = $createdTask->fresh()->taskAssignee;
-        $assignees->map(function (User $user) use ($getTask) {
-            $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
+        $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
+        $assignees->map(function (User $user) use ($getTask, $pluckAssigneeIds) {
             $this->assertContains($user->id, $pluckAssigneeIds);
         });
     }
@@ -58,8 +58,8 @@ class TaskRepositoryTest extends TestCase
         $this->assertEquals($prepareTask['tags'][0], $getTask->tags[0]->id);
 
         $assignees = $task->fresh()->taskAssignee;
-        $assignees->map(function (User $user) use ($getTask) {
-            $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
+        $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
+        $assignees->map(function (User $user) use ($getTask, $pluckAssigneeIds) {
             $this->assertContains($user->id, $pluckAssigneeIds);
         });
     }
