@@ -198,7 +198,7 @@ class TaskRepositoryTest extends TestCase
         $getMyTask = $this->taskRepo->getTaskDetails($timeEntry->task_id);
 
         $this->assertEquals($timeEntry->task_id, $getMyTask->id);
-        $this->assertEquals("00 Hours and 05 Minutes", $getMyTask->totalDuration);
+        $this->assertEquals('00 Hours and 05 Minutes', $getMyTask->totalDuration);
     }
 
     /** @test */
