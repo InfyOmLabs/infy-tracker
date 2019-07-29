@@ -18,7 +18,7 @@
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Assign To</b></label>
-                        {!!Form::select('drp_users',$assignees,null,['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Project</b></label>
@@ -64,8 +64,9 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskDetailUrl = '{{url('task-details')}}';
         let createTaskUrl = '{{route('tasks.store')}}';
-        let timeEntryUrl = "{{url('timeEntries')}}/";
+        let timeEntryUrl = "{{url('time-entries')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
+        let projectsURL = "{{url('projects')}}/";
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
         let taskStatus = $.parseJSON(taskStatusJson)
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';

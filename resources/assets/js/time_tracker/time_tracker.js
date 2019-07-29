@@ -2,6 +2,25 @@ $('#tmActivityId,#tmTaskId,#tmProjectId').select2({
     width: '100%',
 });
 
+let lastProjectId = null;
+window.loadProjects = function() {
+    $.ajax({
+        url: myProjectsUrl,
+        type: 'GET',
+        success: function (result) {
+            $('#tmProjectId').find('option').remove().end().append('<option value="">Select Project</option>');
+            $(result.data).each(function (i, e) {
+                $("#tmProjectId").append($('<option></option>').attr('value', e.id).text(e.name));
+            });
+            if (localStorage.getItem('clockRunning') !== null) {
+                lastProjectId = localStorage.getItem('project_id');
+                $('#tmProjectId').val(lastProjectId).trigger("change");
+                $('#tmProjectId').attr('disabled', true);
+            }
+        }
+    });
+};
+
 loadProjects();
 let isClockRunning = localStorage.getItem('clockRunning');
 $(window).on("load", function () {
@@ -10,7 +29,25 @@ $(window).on("load", function () {
     }
 });
 
+window.revokerTracker = function() {
+    loadProjects();
+
+    setTimeout(function () {
+        $('#tmProjectId').val(lastProjectId).trigger('change');
+    }, 1500);
+};
+
+window.showStartTimeButton= function(){
+    $("#stopTimer").hide();
+    $("#timer").html('<h3><b>00:00:00</b></h3>');
+    $("#startTimer").show();
+};
+
 window.startWatch = function () {
+    if(localStorage.getItem('clockRunning') == null) {
+        showStartTimeButton();
+        return;
+    }
     $("#startTimer").hide();
     $("#stopTimer").show();
 
@@ -191,7 +228,7 @@ $("#tmProjectId").on('change', function (e) {
     e.preventDefault();
     $("#tmTaskId").attr('disabled', true);
 
-    var projectId = $('#tmProjectId').val();
+    var projectId = lastProjectId = $('#tmProjectId').val();
     loadTimerData(projectId);
 });
 
@@ -203,8 +240,14 @@ function loadTimerData(projectId) {
             $('#tmTaskId').find('option').remove().end().append('<option value="">Select Task</option>');
             $('#tmTaskId').val("").trigger('change');
 
+            let drpTaskId = localStorage.getItem('task_id');
+            let drpActivityId = localStorage.getItem('activity_id');
+            let isTaskEmpty = true;
             $(result.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
+                if (e.id == drpTaskId) {
+                    isTaskEmpty = false;
+                }
             });
 
             $('#tmActivityId').find('option').remove().end().append('<option value="">Select Activity</option>');
@@ -216,30 +259,18 @@ function loadTimerData(projectId) {
             $("#tmTaskId").removeAttr('disabled');
             // if timer is running then set values as it is
             if (localStorage.getItem('clockRunning') !== null) {
-                $('#tmActivityId').val(localStorage.getItem('activity_id')).trigger("change");
-                $('#tmTaskId').val(localStorage.getItem('task_id')).trigger("change");
+                $('#tmActivityId').val(drpActivityId).trigger("change");
+                $('#tmTaskId').val(drpTaskId).trigger("change");
 
                 $('#tmTaskId').attr('disabled', true);
                 $('#tmActivityId').attr('disabled', true);
             } else {
-                $('#tmActivityId').val(localStorage.getItem('activity_id')).trigger("change");
-                $('#tmTaskId').val(localStorage.getItem('task_id')).trigger("change");
+                $('#tmActivityId').val(drpActivityId).trigger("change");
+                $('#tmTaskId').val(drpTaskId).trigger("change");
             }
-        }
-    });
-}
 
-function loadProjects() {
-    $.ajax({
-        url: myProjectsUrl,
-        type: 'GET',
-        success: function (result) {
-            $(result.data).each(function (i, e) {
-                $("#tmProjectId").append($('<option></option>').attr('value', e.id).text(e.name));
-            });
-            if (localStorage.getItem('clockRunning') !== null) {
-                $('#tmProjectId').val(localStorage.getItem('project_id')).trigger("change");
-                $('#tmProjectId').attr('disabled', true);
+            if (isTaskEmpty) {
+                $('#tmTaskId').val($('#tmTaskId option:first').val()).trigger("change");
             }
         }
     });
@@ -261,6 +292,7 @@ function getUserLastTaskWork() {
                             'project_id': lastTask.project_id
                         };
                         setItemToLocalStorage(setItems);
+                        lastProjectId = lastTask.project_id;
                         $('#tmProjectId').val(lastTask.project_id).trigger("change");
                     }
                 }

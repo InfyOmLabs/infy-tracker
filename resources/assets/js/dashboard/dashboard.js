@@ -4,8 +4,8 @@ $('#userId').select2({
 });
 let timeRange = $('#time_range');
 const today = moment();
-let start = today.clone().startOf('week');
-let end = today.clone().endOf('week');
+let start = today.clone().startOf('month');
+let end = today.clone().endOf('month');
 let userId = $('#userId').val();
 let isPickerApply = false;
 $(window).on("load", function () {
@@ -35,10 +35,9 @@ timeRange.daterangepicker({
     autoUpdateInput: false,
     ranges: {
         'Today': [moment(), moment()],
-        'This Week': [start, end],
-        'Next Week': [moment().endOf('week').add(1, 'days'), moment().endOf('week').add(7, 'days')],
+        'This Week': [moment().startOf('week'), moment().endOf('week')],
         'Last Week': [moment().startOf('week').subtract(7, 'days'), moment().startOf('week').subtract(1, 'days')],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'This Month': [start, end],
         'Last Month': [lastMonth.clone().startOf('month'), lastMonth.clone().endOf('month')]
     }
 }, cb);
@@ -68,6 +67,7 @@ window.loadUserWorkReport = function (startDate, endDate, userId) {
 window.prepareUserWorkReport = function (result) {
     $('#daily-work-report').html('');
     let data = result.data;
+    console.log(result);
     if (data.totalRecords === 0) {
         $('#work-report-container').html('');
         $('#work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
@@ -80,7 +80,6 @@ window.prepareUserWorkReport = function (result) {
     let barChartData = {
         labels: data.date,
         datasets: data.data
-
     };
     let ctx = document.getElementById('daily-work-report').getContext('2d');
     ctx.canvas.style.height = '400px';
@@ -97,12 +96,12 @@ window.prepareUserWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': ';
                         }
-                        result= roundToQuarterHour(tooltipItem.yLabel);
+                        result = roundToQuarterHour(tooltipItem.yLabel);
                         return label + result;
                     }
                 }
@@ -110,6 +109,7 @@ window.prepareUserWorkReport = function (result) {
             responsive: false,
             maintainAspectRatio: false,
             scales: {
+
                 xAxes: [{
                     stacked: true,
                 }],
@@ -119,29 +119,22 @@ window.prepareUserWorkReport = function (result) {
                         display: true,
                         labelString: 'Hours'
                     },
-                    ticks: {
-                        min: 0,
-                        callback: function(value, index, values) {
-                            if (value > 60) {
-                                return parseInt(value / 60);
-                            } else {
-                                return value
-                            }
-                        }
-                    }
                 }]
             }
         }
     });
 };
-window.roundToQuarterHour = function (totalMinutes) {
-    let hours = parseInt(totalMinutes / 60);
-    let minutes = totalMinutes % 60;
-    let format = null;
-    if (hours > 0) {
-        format = hours + 'h ' + minutes + 'm';
-    } else {
-        format = minutes + 'm';
+
+window.roundToQuarterHour = function (duration) {
+    const totalTime = duration.toString().split('.');
+    const hours = parseInt(totalTime[0]);
+    const minutes = Math.floor((duration * 60)) - Math.floor((hours * 60));
+    if (hours === 0) {
+        return minutes + 'min';
     }
-    return format;
+
+    if (minutes > 0) {
+        return hours + 'hr ' + minutes + 'min';
+    }
+    return hours + 'hr';
 };

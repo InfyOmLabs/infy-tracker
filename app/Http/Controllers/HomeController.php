@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Repositories\DashboardRepository;
 use App\Repositories\UserRepository;
+use Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends AppBaseController
 {
     /** @var DashboardRepository $dashboardRepo */
     private $dashboardRepo;
+
+    /** @var UserRepository $userRepository */
     private $userRepository;
 
     /**
@@ -44,9 +47,12 @@ class HomeController extends AppBaseController
      */
     public function workReport(Request $request)
     {
+        if (!authUserHasPermission('manage_users')) {
+            $request->request->set('user_id', Auth::id());
+        }
         $data = $this->dashboardRepo->getWorkReport($request->all());
 
-        return $this->sendResponse($data, 'Work Report retrieved successfully.');
+        return $this->sendResponse($data, 'Custom Report retrieved successfully.');
     }
 
     /**
@@ -58,6 +64,6 @@ class HomeController extends AppBaseController
     {
         $data = $this->dashboardRepo->getDeveloperWorkReport($request->all());
 
-        return $this->sendResponse($data, 'Developer Work Report retrieved successfully.');
+        return $this->sendResponse($data, 'Daily Work Report retrieved successfully.');
     }
 }

@@ -97,7 +97,8 @@
 @yield('page_js')
 <script src="{{mix('assets/js/custom.js')}}" type="text/javascript"></script>
 <script>
-    let storeTimeEntriesUrl = "{{route('timeEntries.store')}}";
+    let loggedInUserId = "{{ getLoggedInUserId() }}";
+    let storeTimeEntriesUrl = "{{route('time-entries.store')}}";
     let myTasksUrl = "{{url('my-tasks')}}";
     let myProjectsUrl = "{{url('my-projects')}}";
     let lastTaskWorkUrl = "{{url('user-last-task-work')}}";
@@ -107,6 +108,10 @@
     let usersUrl = "{{ url('users') }}/";
     let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
+    let reporstUrl = "{{ url('reports') }}";
+    let usersOfProjects = "{{ url('users-of-projects') }}";
+    let projectsOfClient = "{{ url('projects-of-client') }}";
+    let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

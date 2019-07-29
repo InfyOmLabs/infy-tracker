@@ -74,7 +74,7 @@ class TimeEntryRepository extends BaseRepository
     public function myLastTask()
     {
         /** @var TimeEntry $timeEntry */
-        $timeEntry = TimeEntry::whereUserId(getLoggedInUserId())->latest()->first();
+        $timeEntry = TimeEntry::ofCurrentUser()->latest()->first();
         if (empty($timeEntry)) {
             return;
         }
@@ -95,7 +95,7 @@ class TimeEntryRepository extends BaseRepository
     public function getTasksByProject($projectId, $taskId = null)
     {
         /** @var Builder $query */
-        $query = Task::whereProjectId($projectId)
+        $query = Task::ofProject($projectId)
             ->where('status', '=', Task::STATUS_ACTIVE)
             ->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
@@ -110,6 +110,11 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function getTimeEntryDetail($id)
     {
         $result = TimeEntry::leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
@@ -120,6 +125,12 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param array $input
+     * @param int   $id
+     *
+     * @return bool
+     */
     public function updateTimeEntry($input, $id)
     {
         $timeEntry = $this->find($id);

@@ -1,19 +1,13 @@
-<div class="table-responsive-sm">
-    <div class="list-group">
-        @foreach($reports as $key => $report)
-            @if($key % 2 ===0 )
-                <div class="list-group-item list-group-item-action list-group-item-secondary">
-                    <a class="report__heading" href="{!! route('reports.show',$report->id) !!}">
-                        {{$report->name}}
-                    </a>
-                </div>
-            @else
-                <div class="list-group-item list-group-item-action list-group-item-light">
-                    <a class="report__heading" href="{!! route('reports.show',$report->id) !!}">
-                        {{$report->name}}
-                    </a>
-                </div>
-            @endif
-        @endforeach
-    </div>
-</div>
+<table class="table table-responsive-sm table-striped table-bordered" id="report_table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Created By</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>

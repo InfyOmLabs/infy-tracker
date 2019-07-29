@@ -17,9 +17,11 @@
             <div class="page-header">
                 <h3>Dashboard</h3>
                 <div id="rightData" class="d-flex align-items-center">
+                    @permission('manage_users')
                     <div class="mr-4">
                         {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
                     </div>
+                    @endpermission
                     <div id="time_range" class="time_range">
                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
                             class="caret"></b>
@@ -30,7 +32,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5>Work Report</h5>
+                            <h5>Custom Report</h5>
                             <div id="work-report-container" class="pt-2">
                                 <canvas id="daily-work-report"></canvas>
                             </div>
@@ -43,7 +45,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="page-header">
-                                <h5>Developers Daily Work Report</h5>
+                                <h5>Daily Work Report</h5>
                                 <div id="rightData">
                                     <div id="developers-report-date-picker" class="time_range">
                                         <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;

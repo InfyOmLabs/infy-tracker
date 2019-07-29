@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Eloquent as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -17,7 +18,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $due_date
  * @property int|null $created_by
  * @property int|null $deleted_by
- * @property string $time_entries_count
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -59,6 +59,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read mixed $prefix_task_number
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task ofProject($projectId)
  */
 class Task extends Model
 {
@@ -66,24 +68,12 @@ class Task extends Model
 
     const STATUS_ACTIVE = 0;
     const STATUS_COMPLETED = 1;
-    const STATUS_STARTED = 2;
-    const STATUS_IN_QA = 3;
-    const STATUS_FINISHED = 4;
-    const STATUS_INVALID = 5;
-    const STATUS_DISCUSS = 6;
-    const STATUS_REJECTED = 7;
-    const STATUS_ALL = 8;
+    const STATUS_ALL = 2;
 
     const STATUS_ARR = [
         self::STATUS_ALL       => 'All',
-        self::STATUS_ACTIVE    => 'Not Started',
-        self::STATUS_COMPLETED => 'Accepted',
-        self::STATUS_STARTED   => 'Started',
-        self::STATUS_IN_QA     => 'In QA',
-        self::STATUS_FINISHED  => 'Finished',
-        self::STATUS_INVALID   => 'Invalid',
-        self::STATUS_DISCUSS   => 'Discuss/Block',
-        self::STATUS_REJECTED  => 'Rejected',
+        self::STATUS_ACTIVE    => 'Pending',
+        self::STATUS_COMPLETED => 'Completed',
     ];
     const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
     const PATH = 'attachments';
@@ -202,5 +192,16 @@ class Task extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class, 'task_id');
+    }
+
+    /**
+     * @param Builder $query
+     * @param int     $projectId
+     *
+     * @return Builder
+     */
+    public function scopeOfProject(Builder $query, $projectId)
+    {
+        return $query->where('project_id', $projectId);
     }
 }

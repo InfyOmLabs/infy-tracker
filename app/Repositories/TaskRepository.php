@@ -102,8 +102,8 @@ class TaskRepository extends BaseRepository
      */
     public function update($input, $id)
     {
-        $this->validateTaskData($input);
         $task = $this->findOrFail($id);
+        $this->validateTaskData($input, $task);
 
         try {
             DB::beginTransaction();
@@ -127,14 +127,19 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param array     $input
+     * @param Task|null $task
      *
      * @return bool
      */
-    public function validateTaskData($input)
+    public function validateTaskData($input, $task = null)
     {
+        if (!empty($task) && $input['due_date'] == $task->due_date) {
+            return true;
+        }
+
         if (Carbon::parse($input['due_date'])->toDateString() < Carbon::now()->toDateString()) {
-            throw new BadRequestHttpException('due_date must be greater than today\'s date');
+            throw new BadRequestHttpException('due_date must be greater than today\'s date.');
         }
 
         return true;
@@ -182,12 +187,6 @@ class TaskRepository extends BaseRepository
         return [
             Task::STATUS_ACTIVE    => 'badge-light',
             Task::STATUS_COMPLETED => 'badge-success',
-            Task::STATUS_STARTED   => 'badge-primary',
-            Task::STATUS_IN_QA     => 'badge-warning',
-            Task::STATUS_FINISHED  => 'badge-info',
-            Task::STATUS_INVALID   => 'badge-dark',
-            Task::STATUS_DISCUSS   => 'badge-secondary',
-            Task::STATUS_REJECTED  => 'badge-danger',
         ];
     }
 
@@ -280,16 +279,16 @@ class TaskRepository extends BaseRepository
         /** @var Builder|Task $query */
         $query = Task::whereHas('taskAssignee', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
-        })->whereNotIn('status', [Task::STATUS_INVALID, Task::STATUS_FINISHED, Task::STATUS_COMPLETED]);
+        })->whereNotIn('status', [Task::STATUS_COMPLETED]);
 
         if (!empty($input['project_id'])) {
-            $query->where('project_id', $input['project_id']);
+            $query->ofProject($input['project_id']);
         }
 
-        $assignedTasks = $query->get(['title', 'id']);
+        $assignedTasks = $query->orderBy('title')->get(['title', 'id']);
 
         return [
-            'activities' => ActivityType::get(['name', 'id']),
+            'activities' => ActivityType::orderBy('name')->get(['name', 'id']),
             'tasks'      => $assignedTasks,
         ];
     }
@@ -302,11 +301,12 @@ class TaskRepository extends BaseRepository
     public function getIndex($projectId)
     {
         /** @var Task $task */
-        $task = Task::whereProjectId($projectId)->where('task_number', '!=', '')->latest('created_at')->first();
+        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=',
+            '')->orderByDesc('task_number')->first();
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
-            $task = Task::whereProjectId($projectId)->where('task_number', '=', $uniqueNumber)->first();
+            $task = Task::ofProject($projectId)->where('task_number', '=', $uniqueNumber)->first();
             if (empty($task)) {
                 $isUnique = true;
             } else {
@@ -389,7 +389,7 @@ class TaskRepository extends BaseRepository
         foreach ($attachments as $attachment) {
             $obj['id'] = $attachment->id;
             $obj['name'] = $attachment->file;
-            $obj['size'] = filesize($attachment->file_path);
+            //            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
             $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }

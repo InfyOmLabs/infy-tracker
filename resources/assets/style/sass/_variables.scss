@@ -32,6 +32,7 @@ $theme-colors: ();
 $theme-colors: map-merge(
         (
             "primary": $blue,
+            "info": $orange,
         ),
         $theme-colors
 );

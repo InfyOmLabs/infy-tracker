@@ -16,12 +16,14 @@
             <div class="page-header">
                 <h3>Time Entries</h3>
                 <div class="filter-container">
+                    @permission('manage_time_entries')
                     <div class="mr-2">
-                        <label for="projects" class="lbl-block"><b>Assign To</b></label>
+                        <label for="projects" class="lbl-block"><b>User</b></label>
                         {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
+                    @endpermission
                     <div class="mr-2">
-                        <label for="projects" class="lbl-block"><b>Activity</b></label>
+                        <label for="projects" class="lbl-block"><b>Activity Type</b></label>
                         {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
                     <a href="#" class="btn btn-primary filter-container__btn" id="new_entry" data-toggle="modal"
@@ -51,7 +53,9 @@
 
 @section('scripts')
     <script>
-        let timeEntryUrl = "{{url('timeEntries')}}/";
+        let taskUrl = '{{url('tasks')}}/';
+        let timeEntryUrl = "{{url('time-entries')}}/";
+        let projectsURL = "{{url('projects')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
     </script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>

@@ -82,9 +82,8 @@ var tbl = $('#task_table').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [6],
             "orderable": false,
-            "className": 'text-center',
             "width": "9%"
         },
         {
@@ -94,16 +93,16 @@ var tbl = $('#task_table').DataTable({
             "orderable": false,
         },
         {
-            "targets": [3],
+            "targets": [2],
             "orderable": false,
         },
         {
-            "targets": [5, 4],
+            "targets": [3, 4],
             "width": "10%",
             "className": 'text-center',
         },
         {
-            "targets": [6],
+            "targets": [5],
             "className": 'text-center',
         },
     ],
@@ -119,15 +118,6 @@ var tbl = $('#task_table').DataTable({
                 return '<a href="' + url + '">' + row.title + '</a>'
             },
             name: 'title'
-        },
-        {
-            data: function (row) {
-                if(typeof taskStatus[row.status] == 'undefined')
-                    return '';
-                else
-                    return '<span class="badge '+taskBadges[row.status]+' text-uppercase">'+taskStatus[row.status]+'</span>';
-                },
-            name: 'status'
         },
         {
             data: function (row) {
@@ -171,14 +161,24 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                return '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
+                let taskAssignee = [];
+                $.each(row.task_assignee, function (key, value) {
+                    taskAssignee.push(value.id);
+                });
+                let actionString  =
+                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails mr-1"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
+                    '<i class="fa fa-clock action-icon"></i></a>'+
+                    '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
-                    '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete mr-1" data-task-id="' + row.id + '">' +
-                    '<i class="cui-trash action-icon"></i></a>' +
-                    '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model mr-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
-                    '<i class="fa fa-user-clock action-icon"></i></a>' +
-                    '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
-                    '<i class="fa fa-clock action-icon"></i></a>'
+                    '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete" data-task-id="' + row.id + '">' +
+                    '<i class="cui-trash action-icon"></i></a>';
+
+                if ($.inArray(loggedInUserId, taskAssignee) > -1) {
+                    actionString += '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model ml-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' + row.id + '" data-project-id="' + row.project.id + '">' +
+                        '<i class="fa fa-user-clock action-icon"></i></a>';
+                }
+
+                return actionString;
             }, name: 'id'
         }
     ],
@@ -190,7 +190,10 @@ var tbl = $('#task_table').DataTable({
 });
 
 $('#task_table').on('draw.dt', function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    $(".tooltip").tooltip("hide");
+    setTimeout(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
 });
 
 // open edit user model
@@ -223,7 +226,14 @@ $(document).on('click', '.edit-btn', function (event) {
 
                 $("#editAssignee").val(userIds).trigger('change');
                 $("#editPriority").val(task.priority).trigger('change');
-                $('#EditModal').modal('show');
+
+                setTimeout(function () {
+                    $.each(task.task_assignee, function(i,e){
+                        $("#editAssignee option[value='" + e.id + "']").prop("selected", true).trigger('change');
+                    });
+                    $('#EditModal').modal('show');
+
+                }, 1500);
             }
         },
         error: function (error) {
@@ -241,7 +251,7 @@ $(document).on('click', '.delete-btn', function (event) {
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
     let id = $(event.currentTarget).data('id');
-    startLoader()
+    startLoader();
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
     $.ajax({
@@ -295,8 +305,10 @@ $('#addNewForm').submit(function (event) {
         data: formdata,
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (result) {
@@ -326,8 +338,10 @@ $('#editForm').submit(function (event) {
         data: formdata,
         success: function (result) {
             if (result.success) {
+                displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
                 $('#task_table').DataTable().ajax.reload();
+                revokerTracker();
             }
         },
         error: function (error) {
@@ -371,6 +385,7 @@ $(function () {
             success: function (result) {
                 if (result.success) {
                     $('#task_table').DataTable().ajax.reload(null, false);
+                    revokerTracker();
                 }
             }
         });
@@ -440,6 +455,11 @@ $(document).on('click', '.entry-model', function (event) {
     let projectId = $(event.currentTarget).data('project-id');
     $('#timeProjectId').val(projectId).trigger("change");
     getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
+
+    setTimeout(function () {
+        console.log(taskId);
+        $('#taskId').val(taskId).trigger("change");
+    }, 1500);
 });
 
 CKEDITOR.replace( 'description', {
@@ -451,3 +471,30 @@ CKEDITOR.replace( 'editDesc', {
     language: 'en',
     height: '150px',
 });
+
+$(document).on('change', '#projectId', function (event) {
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'assignee')
+});
+
+$(document).on('change', '#editProjectId', function (event) {
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'editAssignee')
+});
+
+function loadProjectAssignees(projectId, selector) {
+    let url = usersOfProjects + '?projectIds='+projectId;
+    $('#'+selector).empty();
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (result) {
+            const users = result.data;
+            for (const key in users) {
+                if (users.hasOwnProperty(key)) {
+                    $('#'+selector).append($('<option>', {value: key, text: users[key]}));
+                }
+            }
+        }
+    });
+}

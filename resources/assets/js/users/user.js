@@ -153,6 +153,7 @@ $(function () {
             data: $(this).serialize(),
             success: function (result) {
                 if (result.success) {
+                    displaySuccessMessage(result.message);
                     $('#AddModal').modal('hide');
                     $('#users_table').DataTable().ajax.reload(null, false);
                 }
@@ -178,6 +179,7 @@ $(function () {
             data: $(this).serialize(),
             success: function (result) {
                 if (result.success) {
+                    displaySuccessMessage(result.message);
                     $('#EditModal').modal('hide');
                     $('#users_table').DataTable().ajax.reload(null, false);
                 }
@@ -214,7 +216,7 @@ $(function () {
 
     $(document).on('click', '.email-btn', function (event) {
         let userId = $(event.currentTarget).data('id');
-        sendVerificationEmail(usersUrl + 'send-email/' + userId);
+        sendVerificationEmail(usersUrl + userId + '/send-email');
     });
 });
 

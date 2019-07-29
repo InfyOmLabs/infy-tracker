@@ -122,7 +122,7 @@ body {
 
 div.dataTables_wrapper {
     div.dataTables_processing {
-        top: 30%;
+        top: 120px;
     }
 }
 
@@ -198,6 +198,11 @@ div.dataTables_wrapper {
     .icheck_line-icon {
         left: 7px !important;
     }
+}
+
+.icheckbox_flat-blue,
+.icheckbox_flat-blue .checked {
+    background-image: url("../../img/blue-custom.png") !important;
 }
 
 .featured_btn {

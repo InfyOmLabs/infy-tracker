@@ -26,22 +26,25 @@ class UserController extends AppBaseController
     use ImageTrait;
     /** @var UserRepository */
     private $userRepository;
+
     /** @var ProjectRepository */
     private $projectRepository;
+
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+
     /** @var RoleRepository */
     private $roleRepository;
 
     /**
      * UserController constructor.
      *
-     * @param UserRepository    $userRepo
+     * @param UserRepository $userRepo
      * @param AccountRepository $accountRepository
      * @param ProjectRepository $projectRepository
-     * @param RoleRepository    $roleRepository
+     * @param RoleRepository $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
@@ -101,11 +104,9 @@ class UserController extends AppBaseController
             $user->roles()->sync($input['role_id']);
         }
         if ($input['is_active']) {
-            /*
-         * Send confirmation email
-         */
             $key = $user->id.'|'.$user->activation_code;
             $code = Crypt::encrypt($key);
+            /* Send confirmation email */
             $this->accountRepository->sendConfirmEmail(
                 $user->name,
                 $user->email,
@@ -119,14 +120,12 @@ class UserController extends AppBaseController
     /**
      * Show the form for editing the specified User.
      *
-     * @param int $id
+     * @param User $user
      *
      * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        /** @var User $user */
-        $user = $this->userRepository->findOrFail($id);
         $userObj = $user->toArray();
         $userObj['project_ids'] = $user->projects()->pluck('project_id')->toArray();
         $userObj['role_id'] = $user->roles()->pluck('role_id')->toArray();
@@ -137,23 +136,21 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param int               $id
+     * @param User $user
      * @param UpdateUserRequest $request
      *
      * @throws \Exception
      *
      * @return JsonResponse|RedirectResponse
      */
-    public function update($id, UpdateUserRequest $request)
+    public function update(User $user, UpdateUserRequest $request)
     {
-        $this->userRepository->findOrFail($id);
-
         $projectIds = [];
         $input = $request->all();
 
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
         /** @var User $user */
-        $user = $this->userRepository->update($input, $id);
+        $user = $this->userRepository->update($input, $user->id);
         if (isset($input['project_ids']) && !empty($input['project_ids'])) {
             $projectIds = $input['project_ids'];
         }
@@ -177,29 +174,29 @@ class UserController extends AppBaseController
     /**
      * Remove the specified User from storage.
      *
-     * @param int $id
+     * @param User $user
      *
      * @throws \Exception
      *
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $this->userRepository->findOrFail($id);
-
-        $this->userRepository->delete($id);
+        $user->delete();
 
         return $this->sendSuccess('User deleted successfully.');
     }
 
     /**
-     * @param $id
+     * @param User $user
+     *
+     * @throws \Exception
      *
      * @return JsonResponse
      */
-    public function resendEmailVerification($id)
+    public function resendEmailVerification(User $user)
     {
-        $this->userRepository->resendEmailVerification($id);
+        $this->userRepository->resendEmailVerification($user->id);
 
         return $this->sendSuccess('Verification email has been sent successfully.');
     }
@@ -222,7 +219,8 @@ class UserController extends AppBaseController
 
         try {
             if (isset($input['photo']) && !empty($input['photo'])) {
-                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH, ['width' => 150, 'height' => 150]);
+                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH,
+                    ['width' => 150, 'height' => 150]);
                 $imagePath = $user->image_path;
             }
             if (!empty($imagePath)) {
@@ -239,13 +237,13 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param $id
+     * @param User $user
      *
      * @return JsonResponse
      */
-    public function activeDeActiveUser($id)
+    public function activeDeActiveUser(User $user)
     {
-        $this->userRepository->activeDeActiveUser($id);
+        $this->userRepository->activeDeActiveUser($user->id);
 
         return $this->sendSuccess('User updated successfully.');
     }

@@ -142,9 +142,9 @@ Dropzone.options.dropzone = {
     timeout: 50000,
     init: function() {
         thisDropzone = this;
-        $.get(taskUrl+'get-attachments/'+taskId, function(data) {
+        $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
-                let mockFile = { name: value.name, size: value.size, id:value.id};
+                let mockFile = { name: value.name, id:value.id};
 
                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
                 thisDropzone.options.thumbnail.call(thisDropzone, mockFile, value.url);
@@ -195,6 +195,10 @@ Dropzone.options.dropzone = {
             $('.dz-image').last().find('img').attr({width: '100%', height: '100%'});
         }
     },
+    processing: function() {
+        $('.dz-remove').html('x');
+        $('.dz-details').hide();
+    },
     removedfile: function(file)
     {
         let attachmentId = file.previewElement.querySelector("[data-file-id]").getAttribute('data-file-id');
@@ -203,7 +207,7 @@ Dropzone.options.dropzone = {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
             },
             type: 'post',
-            url: taskUrl + 'delete-attachment/' + attachmentId,
+            url: taskUrl + attachmentId +  '/delete-attachment',
             data: {filename: name},
             error: function(e) {
                 console.log('error',e);
@@ -230,6 +234,10 @@ Dropzone.options.dropzone = {
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
+        } else {
+            file.previewElement.addEventListener("click", function() {
+                window.open(attachment.file_url, '_blank');
+            });
         }
     },
     error: function(file, response)
@@ -245,14 +253,13 @@ Dropzone.options.dropzone = {
 
 function addCommentSection(comment) {
     let id = comment.id;
-    let imgUrl = baseUrl +'/assets/img/user-avatar.png';
     return '<div class="comments__information clearfix" id="comment__'+id+'">\n' +
         '        <div class="user">\n' +
-        '            <img class="user__img" src="'+ imgUrl +'" alt="User Image">\n' +
+        '            <img class="user__img" src="'+ comment.user_avatar +'" alt="User Image">\n' +
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
-        '                    <a class="pull-right del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
-        '                    <a class="pull-right edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
+        '                    <a class="user__icons del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
+        '                    <a class="user__icons edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
         '                    <a class="pull-right save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
@@ -268,6 +275,7 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
+    $('.no_comments').hide();
     let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
@@ -275,9 +283,9 @@ $('#btnComment').click(function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/new',
+        url: baseUrl + 'tasks/' + taskId+ '/comments',
         type: 'post',
-        data: { 'comment': comment, 'task_id': taskId },
+        data: { 'comment': comment},
         success: function (result) {
             if (result.success) {
                 let commentId = result.data.comment.id;
@@ -299,7 +307,7 @@ $(document).on('click', '.del-comment', function (event) {
     let commentId = $(this).data('id');
     swal({
             title: "Delete !",
-            text: "Are you sure you want to delete this Comment?",
+            text: 'Are you sure you want to delete this "Comment" ?',
             type: "warning",
             showCancelButton: true,
             closeOnConfirm: false,
@@ -311,8 +319,8 @@ $(document).on('click', '.del-comment', function (event) {
         },
         function () {
             $.ajax({
-                url: baseUrl + 'comments/' + commentId + '/delete',
-                type: 'get',
+                url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId,
+                type: 'DELETE',
                 success: function (result) {
                     if (result.success) {
                         let commetDiv = 'comment__'+commentId;
@@ -323,6 +331,16 @@ $(document).on('click', '.del-comment', function (event) {
                         text: 'Comment has been deleted.',
                         type: 'success',
                         timer: 2000
+                    });
+
+                    $.ajax({
+                        url: baseUrl + 'tasks/' + taskId + '/comments-count',
+                        type: 'GET',
+                        success: function (result) {
+                            if (result.data == 0) {
+                                $('.no_comments').show();
+                            }
+                        },
                     });
                 },
                 error: function (data) {
@@ -370,7 +388,7 @@ $(document).on('click', ".save-comment", function (event) {
         return false;
     }
     $.ajax({
-        url: baseUrl + 'comments/' + commentId + '/update',
+        url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId + '/update',
         type: 'post',
         data: { 'comment': comment.trim() },
         success: function (result) {
