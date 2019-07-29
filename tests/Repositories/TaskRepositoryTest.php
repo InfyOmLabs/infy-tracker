@@ -5,6 +5,7 @@ namespace Tests\Repositories;
 use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
+use App\Models\TimeEntry;
 use App\Models\User;
 use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -20,10 +21,13 @@ class TaskRepositoryTest extends TestCase
     /** @var TaskRepository */
     protected $taskRepo;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->taskRepo = app(TaskRepository::class);
+        $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
@@ -97,6 +101,115 @@ class TaskRepositoryTest extends TestCase
             $this->assertContains($task->title, $getTask);
             $this->assertContains($task->id, $taskIds);
         });
+    }
+
+    /** @test */
+    public function it_can_add_comment()
+    {
+        $task = factory(Task::class)->create();
+        $getComment = $this->taskRepo->addComment([
+            'comment' => 'random text',
+            'task_id' => $task->id,
+        ]);
+
+        $this->assertNotEmpty($getComment);
+        $this->assertEquals('random text', $getComment->comment);
+        $this->assertEquals($this->defaultUserId, $getComment->createdUser->id);
+    }
+
+    /** @test */
+    public function test_can_return_unique_task_index()
+    {
+        $project = factory(Project::class)->create();
+        factory(Task::class)->create([
+            'project_id'  => $project->id,
+            'task_number' => 3,
+        ]);
+        $getUniqueIndex = $this->taskRepo->getIndex($project->id);
+
+        $this->assertNotEmpty($getUniqueIndex);
+        $this->assertEquals(4, $getUniqueIndex, '+1 index');
+    }
+
+    /** @test */
+    public function test_can_return_index_one_when_task_does_not_have_task_number()
+    {
+        $project = factory(Project::class)->create();
+        factory(Task::class)->create([
+            'project_id'  => $project->id,
+            'task_number' => '',
+        ]);
+        $getUniqueIndex = $this->taskRepo->getIndex($project->id);
+
+        $this->assertNotEmpty($getUniqueIndex);
+        $this->assertEquals(1, $getUniqueIndex);
+    }
+
+    /** @test */
+    public function test_can_get_my_tasks_of_given_project_id()
+    {
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$user->id]);
+
+        $loggedInUserTask1 = factory(Task::class)->create();
+        $loggedInUserTask1->taskAssignee()->sync([$this->defaultUserId]);
+
+        $loggedInUserTask2 = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $loggedInUserTask2->taskAssignee()->sync([$this->defaultUserId]);
+
+        $getMyTasks = $this->taskRepo->myTasks(['project_id' => $loggedInUserTask1->project_id]);
+
+        $this->assertCount(5, $getMyTasks['activities']);
+
+        $this->assertCount(1, $getMyTasks['tasks']);
+        $this->assertEquals($loggedInUserTask1->id, $getMyTasks['tasks'][0]->id);
+        $this->assertEquals($loggedInUserTask1->title, $getMyTasks['tasks'][0]->title);
+        $this->assertNotEquals(Task::STATUS_COMPLETED, $getMyTasks['tasks'][0]->status);
+        $this->assertEquals($this->defaultUserId, $loggedInUserTask1->fresh()->taskAssignee[0]->id);
+    }
+
+    /** @test */
+    public function test_can_get_my_tasks()
+    {
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$user->id]);
+
+        $loggedInUserTask1 = factory(Task::class)->create();
+        $loggedInUserTask1->taskAssignee()->sync([$this->defaultUserId]);
+
+        $loggedInUserTask2 = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $loggedInUserTask2->taskAssignee()->sync([$this->defaultUserId]);
+
+        $getMyTasks = $this->taskRepo->myTasks();
+
+        $this->assertCount(1, $getMyTasks['tasks']);
+        $this->assertEquals($loggedInUserTask1->id, $getMyTasks['tasks'][0]->id);
+        $this->assertEquals($loggedInUserTask1->title, $getMyTasks['tasks'][0]->title);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_with_task_duration()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
+        factory(TimeEntry::class)->create();
+
+        $getMyTask = $this->taskRepo->getTaskDetails($timeEntry->task_id);
+
+        $this->assertEquals($timeEntry->task_id, $getMyTask->id);
+        $this->assertEquals("00 Hours and 05 Minutes", $getMyTask->totalDuration);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_when_duration_is_zero()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['duration' => 0]);
+
+        $getMyTask = $this->taskRepo->getTaskDetails($timeEntry->task_id);
+
+        $this->assertEquals($timeEntry->task_id, $getMyTask->id);
+        $this->assertEquals(0, $getMyTask->totalDuration);
     }
 
     /**
