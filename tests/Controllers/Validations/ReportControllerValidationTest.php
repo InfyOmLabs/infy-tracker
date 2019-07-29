@@ -29,12 +29,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_create_report_fails_when_start_date_is_not_passed()
     {
-        $input = [
-            'name'       => 'random string',
-            'start_date' => '',
-        ];
-
-        $this->post('reports', $input)->assertSessionHasErrors([
+        $this->post('reports', ['start_date' => ''])->assertSessionHasErrors([
             'start_date' => 'The start date field is required.',
         ]);
     }
@@ -42,13 +37,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_create_report_fails_when_end_date_is_not_passed()
     {
-        $input = [
-            'name'       => 'random string',
-            'start_date' => '2019-07-19 03:53:07',
-            'end_date'   => '',
-        ];
-
-        $this->post('reports', $input)->assertSessionHasErrors([
+        $this->post('reports', ['end_date' => ''])->assertSessionHasErrors([
             'end_date' => 'The end date field is required.',
         ]);
     }
@@ -66,12 +55,8 @@ class ReportControllerValidationTest extends TestCase
     public function test_update_report_fails_when_start_date_is_not_passed()
     {
         $report = factory(Report::class)->create();
-        $input = [
-            'name'       => 'random string',
-            'start_date' => '',
-        ];
 
-        $this->put('reports/'.$report->id, $input)
+        $this->put('reports/'.$report->id, ['start_date' => ''])
             ->assertSessionHasErrors(['start_date' => 'The start date field is required.']);
     }
 
@@ -79,13 +64,8 @@ class ReportControllerValidationTest extends TestCase
     public function test_update_report_fails_when_end_date_is_not_passed()
     {
         $report = factory(Report::class)->create();
-        $input = [
-            'name'       => 'random string',
-            'start_date' => '2019-07-19 03:53:07',
-            'end_date'   => '',
-        ];
 
-        $this->put('reports/'.$report->id, $input)
+        $this->put('reports/'.$report->id, ['end_date' => ''])
             ->assertSessionHasErrors(['end_date' => 'The end date field is required.']);
     }
 }
