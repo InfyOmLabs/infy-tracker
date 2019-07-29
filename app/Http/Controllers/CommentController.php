@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Task;
 use App\Repositories\TaskRepository;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 class CommentController extends AppBaseController
 {
@@ -42,6 +43,10 @@ class CommentController extends AppBaseController
      */
     public function deleteComment(Task $task, Comment $comment)
     {
+        if ($comment->task_id != $task->id) {
+            throw new UnprocessableEntityHttpException('Unable to delete comment.');
+        }
+
         $comment->delete();
 
         return $this->sendSuccess('Comment has been deleted successfully.');
@@ -56,6 +61,10 @@ class CommentController extends AppBaseController
      */
     public function editComment(Task $task, Comment $comment, Request $request)
     {
+        if ($comment->task_id != $task->id) {
+            throw new UnprocessableEntityHttpException('Unable to update comment.');
+        }
+
         $comment->comment = htmlentities($request->get('comment'));
         $comment->save();
 
