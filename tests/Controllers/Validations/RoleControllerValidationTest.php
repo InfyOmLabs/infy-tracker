@@ -69,7 +69,7 @@ class RoleControllerValidationTest extends TestCase
     {
         $role = factory(Role::class)->create();
         $inputs = array_merge($role->toArray(), ['name' => 'Any Role Name']);
-        
+
         $this->put('roles/'.$role->id, $inputs)
             ->assertSessionHasNoErrors();
 
