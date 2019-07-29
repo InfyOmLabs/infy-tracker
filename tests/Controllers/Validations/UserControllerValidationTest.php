@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ProjectControllerValidationTest.
+ * Class UserControllerValidationTest.
  */
 class UserControllerValidationTest extends TestCase
 {
@@ -28,24 +28,13 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function create_user_fails_when_email_is_not_passed()
     {
-        $input = [
-            'name'  => 'random string',
-            'email' => '',
-        ];
-
-        $this->post('users', $input)->assertSessionHasErrors('email');
+        $this->post('users', ['email' => ''])->assertSessionHasErrors('email');
     }
 
     /** @test */
     public function create_user_fails_when_phone_number_is_more_than_ten_digits()
     {
-        $input = [
-            'name'  => 'random string',
-            'email' => 'xyz@gmail.com',
-            'phone' => '999999999999',
-        ];
-
-        $this->post('users', $input)->assertSessionHasErrors([
+        $this->post('users', ['phone' => '999999999999'])->assertSessionHasErrors([
             'phone' => 'The phone number must be 10 digits long.',
         ]);
     }
@@ -53,13 +42,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function create_user_fails_when_phone_number_is_not_numeric()
     {
-        $input = [
-            'name'  => 'random string',
-            'email' => 'xyz@gmail.com',
-            'phone' => 'abcdefghijklmnopqrstuvwxyz',
-        ];
-
-        $this->post('users', $input)->assertSessionHasErrors([
+        $this->post('users', ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
             'phone' => 'The phone must be a number.',
         ]);
     }
@@ -67,12 +50,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function create_user_fails_when_email_is_invalid()
     {
-        $input = [
-            'name'  => 'random string',
-            'email' => 'random email',
-        ];
-
-        $this->post('users', $input)->assertSessionHasErrors([
+        $this->post('users', ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
         ]);
     }
@@ -90,12 +68,8 @@ class UserControllerValidationTest extends TestCase
     public function update_user_fails_when_email_is_not_passed()
     {
         $user = factory(User::class)->create();
-        $input = [
-            'name'  => 'random string',
-            'email' => '',
-        ];
 
-        $this->put('users/'.$user->id, $input)
+        $this->put('users/'.$user->id, ['email' => ''])
             ->assertSessionHasErrors(['email' => 'The email field is required.']);
     }
 
@@ -103,13 +77,8 @@ class UserControllerValidationTest extends TestCase
     public function update_user_fails_when_phone_number_is_more_than_ten_digits()
     {
         $user = factory(User::class)->create();
-        $input = [
-            'name'  => 'random string',
-            'email' => 'xyz@gmail.com',
-            'phone' => '999999999999',
-        ];
 
-        $this->put('users/'.$user->id, $input)->assertSessionHasErrors([
+        $this->put('users/'.$user->id, ['phone' => '999999999999'])->assertSessionHasErrors([
             'phone' => 'The phone number must be 10 digits long.',
         ]);
     }
@@ -118,13 +87,8 @@ class UserControllerValidationTest extends TestCase
     public function update_user_fails_when_phone_number_is_not_numeric()
     {
         $user = factory(User::class)->create();
-        $input = [
-            'name'  => 'random string',
-            'email' => 'xyz@gmail.com',
-            'phone' => 'abcdefghijklmnopqrstuvwxyz',
-        ];
 
-        $this->put('users/'.$user->id, $input)->assertSessionHasErrors([
+        $this->put('users/'.$user->id, ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
             'phone' => 'The phone must be a number.',
         ]);
     }
@@ -133,12 +97,8 @@ class UserControllerValidationTest extends TestCase
     public function update_user_fails_when_email_is_invalid()
     {
         $user = factory(User::class)->create();
-        $input = [
-            'name'  => 'random string',
-            'email' => 'random email',
-        ];
 
-        $this->put('users/'.$user->id, $input)->assertSessionHasErrors([
+        $this->put('users/'.$user->id, ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
         ]);
     }
