@@ -9,15 +9,14 @@
 
 namespace Tests\Controllers;
 
-
 use App\Models\Client;
 use App\Repositories\ClientRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
+
 /**
- * Class ClientControllerTest
- * @package Tests\Controllers
+ * Class ClientControllerTest.
  */
 class ClientControllerTest extends TestCase
 {
