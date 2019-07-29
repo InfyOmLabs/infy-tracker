@@ -98,7 +98,8 @@ class ReportRepositoryTest extends TestCase
     public function it_will_return_empty_without_param_type()
     {
         $report = factory(Report::class)->create();
-        $this->generateReportFilter($report->id, '', '');
+        $user = factory(User::class)->create();
+        $this->generateReportFilter($report->id, $user->id, User::class);
 
         $clientId = $this->reportRepo->getClientId($report->id);
 
