@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Exceptions\ApiOperationFailedException;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
@@ -143,5 +144,20 @@ class TimeEntryRepository extends BaseRepository
         $this->update($input, $id);
 
         return true;
+    }
+
+    /**
+     * @param $input
+     * @param null $id
+     * @throws ApiOperationFailedException
+     */
+    public function checkDuplicateEntry($input, $id = null){
+        $timeArr = [$input['start_time'], $input['end_time']];
+        $timeEntry = TimeEntry::whereBetween('start_time', $timeArr)
+                                ->orWhereBetween('end_time', $timeArr)
+                                ->first();
+        if(!empty($timeEntry)) {
+            throw new ApiOperationFailedException('Time entry between this duration already exist.');
+        }
     }
 }
