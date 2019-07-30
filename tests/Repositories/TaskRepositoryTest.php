@@ -101,7 +101,7 @@ class TaskRepositoryTest extends TestCase
             'project_id' => $project->id,
         ]);
 
-        $getTask = $this->taskRepo->getTaskList([$project->id => $project->name]);
+        $getTask = $this->taskRepo->getTaskList([$project->id]);
 
         $this->assertCount(2, $getTask);
 
