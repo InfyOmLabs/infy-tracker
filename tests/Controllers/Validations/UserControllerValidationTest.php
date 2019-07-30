@@ -118,7 +118,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_tag_with_valid_input()
+    public function it_can_update_user_with_valid_input()
     {
         /** @var User $user */
         $user = factory(User::class)->create();
