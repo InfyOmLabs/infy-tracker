@@ -29,7 +29,12 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_store_task_with_tags_and_assignees()
     {
-        $task = $this->generateTaskInputs();
+        $task = factory(Task::class)
+            ->states('tag', 'assignees')
+            ->make([
+                'due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))
+            ])->toArray();
+
         $createdTask = $this->taskRepo->store($task);
 
         $getTask = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
