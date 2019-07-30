@@ -27,7 +27,7 @@ class RoleControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_create_role_fails_when_name_is_duplicated()
+    public function test_create_role_fails_when_name_is_duplicate()
     {
         $role = factory(Role::class)->create();
 
@@ -67,7 +67,7 @@ class RoleControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function allow_update_role_with_valid_input()
+    public function test_can_update_role_with_valid_input()
     {
         $role = factory(Role::class)->create();
         $fakeRole = factory(Role::class)->make()->toArray();
