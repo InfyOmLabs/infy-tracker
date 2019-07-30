@@ -172,7 +172,7 @@ class TaskRepository extends BaseRepository
         $data['status'] = $statusArr;
         unset($statusArr[Task::STATUS_ALL]);
         $data['taskStatus'] = $statusArr;
-        $data['tasks'] = $this->getTaskList($loginUserProjects);
+        $data['tasks'] = $this->getTaskList(array_keys($loginUserProjects));
         $data['priority'] = Task::PRIORITY;
         $data['taskBadges'] = $this->getStatusBadge();
 
@@ -191,15 +191,15 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $loginUserProjects
+     * @param array $projectIds
      *
      * @return mixed
      */
-    public function getTaskList($loginUserProjects = [])
+    public function getTaskList($projectIds = [])
     {
         $query = Task::orderBy('title');
-        if (!empty($loginUserProjects)) {
-            $query = $query->whereIn('project_id', array_keys($loginUserProjects));
+        if (!empty($projectIds)) {
+            $query = $query->whereIn('project_id', $projectIds);
         }
 
         return $query->pluck('title', 'id');
