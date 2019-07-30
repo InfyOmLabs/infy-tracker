@@ -143,7 +143,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_tasks_of_logged_in_user_for_given_project_id()
+    public function test_can_get_active_tasks_of_logged_in_user_for_given_project_id()
     {
         $user = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -159,12 +159,12 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertCount(1, $getMyTasks['tasks']);
         $this->assertEquals($loggedInUserTask1->id, $getMyTasks['tasks'][0]->id);
-        $this->assertNotEquals(Task::STATUS_COMPLETED, $getMyTasks['tasks'][0]->status);
+        $this->assertEquals(Task::STATUS_ACTIVE, $getMyTasks['tasks'][0]->status);
         $this->assertEquals($this->defaultUserId, $loggedInUserTask1->fresh()->taskAssignee[0]->id);
     }
 
     /** @test */
-    public function test_can_get_task_of_logged_in_user()
+    public function test_can_get_active_task_of_logged_in_user()
     {
         $user = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -180,7 +180,7 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertCount(1, $getMyTasks['tasks']);
         $this->assertEquals($loggedInUserTask1->id, $getMyTasks['tasks'][0]->id);
-        $this->assertEquals($loggedInUserTask1->title, $getMyTasks['tasks'][0]->title);
+        $this->assertEquals(Task::STATUS_ACTIVE, $getMyTasks['tasks'][0]->status);
     }
 
     /** @test */
