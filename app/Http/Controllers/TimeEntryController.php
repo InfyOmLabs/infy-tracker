@@ -54,13 +54,11 @@ class TimeEntryController extends AppBaseController
      * @param CreateTimeEntryRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\ApiOperationFailedException
      */
     public function store(CreateTimeEntryRequest $request)
     {
         $input = $this->validateInput($request->all());
 
-        $this->timeEntryRepository->checkDuplicateEntry($input);
         $this->timeEntryRepository->create($input);
 
         return $this->sendSuccess('Time Entry created successfully.');
@@ -95,7 +93,6 @@ class TimeEntryController extends AppBaseController
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all());
-
         $existEntry = $entry->only([
             'id',
             'task_id',
