@@ -43,18 +43,16 @@ class ReportControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_create_report()
+    public function test_can_create_report()
     {
-        $this->post('reports', [
-            'name'       => 'random string',
-            'start_date' => $this->faker->dateTime,
-            'end_date'   => $this->faker->dateTime,
-        ])->assertSessionHasNoErrors();
+        $fakeReport = factory(Report::class)->make()->toArray();
 
-        $report = Report::whereName('random string')->first();
+        $this->post('reports', $fakeReport)->assertSessionHasNoErrors();
+
+        $report = Report::whereName($fakeReport['name'])->first();
 
         $this->assertNotEmpty($report);
-        $this->assertEquals('random string', $report->name);
+        $this->assertEquals($fakeReport['name'], $report->name);
     }
 
     /** @test */
@@ -85,17 +83,14 @@ class ReportControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function it_can_update_report_with_valid_input()
+    public function test_can_update_report_with_valid_input()
     {
         /** @var Report $report */
         $report = factory(Report::class)->create();
+        $fakeReport = factory(Report::class)->make()->toArray();
 
-        $this->put('reports/'.$report->id, [
-            'name'       => 'Any Dummy Name',
-            'start_date' => $this->faker->dateTime,
-            'end_date'   => $this->faker->dateTime,
-        ])->assertSessionHasNoErrors();
+        $this->put('reports/'.$report->id, $fakeReport)->assertSessionHasNoErrors();
 
-        $this->assertEquals('Any Dummy Name', $report->fresh()->name);
+        $this->assertEquals($fakeReport['name'], $report->fresh()->name);
     }
 }
