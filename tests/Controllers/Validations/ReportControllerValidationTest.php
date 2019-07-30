@@ -43,6 +43,21 @@ class ReportControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_create_report()
+    {
+        $this->post('reports', [
+            'name'       => 'random string',
+            'start_date' => $this->faker->dateTime,
+            'end_date'   => $this->faker->dateTime,
+        ])->assertSessionHasNoErrors();
+
+        $report = Report::whereName('random string')->first();
+
+        $this->assertNotEmpty($report);
+        $this->assertEquals('random string', $report->name);
+    }
+
+    /** @test */
     public function test_update_report_fails_when_name_is_not_passed()
     {
         $report = factory(Report::class)->create();
@@ -67,5 +82,20 @@ class ReportControllerValidationTest extends TestCase
 
         $this->put('reports/'.$report->id, ['end_date' => ''])
             ->assertSessionHasErrors(['end_date' => 'The end date field is required.']);
+    }
+
+    /** @test */
+    public function it_can_update_report_with_valid_input()
+    {
+        /** @var Report $report */
+        $report = factory(Report::class)->create();
+
+        $this->put('reports/'.$report->id, [
+            'name'       => 'Any Dummy Name',
+            'start_date' => $this->faker->dateTime,
+            'end_date'   => $this->faker->dateTime,
+        ])->assertSessionHasNoErrors();
+
+        $this->assertEquals('Any Dummy Name', $report->fresh()->name);
     }
 }
