@@ -3,6 +3,7 @@
 namespace Tests\Controllers\Validations;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -38,11 +39,13 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function it_can_create_role()
     {
-        $this->post('roles', ['name' => 'any role'])
-            ->assertSessionHasNoErrors();
-        $role = Role::whereName('any role')->first();
+        $fakeRole = factory(Role::class)->make()->toArray();
+
+        $this->post('roles', $fakeRole)->assertSessionHasNoErrors();
+
+        $role = Role::whereName($fakeRole['name'])->first();
         $this->assertNotEmpty($role);
-        $this->assertEquals('any role', $role->name);
+        $this->assertEquals($fakeRole['name'], $role->name);
     }
 
     /** @test */
@@ -68,11 +71,11 @@ class RoleControllerValidationTest extends TestCase
     public function allow_update_role_with_valid_input()
     {
         $role = factory(Role::class)->create();
-        $inputs = array_merge($role->toArray(), ['name' => 'Any Role Name']);
+        $fakeRole = factory(Role::class)->make()->toArray();
 
-        $this->put('roles/'.$role->id, $inputs)
+        $this->put('roles/'.$role->id, $fakeRole)
             ->assertSessionHasNoErrors();
 
-        $this->assertEquals('Any Role Name', $role->fresh()->name);
+        $this->assertEquals($fakeRole['name'], $role->fresh()->name);
     }
 }
