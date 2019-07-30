@@ -20,19 +20,19 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_user_fails_when_name_is_not_passed()
+    public function test_create_user_fails_when_name_is_not_passed()
     {
         $this->post('users', ['name' => ''])->assertSessionHasErrors('name');
     }
 
     /** @test */
-    public function create_user_fails_when_email_is_not_passed()
+    public function test_create_user_fails_when_email_is_not_passed()
     {
         $this->post('users', ['email' => ''])->assertSessionHasErrors('email');
     }
 
     /** @test */
-    public function create_user_fails_when_phone_number_is_more_than_ten_digits()
+    public function test_create_user_fails_when_phone_number_is_more_than_ten_digits()
     {
         $this->post('users', ['phone' => '999999999999'])->assertSessionHasErrors([
             'phone' => 'The phone number must be 10 digits long.',
@@ -40,7 +40,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_user_fails_when_phone_number_is_not_numeric()
+    public function test_create_user_fails_when_phone_number_is_not_numeric()
     {
         $this->post('users', ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
             'phone' => 'The phone must be a number.',
@@ -48,7 +48,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function create_user_fails_when_email_is_invalid()
+    public function test_create_user_fails_when_email_is_invalid()
     {
         $this->post('users', ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
@@ -70,7 +70,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_user_fails_when_name_is_not_passed()
+    public function test_update_user_fails_when_name_is_not_passed()
     {
         $user = factory(User::class)->create();
 
@@ -79,7 +79,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_user_fails_when_email_is_not_passed()
+    public function test_update_user_fails_when_email_is_not_passed()
     {
         $user = factory(User::class)->create();
 
@@ -88,7 +88,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_user_fails_when_phone_number_is_more_than_ten_digits()
+    public function test_update_user_fails_when_phone_number_is_more_than_ten_digits()
     {
         $user = factory(User::class)->create();
 
@@ -98,7 +98,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_user_fails_when_phone_number_is_not_numeric()
+    public function test_update_user_fails_when_phone_number_is_not_numeric()
     {
         $user = factory(User::class)->create();
 
@@ -108,7 +108,7 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function update_user_fails_when_email_is_invalid()
+    public function test_update_user_fails_when_email_is_invalid()
     {
         $user = factory(User::class)->create();
 
