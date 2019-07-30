@@ -24,7 +24,7 @@ $factory->state(Task::class, 'tag', function () {
     $tag = factory(Tag::class)->create();
 
     return [
-        'tags'        => [$tag->id],
+        'tags' => [$tag->id],
     ];
 });
 
@@ -32,6 +32,6 @@ $factory->state(Task::class, 'assignees', function () {
     $assignees = factory(User::class)->times(2)->create();
 
     return [
-        'assignees'   => [$assignees[0]->id, $assignees[1]->id],
+        'assignees' => [$assignees[0]->id, $assignees[1]->id],
     ];
 });
