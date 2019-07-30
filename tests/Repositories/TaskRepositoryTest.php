@@ -3,7 +3,6 @@
 namespace Tests\Repositories;
 
 use App\Models\Project;
-use App\Models\Tag;
 use App\Models\Task;
 use App\Models\User;
 use App\Repositories\TaskRepository;
@@ -32,7 +31,7 @@ class TaskRepositoryTest extends TestCase
         $task = factory(Task::class)
             ->states('tag', 'assignees')
             ->make([
-                'due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))
+                'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
             ])->toArray();
 
         $createdTask = $this->taskRepo->store($task);
@@ -52,7 +51,12 @@ class TaskRepositoryTest extends TestCase
     public function test_can_update_task_with_tags_and_assignees()
     {
         $task = factory(Task::class)->create();
-        $prepareTask = $this->generateTaskInputs(['title' => 'random string']);
+        $prepareTask = factory(Task::class)
+            ->states('tag', 'assignees')
+            ->make([
+                'title'    => 'random string',
+                'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
+            ])->toArray();
 
         $updatedTask = $this->taskRepo->update($prepareTask, $task->id);
 
@@ -102,27 +106,5 @@ class TaskRepositoryTest extends TestCase
             $this->assertContains($task->title, $getTask);
             $this->assertContains($task->id, $taskIds);
         });
-    }
-
-    /**
-     * @param array $task
-     *
-     * @return array
-     */
-    public function generateTaskInputs($task = [])
-    {
-        $tag = factory(Tag::class)->create();
-        $project = factory(Project::class)->create();
-        $assignees = factory(User::class)->times(2)->create();
-
-        return array_merge([
-            'title'       => $this->faker->title,
-            'description' => $this->faker->text,
-            'project_id'  => $project->id,
-            'due_date'    => date('Y-m-d h:i:s', strtotime('+3 days')),
-            'task_number' => $this->faker->randomDigitNotNull,
-            'tags'        => [$tag->id],
-            'assignees'   => [$assignees[0]->id, $assignees[1]->id],
-        ], $task);
     }
 }
