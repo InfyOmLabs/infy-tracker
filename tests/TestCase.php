@@ -12,11 +12,13 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
+    /** @var \Faker\Generator */
     public $faker;
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
+
         $this->faker = Factory::create();
     }
 
