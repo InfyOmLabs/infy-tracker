@@ -135,10 +135,7 @@ class TaskRepositoryTest extends TestCase
     public function test_can_return_task_number_one_when_no_tasks_on_given_project()
     {
         $project = factory(Project::class)->create();
-        factory(Task::class)->create([
-            'project_id'  => $project->id,
-            'task_number' => '',
-        ]);
+
         $getUniqueIndex = $this->taskRepo->getIndex($project->id);
 
         $this->assertNotEmpty($getUniqueIndex);
