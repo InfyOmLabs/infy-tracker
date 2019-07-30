@@ -106,4 +106,24 @@ class TimeEntryRepositoryTest extends TestCase
         $this->assertEmpty($timeEntry->start_time);
         $this->assertEmpty($timeEntry->end_time);
     }
+
+    /** @test */
+    public function test_can_get_tasks_of_logged_in_user()
+    {
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$user->id]);
+
+        $loggedInUserTask1 = factory(Task::class)->create();
+        $loggedInUserTask1->taskAssignee()->sync([$this->defaultUserId]);
+
+        $loggedInUserTask2 = factory(Task::class)->create();
+        $loggedInUserTask2->taskAssignee()->sync([$this->defaultUserId]);
+
+        $result = $this->timeEntryRepo->getEntryData();
+
+        $this->assertCount(2, $result['tasks']);
+        $this->assertContains($loggedInUserTask1->title, $result['tasks']);
+        $this->assertContains($loggedInUserTask2->title, $result['tasks']);
+    }
 }
