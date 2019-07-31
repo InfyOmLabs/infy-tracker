@@ -150,21 +150,21 @@ class TimeEntryRepository extends BaseRepository
      * @param $input
      * @param null $id
      */
-    public function checkDuplicateEntry($input, $id = null){
+    public function checkDuplicateEntry($input, $id = null)
+    {
         $timeArr = [$input['start_time'], $input['end_time']];
-        $query = TimeEntry::where(function ($q) use($timeArr) {
+        $query = TimeEntry::where(function ($q) use ($timeArr) {
             $q->whereBetween('start_time', $timeArr)
                 ->orWhereBetween('end_time', $timeArr);
         });
 
-        if(!empty($id) && $id > 0) {
+        if (!empty($id) && $id > 0) {
             $query->where('id', '!=', $id);
         }
 
         $timeEntry = $query->first();
-        if(!empty($timeEntry)) {
+        if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
     }
-
 }
