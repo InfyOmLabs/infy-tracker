@@ -179,7 +179,7 @@ class TaskController extends AppBaseController
     public function destroy(Task $task)
     {
         if ($task->timeEntries()->count() > 0) {
-            return $this->sendError('Task has one or more time entries');
+            return $this->sendError('Task has one or more time entries.');
         }
 
         $task->update(['deleted_by' => getLoggedInUserId()]);
