@@ -83,7 +83,7 @@ class ReportRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_client_id_of_report()
+    public function it_can_retrieve_client_ids_of_report()
     {
         $reports = factory(Report::class)->times(2)->create();
         $clients = factory(Client::class)->times(2)->create();
