@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class TimeEntryRepository.
@@ -144,4 +145,26 @@ class TimeEntryRepository extends BaseRepository
 
         return true;
     }
+
+    /**
+     * @param $input
+     * @param null $id
+     */
+    public function checkDuplicateEntry($input, $id = null){
+        $timeArr = [$input['start_time'], $input['end_time']];
+        $query = TimeEntry::where(function ($q) use($timeArr) {
+            $q->whereBetween('start_time', $timeArr)
+                ->orWhereBetween('end_time', $timeArr);
+        });
+
+        if(!empty($id) && $id > 0) {
+            $query->where('id', '!=', $id);
+        }
+
+        $timeEntry = $query->first();
+        if(!empty($timeEntry)) {
+            throw new BadRequestHttpException('Time entry between this duration already exist.');
+        }
+    }
+
 }
