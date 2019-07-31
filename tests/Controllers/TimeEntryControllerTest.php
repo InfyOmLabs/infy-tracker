@@ -83,7 +83,7 @@ class TimeEntryControllerTest extends TestCase
             ->with()
             ->andReturn([]);
 
-        $response = $this->getJson("user-last-task-work");
+        $response = $this->getJson('user-last-task-work');
 
         $this->assertSuccessMessageResponse($response, 'User Task retrieved successfully.');
     }
