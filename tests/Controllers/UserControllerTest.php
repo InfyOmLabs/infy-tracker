@@ -120,9 +120,8 @@ class UserControllerTest extends TestCase
             ->with($user->toArray(), getLoggedInUserId())
             ->andReturn([]);
 
-        $response = $this->postJson("users/profile-update", $user->toArray());
+        $response = $this->postJson('users/profile-update', $user->toArray());
 
         $this->assertSuccessMessageResponse($response, 'Profile updated successfully.');
     }
 }
-
