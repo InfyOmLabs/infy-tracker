@@ -45,8 +45,7 @@ class TimeEntryControllerTest extends TestCase
 
         $this->timeEntryRepository->shouldReceive('getTimeEntryDetail')
             ->once()
-            ->with($timeEntry->id)
-            ->andReturn([]);
+            ->with($timeEntry->id);
 
         $response = $this->getJson("time-entries/$timeEntry->id/edit");
 
@@ -74,13 +73,12 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_user_last_task()
+    public function test_can_get_last_task_details_of_logged_in_user()
     {
         $this->mockRepository();
 
         $this->timeEntryRepository->shouldReceive('myLastTask')
-            ->once()
-            ->with();
+            ->once();
 
         $response = $this->getJson('user-last-task-work');
 
