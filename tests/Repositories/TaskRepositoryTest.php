@@ -44,9 +44,9 @@ class TaskRepositoryTest extends TestCase
         $this->assertEquals($task['title'], $taskRecord->title);
         $this->assertEquals($task['tags'][0], $taskRecord->tags[0]->id);
 
-        $pluckAssigneeIds = $taskRecord->taskAssignee->pluck('id');
-        collect($task['assignees'])->map(function ($userId) use ($pluckAssigneeIds) {
-            $this->assertContains($userId, $pluckAssigneeIds);
+        $assigneeIds = $taskRecord->taskAssignee->pluck('id');
+        collect($task['assignees'])->map(function ($userId) use ($assigneeIds) {
+            $this->assertContains($userId, $assigneeIds);
         });
     }
 
@@ -54,24 +54,24 @@ class TaskRepositoryTest extends TestCase
     public function test_can_update_task_with_tags_and_assignees()
     {
         $task = factory(Task::class)->create();
-        $prepareTask = factory(Task::class)
+        $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
             ->make([
                 'title'    => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
             ])->toArray();
 
-        $updatedTask = $this->taskRepo->update($prepareTask, $task->id);
+        $updatedTask = $this->taskRepo->update($preparedTask, $task->id);
 
         $this->assertTrue($updatedTask);
 
         $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($task->id);
         $this->assertEquals('random string', $taskRecord->title);
-        $this->assertEquals($prepareTask['tags'][0], $taskRecord->tags[0]->id);
+        $this->assertEquals($preparedTask['tags'][0], $taskRecord->tags[0]->id);
 
-        $pluckAssigneeIds = $taskRecord->taskAssignee->pluck('id');
-        collect($task['assignees'])->map(function ($userId) use ($pluckAssigneeIds) {
-            $this->assertContains($userId, $pluckAssigneeIds);
+        $assigneeIds = $taskRecord->taskAssignee->pluck('id');
+        collect($task['assignees'])->map(function ($userId) use ($assigneeIds) {
+            $this->assertContains($userId, $assigneeIds);
         });
     }
 
