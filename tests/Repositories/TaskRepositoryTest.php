@@ -40,11 +40,11 @@ class TaskRepositoryTest extends TestCase
 
         $createdTask = $this->taskRepo->store($task);
 
-        $taskList = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
-        $this->assertEquals($task['title'], $taskList->title);
-        $this->assertEquals($task['tags'][0], $taskList->tags[0]->id);
+        $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
+        $this->assertEquals($task['title'], $taskRecord->title);
+        $this->assertEquals($task['tags'][0], $taskRecord->tags[0]->id);
 
-        $pluckAssigneeIds = $taskList->taskAssignee->pluck('id');
+        $pluckAssigneeIds = $taskRecord->taskAssignee->pluck('id');
         collect($task['assignees'])->map(function ($userId) use ($pluckAssigneeIds) {
             $this->assertContains($userId, $pluckAssigneeIds);
         });
