@@ -62,12 +62,12 @@ class UserRepositoryTest extends TestCase
     /** @test */
     public function test_can_activate_user()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create(['is_active' => false]);
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create(['is_active' => false]);
 
-        $user = $this->userRepo->activeDeActiveUser($user->id);
+        $user = $this->userRepo->activeDeActiveUser($farhan->id);
 
-        $this->assertEquals($user->id, $user->id);
+        $this->assertEquals($farhan->id, $user->id);
         $this->assertTrue($user->is_active);
     }
 
@@ -79,7 +79,7 @@ class UserRepositoryTest extends TestCase
 
         $user = $this->userRepo->activeDeActiveUser($farhan->id);
 
-        $this->assertEquals($user->id, $user->id);
+        $this->assertEquals($farhan->id, $user->id);
         $this->assertFalse($user->is_active);
     }
 }
