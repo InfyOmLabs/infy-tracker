@@ -81,13 +81,12 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_my_project()
+    public function test_can_get_projects_of_logged_in_user()
     {
         $this->mockRepository();
 
         $this->projectRepository->shouldReceive('getMyProjects')
-            ->once()
-            ->with();
+            ->once();
 
         $response = $this->getJson('my-projects');
 
@@ -95,7 +94,7 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_users()
+    public function test_get_can_users_of_given_project_ids()
     {
         $this->mockRepository();
 
