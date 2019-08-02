@@ -16,7 +16,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string|null $phone
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string|null $password
- * @property int $set_password
+ * @property boolean $set_password
  * @property int $is_email_verified
  * @property int $is_active
  * @property string|null $activation_code
@@ -95,6 +95,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'set_password' => 'boolean'
     ];
 
     /**
