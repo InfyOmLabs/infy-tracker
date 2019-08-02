@@ -13,12 +13,15 @@ $factory->define(TimeEntry::class, function (Faker $faker) {
     $activityType = factory(ActivityType::class)->create();
     $task = factory(Task::class)->create();
 
+    $startTime = date('Y-m-d h:i:s');
+    $endTime = date('Y-m-d h:i:s', strtotime($startTime.'+1 hours'));
+
     return [
         'task_id'          => $task->id,
         'activity_type_id' => $activityType->id,
         'user_id'          => $user->id,
-        'start_time'       => $faker->dateTime,
-        'end_time'         => $faker->dateTime,
+        'start_time'       => $startTime,
+        'end_time'         => $endTime,
         'duration'         => $faker->randomDigit,
         'note'             => $faker->sentence,
     ];
