@@ -87,8 +87,7 @@ class ProjectControllerTest extends TestCase
 
         $this->projectRepository->shouldReceive('getMyProjects')
             ->once()
-            ->with()
-            ->andReturn();
+            ->with();
 
         $response = $this->getJson('my-projects');
 
@@ -105,8 +104,7 @@ class ProjectControllerTest extends TestCase
 
         $this->userRepo->shouldReceive('getUserList')
             ->once()
-            ->with([$projects[0]->id])
-            ->andReturn();
+            ->with([$projects[0]->id]);
 
         $response = $this->getJson('users-of-projects?projectIds='.$projects[0]->id);
 
