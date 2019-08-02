@@ -109,7 +109,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_add_time_entry_fail_with_duplicate_time_entry()
+    public function test_not_allow_to_add_duplicate_time_entry()
     {
         $timeEntry = factory(TimeEntry::class)->create();
         $inputs = $this->timeEntryInputs([
@@ -117,7 +117,7 @@ class TimeEntryControllerValidationTest extends TestCase
             'end_time'   => $timeEntry->end_time,
         ]);
 
-        $response = $this->post('time-entries', $inputs)->assertSessionHasNoErrors();
+        $response = $this->post('time-entries', $inputs);
         $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
 
@@ -186,7 +186,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_update_time_entry_fail_with_duplicate_time_entry()
+    public function test_not_allow_to_update_duplicate_time_entry()
     {
         $firstEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
