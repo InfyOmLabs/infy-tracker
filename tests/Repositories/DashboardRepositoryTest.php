@@ -26,13 +26,13 @@ class DashboardRepositoryTest extends TestCase
         $startDate = date('Y-m-d h:i:s');
         $endDate = date('Y-m-d h:i:s', strtotime($startDate.'+3 days'));
 
-        $getDate = $this->dashboardRepo->getDate($startDate, $endDate);
+        $date = $this->dashboardRepo->getDate($startDate, $endDate);
 
         $starOfDate = Carbon::parse($startDate)->startOfDay();
         $endOfDate = Carbon::parse($endDate)->endOfDay();
 
-        $this->assertCount(4, $getDate['dateArr'], 'start date + 3days');
-        $this->assertEquals($starOfDate, $getDate['startDate']);
-        $this->assertEquals($endOfDate, $getDate['endDate']);
+        $this->assertCount(4, $date['dateArr'], 'start date + 3days');
+        $this->assertEquals($starOfDate, $date['startDate']);
+        $this->assertEquals($endOfDate, $date['endDate']);
     }
 }
