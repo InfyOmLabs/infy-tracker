@@ -80,8 +80,7 @@ class TimeEntryControllerTest extends TestCase
 
         $this->timeEntryRepository->shouldReceive('myLastTask')
             ->once()
-            ->with()
-            ->andReturn([]);
+            ->with();
 
         $response = $this->getJson('user-last-task-work');
 
@@ -98,8 +97,7 @@ class TimeEntryControllerTest extends TestCase
 
         $this->timeEntryRepository->shouldReceive('getTasksByProject')
             ->once()
-            ->with($task->project_id, $task->id)
-            ->andReturn([]);
+            ->with($task->project_id, $task->id);
 
         $response = $this->getJson("projects/{$task->project_id}/tasks?task_id=$task->id");
 
