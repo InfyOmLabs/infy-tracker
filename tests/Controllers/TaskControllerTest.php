@@ -5,7 +5,6 @@ namespace Tests\Controllers;
 use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\Task;
-use App\Models\TaskAttachment;
 use App\Models\TimeEntry;
 use App\Models\User;
 use App\Repositories\TaskRepository;
@@ -140,45 +139,12 @@ class TaskControllerTest extends TestCase
             ->with(['project_id' => $task->project_id]);
 
         $response = $this->getJson("my-tasks?project_id=$task->project_id");
+
         $response->assertStatus(200);
     }
 
     /** @test */
-    public function test_can_delete_attachment()
-    {
-        $this->mockRepository();
-
-        /** @var TaskAttachment $taskAttachment */
-        $taskAttachment = factory(TaskAttachment::class)->create();
-
-        $this->taskRepository->shouldReceive('deleteFile')
-            ->once()
-            ->with($taskAttachment->id);
-
-        $response = $this->postJson("tasks/{$taskAttachment->id}/delete-attachment", []);
-
-        $this->assertSuccessMessageResponse($response, 'File has been deleted successfully.');
-    }
-
-    /** @test */
-    public function test_can_get_attachments()
-    {
-        $this->mockRepository();
-
-        /** @var Task $task */
-        $task = factory(Task::class)->create();
-
-        $this->taskRepository->shouldReceive('getAttachments')
-            ->once()
-            ->with($task->id);
-
-        $response = $this->getJson("tasks/{$task->id}/get-attachments");
-
-        $this->assertSuccessMessageResponse($response, 'Task retrieved successfully.');
-    }
-
-    /** @test */
-    public function test_can_count_task_comments()
+    public function test_can_get_count_of_comments_for_given_task()
     {
         /** @var Comment $comment */
         $comment = factory(Comment::class)->create();
