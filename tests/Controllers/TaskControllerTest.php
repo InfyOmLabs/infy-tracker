@@ -99,8 +99,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('updateStatus')
             ->once()
-            ->with($task->id)
-            ->andReturn([]);
+            ->with($task->id);
 
         $response = $this->postJson("tasks/$task->id/update-status");
         $response->assertJson([
@@ -119,8 +118,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('getTaskDetails')
             ->once()
-            ->with($task->id)
-            ->andReturn([]);
+            ->with($task->id);
 
         $response = $this->getJson("task-details/$task->id");
         $response->assertJson([
@@ -139,8 +137,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('myTasks')
             ->once()
-            ->with(['project_id' => $task->project_id])
-            ->andReturn([]);
+            ->with(['project_id' => $task->project_id]);
 
         $response = $this->getJson("my-tasks?project_id=$task->project_id");
         $response->assertStatus(200);
@@ -156,8 +153,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('deleteFile')
             ->once()
-            ->with($taskAttachment->id)
-            ->andReturn([]);
+            ->with($taskAttachment->id);
 
         $response = $this->postJson("tasks/{$taskAttachment->id}/delete-attachment", []);
 
@@ -174,8 +170,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('getAttachments')
             ->once()
-            ->with($task->id)
-            ->andReturn([]);
+            ->with($task->id);
 
         $response = $this->getJson("tasks/{$task->id}/get-attachments");
 
