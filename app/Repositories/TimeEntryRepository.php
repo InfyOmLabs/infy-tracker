@@ -154,9 +154,9 @@ class TimeEntryRepository extends BaseRepository
     {
         $timeArr = [$input['start_time'], $input['end_time']];
         $query = TimeEntry::where(function ($q) use ($timeArr) {
-                                $q->whereBetween('start_time', $timeArr)
+            $q->whereBetween('start_time', $timeArr)
                                     ->orWhereBetween('end_time', $timeArr);
-                            })
+        })
                             ->orWhereRaw("('$timeArr[0]' between start_time and end_time 
                                                 or '$timeArr[1]' between start_time and end_time)");
 
