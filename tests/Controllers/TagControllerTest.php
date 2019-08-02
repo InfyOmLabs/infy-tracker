@@ -73,8 +73,7 @@ class TagControllerTest extends TestCase
 
         $this->tagRepository->shouldReceive('update')
             ->once()
-            ->withArgs([['name' => 'Dummy Tag'], $tag->id])
-            ->andReturn([]);
+            ->withArgs([['name' => 'Dummy Tag'], $tag->id]);
 
         $response = $this->putJson(
             'tags/'.$tag->id,
