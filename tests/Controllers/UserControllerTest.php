@@ -37,20 +37,22 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_user_with_its_project_and_roles()
+    public function test_can_retrieve_user_with_its_projects_and_roles()
     {
-        factory(User::class)->create();
-        $user = factory(User::class)->create();
+        $vishal = factory(User::class)->create();
+
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
 
         $project = factory(Project::class)->create();
-        $project->users()->sync([$user->id]);
+        $project->users()->sync([$farhan->id]);
 
         $role = factory(Role::class)->create();
-        $role->users()->sync([$user->id]);
+        $role->users()->sync([$farhan->id]);
 
-        $response = $this->getJson("users/$user->id/edit");
+        $response = $this->getJson("users/$farhan->id/edit");
 
-        $this->assertSuccessDataResponse($response, $user->toArray(), 'User retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $farhan->toArray(), 'User retrieved successfully.');
     }
 
     /** @test */
@@ -83,13 +85,13 @@ class UserControllerTest extends TestCase
             ->once()
             ->with($user->id);
 
-        $response = $this->getJson("users/{$user->id}/send-email");
+        $response = $this->getJson("users/$user->id/send-email");
 
         $this->assertSuccessMessageResponse($response, 'Verification email has been sent successfully.');
     }
 
     /** @test */
-    public function test_can_active_de_active_user()
+    public function test_can_activate_user()
     {
         /** @var User $user */
         $user = factory(User::class)->create();
@@ -100,7 +102,7 @@ class UserControllerTest extends TestCase
             ->once()
             ->with($user->id);
 
-        $response = $this->postJson("users/{$user->id}/active-de-active", []);
+        $response = $this->postJson("users/$user->id/active-de-active", []);
 
         $this->assertSuccessMessageResponse($response, 'User updated successfully.');
     }
