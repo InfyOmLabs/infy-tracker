@@ -58,8 +58,7 @@ class ClientControllerTest extends TestCase
 
         $this->clientRepository->shouldReceive('create')
             ->once()
-            ->with(array_merge($client, ['created_by' => $this->loggedInUserId]))
-            ->andReturn([]);
+            ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
 
         $response = $this->postJson('clients', $client);
 
@@ -86,8 +85,7 @@ class ClientControllerTest extends TestCase
 
         $this->clientRepository->shouldReceive('update')
             ->once()
-            ->withArgs([$fakeClient, $client->id])
-            ->andReturn([]);
+            ->withArgs([$fakeClient, $client->id]);
 
         $response = $this->putJson(
             'clients/'.$client->id,
