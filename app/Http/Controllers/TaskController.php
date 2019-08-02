@@ -78,7 +78,7 @@ class TaskController extends AppBaseController
     {
         $input = $request->all();
         /** @var Task $task */
-        $indexNumber = $this->taskRepository->getIndex($input['project_id']);
+        $indexNumber = $this->taskRepository->getTaskNumber($input['project_id']);
         $input['task_number'] = $indexNumber;
         $this->taskRepository->store($this->fill($input));
 
