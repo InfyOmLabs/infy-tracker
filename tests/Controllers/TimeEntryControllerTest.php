@@ -88,7 +88,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_user_task_by_project()
+    public function test_can_tasks_of_given_project()
     {
         $this->mockRepository();
 
@@ -97,9 +97,9 @@ class TimeEntryControllerTest extends TestCase
 
         $this->timeEntryRepository->shouldReceive('getTasksByProject')
             ->once()
-            ->with($task->project_id, $task->id);
+            ->with($task->project_id, null);
 
-        $response = $this->getJson("projects/{$task->project_id}/tasks?task_id=$task->id");
+        $response = $this->getJson("projects/{$task->project_id}/tasks");
 
         $this->assertSuccessMessageResponse($response, 'Project Tasks retrieved successfully.');
     }
