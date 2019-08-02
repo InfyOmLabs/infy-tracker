@@ -52,8 +52,7 @@ class HomeControllerTest extends TestCase
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
                 'user_id'    => $userId,
-            ])
-            ->andReturn([]);
+            ]);
 
         $response = $this->getJson("/users-work-report?start_date=$startTime&end_date=$endTime&user_id=$userId");
 
@@ -76,8 +75,7 @@ class HomeControllerTest extends TestCase
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
-            ])
-            ->andReturn([]);
+            ]);
 
         $response = $this->getJson("/developer-work-report?start_date=$startTime&end_date=$endTime");
 
