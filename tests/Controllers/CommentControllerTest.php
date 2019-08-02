@@ -43,8 +43,7 @@ class CommentControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('addComment')
             ->once()
-            ->with(['comment' => $comment->comment, 'task_id' => $comment->task_id])
-            ->andReturn([]);
+            ->with(['comment' => $comment->comment, 'task_id' => $comment->task_id]);
 
         $response = $this->postJson("tasks/{$comment->task_id}/comments", [
             'comment' => $comment->comment,
