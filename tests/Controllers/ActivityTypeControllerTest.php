@@ -47,8 +47,7 @@ class ActivityTypeControllerTest extends TestCase
 
         $this->activityTypeRepository->shouldReceive('create')
             ->once()
-            ->with(array_merge($activityType->toArray(), ['created_by' => getLoggedInUserId()]))
-            ->andReturn([]);
+            ->with(array_merge($activityType->toArray(), ['created_by' => getLoggedInUserId()]));
 
         $response = $this->postJson('activity-types', $activityType->toArray());
 
@@ -76,8 +75,7 @@ class ActivityTypeControllerTest extends TestCase
 
         $this->activityTypeRepository->shouldReceive('update')
             ->once()
-            ->withArgs([['name' => 'Dummy Name'], $activityType->id])
-            ->andReturn([]);
+            ->withArgs([['name' => 'Dummy Name'], $activityType->id]);
 
         $response = $this->putJson(
             'activity-types/'.$activityType->id,
