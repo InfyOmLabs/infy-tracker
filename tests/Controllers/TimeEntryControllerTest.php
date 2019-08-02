@@ -86,7 +86,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_tasks_of_given_project()
+    public function test_can_get_tasks_of_given_project()
     {
         $this->mockRepository();
 
