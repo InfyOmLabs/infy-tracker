@@ -81,8 +81,7 @@ class UserControllerTest extends TestCase
 
         $this->userRepo->shouldReceive('resendEmailVerification')
             ->once()
-            ->with($user->id)
-            ->andReturn([]);
+            ->with($user->id);
 
         $response = $this->getJson("users/{$user->id}/send-email");
 
@@ -99,8 +98,7 @@ class UserControllerTest extends TestCase
 
         $this->userRepo->shouldReceive('activeDeActiveUser')
             ->once()
-            ->with($user->id)
-            ->andReturn([]);
+            ->with($user->id);
 
         $response = $this->postJson("users/{$user->id}/active-de-active", []);
 
@@ -117,8 +115,7 @@ class UserControllerTest extends TestCase
 
         $this->userRepo->shouldReceive('update')
             ->once()
-            ->with($user->toArray(), getLoggedInUserId())
-            ->andReturn([]);
+            ->with($user->toArray(), getLoggedInUserId());
 
         $response = $this->postJson('users/profile-update', $user->toArray());
 
