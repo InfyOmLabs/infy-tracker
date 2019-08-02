@@ -41,8 +41,8 @@ class RoleControllerTest extends TestCase
     {
         /** @var Role $role */
         $role = factory(Role::class)->create();
-        $user = factory(User::class)->create();
-        $role->users()->sync([$user->id]);
+        $farhan = factory(User::class)->create();
+        $role->users()->sync([$farhan->id]);
 
         $response = $this->deleteJson('roles/'.$role->id);
 
