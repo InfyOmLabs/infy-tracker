@@ -38,11 +38,11 @@ class UserRepositoryTest extends TestCase
         $users[0]->projects()->attach($project1->id);
         $users[1]->projects()->attach($project2->id);
 
-        $getUsers = $this->userRepo->getUserList([$project1->id, $project2->id]);
+        $userList = $this->userRepo->getUserList([$project1->id, $project2->id]);
 
-        $this->assertCount(2, $getUsers);
-        $this->assertContains($users[0]->name, $getUsers);
-        $this->assertContains($users[1]->name, $getUsers);
+        $this->assertCount(2, $userList);
+        $this->assertContains($users[0]->name, $userList);
+        $this->assertContains($users[1]->name, $userList);
     }
 
     /** @test */
@@ -51,35 +51,35 @@ class UserRepositoryTest extends TestCase
         /** @var Collection $users */
         $users = factory(User::class)->times(2)->create();
 
-        $getUsers = $this->userRepo->getUserList();
+        $userList = $this->userRepo->getUserList();
 
         // +1 default user
-        $this->assertCount(3, $getUsers);
-        $this->assertContains($users[0]->name, $getUsers);
-        $this->assertContains($users[1]->name, $getUsers);
+        $this->assertCount(3, $userList);
+        $this->assertContains($users[0]->name, $userList);
+        $this->assertContains($users[1]->name, $userList);
     }
 
     /** @test */
     public function test_can_activate_user()
     {
-        /** @var Collection $user */
+        /** @var User $user */
         $user = factory(User::class)->create(['is_active' => false]);
 
-        $getUser = $this->userRepo->activeDeActiveUser($user->id);
+        $user = $this->userRepo->activeDeActiveUser($user->id);
 
-        $this->assertEquals($user->id, $getUser->id);
-        $this->assertTrue($getUser->is_active);
+        $this->assertEquals($user->id, $user->id);
+        $this->assertTrue($user->is_active);
     }
 
     /** @test */
     public function test_can_de_activate_user()
     {
-        /** @var Collection $user */
-        $user = factory(User::class)->create(['is_active' => true]);
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create(['is_active' => true]);
 
-        $getUser = $this->userRepo->activeDeActiveUser($user->id);
+        $user = $this->userRepo->activeDeActiveUser($farhan->id);
 
-        $this->assertEquals($user->id, $getUser->id);
-        $this->assertFalse($getUser->is_active);
+        $this->assertEquals($user->id, $user->id);
+        $this->assertFalse($user->is_active);
     }
 }
