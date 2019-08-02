@@ -82,4 +82,21 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($user->id, $getUser->id);
         $this->assertFalse($getUser->is_active);
     }
+
+    /** @test */
+    public function test_can_set_user_password()
+    {
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+
+        $response = $this->userRepo->setUserPassword([
+            'password' => 12345678,
+            'user_id'  => $farhan->id,
+        ]);
+
+        $this->assertTrue($response);
+
+        $user = User::findOrFail($farhan->id);
+        $this->assertEquals(1, $user->set_password);
+    }
 }
