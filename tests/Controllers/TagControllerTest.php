@@ -44,8 +44,7 @@ class TagControllerTest extends TestCase
 
         $this->tagRepository->shouldReceive('store')
             ->once()
-            ->with($tag)
-            ->andReturn([]);
+            ->with($tag);
 
         $response = $this->postJson('tags', $tag);
 
