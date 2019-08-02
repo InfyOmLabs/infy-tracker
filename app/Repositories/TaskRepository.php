@@ -301,7 +301,7 @@ class TaskRepository extends BaseRepository
      *
      * @return int|string|null
      */
-    public function getTaskNumber($projectId)
+    public function getUniqueTaskNumber($projectId)
     {
         /** @var Task $task */
         $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=',

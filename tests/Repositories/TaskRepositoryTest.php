@@ -125,28 +125,28 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_return_unique_task_index()
+    public function test_can_return_unique_task_number()
     {
         $project = factory(Project::class)->create();
         factory(Task::class)->create([
             'project_id'  => $project->id,
             'task_number' => 3,
         ]);
-        $uniqueIndex = $this->taskRepo->getTaskNumber($project->id);
+        $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
 
-        $this->assertNotEmpty($uniqueIndex);
-        $this->assertEquals(4, $uniqueIndex, '+1 index');
+        $this->assertNotEmpty($uniqueTaskNumber);
+        $this->assertEquals(4, $uniqueTaskNumber, '+1 index');
     }
 
     /** @test */
-    public function test_can_return_task_number_one_when_no_tasks_on_given_project()
+    public function test_can_return_unique_task_number_one_when_no_tasks_on_given_project()
     {
         $project = factory(Project::class)->create();
 
-        $uniqueIndex = $this->taskRepo->getTaskNumber($project->id);
+        $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
 
-        $this->assertNotEmpty($uniqueIndex);
-        $this->assertEquals(1, $uniqueIndex);
+        $this->assertNotEmpty($uniqueTaskNumber);
+        $this->assertEquals(1, $uniqueTaskNumber);
     }
 
     /** @test */
