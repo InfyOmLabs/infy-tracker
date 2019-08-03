@@ -44,15 +44,26 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
-        $user = factory(User::class)->create();
-        $task->taskAssignee()->sync([$user->id]);
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+        $task->taskAssignee()->sync([$farhan->id]);
 
+        /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
         $task->tags()->sync([$tag->id]);
 
         $response = $this->getJson('tasks/'.$task->id.'/edit');
 
         $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
+
+        $data = $response->getOriginalContent();
+        $projectId = $data['data']['project']['id'];
+        $tagId = $data['data']['tags'][0]['id'];
+        $taskAssigneeId = $data['data']['taskAssignee'][0]['id'];
+
+        $this->assertEquals($task->project_id, $projectId);
+        $this->assertEquals($tag->id, $tagId);
+        $this->assertEquals($farhan->id, $taskAssigneeId);
     }
 
     /** @test */
@@ -89,7 +100,7 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_update_status()
+    public function test_can_update_status_of_task()
     {
         $this->mockRepository();
 
@@ -127,7 +138,7 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_my_tasks()
+    public function test_can_get_task_of_logged_in_user_for_given_project()
     {
         $this->mockRepository();
 
