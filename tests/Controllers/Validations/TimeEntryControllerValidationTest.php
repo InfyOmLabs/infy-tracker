@@ -118,6 +118,7 @@ class TimeEntryControllerValidationTest extends TestCase
         ]);
 
         $response = $this->post('time-entries', $inputs);
+
         $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
 
@@ -202,6 +203,7 @@ class TimeEntryControllerValidationTest extends TestCase
         ]);
 
         $response = $this->put('time-entries/'.$secondEntry->id, $inputs)->assertSessionHasNoErrors();
+
         $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
 
