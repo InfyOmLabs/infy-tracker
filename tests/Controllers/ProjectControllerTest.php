@@ -85,12 +85,16 @@ class ProjectControllerTest extends TestCase
     {
         $this->mockRepository();
 
+        /** @var Project $project */
+        $project = factory(Project::class)->create();
+
         $this->projectRepository->shouldReceive('getMyProjects')
-            ->once();
+            ->once()
+            ->andReturn($project->toArray());
 
         $response = $this->getJson('my-projects');
 
-        $this->assertSuccessMessageResponse($response, 'Project Retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $project->toArray(), 'Project Retrieved successfully.');
     }
 
     /** @test */
@@ -98,15 +102,22 @@ class ProjectControllerTest extends TestCase
     {
         $this->mockRepository();
 
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+
         /** @var Project $project */
-        $projects = factory(Project::class)->times(2)->create();
+        $project = factory(Project::class)->create();
+        $farhan->projects()->attach($project->id);
+
+        $mockResponse = [$farhan->id => $farhan->name];
 
         $this->userRepo->shouldReceive('getUserList')
             ->once()
-            ->with([$projects[0]->id]);
+            ->with([$project->id])
+            ->andReturn($mockResponse);
 
-        $response = $this->getJson('users-of-projects?projectIds='.$projects[0]->id);
+        $response = $this->getJson('users-of-projects?projectIds='.$project->id);
 
-        $this->assertSuccessMessageResponse($response, 'Users Retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Users Retrieved successfully.');
     }
 }
