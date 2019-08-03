@@ -52,7 +52,11 @@ class UserControllerTest extends TestCase
 
         $response = $this->getJson("users/$farhan->id/edit");
 
-        $this->assertSuccessDataResponse($response, $farhan->toArray(), 'User retrieved successfully.');
+        $assertData = array_merge($farhan->toArray(), [
+            'project_ids' => [$project->id],
+            'role_id'     => [$role->id],
+        ]);
+        $this->assertSuccessDataResponse($response, $assertData, 'User retrieved successfully.');
     }
 
     /** @test */
