@@ -78,8 +78,8 @@ class TaskController extends AppBaseController
     {
         $input = $request->all();
         /** @var Task $task */
-        $indexNumber = $this->taskRepository->getIndex($input['project_id']);
-        $input['task_number'] = $indexNumber;
+        $uniqueTaskNumber = $this->taskRepository->getUniqueTaskNumber($input['project_id']);
+        $input['task_number'] = $uniqueTaskNumber;
         $this->taskRepository->store($this->fill($input));
 
         return $this->sendSuccess('Task created successfully.');
@@ -271,5 +271,15 @@ class TaskController extends AppBaseController
         $result = $this->taskRepository->getAttachments($task->id);
 
         return $this->sendResponse($result, 'Task retrieved successfully.');
+    }
+
+    /**
+     * @param Task $task
+     *
+     * @return JsonResponse
+     */
+    public function getCommentsCount(Task $task)
+    {
+        return $this->sendResponse($task->comments()->count(), 'Comments count retrieved successfully.');
     }
 }

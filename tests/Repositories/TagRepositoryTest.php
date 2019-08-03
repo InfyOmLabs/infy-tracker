@@ -49,10 +49,10 @@ class TagRepositoryTest extends TestCase
 
         $this->assertTrue($tagResult);
 
-        $getTags = Tag::get();
-        $this->assertCount(2, $getTags);
+        $tags = Tag::get();
+        $this->assertCount(2, $tags);
 
-        $this->assertEquals('random', $getTags[0]['name']);
-        $this->assertEquals('string', $getTags[1]['name']);
+        $this->assertEquals('random', $tags[0]['name']);
+        $this->assertEquals('string', $tags[1]['name']);
     }
 }
