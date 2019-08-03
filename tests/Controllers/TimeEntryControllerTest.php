@@ -43,13 +43,17 @@ class TimeEntryControllerTest extends TestCase
         /** @var TimeEntry $timerEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
+        $projectId = $timeEntry->fresh()->task->project_id;
+        $mockResponse = array_merge($timeEntry->toArray(), ['project_id' => $projectId]);
+
         $this->timeEntryRepository->shouldReceive('getTimeEntryDetail')
             ->once()
-            ->with($timeEntry->id);
+            ->with($timeEntry->id)
+            ->andReturn($mockResponse);
 
         $response = $this->getJson("time-entries/$timeEntry->id/edit");
 
-        $this->assertSuccessMessageResponse($response, 'Time Entry retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Time Entry retrieved successfully.');
     }
 
     /** @test */
