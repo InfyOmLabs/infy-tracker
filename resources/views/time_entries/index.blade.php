@@ -18,17 +18,13 @@
                 <div class="filter-container">
                     @permission('manage_time_entries')
                     <div class="mr-2">
-                        <label class="lbl-block"><b>User</b></label>
-                        {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35;', 'placeholder' => 'All'])  !!}
+                        <label for="projects" class="lbl-block"><b>User</b></label>
+                        {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
                     @endpermission
                     <div class="mr-2">
-                        <label class="lbl-block"><b>Project</b></label>
-                        {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;hight:35;', 'placeholder' => 'All'])  !!}
-                    </div>
-                    <div class="mr-2">
-                        <label class="lbl-block"><b>Activity Type</b></label>
-                        {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35;', 'placeholder' => 'All'])  !!}
+                        <label for="projects" class="lbl-block"><b>Activity Type</b></label>
+                        {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
                     <a href="#" class="btn btn-primary filter-container__btn" id="new_entry" data-toggle="modal"
                        data-target="#timeEntryAddModal"></i>New Time Entry</a>
