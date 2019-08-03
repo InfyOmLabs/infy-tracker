@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
@@ -81,5 +82,24 @@ class UserRepositoryTest extends TestCase
 
         $this->assertEquals($farhan->id, $user->id);
         $this->assertFalse($user->is_active);
+    }
+
+    /** @test */
+    public function test_can_set_user_password()
+    {
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+
+        $password = 12345678;
+        $response = $this->userRepo->setUserPassword([
+            'password' => $password,
+            'user_id'  => $farhan->id,
+        ]);
+
+        $this->assertTrue($response);
+
+        $user = User::findOrFail($farhan->id);
+        $this->assertTrue($user->set_password);
+        $this->assertTrue(Hash::check($password, $user->password));
     }
 }
