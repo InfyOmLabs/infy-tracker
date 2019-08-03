@@ -10,7 +10,9 @@
 namespace Tests\Controllers;
 
 use App\Models\Client;
+use App\Models\Project;
 use App\Repositories\ClientRepository;
+use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -24,6 +26,9 @@ class ClientControllerTest extends TestCase
 
     /** @var MockInterface */
     protected $clientRepository;
+
+    /** @var MockInterface */
+    protected $projectRepository;
 
     protected $defaultUserId = 1;
 
@@ -39,7 +44,9 @@ class ClientControllerTest extends TestCase
     private function mockRepository()
     {
         $this->clientRepository = \Mockery::mock(ClientRepository::class);
+        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
         app()->instance(ClientRepository::class, $this->clientRepository);
+        app()->instance(ProjectRepository::class, $this->projectRepository);
     }
 
     public function tearDown(): void
@@ -111,5 +118,28 @@ class ClientControllerTest extends TestCase
             'success' => false,
             'message' => 'Client not found.',
         ]);
+    }
+
+    /** @test */
+    public function test_can_retrieve_client_projects()
+    {
+        $this->mockRepository();
+
+        /** @var Client $client */
+        $client = factory(Client::class)->create();
+
+        /** @var Project $project */
+        $project = factory(Project::class)->create(['client_id' => $client->id]);
+
+        $mockResponse = ['id' => $project->id, 'name' => $project->name];
+
+        $this->projectRepository->shouldReceive('getProjectsList')
+            ->once()
+            ->with($client->id)
+            ->andReturn($mockResponse);
+
+        $response = $this->getJson("projects-of-client?client_id=$client->id");
+
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Projects retrieved successfully.');
     }
 }
