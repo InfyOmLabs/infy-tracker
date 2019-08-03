@@ -39,7 +39,7 @@ class TimeEntryController extends AppBaseController
     {
         if ($request->ajax()) {
             return Datatables::of((new TimeEntryDataTable())->get(
-                $request->only('filter_activity', 'filter_user'))
+                $request->only('filter_activity', 'filter_user', 'filter_project'))
             )->make(true);
         }
 

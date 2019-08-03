@@ -10,7 +10,7 @@ $('#timeProjectId,#editTimeProjectId').select2({
     placeholder: "Select Project"
 });
 
-$('#filterActivity,#filterUser').select2({
+$('#filterActivity,#filterUser,#filter_project').select2({
     minimumResultsForSearch: -1
 });
 
@@ -28,6 +28,7 @@ let tbl = $('#timeEntryTable').DataTable({
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
+            data.filter_project = $('#filter_project').find('option:selected').val();
             data.filter_activity = $('#filterActivity').find('option:selected').val();
             data.filter_user = $('#filterUser').find('option:selected').val();
         }
@@ -114,7 +115,7 @@ let tbl = $('#timeEntryTable').DataTable({
         },
     ],
     "fnInitComplete": function () {
-        $('#filterActivity,#filterUser,#filterTask').change(function () {
+        $('#filterActivity,#filterUser,#filterTask,#filter_project').change(function () {
             tbl.ajax.reload();
         });
     }
