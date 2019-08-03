@@ -40,8 +40,8 @@ class TimeEntryDataTable
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
             function (Builder $q) use ($input) {
                 $taskIds = Task::whereProjectId($input['filter_project'])
-                    ->where('status','=', Task::STATUS_ACTIVE)
-                    ->where(function ($q){
+                    ->where('status', '=', Task::STATUS_ACTIVE)
+                    ->where(function ($q) {
                         $q->whereHas('taskAssignee', function ($q) {
                             $q->where('user_id', getLoggedInUser()->id);
                         });
