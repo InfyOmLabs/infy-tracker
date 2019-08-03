@@ -128,13 +128,12 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('getTaskDetails')
             ->once()
-            ->with($task->id);
+            ->with($task->id)
+            ->andReturn($task->toArray());
 
         $response = $this->getJson("task-details/$task->id");
-        $response->assertJson([
-            'success' => true,
-            'message' => 'Task retrieved successfully.',
-        ]);
+
+        $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
     }
 
     /** @test */
@@ -145,13 +144,15 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
+        $mockResponse = ['tasks' => ['id' => $task->id, 'title' => $task->title]];
         $this->taskRepository->shouldReceive('myTasks')
             ->once()
-            ->with(['project_id' => $task->project_id]);
+            ->with(['project_id' => $task->project_id])
+            ->andReturn($mockResponse);
 
         $response = $this->getJson("my-tasks?project_id=$task->project_id");
 
-        $response->assertStatus(200);
+        $this->assertEquals($mockResponse, $response->getOriginalContent());
     }
 
     /** @test */
