@@ -156,6 +156,32 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals('2 hr', $duration);
     }
 
+    /** @test */
+    public function it_can_create_report_filter()
+    {
+        $report = factory(Report::class)->create();
+
+        $client = factory(Client::class)->create();
+        $user = factory(User::class)->create();
+        $project = factory(Project::class)->create();
+        $tag = factory(Tag::class)->create();
+
+        $projectReportFilter = $this->reportRepo->createReportFilter(['projectIds' => [$project->id]], $report);
+        $userReportFilter = $this->reportRepo->createReportFilter(['userIds' => [$user->id]], $report);
+        $tagReportFilter = $this->reportRepo->createReportFilter(['tagIds' => [$tag->id]], $report);
+        $clientReportFilter = $this->reportRepo->createReportFilter(['client_id' => $client->id], $report);
+
+        $this->assertNotEmpty($projectReportFilter);
+        $this->assertNotEmpty($userReportFilter);
+        $this->assertNotEmpty($tagReportFilter);
+        $this->assertNotEmpty($clientReportFilter);
+
+        $this->assertEquals(Project::class, $projectReportFilter[0]->param_type);
+        $this->assertEquals(User::class, $userReportFilter[0]->param_type);
+        $this->assertEquals(Tag::class, $tagReportFilter[0]->param_type);
+        $this->assertEquals(Client::class, $clientReportFilter[0]->param_type);
+    }
+
     /**
      * @param int    $reportId
      * @param int    $paramId
