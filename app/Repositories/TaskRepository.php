@@ -106,7 +106,7 @@ class TaskRepository extends BaseRepository
         $task = $this->findOrFail($id);
         $this->validateTaskData($input, $task);
 
-        if($task->project_id != $input['project_id']){
+        if ($task->project_id != $input['project_id']) {
             $uniqueTaskNumber = $this->getUniqueTaskNumber($input['project_id']);
             $input['task_number'] = $uniqueTaskNumber;
         }
