@@ -1,8 +1,15 @@
 language: php
 php:
-  - '7.1'
-  - '7.2'
-  - '7.3'
+- '7.1'
+- '7.2'
+- '7.3'
 sudo: false
+cache:
+  directories:
+    - $HOME/.composer/cache/files
 install: travis_retry composer install --no-interaction --prefer-dist
 script: vendor/bin/phpunit --verbose
+notifications:
+  slack:
+    rooms:
+      secure: EhuD5CbAzJECUUdCwmcTH4JBpXojl3fbiPlf2Psx7Lf0jct75HF0O7/6Zp0ury5l0j3FU/lQkQBV8AYqbUk9hESh6iC1q+pmqN1q0TV89WdVdkujHPW0LZ67ucq78D6757XM2AR/lDAKjt18yMk4Inv25kUYXvonFqdcRrW8H2wQRI7n0qZRGHv2fOp23/ZtC1tq7tLguBF7hqq477Ku72BdRBKdrzBcJrZUsmAzWJjCkBFeCPPcpeBtZiJ9iDohY8SYFC8XPG0Hm0Taq100VRnex18z02GhqrXYGmaAoPX2LP9aF5iOFUjmYD4gN8wFiOpH+WCKb73B89jgbosA6Ik/xl7ahefHLb5IgG0O6TO1MbmncKO9iE39ZmugcUNjPOYemwX44LfA3RRyTTwcUbCQI4HEgSmTeU7d/ViH5vr+Zyt2I3w9Lw4OAmRzcJ5CRKMAIB+xHS9k1s4bZyT8qF56fUpPnB2r3lHIFZjXG8BsxiuxRQPQ34qjNHhMX0+dymMoO8q7oGQd5FQqtFyCgYscL+yysUh3xZn4OFBtsj2ucGq3/w5WBUF/36UAXEGin4NLkCAd159CBrvUk2FSirbyz4N4kougo28bR08dj2nyiF44vwg21g599rbaKDUZov+L6rVEQ2ybVHDKdr5n/PkV8YDFM+v8uCFFfAjsHZo=
