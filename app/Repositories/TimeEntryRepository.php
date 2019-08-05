@@ -152,7 +152,6 @@ class TimeEntryRepository extends BaseRepository
      */
     public function checkDuplicateEntry($input, $id = null)
     {
-        $userId = getLoggedInUserId();
         $timeArr = [$input['start_time'], $input['end_time']];
         $query = TimeEntry::whereUserId(getLoggedInUserId())
                 ->where(function ($q) use ($timeArr) {
