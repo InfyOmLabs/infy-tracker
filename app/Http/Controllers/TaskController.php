@@ -179,7 +179,7 @@ class TaskController extends AppBaseController
     public function destroy(Task $task)
     {
         if ($task->timeEntries()->count() > 0) {
-            return $this->sendError('Task has one or more time entries');
+            return $this->sendError('Task has one or more time entries.');
         }
 
         $task->update(['deleted_by' => getLoggedInUserId()]);
@@ -215,14 +215,14 @@ class TaskController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return array
+     * @return JsonResponse
      */
     public function myTasks(Request $request)
     {
         $input = $request->only('project_id');
         $timerDetails = $this->taskRepository->myTasks($input);
 
-        return $timerDetails;
+        return $this->sendResponse($timerDetails, 'My tasks retrieved successfully.');
     }
 
     /**
