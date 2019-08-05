@@ -12,6 +12,10 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
+/**
+ * Class TaskControllerTest
+ * @package Tests\Controllers
+ */
 class TaskControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -56,10 +60,10 @@ class TaskControllerTest extends TestCase
 
         $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
 
-        $data = $response->getOriginalContent();
-        $projectId = $data['data']['project']['id'];
-        $tagId = $data['data']['tags'][0]['id'];
-        $taskAssigneeId = $data['data']['taskAssignee'][0]['id'];
+        $data = $response->original['data'];
+        $projectId = $data['project']['id'];
+        $tagId = $data['tags'][0]['id'];
+        $taskAssigneeId = $data['taskAssignee'][0]['id'];
 
         $this->assertEquals($task->project_id, $projectId);
         $this->assertEquals($tag->id, $tagId);
@@ -86,7 +90,7 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_not_delete_task_when_task_has_time_entries()
+    public function test_can_not_delete_task_when_task_has_one_or_more_time_entries()
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -112,6 +116,7 @@ class TaskControllerTest extends TestCase
             ->with($task->id);
 
         $response = $this->postJson("tasks/$task->id/update-status");
+
         $response->assertJson([
             'success' => true,
             'message' => 'Task status Update successfully.',
@@ -133,7 +138,7 @@ class TaskControllerTest extends TestCase
 
         $response = $this->getJson("task-details/$task->id");
 
-        $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
+        $this->assertExactResponseData($response, $task->toArray(), 'Task retrieved successfully.');
     }
 
     /** @test */
@@ -152,7 +157,7 @@ class TaskControllerTest extends TestCase
 
         $response = $this->getJson("my-tasks?project_id=$task->project_id");
 
-        $this->assertEquals($mockResponse, $response->getOriginalContent());
+        $this->assertExactResponseData($response , $mockResponse, 'My tasks retrieved successfully.');
     }
 
     /** @test */
