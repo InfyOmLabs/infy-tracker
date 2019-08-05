@@ -191,10 +191,12 @@ class TimeEntryControllerValidationTest extends TestCase
     {
         $firstEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
-        $endTime = date('Y-m-d h:i:s', strtotime($firstEntry->end_time.'+1 hours'));
+        $startTime = date('Y-m-d h:i:s', strtotime($firstEntry->end_time.'+1 hours'));
+        $endTime = date('Y-m-d h:i:s', strtotime($startTime.'+1 hours'));
         $secondEntry = factory(TimeEntry::class)->create([
-            'end_time' => $endTime,
-            'user_id'  => $this->defaultUserId,
+            'start_time' => $startTime,
+            'end_time'   => $endTime,
+            'user_id'    => $this->defaultUserId,
         ]);
 
         $inputs = $this->timeEntryInputs([
