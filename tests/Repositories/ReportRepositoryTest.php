@@ -158,7 +158,7 @@ class ReportRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_update_report_filter_for_given_project_ids()
+    public function test_create_new_project_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
 
@@ -169,22 +169,18 @@ class ReportRepositoryTest extends TestCase
         $this->generateReportFilter($report->id, $projects[1]->id, Project::class);
 
         $input = [
-            'projectIds' => [$projects[0]->id, $projects[2]->id],
+            'projectIds' => [$projects[2]->id], // project ids that not passed here, its report filter should be deleted
         ];
         $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
 
-        $this->assertNotEmpty($updatedReportFilter);
-        $this->assertEquals($projects[2]->id, $updatedReportFilter[0]->param_id);
-        $this->assertEquals(Project::class, $updatedReportFilter[0]->param_type);
-
-        $reportFilter = ReportFilter::ofParamType(Project::class)
-            ->where('param_id', $projects[1]->id)
-            ->first();
-        $this->assertEmpty($reportFilter);
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Project::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertEquals($projects[2]->id, $reportFilter[0]->param_id);
     }
 
     /** @test */
-    public function test_can_update_report_filter_for_given_user_ids()
+    public function test_create_new_user_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
 
@@ -195,22 +191,18 @@ class ReportRepositoryTest extends TestCase
         $this->generateReportFilter($report->id, $users[1]->id, User::class);
 
         $input = [
-            'userIds' => [$users[0]->id, $users[2]->id],
+            'userIds' => [$users[2]->id],
         ];
         $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
 
-        $this->assertNotEmpty($updatedReportFilter);
-        $this->assertEquals($users[2]->id, $updatedReportFilter[0]->param_id);
-        $this->assertEquals(User::class, $updatedReportFilter[0]->param_type);
-
-        $reportFilter = ReportFilter::ofParamType(User::class)
-            ->where('param_id', $users[1]->id)
-            ->first();
-        $this->assertEmpty($reportFilter);
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(User::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertEquals($users[2]->id, $reportFilter[0]->param_id);
     }
 
     /** @test */
-    public function test_can_update_report_filter_for_given_tag_ids()
+    public function test_create_new_tag_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
 
@@ -221,22 +213,18 @@ class ReportRepositoryTest extends TestCase
         $this->generateReportFilter($report->id, $tags[1]->id, Tag::class);
 
         $input = [
-            'tagIds' => [$tags[0]->id, $tags[2]->id],
+            'tagIds' => [$tags[2]->id],
         ];
         $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
 
-        $this->assertNotEmpty($updatedReportFilter);
-        $this->assertEquals($tags[2]->id, $updatedReportFilter[0]->param_id);
-        $this->assertEquals(Tag::class, $updatedReportFilter[0]->param_type);
-
-        $reportFilter = ReportFilter::ofParamType(Tag::class)
-            ->where('param_id', $tags[1]->id)
-            ->first();
-        $this->assertEmpty($reportFilter);
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Tag::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertEquals($tags[2]->id, $reportFilter[0]->param_id);
     }
 
     /** @test */
-    public function test_can_update_report_filter_for_given_client_id()
+    public function test_create_new_client_filter_by_deleting_old_filter()
     {
         $report = factory(Report::class)->create();
 
@@ -250,9 +238,10 @@ class ReportRepositoryTest extends TestCase
         ];
         $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
 
-        $this->assertNotEmpty($updatedReportFilter);
-        $this->assertEquals($clients[0]->id, $updatedReportFilter[0]->param_id);
-        $this->assertEquals(Client::class, $updatedReportFilter[0]->param_type);
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Client::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertEquals($clients[0]->id, $reportFilter[0]->param_id);
     }
 
     /** @test */
