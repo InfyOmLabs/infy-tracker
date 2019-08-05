@@ -3,6 +3,7 @@
 namespace Tests\Repositories;
 
 use App\Models\Project;
+use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
@@ -199,5 +200,37 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertEquals($timeEntry->task_id, $taskDetails->id);
         $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+    }
+
+    /** @test */
+    public function test_can_update_task_status()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+
+        $updatedTaskStatus = $this->taskRepo->updateStatus($task->id);
+
+        $this->assertTrue($updatedTaskStatus);
+
+        $task = Task::findOrFail($task->id);
+        $this->assertEquals(Task::STATUS_ACTIVE, $task->status);
+    }
+
+    /** @test */
+    public function test_can_attach_tags()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->make();
+
+        $this->taskRepo->attachTags($task, [$tag]);
+
+        $attachedTag = $task->fresh()->tags;
+        $this->assertNotEmpty($attachedTag);
+
+        $tagName = json_decode($attachedTag[0]->name, true);
+        $this->assertEquals($tag->name, $tagName['name']);
     }
 }
