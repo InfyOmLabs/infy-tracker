@@ -41,11 +41,16 @@ class ClientControllerTest extends TestCase
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    public function mockClientRepository()
     {
         $this->clientRepository = \Mockery::mock(ClientRepository::class);
-        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
         app()->instance(ClientRepository::class, $this->clientRepository);
+
+    }
+
+    public function mockProjectRepository()
+    {
+        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
         app()->instance(ProjectRepository::class, $this->projectRepository);
     }
 
@@ -59,7 +64,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_store_client()
     {
-        $this->mockRepository();
+        $this->mockClientRepository();
 
         $client = factory(Client::class)->make()->toArray();
 
@@ -85,7 +90,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_update_client()
     {
-        $this->mockRepository();
+        $this->mockClientRepository();
 
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->make()->toArray();
@@ -121,9 +126,9 @@ class ClientControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_client_projects()
+    public function test_can_retrieve_projects_of_given_client()
     {
-        $this->mockRepository();
+        $this->mockProjectRepository();
 
         /** @var Client $client */
         $client = factory(Client::class)->create();
