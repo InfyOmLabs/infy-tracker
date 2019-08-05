@@ -159,7 +159,7 @@ class TimeEntryRepository extends BaseRepository
                     $q->whereBetween('start_time', $timeArr)
                         ->orWhereBetween('end_time', $timeArr)
                         ->orWhereRaw("('$timeArr[0]' between start_time and end_time or '$timeArr[1]' between start_time and end_time)");
-                    });
+                });
 
         if (!empty($id) && $id > 0) {
             $query->where('id', '!=', $id);
