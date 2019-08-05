@@ -13,8 +13,7 @@ use Mockery\MockInterface;
 use Tests\TestCase;
 
 /**
- * Class TaskControllerTest
- * @package Tests\Controllers
+ * Class TaskControllerTest.
  */
 class TaskControllerTest extends TestCase
 {
@@ -157,7 +156,7 @@ class TaskControllerTest extends TestCase
 
         $response = $this->getJson("my-tasks?project_id=$task->project_id");
 
-        $this->assertExactResponseData($response , $mockResponse, 'My tasks retrieved successfully.');
+        $this->assertExactResponseData($response, $mockResponse, 'My tasks retrieved successfully.');
     }
 
     /** @test */
