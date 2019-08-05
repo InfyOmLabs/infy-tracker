@@ -110,6 +110,7 @@ class TaskRepository extends BaseRepository
             $uniqueTaskNumber = $this->getUniqueTaskNumber($input['project_id']);
             $input['task_number'] = $uniqueTaskNumber;
         }
+
         try {
             DB::beginTransaction();
             $input['description'] = htmlentities($input['description']);
