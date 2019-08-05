@@ -15,6 +15,8 @@ abstract class TestCase extends BaseTestCase
     /** @var \Faker\Generator */
     public $faker;
 
+    public $loggedInUserId;
+
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
@@ -25,6 +27,7 @@ abstract class TestCase extends BaseTestCase
     public function signInWithDefaultAdminUser()
     {
         $user = User::first();
+        $this->loggedInUserId = $user->id;
 
         return $this->actingAs($user);
     }
@@ -51,6 +54,16 @@ abstract class TestCase extends BaseTestCase
     public function assertExceptionMessage(TestResponse $response, string $message)
     {
         $this->assertEquals($message, $response->exception->getMessage());
+    }
+
+    public function assertExactResponseData(TestResponse $response, $data, $message = null)
+    {
+        $response->assertStatus(200)
+            ->assertExactJson([
+                'success' => true,
+                'message' => $message,
+                'data'    => $data,
+            ]);
     }
 
     /**

@@ -67,7 +67,7 @@ class ClientController extends AppBaseController
 
         $this->clientRepository->create($this->fill($input));
 
-        return $this->sendSuccess('Review created successfully.');
+        return $this->sendSuccess('Client created successfully.');
     }
 
     /**
