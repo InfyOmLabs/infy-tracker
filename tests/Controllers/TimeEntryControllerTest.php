@@ -53,7 +53,7 @@ class TimeEntryControllerTest extends TestCase
 
         $response = $this->getJson("time-entries/$timeEntry->id/edit");
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Time Entry retrieved successfully.');
+        $this->assertExactResponseData($response, $mockResponse, 'Time Entry retrieved successfully.');
     }
 
     /** @test */
@@ -64,8 +64,7 @@ class TimeEntryControllerTest extends TestCase
 
         $response = $this->deleteJson('time-entries/'.$timeEntry->id);
 
-        $response->assertJson(['success' => true]);
-        $response->assertStatus(200);
+        $this->assertSuccessMessageResponse($response, 'TimeEntry deleted successfully.');
 
         $response = $this->getJson('time-entries/'.$timeEntry->id.'/edit');
 
@@ -96,7 +95,7 @@ class TimeEntryControllerTest extends TestCase
 
         $response = $this->getJson('user-last-task-work');
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'User Task retrieved successfully.');
+        $this->assertExactResponseData($response, $mockResponse, 'User Task retrieved successfully.');
     }
 
     /** @test */
@@ -116,6 +115,6 @@ class TimeEntryControllerTest extends TestCase
 
         $response = $this->getJson("projects/{$task->project_id}/tasks");
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Project Tasks retrieved successfully.');
+        $this->assertExactResponseData($response, $mockResponse, 'Project Tasks retrieved successfully.');
     }
 }

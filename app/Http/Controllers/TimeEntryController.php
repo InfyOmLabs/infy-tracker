@@ -131,7 +131,7 @@ class TimeEntryController extends AppBaseController
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
-        return response()->json(['success' => true], 200);
+        return $this->sendSuccess('TimeEntry deleted successfully.');
     }
 
     /**
