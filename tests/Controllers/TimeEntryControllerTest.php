@@ -43,14 +43,17 @@ class TimeEntryControllerTest extends TestCase
         /** @var TimeEntry $timerEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
+        $projectId = $timeEntry->fresh()->task->project_id;
+        $mockResponse = array_merge($timeEntry->toArray(), ['project_id' => $projectId]);
+
         $this->timeEntryRepository->shouldReceive('getTimeEntryDetail')
             ->once()
             ->with($timeEntry->id)
-            ->andReturn([]);
+            ->andReturn($mockResponse);
 
         $response = $this->getJson("time-entries/$timeEntry->id/edit");
 
-        $this->assertSuccessMessageResponse($response, 'Time Entry retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Time Entry retrieved successfully.');
     }
 
     /** @test */
@@ -74,33 +77,45 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_user_last_task()
+    public function test_can_get_last_task_details_of_logged_in_user()
     {
         $this->mockRepository();
 
+        /** @var TimeEntry $timeEntry */
+        $timeEntry = factory(TimeEntry::class)->create();
+
+        $mockResponse = [
+            'task_id'     => $timeEntry->task_id,
+            'activity_id' => $timeEntry->activity_type_id,
+            'project_id'  => $timeEntry->task->project_id,
+        ];
+
         $this->timeEntryRepository->shouldReceive('myLastTask')
             ->once()
-            ->with();
+            ->andReturn($mockResponse);
 
         $response = $this->getJson('user-last-task-work');
 
-        $this->assertSuccessMessageResponse($response, 'User Task retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'User Task retrieved successfully.');
     }
 
     /** @test */
-    public function test_can_get_user_task_by_project()
+    public function test_can_get_tasks_of_given_project()
     {
         $this->mockRepository();
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
+        $mockResponse = [$task->id => $task->title];
+
         $this->timeEntryRepository->shouldReceive('getTasksByProject')
             ->once()
-            ->with($task->project_id, $task->id);
+            ->with($task->project_id, null)
+            ->andReturn($mockResponse);
 
-        $response = $this->getJson("projects/{$task->project_id}/tasks?task_id=$task->id");
+        $response = $this->getJson("projects/{$task->project_id}/tasks");
 
-        $this->assertSuccessMessageResponse($response, 'Project Tasks retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Project Tasks retrieved successfully.');
     }
 }
