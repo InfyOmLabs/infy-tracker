@@ -175,7 +175,7 @@ class ReportRepositoryTest extends TestCase
 
         $this->assertCount(1, $updatedReportFilter);
         $reportFilter = ReportFilter::ofParamType(Project::class)->get();
-        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
         $this->assertEquals($projects[2]->id, $reportFilter[0]->param_id);
     }
 
@@ -197,7 +197,7 @@ class ReportRepositoryTest extends TestCase
 
         $this->assertCount(1, $updatedReportFilter);
         $reportFilter = ReportFilter::ofParamType(User::class)->get();
-        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
         $this->assertEquals($users[2]->id, $reportFilter[0]->param_id);
     }
 
@@ -219,7 +219,7 @@ class ReportRepositoryTest extends TestCase
 
         $this->assertCount(1, $updatedReportFilter);
         $reportFilter = ReportFilter::ofParamType(Tag::class)->get();
-        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
         $this->assertEquals($tags[2]->id, $reportFilter[0]->param_id);
     }
 
@@ -240,7 +240,7 @@ class ReportRepositoryTest extends TestCase
 
         $this->assertCount(1, $updatedReportFilter);
         $reportFilter = ReportFilter::ofParamType(Client::class)->get();
-        $this->assertCount(1, $reportFilter, 'Remaining 2 are deleted.');
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
         $this->assertEquals($clients[0]->id, $reportFilter[0]->param_id);
     }
 
