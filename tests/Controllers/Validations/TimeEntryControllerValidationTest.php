@@ -111,7 +111,7 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_not_allow_to_add_duplicate_time_entry()
     {
-        $timeEntry = factory(TimeEntry::class)->create();
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
         $inputs = $this->timeEntryInputs([
             'start_time' => $timeEntry->start_time,
             'end_time'   => $timeEntry->end_time,
