@@ -45,7 +45,6 @@ class ClientControllerTest extends TestCase
     {
         $this->clientRepository = \Mockery::mock(ClientRepository::class);
         app()->instance(ClientRepository::class, $this->clientRepository);
-
     }
 
     public function mockProjectRepository()
