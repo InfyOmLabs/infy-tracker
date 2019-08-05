@@ -232,8 +232,8 @@ class TimeEntryControllerValidationTest extends TestCase
         $activityType = factory(ActivityType::class)->create();
         $task = factory(Task::class)->create();
 
-        $startTime = date('Y-m-d H:i:s');
-        $endTime = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+        $startTime = date('Y-m-d H:i:s', strtotime('+2 hours'));
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+30 minutes'));
 
         return array_merge([
             'start_time'       => $startTime,
