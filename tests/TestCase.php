@@ -56,6 +56,16 @@ abstract class TestCase extends BaseTestCase
         $this->assertEquals($message, $response->exception->getMessage());
     }
 
+    public function assertExactResponseData(TestResponse $response, $data, $message = null)
+    {
+        $response->assertStatus(200)
+            ->assertExactJson([
+                'success' => true,
+                'message' => $message,
+                'data'    => $data,
+            ]);
+    }
+
     /**
      * @param string $string
      * @param string $timezone
