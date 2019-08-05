@@ -109,6 +109,20 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function test_not_allow_to_add_duplicate_time_entry()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+        $inputs = $this->timeEntryInputs([
+            'start_time' => $timeEntry->start_time,
+            'end_time'   => $timeEntry->end_time,
+        ]);
+
+        $response = $this->post('time-entries', $inputs);
+
+        $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
+    }
+
+    /** @test */
     public function it_can_add_time_entry_of_logged_in_user()
     {
         $inputs = $this->timeEntryInputs();
@@ -170,6 +184,29 @@ class TimeEntryControllerValidationTest extends TestCase
         );
 
         $this->assertEquals('Minimum Entry time should be 1 minute.', $response->exception->getMessage());
+    }
+
+    /** @test */
+    public function test_not_allow_to_update_duplicate_time_entry()
+    {
+        $firstEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+
+        $startTime = date('Y-m-d h:i:s', strtotime($firstEntry->end_time.'+1 hours'));
+        $endTime = date('Y-m-d h:i:s', strtotime($startTime.'+1 hours'));
+        $secondEntry = factory(TimeEntry::class)->create([
+            'start_time' => $startTime,
+            'end_time'   => $endTime,
+            'user_id'    => $this->defaultUserId,
+        ]);
+
+        $inputs = $this->timeEntryInputs([
+            'start_time' => $firstEntry->start_time,
+            'end_time'   => $firstEntry->end_time,
+        ]);
+
+        $response = $this->put('time-entries/'.$secondEntry->id, $inputs)->assertSessionHasNoErrors();
+
+        $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
 
     /** @test */
