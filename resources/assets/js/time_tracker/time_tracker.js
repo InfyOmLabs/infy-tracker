@@ -243,7 +243,7 @@ function loadTimerData(projectId) {
             let drpTaskId = localStorage.getItem('task_id');
             let drpActivityId = localStorage.getItem('activity_id');
             let isTaskEmpty = true;
-            $(result.tasks).each(function (i, e) {
+            $(result.data.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
                 if (e.id == drpTaskId) {
                     isTaskEmpty = false;
@@ -252,7 +252,7 @@ function loadTimerData(projectId) {
 
             $('#tmActivityId').find('option').remove().end().append('<option value="">Select Activity</option>');
             $('#tmActivityId').val("").trigger('change');
-            $(result.activities).each(function (i, e) {
+            $(result.data.activities).each(function (i, e) {
                 $("#tmActivityId").append($('<option></option>').attr('value', e.id).text(e.name));
             });
 
