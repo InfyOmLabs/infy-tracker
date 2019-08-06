@@ -9,6 +9,7 @@ use App\Models\ReportFilter;
 use App\Models\Tag;
 use App\Models\User;
 use App\Repositories\ReportRepository;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -154,6 +155,119 @@ class ReportRepositoryTest extends TestCase
 
         $this->assertNotEmpty($duration);
         $this->assertEquals('2 hr', $duration);
+    }
+
+    /** @test */
+    public function test_create_new_project_filters_by_deleting_old_filters()
+    {
+        $report = factory(Report::class)->create();
+
+        /** @var Collection $projects */
+        $projects = factory(Project::class)->times(3)->create();
+
+        $this->generateReportFilter($report->id, $projects[0]->id, Project::class);
+        $this->generateReportFilter($report->id, $projects[1]->id, Project::class);
+
+        $input = [
+            'projectIds' => [$projects[2]->id], // project ids that not passed here, its report filter should be deleted
+        ];
+        $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
+
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Project::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
+        $this->assertEquals($projects[2]->id, $reportFilter[0]->param_id);
+    }
+
+    /** @test */
+    public function test_create_new_user_filters_by_deleting_old_filters()
+    {
+        $report = factory(Report::class)->create();
+
+        /** @var Collection $users */
+        $users = factory(User::class)->times(3)->create();
+
+        $this->generateReportFilter($report->id, $users[0]->id, User::class);
+        $this->generateReportFilter($report->id, $users[1]->id, User::class);
+
+        $input = [
+            'userIds' => [$users[2]->id],
+        ];
+        $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
+
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(User::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
+        $this->assertEquals($users[2]->id, $reportFilter[0]->param_id);
+    }
+
+    /** @test */
+    public function test_create_new_tag_filters_by_deleting_old_filters()
+    {
+        $report = factory(Report::class)->create();
+
+        /** @var Collection $tags */
+        $tags = factory(Tag::class)->times(3)->create();
+
+        $this->generateReportFilter($report->id, $tags[0]->id, Tag::class);
+        $this->generateReportFilter($report->id, $tags[1]->id, Tag::class);
+
+        $input = [
+            'tagIds' => [$tags[2]->id],
+        ];
+        $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
+
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Tag::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
+        $this->assertEquals($tags[2]->id, $reportFilter[0]->param_id);
+    }
+
+    /** @test */
+    public function test_create_new_client_filter_by_deleting_old_filter()
+    {
+        $report = factory(Report::class)->create();
+
+        /** @var Collection $clients */
+        $clients = factory(Client::class)->times(2)->create();
+
+        $this->generateReportFilter($report->id, $clients[1]->id, Client::class);
+
+        $input = [
+            'client_id' => $clients[0]->id,
+        ];
+        $updatedReportFilter = $this->reportRepo->updateReportFilter($input, $report);
+
+        $this->assertCount(1, $updatedReportFilter);
+        $reportFilter = ReportFilter::ofParamType(Client::class)->get();
+        $this->assertCount(1, $reportFilter, 'Remaining 2 should be deleted.');
+        $this->assertEquals($clients[0]->id, $reportFilter[0]->param_id);
+    }
+
+    /** @test */
+    public function it_can_create_report_filter()
+    {
+        $report = factory(Report::class)->create();
+
+        $client = factory(Client::class)->create();
+        $user = factory(User::class)->create();
+        $project = factory(Project::class)->create();
+        $tag = factory(Tag::class)->create();
+
+        $projectReportFilter = $this->reportRepo->createReportFilter(['projectIds' => [$project->id]], $report);
+        $userReportFilter = $this->reportRepo->createReportFilter(['userIds' => [$user->id]], $report);
+        $tagReportFilter = $this->reportRepo->createReportFilter(['tagIds' => [$tag->id]], $report);
+        $clientReportFilter = $this->reportRepo->createReportFilter(['client_id' => $client->id], $report);
+
+        $this->assertNotEmpty($projectReportFilter);
+        $this->assertNotEmpty($userReportFilter);
+        $this->assertNotEmpty($tagReportFilter);
+        $this->assertNotEmpty($clientReportFilter);
+
+        $this->assertEquals(Project::class, $projectReportFilter[0]->param_type);
+        $this->assertEquals(User::class, $userReportFilter[0]->param_type);
+        $this->assertEquals(Tag::class, $tagReportFilter[0]->param_type);
+        $this->assertEquals(Client::class, $clientReportFilter[0]->param_type);
     }
 
     /**

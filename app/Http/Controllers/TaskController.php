@@ -78,8 +78,8 @@ class TaskController extends AppBaseController
     {
         $input = $request->all();
         /** @var Task $task */
-        $indexNumber = $this->taskRepository->getIndex($input['project_id']);
-        $input['task_number'] = $indexNumber;
+        $uniqueTaskNumber = $this->taskRepository->getUniqueTaskNumber($input['project_id']);
+        $input['task_number'] = $uniqueTaskNumber;
         $this->taskRepository->store($this->fill($input));
 
         return $this->sendSuccess('Task created successfully.');
@@ -215,14 +215,14 @@ class TaskController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return array
+     * @return JsonResponse
      */
     public function myTasks(Request $request)
     {
         $input = $request->only('project_id');
         $timerDetails = $this->taskRepository->myTasks($input);
 
-        return $timerDetails;
+        return $this->sendResponse($timerDetails, 'My tasks retrieved successfully.');
     }
 
     /**
