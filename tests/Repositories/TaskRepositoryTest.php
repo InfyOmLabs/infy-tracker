@@ -4,6 +4,8 @@ namespace Tests\Repositories;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TimeEntry;
+use App\Models\User;
 use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -18,10 +20,13 @@ class TaskRepositoryTest extends TestCase
     /** @var TaskRepository */
     protected $taskRepo;
 
+    private $defaultUserId = 1;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->taskRepo = app(TaskRepository::class);
+        $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
@@ -35,13 +40,13 @@ class TaskRepositoryTest extends TestCase
 
         $createdTask = $this->taskRepo->store($task);
 
-        $getTask = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
-        $this->assertEquals($task['title'], $getTask->title);
-        $this->assertEquals($task['tags'][0], $getTask->tags[0]->id);
+        $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
+        $this->assertEquals($task['title'], $taskRecord->title);
+        $this->assertEquals($task['tags'][0], $taskRecord->tags[0]->id);
 
-        $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
-        collect($task['assignees'])->map(function ($userId) use ($pluckAssigneeIds) {
-            $this->assertContains($userId, $pluckAssigneeIds);
+        $assigneeIds = $taskRecord->taskAssignee->pluck('id');
+        collect($task['assignees'])->map(function ($userId) use ($assigneeIds) {
+            $this->assertContains($userId, $assigneeIds);
         });
     }
 
@@ -49,24 +54,24 @@ class TaskRepositoryTest extends TestCase
     public function test_can_update_task_with_tags_and_assignees()
     {
         $task = factory(Task::class)->create();
-        $prepareTask = factory(Task::class)
+        $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
             ->make([
                 'title'    => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
             ])->toArray();
 
-        $updatedTask = $this->taskRepo->update($prepareTask, $task->id);
+        $updatedTask = $this->taskRepo->update($preparedTask, $task->id);
 
         $this->assertTrue($updatedTask);
 
-        $getTask = Task::with(['tags', 'taskAssignee'])->findOrFail($task->id);
-        $this->assertEquals('random string', $getTask->title);
-        $this->assertEquals($prepareTask['tags'][0], $getTask->tags[0]->id);
+        $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($task->id);
+        $this->assertEquals('random string', $taskRecord->title);
+        $this->assertEquals($preparedTask['tags'][0], $taskRecord->tags[0]->id);
 
-        $pluckAssigneeIds = $getTask->taskAssignee->pluck('id');
-        collect($task['assignees'])->map(function ($userId) use ($pluckAssigneeIds) {
-            $this->assertContains($userId, $pluckAssigneeIds);
+        $assigneeIds = $taskRecord->taskAssignee->pluck('id');
+        collect($task['assignees'])->map(function ($userId) use ($assigneeIds) {
+            $this->assertContains($userId, $assigneeIds);
         });
     }
 
@@ -75,11 +80,11 @@ class TaskRepositoryTest extends TestCase
     {
         $tasks = factory(Task::class)->times(2)->create();
 
-        $getTask = $this->taskRepo->getTaskList();
+        $taskList = $this->taskRepo->getTaskList();
 
-        $this->assertCount(2, $getTask);
-        $tasks->map(function (Task $task) use ($getTask) {
-            $this->assertContains($task->title, $getTask);
+        $this->assertCount(2, $taskList);
+        $tasks->map(function (Task $task) use ($taskList) {
+            $this->assertContains($task->title, $taskList);
         });
     }
 
@@ -94,14 +99,105 @@ class TaskRepositoryTest extends TestCase
             'project_id' => $project->id,
         ]);
 
-        $getTask = $this->taskRepo->getTaskList([$project->id]);
+        $taskList = $this->taskRepo->getTaskList([$project->id]);
 
-        $this->assertCount(2, $getTask);
+        $this->assertCount(2, $taskList);
 
-        $taskIds = $getTask->keys();
-        $tasks->map(function (Task $task) use ($getTask, $taskIds) {
-            $this->assertContains($task->title, $getTask);
+        $taskIds = $taskList->keys();
+        $tasks->map(function (Task $task) use ($taskList, $taskIds) {
+            $this->assertContains($task->title, $taskList);
             $this->assertContains($task->id, $taskIds);
         });
+    }
+
+    /** @test */
+    public function it_can_add_comment()
+    {
+        $task = factory(Task::class)->create();
+        $comment = $this->taskRepo->addComment([
+            'comment' => 'random text',
+            'task_id' => $task->id,
+        ]);
+
+        $this->assertNotEmpty($comment);
+        $this->assertEquals('random text', $comment->comment);
+        $this->assertEquals($this->defaultUserId, $comment->createdUser->id);
+    }
+
+    /** @test */
+    public function test_can_return_unique_task_number()
+    {
+        $project = factory(Project::class)->create();
+        factory(Task::class)->create([
+            'project_id'  => $project->id,
+            'task_number' => 3,
+        ]);
+        $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
+
+        $this->assertNotEmpty($uniqueTaskNumber);
+        $this->assertEquals(4, $uniqueTaskNumber, '+1 index');
+    }
+
+    /** @test */
+    public function test_can_return_unique_task_number_one_when_no_tasks_on_given_project()
+    {
+        $project = factory(Project::class)->create();
+
+        $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
+
+        $this->assertNotEmpty($uniqueTaskNumber);
+        $this->assertEquals(1, $uniqueTaskNumber);
+    }
+
+    /** @test */
+    public function test_can_get_active_tasks_of_logged_in_user_for_given_project_id()
+    {
+        $farhan = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$farhan->id]);
+
+        $activeTask = factory(Task::class)->create();
+        $activeTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $completedTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $myTasks = $this->taskRepo->myTasks(['project_id' => $activeTask->project_id]);
+
+        $this->assertCount(1, $myTasks['tasks']);
+        $this->assertEquals($activeTask->id, $myTasks['tasks'][0]->id);
+        $this->assertEquals(Task::STATUS_ACTIVE, $myTasks['tasks'][0]->status);
+        $this->assertEquals($this->defaultUserId, $activeTask->fresh()->taskAssignee[0]->id);
+    }
+
+    /** @test */
+    public function test_can_get_active_task_of_logged_in_user()
+    {
+        $farhan = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$farhan->id]);
+
+        $activeTask = factory(Task::class)->create();
+        $activeTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $completedTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $myTasks = $this->taskRepo->myTasks();
+
+        $this->assertCount(1, $myTasks['tasks']);
+        $this->assertEquals($activeTask->id, $myTasks['tasks'][0]->id);
+        $this->assertEquals(Task::STATUS_ACTIVE, $myTasks['tasks'][0]->status);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_with_task_duration()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($timeEntry->task_id);
+
+        $this->assertEquals($timeEntry->task_id, $taskDetails->id);
+        $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
     }
 }

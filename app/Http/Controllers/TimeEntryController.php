@@ -39,7 +39,7 @@ class TimeEntryController extends AppBaseController
     {
         if ($request->ajax()) {
             return Datatables::of((new TimeEntryDataTable())->get(
-                $request->only('filter_activity', 'filter_user'))
+                $request->only('filter_activity', 'filter_user', 'filter_project'))
             )->make(true);
         }
 
@@ -92,7 +92,7 @@ class TimeEntryController extends AppBaseController
         if (empty($entry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
-        $input = $this->validateInput($request->all());
+        $input = $this->validateInput($request->all(), $timeEntry->id);
         $existEntry = $entry->only([
             'id',
             'task_id',
@@ -131,7 +131,7 @@ class TimeEntryController extends AppBaseController
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
-        return response()->json(['success' => true], 200);
+        return $this->sendSuccess('TimeEntry deleted successfully.');
     }
 
     /**
@@ -139,7 +139,7 @@ class TimeEntryController extends AppBaseController
      *
      * @return array|\Illuminate\Http\JsonResponse
      */
-    public function validateInput($input)
+    public function validateInput($input, $id = null)
     {
         $startTime = Carbon::parse($input['start_time']);
         $endTime = Carbon::parse($input['end_time']);
@@ -164,6 +164,8 @@ class TimeEntryController extends AppBaseController
         if ($input['duration'] < 1) {
             throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
         }
+
+        $this->timeEntryRepository->checkDuplicateEntry($input, $id);
 
         $input['user_id'] = getLoggedInUserId();
         if (!isset($input['note']) || empty($input['note'])) {
