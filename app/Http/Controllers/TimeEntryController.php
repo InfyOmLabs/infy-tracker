@@ -39,7 +39,7 @@ class TimeEntryController extends AppBaseController
     {
         if ($request->ajax()) {
             return Datatables::of((new TimeEntryDataTable())->get(
-                $request->only('filter_activity', 'filter_user'))
+                $request->only('filter_activity', 'filter_user', 'filter_project'))
             )->make(true);
         }
 
@@ -131,7 +131,7 @@ class TimeEntryController extends AppBaseController
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
-        return response()->json(['success' => true], 200);
+        return $this->sendSuccess('TimeEntry deleted successfully.');
     }
 
     /**
