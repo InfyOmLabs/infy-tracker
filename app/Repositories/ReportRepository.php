@@ -327,7 +327,7 @@ class ReportRepository extends BaseRepository
         }
 
         $hour = floor($minutes / 60);
-        $min = $minutes - $hour * 60;
+        $min = (int) ($minutes - $hour * 60);
         if ($min === 0) {
             return $hour.' hr';
         }
