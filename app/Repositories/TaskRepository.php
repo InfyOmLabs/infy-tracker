@@ -246,7 +246,7 @@ class TaskRepository extends BaseRepository
         $tagIds = [];
         foreach ($newTags as $tag) {
             $tagIds[] = Tag::create([
-                'name'       => $tag->name,
+                'name'       => $tag,
                 'created_by' => getLoggedInUserId(),
             ])->id;
         }

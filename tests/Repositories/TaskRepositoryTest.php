@@ -217,7 +217,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_attach_tags()
+    public function test_can_attach_task_with_tag_name()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -225,11 +225,28 @@ class TaskRepositoryTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->make();
 
-        $this->taskRepo->attachTags($task, [$tag]);
+        $this->taskRepo->attachTags($task, [$tag->name]);
 
         $attachedTag = $task->fresh()->tags;
         $this->assertNotEmpty($attachedTag);
 
         $this->assertEquals($tag->name, $attachedTag[0]['name']);
+    }
+
+    /** @test */
+    public function test_can_attach_task_with_tag_id()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create();
+
+        $this->taskRepo->attachTags($task, [$tag->id]);
+
+        $attachedTag = $task->fresh()->tags;
+        $this->assertNotEmpty($attachedTag);
+
+        $this->assertEquals($tag->id, $attachedTag[0]['id']);
     }
 }
