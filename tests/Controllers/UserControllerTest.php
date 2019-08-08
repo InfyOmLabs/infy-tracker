@@ -62,14 +62,14 @@ class UserControllerTest extends TestCase
     /** @test */
     public function test_can_delete_user()
     {
-        /** @var User $user */
-        $user = factory(User::class)->create();
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
 
-        $response = $this->deleteJson('users/'.$user->id);
+        $response = $this->deleteJson('users/'.$farhan->id);
 
         $this->assertSuccessMessageResponse($response, 'User deleted successfully.');
 
-        $response = $this->getJson('users/'.$user->id.'/edit');
+        $response = $this->getJson('users/'.$farhan->id.'/edit');
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
