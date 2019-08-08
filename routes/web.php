@@ -29,7 +29,7 @@ Route::get('activate', 'AuthController@verifyAccount');
 
 Route::post('set-password', 'AuthController@setPassword');
 
-Route::group(['middleware' => ['auth', 'validate.user','user.activated']], function () {
+Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/users-work-report', 'HomeController@workReport')->name('users-work-report');
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
