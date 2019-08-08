@@ -35,7 +35,7 @@ class HomeControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_retrieve_custom_report_of_logged_in_user()
+    public function test_can_retrieve_report_of_given_user()
     {
         $this->mockRepository();
 
@@ -46,17 +46,17 @@ class HomeControllerTest extends TestCase
         $endTime = $timeEntry->end_time;
         $userId = $timeEntry->user_id;
 
-        $this->dashboardRepository->shouldReceive('getWorkReport')
-            ->once()
+        $mockResponse = ['projects' => [$timeEntry->task->project->name]];
+        $this->dashboardRepository->shouldReceive('getWorkReport')->once()
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
                 'user_id'    => $userId,
-            ]);
+            ])->andReturn($mockResponse);
 
         $response = $this->getJson("/users-work-report?start_date=$startTime&end_date=$endTime&user_id=$userId");
 
-        $this->assertSuccessMessageResponse($response, 'Custom Report retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Custom Report retrieved successfully.');
     }
 
     /** @test */
@@ -70,15 +70,16 @@ class HomeControllerTest extends TestCase
         $startTime = $timeEntry->start_time;
         $endTime = $timeEntry->end_time;
 
+        $mockResponse = ['projects' => [$timeEntry->task->project->name]];
         $this->dashboardRepository->shouldReceive('getDeveloperWorkReport')
             ->once()
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
-            ]);
+            ])->andReturn($mockResponse);
 
         $response = $this->getJson("/developer-work-report?start_date=$startTime&end_date=$endTime");
 
-        $this->assertSuccessMessageResponse($response, 'Daily Work Report retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $mockResponse, 'Daily Work Report retrieved successfully.');
     }
 }
