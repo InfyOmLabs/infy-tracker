@@ -206,14 +206,14 @@ class TaskRepositoryTest extends TestCase
     public function test_can_update_task_status()
     {
         /** @var Task $task */
-        $task = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
 
         $updatedTaskStatus = $this->taskRepo->updateStatus($task->id);
 
         $this->assertTrue($updatedTaskStatus);
 
         $task = Task::findOrFail($task->id);
-        $this->assertEquals(Task::STATUS_ACTIVE, $task->status);
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
     }
 
     /** @test */
@@ -230,7 +230,6 @@ class TaskRepositoryTest extends TestCase
         $attachedTag = $task->fresh()->tags;
         $this->assertNotEmpty($attachedTag);
 
-        $tagName = json_decode($attachedTag[0]->name, true);
-        $this->assertEquals($tag->name, $tagName['name']);
+        $this->assertEquals($tag->name, $attachedTag[0]['name']);
     }
 }
