@@ -201,7 +201,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param Task    $task
      * @param Request $request
      *
      * @return JsonResponse
@@ -289,7 +289,8 @@ class TaskController extends AppBaseController
      *
      * @return array
      */
-    public function getTaskUsers(Task $task){
-        return $task->taskAssignee->pluck('name','id')->toArray();
+    public function getTaskUsers(Task $task)
+    {
+        return $task->taskAssignee->pluck('name', 'id')->toArray();
     }
 }
