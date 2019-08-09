@@ -202,12 +202,13 @@ class TaskController extends AppBaseController
 
     /**
      * @param Task $task
+     * @param Request $request
      *
      * @return JsonResponse
      */
-    public function getTaskDetails(Task $task)
+    public function getTaskDetails(Task $task, Request $request)
     {
-        $taskDetails = $this->taskRepository->getTaskDetails($task->id);
+        $taskDetails = $this->taskRepository->getTaskDetails($task->id, $request->all());
 
         return $this->sendResponse($taskDetails, 'Task retrieved successfully.');
     }
@@ -281,5 +282,14 @@ class TaskController extends AppBaseController
     public function getCommentsCount(Task $task)
     {
         return $this->sendResponse($task->comments()->count(), 'Comments count retrieved successfully.');
+    }
+
+    /**
+     * @param Task $task
+     *
+     * @return array
+     */
+    public function getTaskUsers(Task $task){
+        return $task->taskAssignee->pluck('name','id')->toArray();
     }
 }

@@ -18,6 +18,7 @@ $(function () {
     $('#assignee,#editAssignee').select2({
         width: '100%',
     });
+    $('#task_users').select2({width: '100%', minimumResultsForSearch: -1});
     $('#tagIds,#editTagIds').select2({
         width: '100%',
         tags: true,
@@ -254,42 +255,82 @@ $(document).on('click', '.taskDetails', function (event) {
     startLoader();
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
+
+    $.ajax({
+        url: taskUrl + id + '/' + 'task-users',
+        type: 'GET',
+        success: function (result) {
+            $('#task_users').html('');
+            $('#task_users').attr('data-task_id',id);
+            var newOption = new Option('Select User', 0, false, false);
+            $('#task_users').append(newOption).trigger('change');
+            $.each(result, function (key, value) {
+                var newOption = new Option(value, key +'-'+ id, false, false);
+                $('#task_users').append(newOption);
+            });
+        }
+    });
+
     $.ajax({
         url: taskDetailUrl + '/' + id,
         type: 'GET',
         success: function (result) {
             if (result.success) {
                 let data = result.data;
-                 stopLoader();
-                if (data.totalDuration === 0) {
-                    $('#no-record-info-msg').show();
-                    return true;
-                } else {
-                    $('#taskDetailsTable').show();
-                }
-                var table = $("#taskDetailsTable tbody").html("");
-                $.each(data.time_entries, function (idx, elem) {
-                    table.append(
-                        "<tr>" +
-                        "<td id='tdCollapse" + elem.id + "' onclick='manageCollapseIcon(" + JSON.stringify(elem.id) + ")' class='clickable' data-toggle='collapse' data-target='#collapse" + elem.id + "' aria-expanded='false' aria-controls='collapse" + elem.id + "'>" +
-                        "<a title='Expand' class='btn btn-success action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a></td>" +
-                        "<td>" + elem.user.name + "</td>" +
-                        "<td>" + elem.start_time + "</td>" +
-                        "<td>" + elem.end_time + "</td>" +
-                        "<td>" + elem.duration + "</td>" +
-                        "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
-                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
-                        "</tr>"
-                    );
-                    table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
-                        "<b>Notes: </b><pre>" + elem.note + "</pre>" +
-                        "</div></td></tr>");
-                });
-                table.append("<tr><td colspan='6'><b>Total Duration : " + data.totalDuration + "</b></td></tr>");
+                drawTaskDetailTable(data);
             }
         }
     });
 });
+
+$(document).on('change','#task_users', function () {
+    let taskId = $(this).attr('data-task_id');
+    let taskUserId = $(this).val().split('-');
+    let userId = 0;
+    if(taskUserId.length > 1) {
+        taskId = taskUserId[1];
+        userId = taskUserId[0];
+    }
+    $.ajax({
+        url: taskDetailUrl + '/' + taskId + '?user_id=' + userId,
+        type: 'GET',
+        success: function (result) {
+            if (result.success) {
+                let data = result.data;
+                drawTaskDetailTable(data);
+            }
+        }
+    });
+});
+
+window.drawTaskDetailTable = function (data) {
+    stopLoader();
+    if (data.totalDuration === 0) {
+        $('#no-record-info-msg').show();
+        return true;
+    } else {
+        $('#taskDetailsTable').show();
+    }
+    var table = $("#taskDetailsTable tbody").html("");
+    $.each(data.time_entries, function (idx, elem) {
+        table.append(
+            "<tr>" +
+            "<td id='tdCollapse" + elem.id + "' onclick='manageCollapseIcon(" + JSON.stringify(elem.id) + ")' class='clickable' data-toggle='collapse' data-target='#collapse" + elem.id + "' aria-expanded='false' aria-controls='collapse" + elem.id + "'>" +
+            "<a title='Expand' class='btn btn-success action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a></td>" +
+            "<td>" + elem.user.name + "</td>" +
+            "<td>" + elem.start_time + "</td>" +
+            "<td>" + elem.end_time + "</td>" +
+            "<td>" + elem.duration + "</td>" +
+            "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
+            "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
+            "</tr>"
+        );
+        table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
+            "<b>Notes: </b><pre>" + elem.note + "</pre>" +
+            "</div></td></tr>");
+    });
+    table.append("<tr><td colspan='6'><b>Total Duration : " + data.totalDuration + "</b></td></tr>");
+}
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
@@ -457,7 +498,6 @@ $(document).on('click', '.entry-model', function (event) {
     getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
 
     setTimeout(function () {
-        console.log(taskId);
         $('#taskId').val(taskId).trigger("change");
     }, 1500);
 });

@@ -9,6 +9,9 @@
             <div class="modal-body" style="overflow: auto">
                 @include('loader')
                 <div class="alert alert-info" id="no-record-info-msg">No time entries found for this task</div>
+                <div class="mb-2">
+                    {!!Form::select('task_users',[],null,['id'=>'task_users','class'=>'form-control','style'=>'min-width:300px;', 'placeholder' => 'Select Users'])  !!}
+                </div>
                 <table class="table table-responsive-sm table-striped table-bordered" id="taskDetailsTable">
                     <thead>
                     <tr>

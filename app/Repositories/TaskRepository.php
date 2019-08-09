@@ -12,7 +12,6 @@ use Auth;
 use Carbon\Carbon;
 use DB;
 use Exception;
-use File;
 use Illuminate\Database\Eloquent\Builder;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -258,9 +257,16 @@ class TaskRepository extends BaseRepository
      *
      * @return Task
      */
-    public function getTaskDetails($id)
+    public function getTaskDetails($id, $input = [])
     {
-        $task = Task::with('timeEntries.user')->findOrFail($id);
+        if(isset($input['user_id']) && $input['user_id'] > 0) {
+            $task = Task::with(['timeEntries' => function ($query) use($input) {
+                $query->where('time_entries.user_id', '=', $input['user_id'])
+                    ->with('user');
+            }])->findOrFail($id);
+        } else {
+            $task = Task::with('timeEntries.user')->findOrFail($id);
+        }
 
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
