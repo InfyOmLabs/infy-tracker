@@ -3,6 +3,7 @@
 namespace Tests\Repositories;
 
 use App\Models\TimeEntry;
+use App\Models\User;
 use App\Repositories\DashboardRepository;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -26,10 +27,10 @@ class DashboardRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_get_start_of_the_day_and_end_of_the_day_from_given_date_with_between_days()
+    public function test_should_return_start_of_the_day_and_end_of_the_day_dates_with_dates_between_it()
     {
-        $startDate = date('Y-m-d h:i:s');
-        $endDate = date('Y-m-d h:i:s', strtotime($startDate.'+3 days'));
+        $startDate = date('Y-m-d H:i:s');
+        $endDate = date('Y-m-d H:i:s', strtotime($startDate.'+3 days'));
 
         $date = $this->dashboardRepo->getDate($startDate, $endDate);
 
@@ -37,6 +38,13 @@ class DashboardRepositoryTest extends TestCase
         $endOfDate = Carbon::parse($endDate)->endOfDay();
 
         $this->assertCount(4, $date['dateArr'], 'start date + 3days');
+
+        $startDate = Carbon::parse($startDate)->format('Y-m-d');
+        foreach ($date['dateArr'] as $dateValue) {
+            $this->assertEquals($startDate, $dateValue);
+            $startDate = date('Y-m-d', strtotime($startDate.'+1 days'));
+        }
+
         $this->assertEquals($starOfDate, $date['startDate']);
         $this->assertEquals($endOfDate, $date['endDate']);
     }
@@ -46,6 +54,7 @@ class DashboardRepositoryTest extends TestCase
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
+        $differentTimeEntry = factory(TimeEntry::class)->create();
 
         $input = [
             'start_date' => $timeEntry->start_time,
@@ -59,6 +68,7 @@ class DashboardRepositoryTest extends TestCase
         $this->assertEquals($starDate, $workReport['date'][0]);
 
         $projectName = $timeEntry->task->project->name;
+        $this->assertCount(1, $workReport['projects']);
         $this->assertEquals($projectName, $workReport['projects'][0]);
 
         $this->assertEquals($projectName, $workReport['data'][0]->label);
@@ -68,12 +78,15 @@ class DashboardRepositoryTest extends TestCase
 
         $this->assertEquals($timeEntry->duration, $workReport['totalRecords']);
 
-        $datePeriod = Carbon::parse($input['start_date'])->format('d M, Y').' - '.Carbon::parse($input['end_date'])->format('d M, Y');
+        $datePeriod = Carbon::parse($input['start_date'])
+                ->format('d M, Y').' - '.Carbon::parse($input['end_date'])
+                ->format('d M, Y');
+
         $this->assertEquals($datePeriod, $workReport['label']);
     }
 
     /** @test */
-    public function test_can_get_work_developer_daily_work_report_of_user_between_given_date()
+    public function test_can_get_work_developer_daily_work_report_of_all_user_between_given_date()
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -85,8 +98,6 @@ class DashboardRepositoryTest extends TestCase
 
         $workReport = $this->dashboardRepo->getDeveloperWorkReport($input);
 
-        $this->assertEquals($timeEntry->user->name, $workReport['result'][1]->name);
-
         $totalHours = round($timeEntry->duration / 60, 2);
         $this->assertEquals($totalHours, $workReport['result'][1]->total_hours);
 
@@ -94,6 +105,37 @@ class DashboardRepositoryTest extends TestCase
 
         $hours = Arr::pluck($workReport['result'], 'total_hours');
         $this->assertEquals($hours[1], $workReport['data']['data'][1]);
+
+        $this->assertEquals($totalHours, $workReport['totalRecords']);
+
+        $day = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
+        $this->assertEquals($day, $workReport['label']);
+    }
+
+    /** @test */
+    public function test_can_get_work_developer_daily_work_report_of_logged_in_user_between_given_date()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
+
+        /** @var TimeEntry $timeEntry */
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $user->id]);
+
+        $input = [
+            'start_date' => $timeEntry->start_time,
+            'end_date'   => $timeEntry->end_time,
+        ];
+
+        $workReport = $this->dashboardRepo->getDeveloperWorkReport($input);
+
+        $totalHours = round($timeEntry->duration / 60, 2);
+        $this->assertEquals($totalHours, $workReport['result'][0]->total_hours);
+
+        $this->assertEquals($timeEntry->user->name, $workReport['result'][0]->name);
+
+        $hours = Arr::pluck($workReport['result'], 'total_hours');
+        $this->assertEquals($hours[0], $workReport['data']['data'][0]);
 
         $this->assertEquals($totalHours, $workReport['totalRecords']);
 
