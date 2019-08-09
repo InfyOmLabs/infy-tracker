@@ -217,7 +217,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_attach_task_with_tag_name()
+    public function test_tags_are_created_and_attached_to_given_task()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -234,7 +234,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_attach_task_with_tag_id()
+    public function test_existing_tags_are_attached_to_given_task()
     {
         /** @var Task $task */
         $task = factory(Task::class)->create();
