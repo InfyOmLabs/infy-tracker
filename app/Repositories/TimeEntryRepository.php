@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Class TimeEntryRepository.
@@ -110,6 +111,11 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function getTimeEntryDetail($id)
     {
         $result = TimeEntry::leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
@@ -120,6 +126,12 @@ class TimeEntryRepository extends BaseRepository
         return $result;
     }
 
+    /**
+     * @param array $input
+     * @param int   $id
+     *
+     * @return bool
+     */
     public function updateTimeEntry($input, $id)
     {
         $timeEntry = $this->find($id);
@@ -132,5 +144,29 @@ class TimeEntryRepository extends BaseRepository
         $this->update($input, $id);
 
         return true;
+    }
+
+    /**
+     * @param $input
+     * @param null $id
+     */
+    public function checkDuplicateEntry($input, $id = null)
+    {
+        $timeArr = [$input['start_time'], $input['end_time']];
+        $query = TimeEntry::whereUserId(getLoggedInUserId())
+            ->where(function ($q) use ($timeArr) {
+                $q->whereBetween('start_time', $timeArr)
+                    ->orWhereBetween('end_time', $timeArr)
+                    ->orWhereRaw("('$timeArr[0]' between start_time and end_time or '$timeArr[1]' between start_time and end_time)");
+            });
+
+        if (!empty($id) && $id > 0) {
+            $query->where('id', '!=', $id);
+        }
+
+        $timeEntry = $query->first();
+        if (!empty($timeEntry)) {
+            throw new BadRequestHttpException('Time entry between this duration already exist.');
+        }
     }
 }

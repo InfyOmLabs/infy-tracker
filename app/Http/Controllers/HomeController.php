@@ -11,6 +11,8 @@ class HomeController extends AppBaseController
 {
     /** @var DashboardRepository $dashboardRepo */
     private $dashboardRepo;
+
+    /** @var UserRepository $userRepository */
     private $userRepository;
 
     /**

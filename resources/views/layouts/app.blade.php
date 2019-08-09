@@ -41,7 +41,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link" style="margin-right: 10px" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">
-                <img src="{{ asset('assets/img/user-avatar.png') }}" alt="" class="img-avatar">
+                <img src="{{ Auth::user()->image_path }}" alt="" class="img-avatar">
                 <span class="pr-3 align-middle">{!! Auth::user()->name !!}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -111,6 +111,7 @@
     let reporstUrl = "{{ url('reports') }}";
     let usersOfProjects = "{{ url('users-of-projects') }}";
     let projectsOfClient = "{{ url('projects-of-client') }}";
+    let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')
@@ -118,7 +119,6 @@
 <script src="{{ mix('assets/js/profile/profile.js') }}"></script>
 <script>
     var loginUrl = '{{ route('login') }}';
-
     // Loading button plugin (removed from BS4)
     (function ($) {
         $.fn.button = function (action) {
@@ -130,5 +130,6 @@
             }
         };
     }(jQuery));
+
 </script>
 </html>

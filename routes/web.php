@@ -47,12 +47,14 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
     });
 
     Route::middleware('permission:manage_users')->group(function () {
-        Route::post('users/profile-update', 'UserController@profileUpdate');
         Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
         Route::resource('users', 'UserController');
         Route::post('users/{user}/update', 'UserController@update')->where('user', '\d+');
         Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
     });
+
+    Route::get('users/{user}/edit', 'UserController@edit');
+    Route::post('users/profile-update', 'UserController@profileUpdate');
 
     Route::middleware('permission:manage_tags')->group(function () {
         Route::resource('tags', 'TagController');
@@ -75,12 +77,11 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::post('tasks/{task}/comments/{comment}/update', 'CommentController@editComment');
         Route::delete('tasks/{task}/comments/{comment}', 'CommentController@deleteComment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails');
+        Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount');
     });
 
-    Route::middleware('permission:manage_time_entries')->group(function () {
-        Route::resource('time-entries', 'TimeEntryController');
-        Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
-    });
+    Route::resource('time-entries', 'TimeEntryController');
+    Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
 
     Route::middleware('permission:manage_reports')->group(function () {
         Route::post('reports/{report}', 'ReportController@update');

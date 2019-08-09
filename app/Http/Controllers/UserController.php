@@ -11,10 +11,8 @@ use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use Auth;
 use Crypt;
 use DataTables;
-use Hash;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,12 +21,15 @@ class UserController extends AppBaseController
 {
     /** @var UserRepository */
     private $userRepository;
+
     /** @var ProjectRepository */
     private $projectRepository;
+
     /**
      * @var AccountRepository
      */
     private $accountRepository;
+
     /** @var RoleRepository */
     private $roleRepository;
 
@@ -203,12 +204,8 @@ class UserController extends AppBaseController
     public function profileUpdate(UpdateUserProfileRequest $request)
     {
         $input = $request->all();
-        if (isset($input['password']) && !empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            unset($input['password']);
-        }
-        $this->userRepository->update($input, Auth::user()->id);
+
+        $this->userRepository->profileUpdate($input);
 
         return $this->sendSuccess('Profile updated successfully.');
     }

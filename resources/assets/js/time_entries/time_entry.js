@@ -10,7 +10,7 @@ $('#timeProjectId,#editTimeProjectId').select2({
     placeholder: "Select Project"
 });
 
-$('#filterActivity,#filterUser').select2({
+$('#filterActivity,#filterUser,#filter_project').select2({
     minimumResultsForSearch: -1
 });
 
@@ -28,6 +28,7 @@ let tbl = $('#timeEntryTable').DataTable({
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
+            data.filter_project = $('#filter_project').find('option:selected').val();
             data.filter_activity = $('#filterActivity').find('option:selected').val();
             data.filter_user = $('#filterUser').find('option:selected').val();
         }
@@ -114,11 +115,14 @@ let tbl = $('#timeEntryTable').DataTable({
         },
     ],
     "fnInitComplete": function () {
-        $('#filterActivity,#filterUser,#filterTask').change(function () {
+        $('#filterActivity,#filterUser,#filterTask,#filter_project').change(function () {
             tbl.ajax.reload();
         });
     }
 });
+if (!canManageEntries) {
+    tbl.columns([0]).visible(false);
+}
 
 $('#timeEntryTable').on('draw.dt', function () {
     $('[data-toggle="tooltip"]').tooltip();
@@ -190,6 +194,9 @@ $('#editStartTime,#editEndTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
+        if (!Number.isInteger(minutes))  {
+            minutes = minutes.toFixed(2);
+        }
     }
     $('#editDuration').val(minutes).prop('disabled', true);
 });

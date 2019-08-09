@@ -22,6 +22,8 @@ class TaskController extends AppBaseController
 {
     /** @var TaskRepository */
     private $taskRepository;
+
+    /** @var UserRepository $userRepo */
     private $userRepo;
 
     public function __construct(TaskRepository $taskRepo, UserRepository $userRepository)
@@ -76,8 +78,8 @@ class TaskController extends AppBaseController
     {
         $input = $request->all();
         /** @var Task $task */
-        $indexNumber = $this->taskRepository->getIndex($input['project_id']);
-        $input['task_number'] = $indexNumber;
+        $uniqueTaskNumber = $this->taskRepository->getUniqueTaskNumber($input['project_id']);
+        $input['task_number'] = $uniqueTaskNumber;
         $this->taskRepository->store($this->fill($input));
 
         return $this->sendSuccess('Task created successfully.');
@@ -177,7 +179,7 @@ class TaskController extends AppBaseController
     public function destroy(Task $task)
     {
         if ($task->timeEntries()->count() > 0) {
-            return $this->sendError('Task has one or more time entries');
+            return $this->sendError('Task has one or more time entries.');
         }
 
         $task->update(['deleted_by' => getLoggedInUserId()]);
@@ -213,14 +215,14 @@ class TaskController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return array
+     * @return JsonResponse
      */
     public function myTasks(Request $request)
     {
         $input = $request->only('project_id');
         $timerDetails = $this->taskRepository->myTasks($input);
 
-        return $timerDetails;
+        return $this->sendResponse($timerDetails, 'My tasks retrieved successfully.');
     }
 
     /**
@@ -269,5 +271,15 @@ class TaskController extends AppBaseController
         $result = $this->taskRepository->getAttachments($task->id);
 
         return $this->sendResponse($result, 'Task retrieved successfully.');
+    }
+
+    /**
+     * @param Task $task
+     *
+     * @return JsonResponse
+     */
+    public function getCommentsCount(Task $task)
+    {
+        return $this->sendResponse($task->comments()->count(), 'Comments count retrieved successfully.');
     }
 }
