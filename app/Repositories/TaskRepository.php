@@ -259,8 +259,8 @@ class TaskRepository extends BaseRepository
      */
     public function getTaskDetails($id, $input = [])
     {
-        if(isset($input['user_id']) && $input['user_id'] > 0) {
-            $task = Task::with(['timeEntries' => function ($query) use($input) {
+        if (isset($input['user_id']) && $input['user_id'] > 0) {
+            $task = Task::with(['timeEntries' => function ($query) use ($input) {
                 $query->where('time_entries.user_id', '=', $input['user_id'])
                     ->with('user');
             }])->findOrFail($id);
