@@ -119,9 +119,9 @@ class UserControllerTest extends TestCase
 
         $this->mockRepository();
 
-        $this->userRepo->shouldReceive('update')
+        $this->userRepo->shouldReceive('profileUpdate')
             ->once()
-            ->with($user->toArray(), getLoggedInUserId());
+            ->with($user->toArray());
 
         $response = $this->postJson('users/profile-update', $user->toArray());
 
