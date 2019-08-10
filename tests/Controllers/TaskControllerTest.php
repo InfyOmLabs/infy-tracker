@@ -132,7 +132,7 @@ class TaskControllerTest extends TestCase
 
         $this->taskRepository->shouldReceive('getTaskDetails')
             ->once()
-            ->with($task->id)
+            ->with($task->id,[])
             ->andReturn($task->toArray());
 
         $response = $this->getJson("task-details/$task->id");
