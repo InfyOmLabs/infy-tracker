@@ -473,12 +473,9 @@ table.dataTable {
     position: fixed;
     height: 50px;
     bottom: 0;
-    width: 100%;
     z-index: 2;
-}
-
-.powered-by {
-    margin-right: 11%;
+    left: 0;
+    right: 0;
 }
 
 .modal-content {
