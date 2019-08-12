@@ -8,12 +8,11 @@
             </div>
             <div class="modal-body task-detail__body">
                 @include('loader')
-                <div class="alert alert-info" id="no-record-info-msg">No time entries found for this task</div>
-                <div class="row no-gutters" id="taskDetailsTable">
-                    <div class="col-4 offset-8 mb-2">
+                <div class="row no-gutters">
+                    <div class="col-4 offset-8 mb-2" id="user-drop-down-body">
                         {!!Form::select('task_users',[],null,['id'=>'task_users','class'=>'form-control'])  !!}
                     </div>
-                    <table class="col-12 table table-responsive-sm table-striped table-bordered">
+                    <table class="col-12 table table-responsive-sm table-striped table-bordered" id="taskDetailsTable">
                         <thead>
                         <tr>
                             <th></th>
@@ -27,6 +26,7 @@
                         <tbody></tbody>
                     </table>
                 </div>
+                <div class="alert alert-info" id="no-record-info-msg">No time entries found for this task</div>
             </div>
         </div>
     </div>

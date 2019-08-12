@@ -1,6 +1,7 @@
 $(function () {
     $('#no-record-info-msg').hide();
-    $('#task_users').select2({ width: '100%', placeholder: "Select User", minimumResultsForSearch: -1 });
+    $('#user-drop-down-body').hide();
+    $('#task_users').select2({ width: '100%', placeholder: "All", minimumResultsForSearch: -1 });
 
     $('#filter_project,#filter_status,#filter_user').select2({
         minimumResultsForSearch: -1
@@ -263,7 +264,7 @@ $(document).on('click', '.taskDetails', function (event) {
         success: function (result) {
             $('#task_users').empty('');
             $('#task_users').attr('data-task_id', id);
-            const newOption = new Option('Select User', 0, false, false);
+            const newOption = new Option('All', 0, false, false);
             $('#task_users').append(newOption).trigger('change');
             $.each(result, function (key, value) {
                 const newOption = new Option(value, key + '-' + id, false, false);
@@ -292,8 +293,12 @@ $(document).on('change', '#task_users', function () {
         taskId = taskUserId[1];
         userId = taskUserId[0];
     }
+    let url =  taskDetailUrl + '/' + taskId
+    if (userId !== 0) {
+        url = url + '?user_id=' + userId
+    }
     $.ajax({
-        url: taskDetailUrl + '/' + taskId + '?user_id=' + userId,
+        url: url,
         type: 'GET',
         success: function (result) {
             if (result.success) {
@@ -308,9 +313,12 @@ window.drawTaskDetailTable = function (data) {
     stopLoader();
     if (data.totalDuration === 0) {
         $('#no-record-info-msg').show();
+        $('#taskDetailsTable').hide();
         return true;
     } else {
         $('#taskDetailsTable').show();
+        $('#user-drop-down-body').show();
+        $('#no-record-info-msg').hide();
     }
     var table = $("#taskDetailsTable tbody").html("");
     let totalMin = 0;
