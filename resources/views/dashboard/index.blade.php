@@ -16,23 +16,32 @@
             @include('flash::message')
             <div class="page-header">
                 <h3>Dashboard</h3>
-                <div id="rightData" class="d-flex align-items-center">
-                    @permission('manage_users')
-                    <div class="mr-4">
-                        {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
-                    </div>
-                    @endpermission
-                    <div id="time_range" class="time_range">
-                        <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
-                            class="caret"></b>
-                    </div>
-                </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <h5>Custom Report</h5>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h5>Custom Report</h5>
+                                </div>
+                                <div class="col-4">
+                                    <div class="row">
+                                        @permission('manage_users')
+                                        <div class="col-5">
+                                            {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
+                                        </div>
+                                        @endpermission
+                                        <div class="col-7">
+                                            <div id="time_range" class="time_range">
+                                                <i class="far fa-calendar-alt"
+                                                   aria-hidden="true"></i>&nbsp;&nbsp;<span></span> <b
+                                                    class="caret"></b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="work-report-container" class="pt-2">
                                 <canvas id="daily-work-report"></canvas>
                             </div>

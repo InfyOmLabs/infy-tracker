@@ -537,8 +537,9 @@ $(document).on('change', '#editProjectId', function (event) {
 });
 
 function loadProjectAssignees(projectId, selector) {
-    let url = usersOfProjects + '?projectIds=' + projectId;
-    $('#' + selector).empty();
+    let url = usersOfProjects + '?projectIds='+projectId;
+    $('#'+selector).empty();
+    $('#'+selector).trigger("change");
     $.ajax({
         url: url,
         type: 'GET',

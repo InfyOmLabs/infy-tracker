@@ -260,8 +260,8 @@ function addCommentSection(comment) {
         '                <a>'+ comment.created_user.name +'</a>\n' +
         '                    <a class="user__icons del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
         '                    <a class="user__icons edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
-        '                    <a class="pull-right save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
-        '                    <a class="pull-right cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="user__icons save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        '                    <a class="user__icons cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
         '            </span>\n' +
         '            <span class="user__description">just now</span>\n' +
         '        </div>\n' +
