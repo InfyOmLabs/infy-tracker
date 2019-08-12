@@ -41,7 +41,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link" style="margin-right: 10px" data-toggle="dropdown" href="#" role="button"
                aria-haspopup="true" aria-expanded="false">
-                <img src="{{ asset('assets/img/user-avatar.png') }}" alt="" class="img-avatar">
+                <img src="{{ Auth::user()->image_path }}" alt="" class="img-avatar">
                 <span class="pr-3 align-middle">{!! Auth::user()->name !!}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
@@ -74,12 +74,12 @@
 
 @include('time_tracker.index');
 
-<footer class="app-footer">
+<footer class="app-footer justify-content-between">
     <div>
         <a href="https://infyom.com">InfyOm </a>
         <span>&copy; 2019 InfyOmLabs.</span>
     </div>
-    <div class="ml-auto powered-by">
+    <div>
         <span>Powered by</span>
         <a href="https://coreui.io">CoreUI</a>
     </div>
@@ -119,7 +119,6 @@
 <script src="{{ mix('assets/js/profile/profile.js') }}"></script>
 <script>
     var loginUrl = '{{ route('login') }}';
-
     // Loading button plugin (removed from BS4)
     (function ($) {
         $.fn.button = function (action) {
@@ -131,5 +130,6 @@
             }
         };
     }(jQuery));
+
 </script>
 </html>

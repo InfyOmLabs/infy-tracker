@@ -473,16 +473,28 @@ table.dataTable {
     position: fixed;
     height: 50px;
     bottom: 0;
-    width: 100%;
     z-index: 2;
-}
-
-.powered-by {
-    margin-right: 11%;
+    left: 0;
+    right: 0;
 }
 
 .modal-content {
     border-radius: 5px !important;
+}
+
+.edit-profile__file-upload {
+    padding: 10px;
+    background: #20a8d8;
+    display: table;
+    color: $white;
+    border-radius: .25rem;
+    border-color: #20a8d8;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #1985ac;
+        border-color: #187da0
+    }
 }
 
 .check-icon {
@@ -534,3 +546,7 @@ table.dataTable {
     }
 }
 
+.task-detail__body {
+    overflow-y: auto;
+    max-height: 750px;
+}

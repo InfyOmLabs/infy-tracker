@@ -1,7 +1,7 @@
 {
   "name": "infyomlabs/infy-tracker",
   "type": "project",
-  "version": "1.5.4-alpha",
+  "version": "1.6.0-alpha",
   "description": "Create Projects / Tasks, Track Time, Show Daily Reports",
     "keywords": [
       "time",
@@ -23,6 +23,7 @@
         "infyomlabs/swagger-generator": "dev-master",
         "laravelcollective/html": "^5.8.0",
         "yajra/laravel-datatables-oracle": "~9.0",
+        "intervention/image": "^2.4",
         "zizaco/entrust": "dev-master"
     },
     "require-dev": {
