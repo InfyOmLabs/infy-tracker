@@ -75,9 +75,8 @@ return [
             'ssl'          => getenv('FTP_SSL'),
             'passive'      => getenv('FTP_PASSIVE'),
             'timeout'      => getenv('FTP_TIMEOUT'),
-            'url'    => env('FTP_IMAGE_DOMAIN').'/uploads',
+            'url'          => env('FTP_IMAGE_DOMAIN').'/uploads',
         ],
-
     ],
 
 ];
