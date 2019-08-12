@@ -78,7 +78,7 @@ Route::group(['middleware' => ['auth', 'validate.user']], function () {
         Route::delete('tasks/{task}/comments/{comment}', 'CommentController@deleteComment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails');
         Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount');
-        Route::get('tasks/{task}/task-users', 'TaskController@getTaskUsers');
+        Route::get('tasks/{task}/users', 'TaskController@getTaskUsers');
     });
 
     Route::resource('time-entries', 'TimeEntryController');

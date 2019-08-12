@@ -1,5 +1,7 @@
 $(function () {
     $('#no-record-info-msg').hide();
+    $('#task_users').select2({ width: '100%', placeholder: "Select User", minimumResultsForSearch: -1 });
+
     $('#filter_project,#filter_status,#filter_user').select2({
         minimumResultsForSearch: -1
     });
@@ -18,13 +20,12 @@ $(function () {
     $('#assignee,#editAssignee').select2({
         width: '100%',
     });
-    $('#task_users').select2({width: '100%', minimumResultsForSearch: -1});
     $('#tagIds,#editTagIds').select2({
         width: '100%',
         tags: true,
         createTag: function (tag) {
-            var found = false;
-            $("#tagIds option").each(function() {
+            let found = false;
+            $("#tagIds option").each(function () {
                 if ($.trim(tag.term).toUpperCase() === $.trim($(this).text()).toUpperCase()) {
                     found = true;
                 }
@@ -124,7 +125,7 @@ var tbl = $('#task_table').DataTable({
             data: function (row) {
                 let imgStr = '';
                 $(row.task_assignee).each(function (i, e) {
-                    imgStr += '<img class="assignee__avatar" src="'+e.img_avatar+'" data-toggle="tooltip" title="'+e.name+'">';
+                    imgStr += '<img class="assignee__avatar" src="' + e.img_avatar + '" data-toggle="tooltip" title="' + e.name + '">';
                 });
 
                 return imgStr;
@@ -135,7 +136,7 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                if(row.due_date != null && row.due_date != '' && typeof row.due_date != 'undefined'){
+                if (row.due_date != null && row.due_date != '' && typeof row.due_date != 'undefined') {
                     return '<span>' + format(row.due_date) + '</span>';
                 }
                 return row.due_date;
@@ -153,8 +154,8 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                if(row.created_user) {
-                    return '<img class="assignee__avatar" src="'+row.created_user.img_avatar+'" data-toggle="tooltip" title="'+row.created_user.name+'">';
+                if (row.created_user) {
+                    return '<img class="assignee__avatar" src="' + row.created_user.img_avatar + '" data-toggle="tooltip" title="' + row.created_user.name + '">';
                 } else {
                     return '';
                 }
@@ -166,9 +167,9 @@ var tbl = $('#task_table').DataTable({
                 $.each(row.task_assignee, function (key, value) {
                     taskAssignee.push(value.id);
                 });
-                let actionString  =
+                let actionString =
                     '<a title="Details" data-toggle="modal" class="btn action-btn btn-info btn-sm taskDetails mr-1"  data-target="#taskDetailsModal" data-id="' + row.id + '"> ' +
-                    '<i class="fa fa-clock action-icon"></i></a>'+
+                    '<i class="fa fa-clock action-icon"></i></a>' +
                     '<a title="Edit" class="btn action-btn btn-primary btn-sm mr-1 edit-btn" data-id="' + row.id + '">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-task-delete" data-task-id="' + row.id + '">' +
@@ -229,7 +230,7 @@ $(document).on('click', '.edit-btn', function (event) {
                 $("#editPriority").val(task.priority).trigger('change');
 
                 setTimeout(function () {
-                    $.each(task.task_assignee, function(i,e){
+                    $.each(task.task_assignee, function (i, e) {
                         $("#editAssignee option[value='" + e.id + "']").prop("selected", true).trigger('change');
                     });
                     $('#EditModal').modal('show');
@@ -257,15 +258,15 @@ $(document).on('click', '.taskDetails', function (event) {
     $('#taskDetailsTable').hide();
 
     $.ajax({
-        url: taskUrl + id + '/' + 'task-users',
+        url: taskUrl + id + '/' + 'users',
         type: 'GET',
         success: function (result) {
-            $('#task_users').html('');
-            $('#task_users').attr('data-task_id',id);
-            var newOption = new Option('Select User', 0, false, false);
+            $('#task_users').empty('');
+            $('#task_users').attr('data-task_id', id);
+            const newOption = new Option('Select User', 0, false, false);
             $('#task_users').append(newOption).trigger('change');
             $.each(result, function (key, value) {
-                var newOption = new Option(value, key +'-'+ id, false, false);
+                const newOption = new Option(value, key + '-' + id, false, false);
                 $('#task_users').append(newOption);
             });
         }
@@ -283,11 +284,11 @@ $(document).on('click', '.taskDetails', function (event) {
     });
 });
 
-$(document).on('change','#task_users', function () {
+$(document).on('change', '#task_users', function () {
     let taskId = $(this).attr('data-task_id');
     let taskUserId = $(this).val().split('-');
     let userId = 0;
-    if(taskUserId.length > 1) {
+    if (taskUserId.length > 1) {
         taskId = taskUserId[1];
         userId = taskUserId[0];
     }
@@ -312,7 +313,9 @@ window.drawTaskDetailTable = function (data) {
         $('#taskDetailsTable').show();
     }
     var table = $("#taskDetailsTable tbody").html("");
+    let totalMin = 0;
     $.each(data.time_entries, function (idx, elem) {
+        totalMin = totalMin + elem.duration;
         table.append(
             "<tr>" +
             "<td id='tdCollapse" + elem.id + "' onclick='manageCollapseIcon(" + JSON.stringify(elem.id) + ")' class='clickable' data-toggle='collapse' data-target='#collapse" + elem.id + "' aria-expanded='false' aria-controls='collapse" + elem.id + "'>" +
@@ -329,8 +332,11 @@ window.drawTaskDetailTable = function (data) {
             "<b>Notes: </b><pre>" + elem.note + "</pre>" +
             "</div></td></tr>");
     });
-    table.append("<tr><td colspan='6'><b>Total Duration : " + data.totalDuration + "</b></td></tr>");
-}
+    table.append("<tr>" +
+        "<td colspan='3'><strong>Total duration in hours : " + data.totalDuration + "</strong></td>" +
+        "<td colspan='3'><strong>Total duration in minutes:" + totalMin + "</strong></td>" +
+        "</tr>");
+};
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
@@ -339,7 +345,7 @@ $('#addNewForm').submit(function (event) {
 
     let formdata = $(this).serialize();
     let desc = CKEDITOR.instances.description.getData();
-    formdata = formdata.replace("description=", "description="+desc);
+    formdata = formdata.replace("description=", "description=" + desc);
     $.ajax({
         url: createTaskUrl,
         type: 'POST',
@@ -369,7 +375,7 @@ $('#editForm').submit(function (event) {
     let formdata = $(this).serializeArray();
     let desc = CKEDITOR.instances.editDesc.getData();
     $.each(formdata, function (i, val) {
-        if(val.name == 'description'){
+        if (val.name == 'description') {
             formdata[i].value = desc;
         }
     });
@@ -502,12 +508,12 @@ $(document).on('click', '.entry-model', function (event) {
     }, 1500);
 });
 
-CKEDITOR.replace( 'description', {
+CKEDITOR.replace('description', {
     language: 'en',
     height: '150px',
 });
 
-CKEDITOR.replace( 'editDesc', {
+CKEDITOR.replace('editDesc', {
     language: 'en',
     height: '150px',
 });
@@ -523,8 +529,8 @@ $(document).on('change', '#editProjectId', function (event) {
 });
 
 function loadProjectAssignees(projectId, selector) {
-    let url = usersOfProjects + '?projectIds='+projectId;
-    $('#'+selector).empty();
+    let url = usersOfProjects + '?projectIds=' + projectId;
+    $('#' + selector).empty();
     $.ajax({
         url: url,
         type: 'GET',
@@ -532,7 +538,7 @@ function loadProjectAssignees(projectId, selector) {
             const users = result.data;
             for (const key in users) {
                 if (users.hasOwnProperty(key)) {
-                    $('#'+selector).append($('<option>', {value: key, text: users[key]}));
+                    $('#' + selector).append($('<option>', { value: key, text: users[key] }));
                 }
             }
         }

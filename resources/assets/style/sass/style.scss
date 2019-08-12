@@ -484,6 +484,7 @@ table.dataTable {
 .modal-content {
     border-radius: 5px !important;
 }
+
 .edit-profile__file-upload {
     padding: 10px;
     background: #20a8d8;
@@ -498,6 +499,7 @@ table.dataTable {
         border-color: #187da0
     }
 }
+
 .check-icon {
     color: $green;
     font-weight: bold;
@@ -547,3 +549,7 @@ table.dataTable {
     }
 }
 
+.task-detail__body {
+    overflow-y: auto;
+    max-height: 750px;
+}
