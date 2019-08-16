@@ -64,7 +64,19 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url'    => env('AWS_URL'),
         ],
-
+        'ftp' => [
+            'driver'       => 'ftp',
+            'host'         => getenv('FTP_HOST'),
+            'username'     => getenv('FTP_USERNAME'),
+            'password'     => getenv('FTP_PASSWORD'),
+            'port'         => getenv('FTP_PORT'),
+            'root'         => getenv('FTP_ROOT'),
+            'image_domain' => getenv('FTP_IMAGE_DOMAIN'),
+            'ssl'          => getenv('FTP_SSL'),
+            'passive'      => getenv('FTP_PASSIVE'),
+            'timeout'      => getenv('FTP_TIMEOUT'),
+            'url'          => env('FTP_IMAGE_DOMAIN').'/uploads',
+        ],
     ],
 
 ];
