@@ -74,12 +74,12 @@
 
 @include('time_tracker.index');
 
-<footer class="app-footer">
+<footer class="app-footer justify-content-between">
     <div>
         <a href="https://infyom.com">InfyOm </a>
         <span>&copy; 2019 InfyOmLabs.</span>
     </div>
-    <div class="ml-auto powered-by">
+    <div>
         <span>Powered by</span>
         <a href="https://coreui.io">CoreUI</a>
     </div>

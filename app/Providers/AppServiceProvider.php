@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Filesystem\Adapter\Ftp;
 use Illuminate\Support\ServiceProvider;
+use League\Flysystem\Filesystem;
 use Schema;
 
 class AppServiceProvider extends ServiceProvider
@@ -25,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        \Storage::extend('ftp', function ($app, $config) {
+            return new Filesystem(new Ftp($config));
+        });
     }
 }

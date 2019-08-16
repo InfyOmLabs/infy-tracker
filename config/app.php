@@ -53,6 +53,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    
+    'mix_url' => env('APP_URL', 'http://localhost/infy-tracker/publish'),
 
     'asset_url' => env('ASSET_URL', null),
 
