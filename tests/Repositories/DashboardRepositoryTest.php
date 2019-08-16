@@ -17,8 +17,6 @@ class DashboardRepositoryTest extends TestCase
     /** @var DashboardRepository */
     protected $dashboardRepo;
 
-    private $defaultUserId = 1;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -88,20 +86,27 @@ class DashboardRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_work_developer_daily_work_report_of_all_user_between_given_date()
     {
-        /** @var TimeEntry $timeEntry */
-        $timeEntry = factory(TimeEntry::class)->create();
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create();
+
+        $secondTimeEntry = factory(TimeEntry::class)->create();
 
         $input = [
-            'start_date' => $timeEntry->start_time,
-            'end_date'   => $timeEntry->end_time,
+            'start_date' => $firstTimeEntry->start_time,
+            'end_date'   => $firstTimeEntry->end_time,
         ];
 
         $workReport = $this->dashboardRepo->getDeveloperWorkReport($input);
 
-        $totalHours = round($timeEntry->duration / 60, 2);
-        $this->assertEquals($totalHours, $workReport['result'][1]->total_hours);
+        $this->assertCount(3, $workReport['result']);
 
-        $this->assertEquals($timeEntry->user->name, $workReport['result'][1]->name);
+        $firstEntryHours = round($firstTimeEntry->duration / 60, 2);
+        $secondEntryHours = round($secondTimeEntry->duration / 60, 2);
+        $totalHours = $firstEntryHours + $secondEntryHours;
+
+        $this->assertEquals($firstEntryHours, $workReport['result'][1]->total_hours);
+
+        $this->assertEquals($firstTimeEntry->user->name, $workReport['result'][1]->name);
 
         $hours = Arr::pluck($workReport['result'], 'total_hours');
         $this->assertEquals($hours[1], $workReport['data']['data'][1]);
