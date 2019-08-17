@@ -115,15 +115,16 @@ class UserControllerTest extends TestCase
     public function test_can_update_profile()
     {
         /** @var User $user */
-        $user = factory(User::class)->make();
+        $user = factory(User::class)->raw();
+        unset($user['email_verified_at']);
 
         $this->mockRepository();
 
         $this->userRepo->shouldReceive('profileUpdate')
             ->once()
-            ->with($user->toArray());
+            ->with($user);
 
-        $response = $this->postJson('users/profile-update', $user->toArray());
+        $response = $this->postJson('users/profile-update', $user);
 
         $this->assertSuccessMessageResponse($response, 'Profile updated successfully.');
     }
