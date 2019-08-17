@@ -45,7 +45,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_can_create_report()
     {
-        $fakeReport = factory(Report::class)->make()->toArray();
+        $fakeReport = factory(Report::class)->raw();
 
         $this->post('reports', $fakeReport)->assertSessionHasNoErrors();
 
@@ -87,7 +87,7 @@ class ReportControllerValidationTest extends TestCase
     {
         /** @var Report $report */
         $report = factory(Report::class)->create();
-        $fakeReport = factory(Report::class)->make()->toArray();
+        $fakeReport = factory(Report::class)->raw();
 
         $this->put('reports/'.$report->id, $fakeReport)->assertSessionHasNoErrors();
 

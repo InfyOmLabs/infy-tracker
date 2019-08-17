@@ -38,7 +38,7 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function it_can_create_role()
     {
-        $fakeRole = factory(Role::class)->make()->toArray();
+        $fakeRole = factory(Role::class)->raw();
 
         $this->post('roles', $fakeRole)->assertSessionHasNoErrors();
 
@@ -70,7 +70,7 @@ class RoleControllerValidationTest extends TestCase
     public function test_can_update_role_with_valid_input()
     {
         $role = factory(Role::class)->create();
-        $fakeRole = factory(Role::class)->make()->toArray();
+        $fakeRole = factory(Role::class)->raw();
 
         $this->put('roles/'.$role->id, $fakeRole)
             ->assertSessionHasNoErrors();

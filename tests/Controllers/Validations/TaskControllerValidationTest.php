@@ -42,11 +42,11 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_create_task_fail_with_invalid_due_date()
     {
-        $task = factory(Task::class)->make([
+        $task = factory(Task::class)->raw([
             'due_date' => date('Y-m-d H:i:s', strtotime('-1 day')),
         ]);
 
-        $response = $this->post('tasks', $task->toArray());
+        $response = $this->post('tasks', $task);
 
         $this->assertExceptionMessage($response, 'due_date must be greater than today\'s date.');
     }

@@ -34,9 +34,9 @@ class TaskRepositoryTest extends TestCase
     {
         $task = factory(Task::class)
             ->states('tag', 'assignees')
-            ->make([
+            ->raw([
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
-            ])->toArray();
+            ]);
 
         $createdTask = $this->taskRepo->store($task);
 
@@ -56,10 +56,10 @@ class TaskRepositoryTest extends TestCase
         $task = factory(Task::class)->create();
         $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
-            ->make([
+            ->raw([
                 'title'    => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
-            ])->toArray();
+            ]);
 
         $updatedTask = $this->taskRepo->update($preparedTask, $task->id);
 
