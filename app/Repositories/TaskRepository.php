@@ -408,7 +408,7 @@ class TaskRepository extends BaseRepository
     public function addComment($input)
     {
         $input['created_by'] = Auth::id();
-        $input['comment'] = htmlentities($input['comment']);
+        $input['comment'] = $input['comment'];
         $comment = Comment::create($input);
 
         return Comment::with('createdUser')->findOrFail($comment->id);
