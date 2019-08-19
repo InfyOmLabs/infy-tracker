@@ -36,11 +36,11 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::group(['middleware' => ['permission:manage_activities']], function() {
+    Route::middleware('permission:manage_activities')->group(function () {
         Route::resource('activity-types', 'ActivityTypeController');
     });
 
-    Route::group(['middleware' => ['permission:manage_clients']], function() {
+    Route::middleware('permission:manage_clients')->group(function () {
         Route::resource('clients', 'ClientController');
     });
 
@@ -63,16 +63,17 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::middleware('permission:manage_all_tasks')->group(function () {
         Route::resource('tasks', 'TaskController');
-        Route::post('tasks/{task}/update-status', 'TaskController@updateStatus');
-        Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment');
-        Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment');
-        Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment');
-        Route::post('tasks/{task}/comments', 'CommentController@addComment');
-        Route::post('tasks/{task}/comments/{comment}/update', 'CommentController@editComment');
-        Route::delete('tasks/{task}/comments/{comment}', 'CommentController@deleteComment');
-        Route::get('task-details/{task}', 'TaskController@getTaskDetails');
-        Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount');
-        Route::get('tasks/{task}/users', 'TaskController@getTaskUsers');
+        Route::post('tasks/{task}/update-status', 'TaskController@updateStatus')->name('task.update-status');
+        Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment')->name('task.add-attachment');
+        Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment')
+            ->name('task.delete-attachment');;
+        Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment')->name('task.attachments');;
+        Route::post('tasks/{task}/comments', 'CommentController@addComment')->name('task.comments');
+        Route::post('tasks/{task}/comments/{comment}/update', 'CommentController@editComment')->name('task.update-comment');
+        Route::delete('tasks/{task}/comments/{comment}', 'CommentController@deleteComment')->name('task.delete-comment');
+        Route::get('task-details/{task}', 'TaskController@getTaskDetails')->name('task.get-details');
+        Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount')->name('task.comments-count');
+        Route::get('tasks/{task}/users', 'TaskController@getTaskUsers')->name('task.users');
     });
 
     Route::resource('time-entries', 'TimeEntryController');

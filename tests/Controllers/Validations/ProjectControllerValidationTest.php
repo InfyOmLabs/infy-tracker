@@ -23,7 +23,7 @@ class ProjectControllerValidationTest extends TestCase
     /** @test */
     public function create_project_fails_when_name_is_not_passed()
     {
-        $this->post('projects', ['name' => ''])->assertSessionHasErrors('name');
+        $this->post(route('projects.store'), ['name' => ''])->assertSessionHasErrors('name');
     }
 
     /** @test */
@@ -31,7 +31,7 @@ class ProjectControllerValidationTest extends TestCase
     {
         $project = factory(Project::class)->create();
 
-        $this->post('projects', ['name' => $project->name])
+        $this->post(route('projects.store'), ['name' => $project->name])
             ->assertSessionHasErrors(['name' => 'Project with same name already exist.']);
     }
 
@@ -40,7 +40,7 @@ class ProjectControllerValidationTest extends TestCase
     {
         $project = factory(Project::class)->create();
 
-        $this->put('projects/'.$project->id, ['name' => ''])
+        $this->put(route('projects.update', $project->id), ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -51,7 +51,7 @@ class ProjectControllerValidationTest extends TestCase
         $project2 = factory(Project::class)->create();
 
         $inputs = array_merge($project2->toArray(), ['user_ids' => [], 'name' => $project1->name]);
-        $this->put('projects/'.$project2->id, $inputs)
+        $this->put(route('projects.update', $project2->id), $inputs)
             ->assertSessionHasErrors(['name' => 'Project with same name already exist.']);
     }
 
@@ -61,7 +61,7 @@ class ProjectControllerValidationTest extends TestCase
         $project = factory(Project::class)->create();
 
         $inputs = array_merge($project->toArray(), ['user_ids' => [], 'name' => 'Dummy Project Name']);
-        $this->put('projects/'.$project->id, $inputs)
+        $this->put(route('projects.update', $project->id), $inputs)
             ->assertSessionHasNoErrors();
     }
 }
