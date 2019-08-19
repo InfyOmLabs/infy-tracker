@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AddComment;
-use App\Events\DeleteComment;
-use App\Events\UpdateComment;
 use App\Models\Comment;
 use App\Models\Task;
 use App\Repositories\TaskRepository;
@@ -22,7 +19,7 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
+     * @param Task $task
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -32,13 +29,13 @@ class CommentController extends AppBaseController
         $input = $request->only(['comment']);
         $input['task_id'] = $task->id;
         $comment = $this->taskRepository->addComment($input);
-        broadcast(new AddComment($comment))->toOthers();
+        $this->taskRepository->addCommentBroadCast($comment);
 
         return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
     }
 
     /**
-     * @param Task    $task
+     * @param Task $task
      * @param Comment $comment
      *
      * @throws \Exception
@@ -51,14 +48,14 @@ class CommentController extends AppBaseController
             throw new UnprocessableEntityHttpException('Unable to delete comment.');
         }
 
-        broadcast(new DeleteComment($comment))->toOthers();
+        $this->taskRepository->deleteCommentBroadCast($comment);
         $comment->delete();
 
         return $this->sendSuccess('Comment has been deleted successfully.');
     }
 
     /**
-     * @param Task    $task
+     * @param Task $task
      * @param Comment $comment
      * @param Request $request
      *
@@ -72,7 +69,7 @@ class CommentController extends AppBaseController
 
         $comment->comment = $request->get('comment');
         $comment->save();
-        broadcast(new UpdateComment($comment))->toOthers();
+        $this->taskRepository->editCommentBroadCast($comment);
 
         return $this->sendSuccess('Comment has been updated successfully.');
     }

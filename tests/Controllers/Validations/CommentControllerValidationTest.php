@@ -49,17 +49,6 @@ class CommentControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_given_comment()
-    {
-        $comment = factory(Comment::class)->create();
-
-        $result = $this->delete('tasks/'.$comment->task_id.'/comments/'.$comment->id);
-
-        $this->assertSuccessMessageResponse($result, 'Comment has been deleted successfully.');
-        $this->assertEmpty(Comment::find($comment->id));
-    }
-
-    /** @test */
     public function test_unable_to_update_comment_with_invalid_input()
     {
         $task = factory(Task::class)->create();
@@ -68,17 +57,5 @@ class CommentControllerValidationTest extends TestCase
         $result = $this->post('tasks/'.$task->id.'/comments/'.$comment->id.'/update');
 
         $this->assertExceptionMessage($result, 'Unable to update comment.');
-    }
-
-    /** @test */
-    public function test_can_update_comment_with_valid_input()
-    {
-        $comment = factory(Comment::class)->create();
-        $newText = $this->faker->text;
-
-        $result = $this->post('tasks/'.$comment->task_id.'/comments/'.$comment->id.'/update', ['comment' => $newText]);
-
-        $this->assertSuccessMessageResponse($result, 'Comment has been updated successfully.');
-        $this->assertEquals($newText, $comment->fresh()->comment);
     }
 }
