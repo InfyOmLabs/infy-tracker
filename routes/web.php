@@ -36,14 +36,25 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::middleware('permission:manage_activities')->group(function () {
-        Route::resource('activity-types', 'ActivityTypeController');
-        Route::post('activity-types/{activity_type}/update', 'ActivityTypeController@update');
+    Route::group(['middleware' => ['permission:manage_activities'],['prefix' => 'activity-types']], function() {
+        Route::get('/', 'ActivityTypeController@index')->name('activity-types');
+        Route::get('/{activity_type}', 'ActivityTypeController@show')->name('activity-types.show');
+        Route::post('/activity-types', 'ActivityTypeController@store')->name('activity-types.store');
+        Route::put('/{activity_type}', 'ActivityTypeController@update')->name('activity-types.update');
+        Route::delete('/{activity_type}', 'ActivityTypeController@delete')->name('activity-types.delete');
     });
 
-    Route::middleware('permission:manage_clients')->group(function () {
+  /*  Route::middleware('permission:manage_clients')->group(function () {
         Route::resource('clients', 'ClientController');
         Route::post('clients/{client}/update', 'ClientController@update');
+    });*/
+
+    Route::group(['middleware' => ['permission:manage_clients'],['prefix' => 'clients']], function() {
+        Route::get('/', 'ClientController@index')->name('clients');
+        Route::get('/{client}', 'ClientController@show')->name('clients.show');
+        Route::post('/', 'ClientController@store')->name('clients.store');
+        Route::put('/{client}/update', 'ClientController@update')->name('clients.update');
+        Route::delete('/{client}', 'ClientController@delete')->name('clients.delete');
     });
 
     Route::middleware('permission:manage_users')->group(function () {
