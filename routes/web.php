@@ -37,11 +37,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::post('logout', 'Auth\LoginController@logout');
 
     Route::group(['middleware' => ['permission:manage_activities'],['prefix' => 'activity-types']], function() {
-        Route::get('/', 'ActivityTypeController@index')->name('activity-types');
-        Route::get('/{activity_type}', 'ActivityTypeController@show')->name('activity-types.show');
-        Route::post('/activity-types', 'ActivityTypeController@store')->name('activity-types.store');
-        Route::put('/{activity_type}', 'ActivityTypeController@update')->name('activity-types.update');
-        Route::delete('/{activity_type}', 'ActivityTypeController@delete')->name('activity-types.delete');
+        Route::resource('activity-types', 'ActivityTypeController');
     });
 
   /*  Route::middleware('permission:manage_clients')->group(function () {
@@ -50,17 +46,12 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     });*/
 
     Route::group(['middleware' => ['permission:manage_clients'],['prefix' => 'clients']], function() {
-        Route::get('/', 'ClientController@index')->name('clients');
-        Route::get('/{client}', 'ClientController@show')->name('clients.show');
-        Route::post('/', 'ClientController@store')->name('clients.store');
-        Route::put('/{client}/update', 'ClientController@update')->name('clients.update');
-        Route::delete('/{client}', 'ClientController@delete')->name('clients.delete');
+        Route::resource('clients', 'ClientController');
     });
 
     Route::middleware('permission:manage_users')->group(function () {
         Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
         Route::resource('users', 'UserController');
-        Route::post('users/{user}/update', 'UserController@update')->where('user', '\d+');
         Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
     });
 
@@ -69,17 +60,14 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::middleware('permission:manage_tags')->group(function () {
         Route::resource('tags', 'TagController');
-        Route::post('tags/{tag}/update', 'TagController@update');
     });
 
     Route::middleware('permission:manage_projects')->group(function () {
         Route::resource('projects', 'ProjectController');
-        Route::post('projects/{project}/update', 'ProjectController@update')->where('project', '\d+');
     });
 
     Route::middleware('permission:manage_all_tasks')->group(function () {
         Route::resource('tasks', 'TaskController');
-        Route::post('tasks/{task}/update', 'TaskController@update');
         Route::post('tasks/{task}/update-status', 'TaskController@updateStatus');
         Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment');
         Route::post('tasks/{task_attachment}/delete-attachment', 'TaskController@deleteAttachment');
@@ -96,7 +84,6 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
 
     Route::middleware('permission:manage_reports')->group(function () {
-        Route::post('reports/{report}', 'ReportController@update');
         Route::resource('reports', 'ReportController');
         Route::get('users-of-projects', 'ProjectController@users');
         Route::get('projects-of-client', 'ClientController@projects');
@@ -109,7 +96,6 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::middleware('permission:manage_roles')->group(function () {
         Route::resource('roles', 'RoleController');
-        Route::post('roles/{role}/update', 'RoleController@update');
     });
 });
 
