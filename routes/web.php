@@ -36,16 +36,11 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::post('logout', 'Auth\LoginController@logout');
 
-    Route::group(['middleware' => ['permission:manage_activities'],['prefix' => 'activity-types']], function() {
+    Route::group(['middleware' => ['permission:manage_activities']], function() {
         Route::resource('activity-types', 'ActivityTypeController');
     });
 
-  /*  Route::middleware('permission:manage_clients')->group(function () {
-        Route::resource('clients', 'ClientController');
-        Route::post('clients/{client}/update', 'ClientController@update');
-    });*/
-
-    Route::group(['middleware' => ['permission:manage_clients'],['prefix' => 'clients']], function() {
+    Route::group(['middleware' => ['permission:manage_clients']], function() {
         Route::resource('clients', 'ClientController');
     });
 
