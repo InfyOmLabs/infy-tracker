@@ -49,6 +49,7 @@ class TaskController extends AppBaseController
                 'filter_project',
                 'filter_status',
                 'filter_user',
+                'due_date_filter'
             ])))->editColumn('title', function (Task $task) {
                 return $task->prefix_task_number.' '.$task->title;
             })->filterColumn('title', function ($query, $search) {
