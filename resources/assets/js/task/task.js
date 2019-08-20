@@ -92,7 +92,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             "targets": [0],
-            "width": "5%",
+            "width": "2%",
             "className": 'text-center',
             "orderable": false,
         },
@@ -107,6 +107,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             "targets": [5],
+            "width": "6%",
             "className": 'text-center',
         },
     ],
