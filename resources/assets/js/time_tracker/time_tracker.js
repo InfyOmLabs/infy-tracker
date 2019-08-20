@@ -4,8 +4,8 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: '40b7ed16ee482f758b2b',
-    cluster: 'ap2',
+    key: pusherAppKey,
+    cluster: pusherAppCluster,
     useTLS: true,
 });
 
