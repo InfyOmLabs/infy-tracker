@@ -83,6 +83,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::resource('time-entries', 'TimeEntryController');
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
+    Route::get('start-timer', 'TimeEntryController@getStartTimer');
 
     Route::middleware('permission:manage_reports')->group(function () {
         Route::post('reports/{report}', 'ReportController@update');

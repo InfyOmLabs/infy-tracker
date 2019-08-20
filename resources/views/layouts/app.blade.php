@@ -112,6 +112,7 @@
     let usersOfProjects = "{{ url('users-of-projects') }}";
     let projectsOfClient = "{{ url('projects-of-client') }}";
     let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
+    let startTimerUrl = "{{ url('start-timer') }}"
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

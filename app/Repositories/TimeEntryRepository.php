@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Events\StartTimer;
+use App\Events\StopWatchStop;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
@@ -168,5 +170,13 @@ class TimeEntryRepository extends BaseRepository
         if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
+    }
+
+    public function broadcastStartTimerEvent() {
+        broadcast(new StartTimer())->toOthers();
+    }
+
+    public function broadcastStopTimerEvent() {
+        broadcast(new StopWatchStop())->toOthers();
     }
 }
