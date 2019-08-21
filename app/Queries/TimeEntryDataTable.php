@@ -25,17 +25,10 @@ class TimeEntryDataTable
 
         /** @var User $user */
         $user = Auth::user();
-        if (!$user->can('manage_time_entries')) {
-            return $query->OfCurrentUser();
-        }
 
         $query->when(isset($input['filter_activity']) && !empty($input['filter_activity']),
             function (Builder $q) use ($input) {
                 $q->where('activity_type_id', $input['filter_activity']);
-            });
-        $query->when(isset($input['filter_user']) && !empty($input['filter_user']),
-            function (Builder $q) use ($input) {
-                $q->where('user_id', $input['filter_user']);
             });
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
             function (Builder $q) use ($input) {
@@ -47,6 +40,13 @@ class TimeEntryDataTable
                         });
                     })->get()->pluck('id')->toArray();
                 $q->whereIn('task_id', $taskIds);
+            });
+        if (!$user->can('manage_time_entries')) {
+            return $query->OfCurrentUser();
+        }
+        $query->when(isset($input['filter_user']) && !empty($input['filter_user']),
+            function (Builder $q) use ($input) {
+                $q->where('user_id', $input['filter_user']);
             });
 
         return $query;
