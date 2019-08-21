@@ -40,7 +40,7 @@ $(function () {
         }
     });
 
-    $('#dueDate,#editDueDate,#dueDateFilter').datetimepicker({
+    $('#dueDate,#editDueDate').datetimepicker({
         format: 'YYYY-MM-DD',
         useCurrent: false,
         icons: {
@@ -49,6 +49,16 @@ $(function () {
         },
         sideBySide: true,
         minDate: moment().millisecond(0).second(0).minute(0).hour(0)
+    });
+
+    $('#dueDateFilter').datetimepicker({
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        icons: {
+            up: "icon-angle-up",
+            down: "icon-angle-down"
+        },
+        sideBySide: true
     });
 
     $(document).ajaxComplete(function (result) {
