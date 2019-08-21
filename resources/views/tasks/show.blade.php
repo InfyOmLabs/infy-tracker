@@ -201,8 +201,6 @@
         let attachmentUrl = '{{ $attachmentUrl }}/';
         let baseUrl = '{{ url('/') }}/';
         let authId = '{{Auth::id()}}';
-        let pusherAppKey = '{{env('PUSHER_APP_KEY')}}';
-        let pusherAppCluster = '{{env('PUSHER_APP_CLUSTER')}}';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
