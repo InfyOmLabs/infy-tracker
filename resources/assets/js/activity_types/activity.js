@@ -61,8 +61,8 @@ $('#editForm').submit(function (event) {
     loadingButton.button('loading');
     var id = $('#activityTypeId').val();
     $.ajax({
-        url: activityUrl + id + '/update',
-        type: 'post',
+        url: activityUrl + id,
+        type: 'put',
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {

@@ -388,8 +388,8 @@ $('#editForm').submit(function (event) {
         }
     });
     $.ajax({
-        url: taskUrl + id + '/update',
-        type: 'post',
+        url: taskUrl + id,
+        type: 'put',
         data: formdata,
         success: function (result) {
             if (result.success) {

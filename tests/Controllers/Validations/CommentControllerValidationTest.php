@@ -32,7 +32,7 @@ class CommentControllerValidationTest extends TestCase
     public function test_delete_comment_fails_when_invalid_comment_id_passed()
     {
         $task = factory(Task::class)->create();
-        $result = $this->delete('tasks/'.$task->id.'/comments/999');
+        $result = $this->delete(route('task.delete-comment', [$task->id, 999]));
 
         $result->assertStatus(404);
     }
@@ -43,7 +43,7 @@ class CommentControllerValidationTest extends TestCase
         $task = factory(Task::class)->create();
         $comment = factory(Comment::class)->create();
 
-        $result = $this->delete('tasks/'.$task->id.'/comments/'.$comment->id);
+        $result = $this->delete(route('task.delete-comment', [$task->id, $comment->id]));
 
         $this->assertExceptionMessage($result, 'Unable to delete comment.');
     }
@@ -53,7 +53,7 @@ class CommentControllerValidationTest extends TestCase
     {
         $comment = factory(Comment::class)->create();
 
-        $result = $this->delete('tasks/'.$comment->task_id.'/comments/'.$comment->id);
+        $result = $this->delete(route('task.delete-comment', [$comment->task_id, $comment->id]));
 
         $this->assertSuccessMessageResponse($result, 'Comment has been deleted successfully.');
         $this->assertEmpty(Comment::find($comment->id));
@@ -65,7 +65,7 @@ class CommentControllerValidationTest extends TestCase
         $task = factory(Task::class)->create();
         $comment = factory(Comment::class)->create();
 
-        $result = $this->post('tasks/'.$task->id.'/comments/'.$comment->id.'/update');
+        $result = $this->post(route('task.update-comment', [$task->id, $comment->id]));
 
         $this->assertExceptionMessage($result, 'Unable to update comment.');
     }
@@ -76,7 +76,7 @@ class CommentControllerValidationTest extends TestCase
         $comment = factory(Comment::class)->create();
         $newText = $this->faker->text;
 
-        $result = $this->post('tasks/'.$comment->task_id.'/comments/'.$comment->id.'/update', ['comment' => $newText]);
+        $result = $this->post(route('task.update-comment', [$comment->task_id, $comment->id]), ['comment' => $newText]);
 
         $this->assertSuccessMessageResponse($result, 'Comment has been updated successfully.');
         $this->assertEquals($newText, $comment->fresh()->comment);
