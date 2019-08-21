@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Events\AddComment;
+use App\Events\DeleteComment;
+use App\Events\UpdateComment;
 use App\Models\ActivityType;
 use App\Models\Comment;
 use App\Models\Project;
@@ -265,10 +268,12 @@ class TaskRepository extends BaseRepository
     public function getTaskDetails($id, $input = [])
     {
         if (isset($input['user_id']) && $input['user_id'] > 0) {
-            $task = Task::with(['timeEntries' => function ($query) use ($input) {
-                $query->where('time_entries.user_id', '=', $input['user_id'])
-                    ->with('user');
-            }])->findOrFail($id);
+            $task = Task::with([
+                'timeEntries' => function ($query) use ($input) {
+                    $query->where('time_entries.user_id', '=', $input['user_id'])
+                        ->with('user');
+                },
+            ])->findOrFail($id);
         } else {
             $task = Task::with('timeEntries.user')->findOrFail($id);
         }
@@ -419,9 +424,33 @@ class TaskRepository extends BaseRepository
     public function addComment($input)
     {
         $input['created_by'] = Auth::id();
-        $input['comment'] = htmlentities($input['comment']);
+        $input['comment'] = $input['comment'];
         $comment = Comment::create($input);
 
         return Comment::with('createdUser')->findOrFail($comment->id);
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function addCommentBroadCast($comment)
+    {
+        broadcast(new AddComment($comment))->toOthers();
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function deleteCommentBroadCast($comment)
+    {
+        broadcast(new DeleteComment($comment))->toOthers();
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function editCommentBroadCast($comment)
+    {
+        broadcast(new UpdateComment($comment))->toOthers();
     }
 }

@@ -131,9 +131,7 @@
                                     <div>
                                         <div class="mb-3 d-flex">
                                             <span class="font-weight-bold">Comments</span>
-                                            @if($task->comments->isEmpty())
-                                                <span class="flex-1 ml-5 no_comments">No comments added yet</span>
-                                            @endif
+                                            <span class="flex-1 ml-5 no_comments @if(!($task->comments->isEmpty())) d-none @endif">No comments added yet</span>
                                         </div>
                                     </div>
                                     @foreach($task->comments as $comment)
@@ -152,7 +150,7 @@
                                                 <span class="user__description">{{time_elapsed_string($comment->created_at)}}</span>
                                             </div>
                                             <div class="user__comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
-                                                <?php echo html_entity_decode($comment->comment) ?>
+                                                {!! html_entity_decode($comment->comment) !!}
                                             </div>
                                             @if($comment->created_by == Auth::id())
                                                 <div class="user__comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
@@ -203,6 +201,8 @@
         let attachmentUrl = '{{ $attachmentUrl }}/';
         let baseUrl = '{{ url('/') }}/';
         let authId = '{{Auth::id()}}';
+        let pusherAppKey = '{{env('PUSHER_APP_KEY')}}';
+        let pusherAppCluster = '{{env('PUSHER_APP_CLUSTER')}}';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection
