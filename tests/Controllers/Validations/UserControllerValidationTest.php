@@ -22,19 +22,19 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_create_user_fails_when_name_is_not_passed()
     {
-        $this->post('users', ['name' => ''])->assertSessionHasErrors('name');
+        $this->post(route('users.store'), ['name' => ''])->assertSessionHasErrors('name');
     }
 
     /** @test */
     public function test_create_user_fails_when_email_is_not_passed()
     {
-        $this->post('users', ['email' => ''])->assertSessionHasErrors('email');
+        $this->post(route('users.store'), ['email' => ''])->assertSessionHasErrors('email');
     }
 
     /** @test */
     public function test_create_user_fails_when_phone_number_is_more_than_ten_digits()
     {
-        $this->post('users', ['phone' => '999999999999'])->assertSessionHasErrors([
+        $this->post(route('users.store'), ['phone' => '999999999999'])->assertSessionHasErrors([
             'phone' => 'The phone number must be 10 digits long.',
         ]);
     }
@@ -42,7 +42,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_create_user_fails_when_phone_number_is_not_numeric()
     {
-        $this->post('users', ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
+        $this->post(route('users.store'), ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
             'phone' => 'The phone must be a number.',
         ]);
     }
@@ -50,7 +50,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_create_user_fails_when_email_is_invalid()
     {
-        $this->post('users', ['email' => 'random email'])->assertSessionHasErrors([
+        $this->post(route('users.store'), ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
         ]);
     }
@@ -62,7 +62,7 @@ class UserControllerValidationTest extends TestCase
             'name'  => 'random string',
             'email' => 'dummy@gmail.com',
         ];
-        $this->post('users', $input)->assertSessionHasNoErrors();
+        $this->post(route('users.store'), $input)->assertSessionHasNoErrors();
 
         $user = User::whereName('random string')->first();
         $this->assertNotEmpty($user);
@@ -74,7 +74,7 @@ class UserControllerValidationTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('users/'.$user->id, ['name' => ''])
+        $this->put(route('users.update', $user->id), ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -83,7 +83,7 @@ class UserControllerValidationTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('users/'.$user->id, ['email' => ''])
+        $this->put(route('users.update', $user->id), ['email' => ''])
             ->assertSessionHasErrors(['email' => 'The email field is required.']);
     }
 
@@ -92,7 +92,7 @@ class UserControllerValidationTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('users/'.$user->id, ['phone' => '999999999999'])->assertSessionHasErrors([
+        $this->put(route('users.update', $user->id), ['phone' => '999999999999'])->assertSessionHasErrors([
             'phone' => 'The phone number must be 10 digits long.',
         ]);
     }
@@ -102,7 +102,8 @@ class UserControllerValidationTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('users/'.$user->id, ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
+        $this->put(route('users.update', $user->id),
+            ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
             'phone' => 'The phone must be a number.',
         ]);
     }
@@ -112,7 +113,7 @@ class UserControllerValidationTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $this->put('users/'.$user->id, ['email' => 'random email'])->assertSessionHasErrors([
+        $this->put(route('users.update', $user->id), ['email' => 'random email'])->assertSessionHasErrors([
             'email' => 'Please enter valid email.',
         ]);
     }
@@ -127,7 +128,7 @@ class UserControllerValidationTest extends TestCase
             'email' => 'dummy@gmail.com',
         ];
 
-        $this->put('users/'.$user->id, $input)->assertSessionHasNoErrors();
+        $this->put(route('users.update', $user->id), $input)->assertSessionHasNoErrors();
 
         $this->assertEquals('random string', $user->fresh()->name);
     }

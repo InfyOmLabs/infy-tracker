@@ -27,14 +27,14 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_add_time_entry_fails_when_task_id_is_not_passed()
     {
-        $this->post('time-entries', ['task_id' => ''])
+        $this->post(route('time-entries.store'), ['task_id' => ''])
             ->assertSessionHasErrors(['task_id' => 'The task id field is required.']);
     }
 
     /** @test */
     public function test_add_time_entry_fails_when_invalid_start_time_given()
     {
-        $this->post('time-entries', ['start_time' => date('Y-m-d')])
+        $this->post(route('time-entries.store'), ['start_time' => date('Y-m-d')])
             ->assertSessionHasErrors(['start_time' => 'The start time does not match the format Y-m-d H:i:s.']);
     }
 
@@ -45,7 +45,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime('-1 day'));
 
         $response = $this->post(
-            'time-entries',
+            route('time-entries.store'),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
         $this->assertEquals('Invalid start time and end time.', $response->exception->getMessage());
@@ -58,7 +58,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+2 days'));
 
         $response = $this->post(
-            'time-entries',
+            route('time-entries.store'),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -73,7 +73,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+2 days'));
 
         $response = $this->post(
-            'time-entries',
+            route('time-entries.store'),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -87,7 +87,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+ 13 hours'));
 
         $response = $this->post(
-            'time-entries',
+            route('time-entries.store'),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -101,7 +101,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime('-10 seconds'));
 
         $response = $this->post(
-            'time-entries',
+            route('time-entries.store'),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -117,7 +117,7 @@ class TimeEntryControllerValidationTest extends TestCase
             'end_time'   => $timeEntry->end_time,
         ]);
 
-        $response = $this->post('time-entries', $inputs);
+        $response = $this->post(route('time-entries.store'), $inputs);
 
         $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
@@ -126,7 +126,7 @@ class TimeEntryControllerValidationTest extends TestCase
     public function it_can_add_time_entry_of_logged_in_user()
     {
         $inputs = $this->timeEntryInputs();
-        $this->post('time-entries', $inputs)->assertSessionHasNoErrors();
+        $this->post(route('time-entries.store'), $inputs)->assertSessionHasNoErrors();
 
         $timeEntry = TimeEntry::latest()->first();
         $this->assertNotEmpty($timeEntry);
@@ -140,7 +140,7 @@ class TimeEntryControllerValidationTest extends TestCase
     {
         $timeEntry = factory(TimeEntry::class)->create();
 
-        $this->put('time-entries/'.$timeEntry->id, ['task_id' => ''])
+        $this->put(route('time-entries.update', $timeEntry->id), ['task_id' => ''])
             ->assertSessionHasErrors(['task_id' => 'The task id field is required.']);
     }
 
@@ -150,7 +150,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $timeEntry1 = factory(TimeEntry::class)->create();
         $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
-        $response = $this->put('time-entries/'.$timeEntry1->id, $this->timeEntryInputs());
+        $response = $this->put(route('time-entries.update', $timeEntry1->id), $this->timeEntryInputs());
 
         $this->assertEquals('Time Entry not found.',
             $response->original['message']);
@@ -164,7 +164,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+ 13 hours'));
 
         $response = $this->put(
-            'time-entries/'.$timeEntry->id,
+            route('time-entries.update', $timeEntry->id),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -179,7 +179,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $endTime = date('Y-m-d H:i:s', strtotime('-10 seconds'));
 
         $response = $this->put(
-            'time-entries/'.$timeEntry->id,
+            route('time-entries.update', $timeEntry->id),
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
@@ -204,7 +204,7 @@ class TimeEntryControllerValidationTest extends TestCase
             'end_time'   => $firstEntry->end_time,
         ]);
 
-        $response = $this->put('time-entries/'.$secondEntry->id, $inputs)->assertSessionHasNoErrors();
+        $response = $this->put(route('time-entries.update', $secondEntry->id), $inputs)->assertSessionHasNoErrors();
 
         $this->assertExceptionMessage($response, 'Time entry between this duration already exist.');
     }
@@ -215,7 +215,7 @@ class TimeEntryControllerValidationTest extends TestCase
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $inputs = $this->timeEntryInputs();
-        $this->put('time-entries/'.$timeEntry->id, $inputs)->assertSessionHasNoErrors();
+        $this->put(route('time-entries.update', $timeEntry->id), $inputs)->assertSessionHasNoErrors();
 
         $timeEntry = TimeEntry::latest()->first();
         $this->assertNotEmpty($timeEntry);

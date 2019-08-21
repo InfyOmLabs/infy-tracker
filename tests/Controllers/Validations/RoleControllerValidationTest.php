@@ -22,7 +22,7 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function test_create_role_fails_when_name_is_not_passed()
     {
-        $this->post('roles', ['name' => ''])
+        $this->post(route('roles.store'), ['name' => ''])
             ->assertSessionHasErrors('name');
     }
 
@@ -31,7 +31,7 @@ class RoleControllerValidationTest extends TestCase
     {
         $role = factory(Role::class)->create();
 
-        $this->post('roles', ['name' => $role->name])
+        $this->post(route('roles.store'), ['name' => $role->name])
             ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
@@ -40,7 +40,7 @@ class RoleControllerValidationTest extends TestCase
     {
         $fakeRole = factory(Role::class)->raw();
 
-        $this->post('roles', $fakeRole)->assertSessionHasNoErrors();
+        $this->post(route('roles.store'), $fakeRole)->assertSessionHasNoErrors();
 
         $role = Role::whereName($fakeRole['name'])->first();
         $this->assertNotEmpty($role);
@@ -52,7 +52,7 @@ class RoleControllerValidationTest extends TestCase
     {
         $role = factory(Role::class)->create();
 
-        $this->put('roles/'.$role->id, ['name' => ''])
+        $this->put(route('roles.update', $role->id), ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -62,7 +62,7 @@ class RoleControllerValidationTest extends TestCase
         $role1 = factory(Role::class)->create();
         $role2 = factory(Role::class)->create();
 
-        $this->put('roles/'.$role2->id, ['name' => $role1->name])
+        $this->put(route('roles.update', $role2->id), ['name' => $role1->name])
             ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
@@ -72,7 +72,7 @@ class RoleControllerValidationTest extends TestCase
         $role = factory(Role::class)->create();
         $fakeRole = factory(Role::class)->raw();
 
-        $this->put('roles/'.$role->id, $fakeRole)
+        $this->put(route('roles.update', $role->id), $fakeRole)
             ->assertSessionHasNoErrors();
 
         $this->assertEquals($fakeRole['name'], $role->fresh()->name);

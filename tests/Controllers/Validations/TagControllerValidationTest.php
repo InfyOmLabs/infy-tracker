@@ -19,7 +19,7 @@ class TagControllerValidationTest extends TestCase
     /** @test */
     public function test_create_tag_fails_when_name_is_not_passed()
     {
-        $this->post('tags', ['name' => ''])
+        $this->post(route('tags.store'), ['name' => ''])
             ->assertSessionHasErrors('name');
     }
 
@@ -28,14 +28,14 @@ class TagControllerValidationTest extends TestCase
     {
         $tag = factory(Tag::class)->create();
 
-        $this->post('tags', ['name' => $tag->name])
+        $this->post(route('tags.store'), ['name' => $tag->name])
             ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
     /** @test */
     public function it_can_create_tag()
     {
-        $this->post('tags', ['name' => 'random tag'])
+        $this->post(route('tags.store'), ['name' => 'random tag'])
             ->assertSessionHasNoErrors();
 
         $tag = Tag::whereName('random tag')->first();
@@ -49,7 +49,7 @@ class TagControllerValidationTest extends TestCase
     {
         $tag = factory(Tag::class)->create();
 
-        $this->put('tags/'.$tag->id, ['name' => ''])
+        $this->put(route('tags.update', $tag->id), ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -59,7 +59,7 @@ class TagControllerValidationTest extends TestCase
         $tag1 = factory(Tag::class)->create();
         $tag2 = factory(Tag::class)->create();
 
-        $this->put('tags/'.$tag2->id, ['name' => $tag1->name])
+        $this->put(route('tags.update', $tag2->id), ['name' => $tag1->name])
             ->assertSessionHasErrors(['name' => 'The name has already been taken.']);
     }
 
@@ -69,7 +69,7 @@ class TagControllerValidationTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $this->put('tags/'.$tag->id, ['name' => 'Any Dummy Name'])
+        $this->put(route('tags.update', $tag->id), ['name' => 'Any Dummy Name'])
             ->assertSessionHasNoErrors();
 
         $this->assertEquals('Any Dummy Name', $tag->fresh()->name);

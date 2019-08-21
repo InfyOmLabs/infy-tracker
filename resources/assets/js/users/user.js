@@ -174,8 +174,8 @@ $(function () {
         loadingButton.button('loading');
         var id = $('#userId').val();
         $.ajax({
-            url: usersUrl + id + '/update',
-            type: 'post',
+            url: usersUrl + id,
+            type: 'put',
             data: $(this).serialize(),
             success: function (result) {
                 if (result.success) {

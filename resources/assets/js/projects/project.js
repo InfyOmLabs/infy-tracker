@@ -91,8 +91,8 @@ $('#editForm').submit(function (event) {
     loadingButton.button('loading');
     var id = $('#projectId').val();
     $.ajax({
-        url: projectUrl + id + '/update',
-        type: 'post',
+        url: projectUrl + id,
+        type: 'put',
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {

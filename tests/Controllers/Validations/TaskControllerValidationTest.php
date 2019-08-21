@@ -21,21 +21,21 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_create_task_fails_when_title_is_not_passed()
     {
-        $this->post('tasks', ['title' => ''])
+        $this->post(route('tasks.store'), ['title' => ''])
             ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function test_create_task_fails_when_project_id_is_not_passed()
     {
-        $this->post('tasks', ['project_id' => ''])
+        $this->post(route('tasks.store'), ['project_id' => ''])
             ->assertSessionHasErrors('project_id');
     }
 
     /** @test */
     public function test_create_task_fail_with_non_existing_project_id()
     {
-        $this->post('tasks', ['project_id' => 999])
+        $this->post(route('tasks.store'), ['project_id' => 999])
             ->assertSessionHasErrors();
     }
 
@@ -46,7 +46,7 @@ class TaskControllerValidationTest extends TestCase
             'due_date' => date('Y-m-d H:i:s', strtotime('-1 day')),
         ]);
 
-        $response = $this->post('tasks', $task);
+        $response = $this->post(route('tasks.store'), $task);
 
         $this->assertExceptionMessage($response, 'due_date must be greater than today\'s date.');
     }
@@ -56,7 +56,7 @@ class TaskControllerValidationTest extends TestCase
     {
         $task = factory(Task::class)->create();
 
-        $this->put('tasks/'.$task->id, ['title' => ''])
+        $this->put(route('tasks.update', $task->id), ['title' => ''])
             ->assertSessionHasErrors(['title' => 'The title field is required.']);
     }
 
@@ -65,7 +65,7 @@ class TaskControllerValidationTest extends TestCase
     {
         $task = factory(Task::class)->create();
 
-        $this->put('tasks/'.$task->id, ['title' => 'random string', 'project_id' => ''])
+        $this->put(route('tasks.update', $task->id), ['title' => 'random string', 'project_id' => ''])
             ->assertSessionHasErrors(['project_id' => 'The project id field is required.']);
     }
 
@@ -74,7 +74,7 @@ class TaskControllerValidationTest extends TestCase
     {
         $task = factory(Task::class)->create();
 
-        $this->put('tasks/'.$task->id, ['project_id' => 999])
+        $this->put(route('tasks.update', $task->id), ['project_id' => 999])
             ->assertSessionHasErrors();
     }
 
@@ -85,7 +85,7 @@ class TaskControllerValidationTest extends TestCase
         $dueDate = date('Y-m-d H:i:s', strtotime('-1 day'));
 
         $input = array_merge($task->toArray(), ['due_date' => $dueDate]);
-        $response = $this->put('tasks/'.$task->id, $input);
+        $response = $this->put(route('tasks.update', $task->id), $input);
 
         $this->assertExceptionMessage($response, 'due_date must be greater than today\'s date.');
     }
@@ -98,7 +98,7 @@ class TaskControllerValidationTest extends TestCase
 
         $inputs = array_merge($task->toArray(), ['title' => 'Any Dummy Title']);
 
-        $this->put('tasks/'.$task->id, $inputs)
+        $this->put(route('tasks.update', $task->id), $inputs)
             ->assertSessionHasNoErrors();
 
         $this->assertEquals('Any Dummy Title', $task->fresh()->title);
@@ -112,7 +112,7 @@ class TaskControllerValidationTest extends TestCase
         $project = factory(Project::class)->create();
         $inputs = array_merge($task->toArray(), ['project_id' => $project->id]);
 
-        $this->put('tasks/'.$task->id, $inputs)
+        $this->put(route('tasks.update', $task->id), $inputs)
             ->assertSessionHasNoErrors();
 
         $this->assertEquals($project->id, $task->fresh()->project_id);
@@ -124,7 +124,7 @@ class TaskControllerValidationTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
 
-        $this->post("tasks/$task->id/update-status", [])->assertSessionHasNoErrors();
+        $this->post(route('task.update-status', $task->id), [])->assertSessionHasNoErrors();
 
         $this->assertEquals(Task::STATUS_COMPLETED, $task->fresh()->status);
     }

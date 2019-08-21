@@ -51,6 +51,16 @@ $(function () {
         minDate: moment().millisecond(0).second(0).minute(0).hour(0)
     });
 
+    $('#dueDateFilter').datetimepicker({
+        format: 'YYYY-MM-DD',
+        useCurrent: false,
+        icons: {
+            up: "icon-angle-up",
+            down: "icon-angle-down"
+        },
+        sideBySide: true
+    });
+
     $(document).ajaxComplete(function (result) {
         $('input[name=yes]').iCheck({
             checkboxClass: 'icheckbox_line-green',
@@ -81,6 +91,7 @@ var tbl = $('#task_table').DataTable({
             data.filter_project = $('#filter_project').find('option:selected').val();
             data.filter_user = $('#filter_user').find('option:selected').val();
             data.filter_status = $('#filter_status').find('option:selected').val();
+            data.due_date_filter = $('#dueDateFilter').val();
         },
     },
     columnDefs: [
@@ -91,7 +102,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             "targets": [0],
-            "width": "5%",
+            "width": "2%",
             "className": 'text-center',
             "orderable": false,
         },
@@ -106,6 +117,7 @@ var tbl = $('#task_table').DataTable({
         },
         {
             "targets": [5],
+            "width": "6%",
             "className": 'text-center',
         },
     ],
@@ -187,6 +199,10 @@ var tbl = $('#task_table').DataTable({
     ],
     "fnInitComplete": function () {
         $('#filter_project,#filter_status,#filter_user').change(function () {
+            tbl.ajax.reload();
+        });
+
+        $('#dueDateFilter').on('dp.change', function(e) {
             tbl.ajax.reload();
         });
     },
@@ -388,8 +404,8 @@ $('#editForm').submit(function (event) {
         }
     });
     $.ajax({
-        url: taskUrl + id + '/update',
-        type: 'post',
+        url: taskUrl + id,
+        type: 'put',
         data: formdata,
         success: function (result) {
             if (result.success) {

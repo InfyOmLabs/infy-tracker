@@ -22,14 +22,14 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_create_report_fails_when_name_is_not_passed()
     {
-        $this->post('reports', ['name' => ''])
+        $this->post(route('reports.store'), ['name' => ''])
             ->assertSessionHasErrors('name');
     }
 
     /** @test */
     public function test_create_report_fails_when_start_date_is_not_passed()
     {
-        $this->post('reports', ['start_date' => ''])->assertSessionHasErrors([
+        $this->post(route('reports.store'), ['start_date' => ''])->assertSessionHasErrors([
             'start_date' => 'The start date field is required.',
         ]);
     }
@@ -37,7 +37,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_create_report_fails_when_end_date_is_not_passed()
     {
-        $this->post('reports', ['end_date' => ''])->assertSessionHasErrors([
+        $this->post(route('reports.store'), ['end_date' => ''])->assertSessionHasErrors([
             'end_date' => 'The end date field is required.',
         ]);
     }
@@ -47,7 +47,7 @@ class ReportControllerValidationTest extends TestCase
     {
         $fakeReport = factory(Report::class)->raw();
 
-        $this->post('reports', $fakeReport)->assertSessionHasNoErrors();
+        $this->post(route('reports.store'), $fakeReport)->assertSessionHasNoErrors();
 
         $report = Report::whereName($fakeReport['name'])->first();
 
@@ -60,7 +60,7 @@ class ReportControllerValidationTest extends TestCase
     {
         $report = factory(Report::class)->create();
 
-        $this->put('reports/'.$report->id, ['name' => ''])
+        $this->put(route('reports.update', $report->id), ['name' => ''])
             ->assertSessionHasErrors(['name' => 'The name field is required.']);
     }
 
@@ -69,7 +69,7 @@ class ReportControllerValidationTest extends TestCase
     {
         $report = factory(Report::class)->create();
 
-        $this->put('reports/'.$report->id, ['start_date' => ''])
+        $this->put(route('reports.update', $report->id), ['start_date' => ''])
             ->assertSessionHasErrors(['start_date' => 'The start date field is required.']);
     }
 
@@ -78,7 +78,7 @@ class ReportControllerValidationTest extends TestCase
     {
         $report = factory(Report::class)->create();
 
-        $this->put('reports/'.$report->id, ['end_date' => ''])
+        $this->put(route('reports.update', $report->id), ['end_date' => ''])
             ->assertSessionHasErrors(['end_date' => 'The end date field is required.']);
     }
 
@@ -89,7 +89,7 @@ class ReportControllerValidationTest extends TestCase
         $report = factory(Report::class)->create();
         $fakeReport = factory(Report::class)->raw();
 
-        $this->put('reports/'.$report->id, $fakeReport)->assertSessionHasNoErrors();
+        $this->put(route('reports.update', $report->id), $fakeReport)->assertSessionHasNoErrors();
 
         $this->assertEquals($fakeReport['name'], $report->fresh()->name);
     }
