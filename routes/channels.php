@@ -15,6 +15,6 @@ Broadcast::channel('task-detail', function ($user) {
     return ($user->can('manage_all_tasks')) ? true : false;
 });
 
-Broadcast::channel('stopwatch-event', function ($user) {
-    return false; //($user->can('manage_time_entries')) ? true : false;
-});
+//Broadcast::channel('stopwatch-event', function ($user) {
+//    return false; //($user->can('manage_time_entries')) ? true : false;
+//});
