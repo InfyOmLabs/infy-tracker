@@ -139,7 +139,6 @@ function startTimerEvent() {
         url: startTimerUrl,
         type: 'get',
         success: function () {
-            console.log('timer start');
         },
         error: function (result) {
             printErrorMessage("#timeTrackerValidationErrorsBox", result);
