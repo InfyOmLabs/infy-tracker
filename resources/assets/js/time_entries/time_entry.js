@@ -274,6 +274,10 @@ window.renderTimeEntry = function (id) {
                 $('#editEndTime').val(timeEntry.end_time);
                 $('#editNote').val(timeEntry.note);
                 $('#editTimeEntryModal').modal('show');
+                //add it cause of project_id change, when it change it sets tasks dynamically and selected task_id vanished
+                setTimeout(function () {
+                    $('#editTaskId').val(timeEntry.task_id).trigger("change");
+                }, 1500);
             }
         },
         error: function (error) {
