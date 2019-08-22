@@ -25,6 +25,10 @@
                         {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
                     </div>
                     <div class="mr-2">
+                        <label class="lbl-block"><b>Due Date</b></label>
+                        {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;']) !!}
+                    </div>
+                    <div class="mr-2">
                         <label class="lbl-block"><b>Status</b></label>
                         {!!Form::select('drp_status',$status,0,['id'=>'filter_status','class'=>'form-control','style'=>'min-width:150px;'])  !!}
                     </div>

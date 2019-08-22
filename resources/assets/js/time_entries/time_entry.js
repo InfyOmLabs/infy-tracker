@@ -302,7 +302,6 @@ window.getTasksByProject = function (projectId, taskId, selectedId, errorBoxId) 
     $.ajax({
         url: taskURL,
         type: 'get',
-        async: false,
         success: function (result) {
             var tasks = result.data;
             if (selectedId > 0) {

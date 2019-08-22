@@ -39,7 +39,7 @@ class TagControllerTest extends TestCase
     {
         $this->mockRepository();
 
-        $tag = factory(Tag::class)->make()->toArray();
+        $tag = factory(Tag::class)->raw();
 
         $this->tagRepository->shouldReceive('store')
             ->once()

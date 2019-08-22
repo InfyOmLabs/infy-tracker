@@ -42,14 +42,13 @@ class ActivityTypeControllerTest extends TestCase
     {
         $this->mockRepository();
 
-        /** @var ActivityType $activityType */
-        $activityType = factory(ActivityType::class)->make();
+        $activityType = factory(ActivityType::class)->raw();
 
         $this->activityTypeRepository->shouldReceive('create')
             ->once()
-            ->with(array_merge($activityType->toArray(), ['created_by' => getLoggedInUserId()]));
+            ->with(array_merge($activityType, ['created_by' => getLoggedInUserId()]));
 
-        $response = $this->postJson('activity-types', $activityType->toArray());
+        $response = $this->postJson('activity-types', $activityType);
 
         $this->assertSuccessMessageResponse($response, 'Activity Type created successfully.');
     }

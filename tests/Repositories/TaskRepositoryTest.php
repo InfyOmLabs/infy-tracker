@@ -3,6 +3,7 @@
 namespace Tests\Repositories;
 
 use App\Models\Project;
+use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
@@ -34,9 +35,9 @@ class TaskRepositoryTest extends TestCase
     {
         $task = factory(Task::class)
             ->states('tag', 'assignees')
-            ->make([
+            ->raw([
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
-            ])->toArray();
+            ]);
 
         $createdTask = $this->taskRepo->store($task);
 
@@ -56,10 +57,10 @@ class TaskRepositoryTest extends TestCase
         $task = factory(Task::class)->create();
         $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
-            ->make([
+            ->raw([
                 'title'    => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
-            ])->toArray();
+            ]);
 
         $updatedTask = $this->taskRepo->update($preparedTask, $task->id);
 
@@ -199,5 +200,53 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertEquals($timeEntry->task_id, $taskDetails->id);
         $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+    }
+
+    /** @test */
+    public function test_can_update_task_status()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+
+        $updatedTaskStatus = $this->taskRepo->updateStatus($task->id);
+
+        $this->assertTrue($updatedTaskStatus);
+
+        $task = Task::findOrFail($task->id);
+        $this->assertEquals(Task::STATUS_COMPLETED, $task->status);
+    }
+
+    /** @test */
+    public function test_tags_are_created_and_attached_to_given_task()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->make();
+
+        $this->taskRepo->attachTags($task, [$tag->name]);
+
+        $attachedTag = $task->fresh()->tags;
+        $this->assertNotEmpty($attachedTag);
+
+        $this->assertEquals($tag->name, $attachedTag[0]['name']);
+    }
+
+    /** @test */
+    public function test_existing_tags_are_attached_to_given_task()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var Tag $tag */
+        $tag = factory(Tag::class)->create();
+
+        $this->taskRepo->attachTags($task, [$tag->id]);
+
+        $attachedTag = $task->fresh()->tags;
+        $this->assertNotEmpty($attachedTag);
+
+        $this->assertEquals($tag->id, $attachedTag[0]['id']);
     }
 }

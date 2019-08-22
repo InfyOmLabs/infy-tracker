@@ -7,7 +7,7 @@
  * Time: 02:44 PM.
  */
 
-namespace Tests\Integration\Models;
+namespace Tests\Models;
 
 use App\Models\Project;
 use App\Models\Report;

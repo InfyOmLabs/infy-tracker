@@ -34,6 +34,11 @@ class TaskDataTable
                 $q->where('status', $input['filter_status']);
             });
 
+        $query->when(isset($input['due_date_filter']) && !empty($input['due_date_filter']),
+            function (Builder $q) use ($input) {
+                $q->where('due_date', $input['due_date_filter']);
+            });
+
         $query->when(isset($input['filter_user']),
             function (Builder $q) use ($input) {
                 $q->whereHas('taskAssignee', function (Builder $q) use ($input) {

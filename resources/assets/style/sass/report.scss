@@ -18,6 +18,10 @@
         color: $blue;
         background-color: #fff9f1;
         padding: 10px;
+
+        &-title {
+            cursor: pointer;
+        }
     }
 
     &__project-row {
@@ -51,6 +55,7 @@
     &__project {
         &-header {
             margin-left: 3%;
+            cursor: pointer;
         }
     }
 
@@ -63,12 +68,22 @@
 
         &-header {
             margin-left: 6%;
+            cursor: pointer;
         }
     }
 
     &__task {
         &-header {
-            margin-left: 9%;
+            margin-left: 14%;
         }
+    }
+
+    .fa-rotate {
+        transform: rotate(180deg);
+        transition: all .3s ease;
+    }
+
+    .fa-caret-up {
+        transition: all .3s ease;
     }
 }

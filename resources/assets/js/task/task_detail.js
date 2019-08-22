@@ -1,3 +1,16 @@
+//listen a event
+window.Echo.private(`task-detail`)
+    .listen('AddComment', (result) => {
+        processAddCommentResponce(result);
+    })
+    .listen('UpdateComment', (result) => {
+        processUpdateCommentResponce(result.id, result.comment);
+    })
+    .listen('DeleteComment', (result) => {
+        processDeleteCommentResponce(result.id, result.task_id)
+    });
+
+
 $(function () {
     $('#editAssignTo').select2({
         width: '100%',
@@ -141,7 +154,7 @@ Dropzone.options.dropzone = {
     dictRemoveFile: 'x',
     timeout: 50000,
     init: function() {
-        thisDropzone = this;
+        let thisDropzone = this;
         $.get(taskUrl+taskId+'/get-attachments', function(data) {
             $.each(data.data, function(key,value){
                 let mockFile = { name: value.name, id:value.id};
@@ -253,15 +266,19 @@ Dropzone.options.dropzone = {
 
 function addCommentSection(comment) {
     let id = comment.id;
+    let icons = '';
+    if(comment.created_by == authId) {
+        icons = '                    <a class="user__icons del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
+            '                    <a class="user__icons edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
+            '                    <a class="user__icons save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+            '                    <a class="user__icons cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n';
+    }
     return '<div class="comments__information clearfix" id="comment__'+id+'">\n' +
         '        <div class="user">\n' +
         '            <img class="user__img" src="'+ comment.user_avatar +'" alt="User Image">\n' +
         '            <span class="user__username">\n' +
         '                <a>'+ comment.created_user.name +'</a>\n' +
-        '                    <a class="user__icons del-comment d-none" data-id="'+id+'"><i class="cui-trash hand-cursor"></i></a>\n' +
-        '                    <a class="user__icons edit-comment d-none" data-id="'+id+'"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>\n' +
-        '                    <a class="user__icons save-comment comment-save-icon-'+id+' d-none" data-id="'+id+'"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
-        '                    <a class="user__icons cancel-comment comment-cancel-icon-'+id+' d-none" data-id="'+id+'"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>\n' +
+        icons +
         '            </span>\n' +
         '            <span class="user__description">just now</span>\n' +
         '        </div>\n' +
@@ -275,7 +292,6 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
-    $('.no_comments').hide();
     let loadingButton = $(this);
     loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
@@ -288,11 +304,7 @@ $('#btnComment').click(function (event) {
         data: { 'comment': comment},
         success: function (result) {
             if (result.success) {
-                let commentId = result.data.comment.id;
-                commentDiv = addCommentSection(result.data.comment);
-                $(".comments").append(commentDiv);
-                $(".comment-display-"+commentId).html(comment);
-                CKEDITOR.instances.comment.setData('');
+                processAddCommentResponce(result.data.comment);
             }
             loadingButton.button('reset');
         },
@@ -323,24 +335,13 @@ $(document).on('click', '.del-comment', function (event) {
                 type: 'DELETE',
                 success: function (result) {
                     if (result.success) {
-                        let commetDiv = 'comment__'+commentId;
-                        $("#"+commetDiv).remove();
+                        processDeleteCommentResponce(commentId, taskId);
                     }
                     swal({
                         title: 'Deleted!',
                         text: 'Comment has been deleted.',
                         type: 'success',
                         timer: 2000
-                    });
-
-                    $.ajax({
-                        url: baseUrl + 'tasks/' + taskId + '/comments-count',
-                        type: 'GET',
-                        success: function (result) {
-                            if (result.data == 0) {
-                                $('.no_comments').show();
-                            }
-                        },
                     });
                 },
                 error: function (data) {
@@ -354,6 +355,36 @@ $(document).on('click', '.del-comment', function (event) {
             });
         });
 });
+
+function processAddCommentResponce(result) {
+    let commentDiv = addCommentSection(result);
+    $(".comments").append(commentDiv);
+    CKEDITOR.instances.comment.setData('');
+    $('.no_comments').hide();
+}
+
+function processDeleteCommentResponce(commentId, taskId) {
+    let commetDiv = 'comment__'+commentId;
+    $("#"+commetDiv).remove();
+
+    $.ajax({
+        url: baseUrl + 'tasks/' + taskId + '/comments-count',
+        type: 'GET',
+        success: function (result) {
+            if (result.data == 0) {
+                $('.no_comments').show();
+                $('.no_comments').removeClass('d-none');
+            }
+        },
+    });
+}
+
+function processUpdateCommentResponce(commentId, comment) {
+    $(".comment-display-"+commentId).html(comment).removeClass('d-none');
+    $(".comment-edit-"+commentId).addClass('d-none');
+    $(".comment-save-icon-"+commentId).addClass('d-none');
+    $(".comment-cancel-icon-"+commentId).addClass('d-none');
+}
 
 $(document).on('click', ".comment-display,.edit-comment" ,function () {
     let commentId = $(this).data('id');
@@ -393,10 +424,7 @@ $(document).on('click', ".save-comment", function (event) {
         data: { 'comment': comment.trim() },
         success: function (result) {
             if (result.success) {
-                $(".comment-display-"+commentId).html(comment).removeClass('d-none');
-                $(".comment-edit-"+commentId).addClass('d-none');
-                $(".comment-save-icon-"+commentId).addClass('d-none');
-                $(".comment-cancel-icon-"+commentId).addClass('d-none');
+                processUpdateCommentResponce(commentId, comment);
             }
         },
         error: function (result) {

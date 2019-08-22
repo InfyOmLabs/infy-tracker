@@ -29,6 +29,7 @@ class CommentController extends AppBaseController
         $input = $request->only(['comment']);
         $input['task_id'] = $task->id;
         $comment = $this->taskRepository->addComment($input);
+        $this->taskRepository->addCommentBroadCast($comment);
 
         return $this->sendResponse(['comment' => $comment], 'Comment has been added successfully.');
     }
@@ -43,10 +44,11 @@ class CommentController extends AppBaseController
      */
     public function deleteComment(Task $task, Comment $comment)
     {
-        if ($comment->task_id != $task->id) {
+        if ($comment->task_id != $task->id || $comment->created_by != \Auth::user()->id) {
             throw new UnprocessableEntityHttpException('Unable to delete comment.');
         }
 
+        $this->taskRepository->deleteCommentBroadCast($comment);
         $comment->delete();
 
         return $this->sendSuccess('Comment has been deleted successfully.');
@@ -61,12 +63,13 @@ class CommentController extends AppBaseController
      */
     public function editComment(Task $task, Comment $comment, Request $request)
     {
-        if ($comment->task_id != $task->id) {
+        if ($comment->task_id != $task->id || $comment->created_by != \Auth::user()->id) {
             throw new UnprocessableEntityHttpException('Unable to update comment.');
         }
 
-        $comment->comment = htmlentities($request->get('comment'));
+        $comment->comment = $request->get('comment');
         $comment->save();
+        $this->taskRepository->editCommentBroadCast($comment);
 
         return $this->sendSuccess('Comment has been updated successfully.');
     }

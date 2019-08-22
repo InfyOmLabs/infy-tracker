@@ -1,3 +1,30 @@
+import Echo from "laravel-echo";
+
+window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: pusherAppKey,
+    cluster: pusherAppCluster,
+    useTLS: true,
+});
+
+//listen a event
+window.Echo.private(`stopwatch-event`)
+    .listen('StopWatchStop', () => {
+        enableTimerData();
+        stopTimerData();
+    })
+    .listen('StartTimer', () => {
+        startWatch();
+        let projectId = localStorage.getItem('project_id');
+        let taskId = localStorage.getItem('task_id');
+        let activityId = localStorage.getItem('activity_id');
+        $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
+        $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
+        $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
+    });
+
 $('#tmActivityId,#tmTaskId,#tmProjectId').select2({
     width: '100%',
 });
@@ -107,6 +134,17 @@ var count, seconds = 0, minutes = 0, hours = 0;
 var secs, mins, gethours;
 var entryStartTime, entryStopTime = 0;
 
+function startTimerEvent() {
+    $.ajax({
+        url: startTimerUrl,
+        type: 'get',
+        success: function () {
+        },
+        error: function (result) {
+            printErrorMessage("#timeTrackerValidationErrorsBox", result);
+        }
+    });
+}
 $("#startTimer").click(function (e) {
     var activity = $('#tmActivityId').val();
     var task = $('#tmTaskId').val();
@@ -133,6 +171,7 @@ $("#startTimer").click(function (e) {
             localStorage.setItem('start_time', entryStartTime);
         }
         startWatch();
+        startTimerEvent();
     }
 });
 
@@ -140,15 +179,20 @@ $("#stopTimer").click(function (e) {
     e.preventDefault();
     $(this).attr('disabled', 'true');
 
+    enableTimerData();
+
+    $('#loader').show();
+    storeTimeEntry();
+});
+
+function enableTimerData() {
     $('#tmActivityId').removeAttr('disabled');
     $('#tmTaskId').removeAttr('disabled');
     $('#tmProjectId').removeAttr('disabled');
     $('#tmNotesErr').html("");
 
-    $('#loader').show();
     stopTime();
-    storeTimeEntry();
-});
+}
 
 //create a function to start the stop watch
 function startTime() {
@@ -178,14 +222,8 @@ function storeTimeEntry() {
                     "text": "Time Entry stored successfully!",
                     "type": "success"
                 });
-                stopWatch();
-                $("#stopTimer").hide();
-                $("#timer").html('<h3><b>00:00:00</b></h3>');
-                $("#startTimer").show();
-                clearTimeout(clearTime);
+                stopTimerData();
 
-                var removeItems = ['user_id', 'activity_id', 'task_id', 'clockRunning', 'start_time', 'seconds', 'minutes', 'hours'];
-                removeItemsFromLocalStorage(removeItems);
                 location.reload();
             }
         },
@@ -199,6 +237,17 @@ function storeTimeEntry() {
         complete: function () {
         }
     });
+}
+
+function stopTimerData() {
+    stopWatch();
+    $("#stopTimer").hide();
+    $("#timer").html('<h3><b>00:00:00</b></h3>');
+    $("#startTimer").show();
+    clearTimeout(clearTime);
+
+    var removeItems = ['user_id', 'activity_id', 'task_id', 'clockRunning', 'start_time', 'seconds', 'minutes', 'hours'];
+    removeItemsFromLocalStorage(removeItems);
 }
 
 function getCurrentTime(datetime = null) {

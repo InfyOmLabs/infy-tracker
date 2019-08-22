@@ -65,7 +65,7 @@ class ClientControllerTest extends TestCase
     {
         $this->mockClientRepository();
 
-        $client = factory(Client::class)->make()->toArray();
+        $client = factory(Client::class)->raw();
 
         $this->clientRepository->shouldReceive('create')
             ->once()
@@ -92,7 +92,7 @@ class ClientControllerTest extends TestCase
         $this->mockClientRepository();
 
         $client = factory(Client::class)->create();
-        $fakeClient = factory(Client::class)->make()->toArray();
+        $fakeClient = factory(Client::class)->raw();
 
         $this->clientRepository->shouldReceive('update')
             ->once()

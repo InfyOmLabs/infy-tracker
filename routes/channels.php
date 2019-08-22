@@ -11,6 +11,10 @@
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('task-detail', function ($user) {
+    return ($user->can('manage_all_tasks')) ? true : false;
+});
+
+Broadcast::channel('stopwatch-event', function ($user) {
+    return ($user->can('manage_time_entries')) ? true : false;
 });
