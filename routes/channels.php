@@ -16,5 +16,5 @@ Broadcast::channel('task-detail', function ($user) {
 });
 
 Broadcast::channel('stopwatch-event', function ($user) {
-    return true;
+    return false;
 });
