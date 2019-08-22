@@ -1,17 +1,4 @@
-import Echo from "laravel-echo";
-
-window.Pusher = require('pusher-js');
-
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: pusherAppKey,
-    cluster: pusherAppCluster,
-    useTLS: true,
-});
-
-
 //listen a event
-// Echo.private(`task-detail.${taskId}`)
 window.Echo.private(`task-detail`)
     .listen('AddComment', (result) => {
         processAddCommentResponce(result);
