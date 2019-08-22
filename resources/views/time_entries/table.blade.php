@@ -7,6 +7,7 @@
         <th>Start Time</th>
         <th>End Time</th>
         <th>Duration (min)</th>
+        <th>Entry Type</th>
         <th>Created At</th>
         <th>Action</th>
     </tr>

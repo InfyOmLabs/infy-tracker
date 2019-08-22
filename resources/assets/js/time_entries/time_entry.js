@@ -24,7 +24,7 @@ let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[6, "desc"]],
+    "order": [[7, "desc"]],
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
@@ -35,13 +35,13 @@ let tbl = $('#timeEntryTable').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [8],
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
         },
         {
-            "targets": [8, 9],
+            "targets": [10, 9],
             "visible": false,
         },
         {
@@ -49,11 +49,15 @@ let tbl = $('#timeEntryTable').DataTable({
             "width": "9%"
         },
         {
+            "targets": [6],
+            "width": "7%"
+        },
+        {
             "targets": [3, 4],
             "width": "10%"
         },
         {
-            "targets": [6],
+            "targets": [7],
             "width": "10%",
             "className": 'text-center',
         },
@@ -87,6 +91,18 @@ let tbl = $('#timeEntryTable').DataTable({
         {
             data: 'duration',
             name: 'duration'
+        },
+        {
+            data: function (row) {
+                return row;
+            },
+            render: function (row) {
+                if(row.entry_type == 1) {
+                    return '<span class="badge badge-primary">' + row.entry_type_string + '</span>';
+                }
+                return '<span class="badge badge-secondary">' + row.entry_type_string + '</span>';
+            },
+            name: 'entry_type'
         },
         {
             data: function (row) {
@@ -171,7 +187,7 @@ $('#startTime,#endTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
-        if (!Number.isInteger(minutes))  {
+        if (!Number.isInteger(minutes)) {
             minutes = minutes.toFixed(2);
         }
     }
@@ -194,7 +210,7 @@ $('#editStartTime,#editEndTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
-        if (!Number.isInteger(minutes))  {
+        if (!Number.isInteger(minutes)) {
             minutes = minutes.toFixed(2);
         }
     }
