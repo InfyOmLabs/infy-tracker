@@ -10,20 +10,20 @@ window.Echo = new Echo({
 });
 
 //listen a event
-window.Echo.private(`stopwatch-event`)
-    .listen('StopWatchStop', () => {
-        enableTimerData();
-        stopTimerData();
-    })
-    .listen('StartTimer', () => {
-        startWatch();
-        let projectId = localStorage.getItem('project_id');
-        let taskId = localStorage.getItem('task_id');
-        let activityId = localStorage.getItem('activity_id');
-        $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
-        $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
-        $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
-    });
+// window.Echo.private(`stopwatch-event`)
+//     .listen('StopWatchStop', () => {
+//         enableTimerData();
+//         stopTimerData();
+//     })
+//     .listen('StartTimer', () => {
+//         startWatch();
+//         let projectId = localStorage.getItem('project_id');
+//         let taskId = localStorage.getItem('task_id');
+//         let activityId = localStorage.getItem('activity_id');
+//         $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
+//         $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
+//         $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
+//     });
 
 $('#tmActivityId,#tmTaskId,#tmProjectId').select2({
     width: '100%',
