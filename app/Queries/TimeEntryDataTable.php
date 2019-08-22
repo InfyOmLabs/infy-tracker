@@ -22,7 +22,7 @@ class TimeEntryDataTable
     {
         /** @var TimeEntry $query */
         $query = TimeEntry::with(['task.project', 'user', 'activityType'])
-            ->select('time_entries.*', \DB::raw("IF(entry_type=1,'Stopwatch','Via Form') as entry_type_string"));
+            ->select('time_entries.*', \DB::raw("IF(IFNULL(entry_type,1)=1,'Stopwatch','Via Form') as entry_type_string"));
 
         /** @var User $user */
         $user = Auth::user();
