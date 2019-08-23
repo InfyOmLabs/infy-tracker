@@ -46,7 +46,7 @@ class TimeEntryControllerTest extends TestCase
         $projectId = $timeEntry->fresh()->task->project_id;
         $mockResponse = array_merge($timeEntry->toArray(), ['project_id' => $projectId]);
 
-        $this->timeEntryRepository->shouldReceive('getTimeEntryDetail')
+        $this->timeEntryRepository->expects('getTimeEntryDetail')
             ->once()
             ->with($timeEntry->id)
             ->andReturn($mockResponse);
@@ -89,7 +89,7 @@ class TimeEntryControllerTest extends TestCase
             'project_id'  => $timeEntry->task->project_id,
         ];
 
-        $this->timeEntryRepository->shouldReceive('myLastTask')
+        $this->timeEntryRepository->expects('myLastTask')
             ->once()
             ->andReturn($mockResponse);
 
@@ -108,7 +108,7 @@ class TimeEntryControllerTest extends TestCase
 
         $mockResponse = [$task->id => $task->title];
 
-        $this->timeEntryRepository->shouldReceive('getTasksByProject')
+        $this->timeEntryRepository->expects('getTasksByProject')
             ->once()
             ->with($task->project_id, null)
             ->andReturn($mockResponse);

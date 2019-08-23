@@ -85,7 +85,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepository();
 
-        $this->userRepo->shouldReceive('resendEmailVerification')
+        $this->userRepo->expects('resendEmailVerification')
             ->once()
             ->with($user->id);
 
@@ -102,7 +102,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepository();
 
-        $this->userRepo->shouldReceive('activeDeActiveUser')
+        $this->userRepo->expects('activeDeActiveUser')
             ->once()
             ->with($user->id);
 
@@ -120,7 +120,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepository();
 
-        $this->userRepo->shouldReceive('profileUpdate')
+        $this->userRepo->expects('profileUpdate')
             ->once()
             ->with($user);
 

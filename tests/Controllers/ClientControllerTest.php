@@ -67,7 +67,7 @@ class ClientControllerTest extends TestCase
 
         $client = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('create')
+        $this->clientRepository->expects('create')
             ->once()
             ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
 
@@ -94,7 +94,7 @@ class ClientControllerTest extends TestCase
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('update')
+        $this->clientRepository->expects('update')
             ->once()
             ->withArgs([$fakeClient, $client->id]);
 
@@ -137,7 +137,7 @@ class ClientControllerTest extends TestCase
 
         $mockResponse = ['id' => $project->id, 'name' => $project->name];
 
-        $this->projectRepository->shouldReceive('getProjectsList')
+        $this->projectRepository->expects('getProjectsList')
             ->once()
             ->with($client->id)
             ->andReturn($mockResponse);

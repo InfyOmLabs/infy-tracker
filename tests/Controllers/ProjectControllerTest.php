@@ -88,7 +88,7 @@ class ProjectControllerTest extends TestCase
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $this->projectRepository->shouldReceive('getMyProjects')
+        $this->projectRepository->expects('getMyProjects')
             ->once()
             ->andReturn($project->toArray());
 
@@ -111,7 +111,7 @@ class ProjectControllerTest extends TestCase
 
         $mockResponse = [$farhan->id => $farhan->name];
 
-        $this->userRepo->shouldReceive('getUserList')
+        $this->userRepo->expects('getUserList')
             ->once()
             ->with([$project->id])
             ->andReturn($mockResponse);

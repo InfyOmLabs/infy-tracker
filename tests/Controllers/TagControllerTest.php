@@ -41,7 +41,7 @@ class TagControllerTest extends TestCase
 
         $tag = factory(Tag::class)->raw();
 
-        $this->tagRepository->shouldReceive('store')
+        $this->tagRepository->expects('store')
             ->once()
             ->with($tag);
 
@@ -69,7 +69,7 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $this->tagRepository->shouldReceive('update')
+        $this->tagRepository->expects('update')
             ->once()
             ->withArgs([['name' => 'Dummy Tag'], $tag->id]);
 

@@ -44,7 +44,7 @@ class ActivityTypeControllerTest extends TestCase
 
         $activityType = factory(ActivityType::class)->raw();
 
-        $this->activityTypeRepository->shouldReceive('create')
+        $this->activityTypeRepository->expects('create')
             ->once()
             ->with(array_merge($activityType, ['created_by' => getLoggedInUserId()]));
 
@@ -72,7 +72,7 @@ class ActivityTypeControllerTest extends TestCase
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $this->activityTypeRepository->shouldReceive('update')
+        $this->activityTypeRepository->expects('update')
             ->once()
             ->withArgs([['name' => 'Dummy Name'], $activityType->id]);
 
