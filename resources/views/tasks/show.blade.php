@@ -22,7 +22,7 @@
                             data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">
                         Edit Detail
                     </button>
-                    <a class="btn btn-secondary" href="{{url(route('tasks.index'))}}">Back</a>
+                    <a class="btn btn-secondary" href="{{ url()->previous() }}">Back</a>
                 </div>
             </div>
             <div class="row">

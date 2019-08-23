@@ -3,14 +3,14 @@ import Echo from "laravel-echo";
 window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: pusherBroadcaster,
     key: pusherAppKey,
     cluster: pusherAppCluster,
     useTLS: true,
 });
 
-//listen a event
-window.Echo.private(`stopwatch-event`)
+// listen a event
+window.Echo.private(`stopwatch-event.${loggedInUserId}`)
     .listen('StopWatchStop', () => {
         enableTimerData();
         stopTimerData();

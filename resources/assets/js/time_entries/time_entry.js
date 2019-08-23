@@ -24,7 +24,7 @@ let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[6, "desc"]],
+    "order": [[7, "desc"]],
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
@@ -35,13 +35,13 @@ let tbl = $('#timeEntryTable').DataTable({
     },
     columnDefs: [
         {
-            "targets": [7],
+            "targets": [8],
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
         },
         {
-            "targets": [8, 9],
+            "targets": [10, 9],
             "visible": false,
         },
         {
@@ -49,19 +49,37 @@ let tbl = $('#timeEntryTable').DataTable({
             "width": "9%"
         },
         {
+            "targets": [6],
+            "width": "4%"
+        },
+        {
             "targets": [3, 4],
             "width": "10%"
         },
         {
-            "targets": [6],
-            "width": "10%",
+            "targets": [7],
+            "width": "7%",
             "className": 'text-center',
+        },
+        {
+            "targets": [2],
+            "width": "8%"
+        },
+        {
+            "targets": [0],
+            "width": "3%"
         },
     ],
     columns: [
         {
-            data: 'user.name',
-            name: 'user.name'
+            data: function (row) {
+                if (row.user) {
+                    return '<img class="assignee__avatar" src="' + row.user.img_avatar + '" data-toggle="tooltip" title="' + row.user.name + '">';
+                } else {
+                    return '';
+                }
+            },
+            name: 'user.name',
         },
         {
             data: function (row) {
@@ -87,6 +105,18 @@ let tbl = $('#timeEntryTable').DataTable({
         {
             data: 'duration',
             name: 'duration'
+        },
+        {
+            data: function (row) {
+                return row;
+            },
+            render: function (row) {
+                if(row.entry_type == 1) {
+                    return '<span class="badge badge-primary">' + row.entry_type_string + '</span>';
+                }
+                return '<span class="badge badge-secondary">' + row.entry_type_string + '</span>';
+            },
+            name: 'entry_type'
         },
         {
             data: function (row) {
@@ -171,7 +201,7 @@ $('#startTime,#endTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
-        if (!Number.isInteger(minutes))  {
+        if (!Number.isInteger(minutes)) {
             minutes = minutes.toFixed(2);
         }
     }
@@ -194,19 +224,23 @@ $('#editStartTime,#editEndTime').on('dp.change', function () {
     if (endTime) {
         const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
         minutes = diff / (1000 * 60);
-        if (!Number.isInteger(minutes))  {
+        if (!Number.isInteger(minutes)) {
             minutes = minutes.toFixed(2);
         }
     }
     $('#editDuration').val(minutes).prop('disabled', true);
+    $('#editStartTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    $('#editEndTime').data("DateTimePicker").maxDate(moment().endOf('now'));
 });
 
 $('#startTime,#editStartTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
     useCurrent: true,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down"
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment().endOf('day'),
@@ -215,11 +249,17 @@ $('#endTime,#editEndTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
     useCurrent: true,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down"
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment().endOf('day'),
+});
+$('#startTime,#endTime').on('dp.change', function (selected) {
+    $('#startTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    $('#endTime').data("DateTimePicker").maxDate(moment().endOf('now'));
 });
 
 $('#editTimeEntryForm').submit(function (event) {
@@ -274,6 +314,10 @@ window.renderTimeEntry = function (id) {
                 $('#editEndTime').val(timeEntry.end_time);
                 $('#editNote').val(timeEntry.note);
                 $('#editTimeEntryModal').modal('show');
+                //add it cause of project_id change, when it change it sets tasks dynamically and selected task_id vanished
+                setTimeout(function () {
+                    $('#editTaskId').val(timeEntry.task_id).trigger("change");
+                }, 1500);
             }
         },
         error: function (error) {
