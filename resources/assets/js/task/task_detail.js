@@ -50,8 +50,8 @@ $(function () {
         format: 'YYYY-MM-DD',
         useCurrent: false,
         icons: {
-            up: "icon-angle-up",
-            down: "icon-angle-down"
+            previous: 'icon-arrow-left icons',
+            next: 'icon-arrow-right icons',
         },
         sideBySide: true,
         minDate: moment().millisecond(0).second(0).minute(0).hour(0)

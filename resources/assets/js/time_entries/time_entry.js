@@ -205,8 +205,10 @@ $('#startTime,#editStartTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
     useCurrent: true,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down"
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment().endOf('day'),
@@ -215,8 +217,10 @@ $('#endTime,#editEndTime').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss',
     useCurrent: true,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down"
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment().endOf('day'),
