@@ -60,7 +60,7 @@ class TimeEntryController extends AppBaseController
         $input = $this->validateInput($request->all());
 
         $this->timeEntryRepository->create($input);
-//        $this->timeEntryRepository->broadcastStopTimerEvent();
+        $this->timeEntryRepository->broadcastStopTimerEvent();
 
         return $this->sendSuccess('Time Entry created successfully.');
     }
@@ -205,7 +205,7 @@ class TimeEntryController extends AppBaseController
      */
     public function getStartTimer()
     {
-//        $this->timeEntryRepository->broadcastStartTimerEvent();
+        $this->timeEntryRepository->broadcastStartTimerEvent();
 
         return $this->sendSuccess('Start timer broadcasted successfully.');
     }
