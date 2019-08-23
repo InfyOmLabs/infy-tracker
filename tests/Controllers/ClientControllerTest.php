@@ -94,7 +94,6 @@ class ClientControllerTest extends TestCase
         $fakeClient = factory(Client::class)->raw();
 
         $this->clientRepository->expects('update')
-            ->once()
             ->withArgs([$fakeClient, $client->id]);
 
         $response = $this->putJson(

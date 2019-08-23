@@ -42,7 +42,6 @@ class TagControllerTest extends TestCase
         $tag = factory(Tag::class)->raw();
 
         $this->tagRepository->expects('store')
-            ->once()
             ->with($tag);
 
         $response = $this->postJson('tags', $tag);
