@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\tests\Features\Auth;
+namespace Tests\Features\Auth;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -10,9 +10,7 @@ class LoginControllerTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * A basic feature test example.
-     *
-     * @return void
+     * @test
      */
     public function test_it_shows_login_form()
     {
