@@ -55,6 +55,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
+ *
  * @property-read mixed $img_avatar
  */
 class User extends Authenticatable

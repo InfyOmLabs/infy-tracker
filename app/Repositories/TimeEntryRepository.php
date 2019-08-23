@@ -155,12 +155,15 @@ class TimeEntryRepository extends BaseRepository
     /**
      * @param $timeEntry
      * @param $input
+     *
      * @return int
      */
-    public function checkTimeUpdated($timeEntry, $input){
-        if($input['start_time'] != $timeEntry->start_time || $input['end_time'] != $timeEntry->end_time){
+    public function checkTimeUpdated($timeEntry, $input)
+    {
+        if ($input['start_time'] != $timeEntry->start_time || $input['end_time'] != $timeEntry->end_time) {
             return TimeEntry::VIA_FORM;
         }
+
         return TimeEntry::STOPWATCH;
     }
 
