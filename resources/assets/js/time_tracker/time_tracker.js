@@ -12,17 +12,19 @@ window.Echo = new Echo({
 // listen a event
 window.Echo.private(`stopwatch-event.${loggedInUserId}`)
     .listen('StopWatchStop', () => {
+        console.log('StopWatchStop event');
         enableTimerData();
         stopTimerData();
     })
-    .listen('StartTimer', () => {
-        startWatch();
-        let projectId = localStorage.getItem('project_id');
-        let taskId = localStorage.getItem('task_id');
-        let activityId = localStorage.getItem('activity_id');
-        $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
-        $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
-        $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
+    .listen('StartTimer', (result) => {
+        console.log('StartTimer event data = ',result);
+        $('#tmProjectId').val(result.project).trigger('change').attr('disabled', true);
+        $('#tmTaskId').val(result.task).trigger('change').attr('disabled', true);
+        $('#tmActivityId').val(result.activity).trigger('change').attr('disabled', true);
+        setTimeout(function () {
+            $('#tmTaskId').val(result.task).trigger('change').attr('disabled', true);
+        }, 1500);
+        setTimerData(result.activity, result.task, result.project);
     });
 
 $('#tmActivityId,#tmTaskId,#tmProjectId').select2({
@@ -39,8 +41,9 @@ window.loadProjects = function() {
             $(result.data).each(function (i, e) {
                 $("#tmProjectId").append($('<option></option>').attr('value', e.id).text(e.name));
             });
-            if (localStorage.getItem('clockRunning') !== null) {
-                lastProjectId = localStorage.getItem('project_id');
+            if (getItemFromLocalStorage('clockRunning') !== null) {
+            // if (localStorage.getItem('clockRunning') !== null) {
+                lastProjectId = getItemFromLocalStorage('project_id');//localStorage.getItem('project_id');
                 $('#tmProjectId').val(lastProjectId).trigger("change");
                 $('#tmProjectId').attr('disabled', true);
             }
@@ -49,8 +52,9 @@ window.loadProjects = function() {
 };
 
 loadProjects();
-let isClockRunning = localStorage.getItem('clockRunning');
+let isClockRunning = getItemFromLocalStorage('clockRunning'); //localStorage.getItem('clockRunning');
 $(window).on("load", function () {
+    console.log('isClockRunning =',isClockRunning);
     if (isClockRunning == null) {
         getUserLastTaskWork();
     }
@@ -71,14 +75,17 @@ window.showStartTimeButton= function(){
 };
 
 window.startWatch = function () {
-    if(localStorage.getItem('clockRunning') == null) {
+    console.log('here');
+    if(getItemFromLocalStorage('clockRunning') == null) {
+    // if(localStorage.getItem('clockRunning') == null) {
         showStartTimeButton();
         return;
     }
     $("#startTimer").hide();
     $("#stopTimer").show();
 
-    var stTime = (localStorage.getItem('start_time') !== null) ? localStorage.getItem('start_time') : getCurrentTime();
+    // var stTime = (localStorage.getItem('start_time') !== null) ? localStorage.getItem('start_time') : getCurrentTime();
+    var stTime = (getItemFromLocalStorage('start_time') !== null) ? getItemFromLocalStorage('start_time') : getCurrentTime();
     var d1 = new Date($.now());
     var d2 = new Date(moment(stTime).format("YYYY-MM-DD HH:mm:ss"));
     var diffMs = parseInt(d1 - d2);
@@ -137,7 +144,12 @@ var entryStartTime, entryStopTime = 0;
 function startTimerEvent() {
     $.ajax({
         url: startTimerUrl,
-        type: 'get',
+        type: 'post',
+        data: {
+            'activity' : $('#tmActivityId').val(),
+            'task' : $('#tmTaskId').val(),
+            'project' : $('#tmProjectId').val()
+        },
         success: function () {
         },
         error: function (result) {
@@ -151,29 +163,35 @@ $("#startTimer").click(function (e) {
     var project = $('#tmProjectId').val();
     if (project != '' && activity != '' && (task != '' && !(task == null))) {
         e.preventDefault();
-        $('#tmActivityId').attr('disabled', true);
-        $('#tmTaskId').attr('disabled', true);
-        $('#tmProjectId').attr('disabled', true);
-
-        var setItems = {
-            'user_id': loginUserId,
-            'activity_id': activity,
-            'task_id': task,
-            'project_id': project,
-            'clockRunning': true
-        };
-        setItemToLocalStorage(setItems);
-
-        entryStartTime = getCurrentTime();
-        if (localStorage.getItem('start_time') !== null) {
-            entryStartTime = localStorage.getItem('start_time');
-        } else {
-            localStorage.setItem('start_time', entryStartTime);
-        }
-        startWatch();
+        setTimerData(activity, task, project);
         startTimerEvent();
     }
 });
+
+function setTimerData(activity, task, project) {
+    $('#tmActivityId').attr('disabled', true);
+    $('#tmTaskId').attr('disabled', true);
+    $('#tmProjectId').attr('disabled', true);
+
+    var setItems = {
+        'user_id': loginUserId,
+        'activity_id': activity,
+        'task_id': task,
+        'project_id': project,
+        'clockRunning': true
+    };
+    setItemToLocalStorage(setItems);
+
+    entryStartTime = getCurrentTime();
+    // if (localStorage.getItem('start_time') !== null) {
+    if (getItemFromLocalStorage('start_time') !== null) {
+        entryStartTime = getItemFromLocalStorage('start_time');//localStorage.getItem('start_time');
+    } else {
+        setItemToLocalStorage({'start_time': entryStartTime});
+        // localStorage.setItem('start_time', entryStartTime);
+    }
+    startWatch();
+}
 
 $("#stopTimer").click(function (e) {
     e.preventDefault();
@@ -207,7 +225,7 @@ function stopTime() {
 }
 
 function storeTimeEntry() {
-    let startTime = localStorage.getItem('start_time');
+    let startTime = getItemFromLocalStorage('start_time');//localStorage.getItem('start_time');
     let endTime = getCurrentTime();
 
     $.ajax({
@@ -263,13 +281,13 @@ function getCurrentTime(datetime = null) {
 
 function setItemToLocalStorage(items) {
     $.each(items, function (key, value) {
-        localStorage.setItem(key, value);
+        localStorage.setItem(key+'_'+loggedInUserId, value);
     });
 }
 
 function removeItemsFromLocalStorage(items) {
     $.each(items, function (index, value) {
-        localStorage.removeItem(value);
+        localStorage.removeItem(value+'_'+loggedInUserId);
     });
 }
 
@@ -289,8 +307,8 @@ function loadTimerData(projectId) {
             $('#tmTaskId').find('option').remove().end().append('<option value="">Select Task</option>');
             $('#tmTaskId').val("").trigger('change');
 
-            let drpTaskId = localStorage.getItem('task_id');
-            let drpActivityId = localStorage.getItem('activity_id');
+            let drpTaskId = getItemFromLocalStorage('task_id');//localStorage.getItem('task_id');
+            let drpActivityId = getItemFromLocalStorage('activity_id');//localStorage.getItem('activity_id');
             let isTaskEmpty = true;
             $(result.data.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
@@ -307,7 +325,8 @@ function loadTimerData(projectId) {
 
             $("#tmTaskId").removeAttr('disabled');
             // if timer is running then set values as it is
-            if (localStorage.getItem('clockRunning') !== null) {
+            // if (localStorage.getItem('clockRunning') !== null) {
+            if (getItemFromLocalStorage('clockRunning') !== null) {
                 $('#tmActivityId').val(drpActivityId).trigger("change");
                 $('#tmTaskId').val(drpTaskId).trigger("change");
 
@@ -333,6 +352,7 @@ function getUserLastTaskWork() {
             if (result.success) {
                 if (result.data) {
                     let lastTask = result.data;
+                    console.log('in fn isClockRunning',isClockRunning);
                     if (isClockRunning == null) {
                         let setItems = {
                             'user_id': loginUserId,
@@ -348,4 +368,8 @@ function getUserLastTaskWork() {
             }
         }
     });
+}
+
+function getItemFromLocalStorage(item) {
+    return localStorage.getItem(item+'_'+loggedInUserId);
 }
