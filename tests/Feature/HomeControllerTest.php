@@ -18,6 +18,8 @@ class HomeControllerTest extends TestCase
     /** @test */
     public function it_shows_dashboard()
     {
+        $this->withoutExceptionHandling();
+
         $response = $this->get(route('home'));
 
         echo $response->content();
