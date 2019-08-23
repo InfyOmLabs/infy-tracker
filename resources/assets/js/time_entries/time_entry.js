@@ -50,7 +50,7 @@ let tbl = $('#timeEntryTable').DataTable({
         },
         {
             "targets": [6],
-            "width": "7%"
+            "width": "4%"
         },
         {
             "targets": [3, 4],
@@ -58,14 +58,28 @@ let tbl = $('#timeEntryTable').DataTable({
         },
         {
             "targets": [7],
-            "width": "10%",
+            "width": "7%",
             "className": 'text-center',
+        },
+        {
+            "targets": [2],
+            "width": "8%"
+        },
+        {
+            "targets": [0],
+            "width": "3%"
         },
     ],
     columns: [
         {
-            data: 'user.name',
-            name: 'user.name'
+            data: function (row) {
+                if (row.user) {
+                    return '<img class="assignee__avatar" src="' + row.user.img_avatar + '" data-toggle="tooltip" title="' + row.user.name + '">';
+                } else {
+                    return '';
+                }
+            },
+            name: 'user.name',
         },
         {
             data: function (row) {
