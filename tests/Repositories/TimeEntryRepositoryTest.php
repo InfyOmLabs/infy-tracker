@@ -127,7 +127,6 @@ class TimeEntryRepositoryTest extends TestCase
         $this->assertContains($loggedInUserTask2->title, $result['tasks']);
     }
 
-
     /** @test */
     public function test_can_check_updated_time_entry_time()
     {
@@ -136,14 +135,13 @@ class TimeEntryRepositoryTest extends TestCase
 
         $input = [
             'start_time' => $this->faker->dateTime,
-            'end_time' => $this->faker->dateTime,
+            'end_time'   => $this->faker->dateTime,
         ];
         $result = $this->timeEntryRepo->checkTimeUpdated($timeEntry, $input);
 
         $this->assertEquals(TimeEntry::VIA_FORM, $result);
         $this->assertIsNumeric($result);
     }
-
 
     /** @test */
     public function test_can_check_updated_time_entry()
@@ -153,7 +151,7 @@ class TimeEntryRepositoryTest extends TestCase
 
         $input = [
             'start_time' => $timeEntry->start_time,
-            'end_time' => $timeEntry->end_time,
+            'end_time'   => $timeEntry->end_time,
         ];
         $result = $this->timeEntryRepo->checkTimeUpdated($timeEntry, $input);
 

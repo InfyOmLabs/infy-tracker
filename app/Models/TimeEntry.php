@@ -49,7 +49,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofCurrentUser()
+ *
  * @property int $entry_type
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry whereEntryType($value)
  */
 class TimeEntry extends Model

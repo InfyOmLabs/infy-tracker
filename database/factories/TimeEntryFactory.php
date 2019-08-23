@@ -14,16 +14,16 @@ $factory->define(TimeEntry::class, function (Faker $faker) {
     $task = factory(Task::class)->create();
 
     $startTime = date('Y-m-d H:i:s');
-    $endTime = date('Y-m-d H:i:s', strtotime($startTime . '+1 hours'));
+    $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+1 hours'));
 
     return [
-        'task_id' => $task->id,
+        'task_id'          => $task->id,
         'activity_type_id' => $activityType->id,
-        'user_id' => $user->id,
-        'start_time' => $startTime,
-        'end_time' => $endTime,
-        'duration' => $faker->randomDigit,
-        'note' => $faker->sentence,
-        'entry_type' => TimeEntry::STOPWATCH,
+        'user_id'          => $user->id,
+        'start_time'       => $startTime,
+        'end_time'         => $endTime,
+        'duration'         => $faker->randomDigit,
+        'note'             => $faker->sentence,
+        'entry_type'       => TimeEntry::STOPWATCH,
     ];
 });
