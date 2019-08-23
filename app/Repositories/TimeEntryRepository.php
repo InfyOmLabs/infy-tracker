@@ -190,11 +190,11 @@ class TimeEntryRepository extends BaseRepository
 
     public function broadcastStartTimerEvent()
     {
-//        broadcast(new StartTimer())->toOthers();
+        broadcast(new StartTimer())->toOthers();
     }
 
     public function broadcastStopTimerEvent()
     {
-//        broadcast(new StopWatchStop())->toOthers();
+        broadcast(new StopWatchStop())->toOthers();
     }
 }
