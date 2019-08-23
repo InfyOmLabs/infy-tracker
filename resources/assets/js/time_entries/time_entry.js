@@ -199,6 +199,8 @@ $('#editStartTime,#editEndTime').on('dp.change', function () {
         }
     }
     $('#editDuration').val(minutes).prop('disabled', true);
+    $('#editStartTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    $('#editEndTime').data("DateTimePicker").maxDate(moment().endOf('now'));
 });
 
 $('#startTime,#editStartTime').datetimepicker({
@@ -220,6 +222,10 @@ $('#endTime,#editEndTime').datetimepicker({
     },
     sideBySide: true,
     maxDate: moment().endOf('day'),
+});
+$('#startTime,#endTime').on('dp.change', function (selected) {
+    $('#startTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    $('#endTime').data("DateTimePicker").maxDate(moment().endOf('now'));
 });
 
 $('#editTimeEntryForm').submit(function (event) {
