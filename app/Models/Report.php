@@ -29,6 +29,8 @@ use Eloquent as Model;
  * @mixin \Eloquent
  *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ * @property-read mixed $formatted_date
+ * @property-read \App\Models\User $user
  */
 class Report extends Model
 {

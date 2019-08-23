@@ -13,7 +13,7 @@ $factory->define(Task::class, function (Faker $faker) {
 
     return [
         'title'       => $faker->sentence,
-        'description' => $faker->sentence,
+        'description' => $faker->text,
         'project_id'  => $project->id,
         'due_date'    => $faker->dateTime,
         'task_number' => $faker->unique()->randomDigitNotNull,
