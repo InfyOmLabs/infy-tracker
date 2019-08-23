@@ -42,12 +42,10 @@ class CommentControllerTest extends TestCase
         $comment = factory(Comment::class)->make();
 
         $this->taskRepository->expects('addComment')
-            ->once()
             ->with(['comment' => $comment->comment, 'task_id' => $comment->task_id])
             ->andReturn($comment);
 
         $this->taskRepository->expects('addCommentBroadCast')
-            ->once()
             ->with($comment);
 
         $response = $this->postJson("tasks/{$comment->task_id}/comments", [
@@ -65,8 +63,7 @@ class CommentControllerTest extends TestCase
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
         $newText = $this->faker->text;
 
-        $this->taskRepository->expects('editCommentBroadCast')
-            ->once();
+        $this->taskRepository->expects('editCommentBroadCast');
 
         $result = $this->post('tasks/'.$comment->task_id.'/comments/'.$comment->id.'/update', ['comment' => $newText]);
 
@@ -81,8 +78,7 @@ class CommentControllerTest extends TestCase
 
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
 
-        $this->taskRepository->expects('deleteCommentBroadCast')
-            ->once();
+        $this->taskRepository->expects('deleteCommentBroadCast');
 
         $result = $this->delete('tasks/'.$comment->task_id.'/comments/'.$comment->id);
 

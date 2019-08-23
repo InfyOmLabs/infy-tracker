@@ -68,7 +68,6 @@ class ClientControllerTest extends TestCase
         $client = factory(Client::class)->raw();
 
         $this->clientRepository->expects('create')
-            ->once()
             ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
 
         $response = $this->postJson('clients', $client);
@@ -138,7 +137,6 @@ class ClientControllerTest extends TestCase
         $mockResponse = ['id' => $project->id, 'name' => $project->name];
 
         $this->projectRepository->expects('getProjectsList')
-            ->once()
             ->with($client->id)
             ->andReturn($mockResponse);
 

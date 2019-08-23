@@ -86,7 +86,6 @@ class UserControllerTest extends TestCase
         $this->mockRepository();
 
         $this->userRepo->expects('resendEmailVerification')
-            ->once()
             ->with($user->id);
 
         $response = $this->getJson("users/$user->id/send-email");
@@ -103,7 +102,6 @@ class UserControllerTest extends TestCase
         $this->mockRepository();
 
         $this->userRepo->expects('activeDeActiveUser')
-            ->once()
             ->with($user->id);
 
         $response = $this->postJson("users/$user->id/active-de-active", []);
@@ -121,7 +119,6 @@ class UserControllerTest extends TestCase
         $this->mockRepository();
 
         $this->userRepo->expects('profileUpdate')
-            ->once()
             ->with($user);
 
         $response = $this->postJson('users/profile-update', $user);

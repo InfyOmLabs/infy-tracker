@@ -70,7 +70,6 @@ class TagControllerTest extends TestCase
         $tag = factory(Tag::class)->create();
 
         $this->tagRepository->expects('update')
-            ->once()
             ->withArgs([['name' => 'Dummy Tag'], $tag->id]);
 
         $response = $this->putJson(
