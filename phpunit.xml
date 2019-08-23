@@ -39,7 +39,7 @@
         </whitelist>
     </filter>
     <php>
-        <server name="APP_ENV" value="testing"/>
+        <server name="APP_ENV" value="local"/>
         <server name="APP_KEY" value="base64:Y7CqgUBTAaTfOV31buHGXFb5PrnzsxUnRmRarPc8p2Y="/>
         <server name="DB_CONNECTION" value="sqlite_testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
