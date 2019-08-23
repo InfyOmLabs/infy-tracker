@@ -18,10 +18,12 @@ class HomeControllerTest extends TestCase
     /** @test */
     public function it_shows_dashboard()
     {
-        $this->withoutExceptionHandling();
-
         $response = $this->get(route('home'));
 
-        echo $response->content();
+        $response->assertStatus(200)
+                 ->assertViewIs('dashboard.index')
+                 ->assertSeeText('Dashboard')
+                 ->assertSeeText('Custom Report')
+                 ->assertSeeText('Daily Work Report');
     }
 }
