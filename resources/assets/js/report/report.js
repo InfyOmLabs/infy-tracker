@@ -24,10 +24,8 @@ $('#start_date').datetimepicker({
     format: 'YYYY-MM-DD',
     useCurrent: true,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down",
-        next: "icon-angle-right",
-        previous: "icon-angle-left"
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment()
@@ -37,10 +35,8 @@ $('#end_date').datetimepicker({
     format: 'YYYY-MM-DD',
     useCurrent: false,
     icons: {
-        up: "icon-angle-up",
-        down: "icon-angle-down",
-        next: "icon-angle-right",
-        previous: "icon-angle-left"
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
     },
     sideBySide: true,
     maxDate: moment()
