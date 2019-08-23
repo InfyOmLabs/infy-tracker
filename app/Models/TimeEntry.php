@@ -49,12 +49,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofCurrentUser()
+ *
+ * @property int $entry_type
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry whereEntryType($value)
  */
 class TimeEntry extends Model
 {
     use SoftDeletes;
 
     public $table = 'time_entries';
+
+    const STOPWATCH = 1;
+    const VIA_FORM = 2;
 
     public $fillable = [
         'task_id',
@@ -63,6 +70,7 @@ class TimeEntry extends Model
         'start_time',
         'end_time',
         'duration',
+        'entry_type',
         'note',
         'deleted_by',
     ];
@@ -82,6 +90,7 @@ class TimeEntry extends Model
         'duration'         => 'integer',
         'note'             => 'string',
         'deleted_by'       => 'integer',
+        'entry_type'       => 'integer',
     ];
 
     /**

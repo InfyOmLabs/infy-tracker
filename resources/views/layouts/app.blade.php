@@ -113,8 +113,9 @@
     let projectsOfClient = "{{ url('projects-of-client') }}";
     let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     let startTimerUrl = "{{ url('start-timer') }}";
-    let pusherAppKey = '{{env('PUSHER_APP_KEY')}}';
-    let pusherAppCluster = '{{env('PUSHER_APP_CLUSTER')}}';
+    let pusherAppKey = "{{config('broadcasting.connections.pusher.key')}}";
+    let pusherAppCluster = "{{config('broadcasting.connections.pusher.options.cluster')}}";
+    let pusherBroadcaster = "{{config('broadcasting.connections.pusher.driver')}}";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

@@ -29,6 +29,6 @@ class StartTimer implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('stopwatch-event');
+        return new PrivateChannel('stopwatch-event.'.getLoggedInUserId());
     }
 }

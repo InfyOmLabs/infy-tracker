@@ -44,8 +44,8 @@ $(function () {
         format: 'YYYY-MM-DD',
         useCurrent: false,
         icons: {
-            up: "icon-angle-up",
-            down: "icon-angle-down"
+            previous: 'icon-arrow-left icons',
+            next: 'icon-arrow-right icons',
         },
         sideBySide: true,
         minDate: moment().millisecond(0).second(0).minute(0).hour(0)
@@ -55,11 +55,15 @@ $(function () {
         format: 'YYYY-MM-DD',
         useCurrent: false,
         icons: {
-            up: "icon-angle-up",
-            down: "icon-angle-down"
+            previous: 'icon-arrow-left icons',
+            next: 'icon-arrow-right icons',
+            clear: 'icon-trash icons'
         },
-        sideBySide: true
+        sideBySide: true,
+        date: new Date(),
+        showClear: true
     });
+    tbl.ajax.reload();
 
     $(document).ajaxComplete(function (result) {
         $('input[name=yes]').iCheck({

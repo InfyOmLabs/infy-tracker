@@ -3,27 +3,27 @@ import Echo from "laravel-echo";
 window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
+    broadcaster: pusherBroadcaster,
     key: pusherAppKey,
     cluster: pusherAppCluster,
     useTLS: true,
 });
 
-//listen a event
-// window.Echo.private(`stopwatch-event`)
-//     .listen('StopWatchStop', () => {
-//         enableTimerData();
-//         stopTimerData();
-//     })
-//     .listen('StartTimer', () => {
-//         startWatch();
-//         let projectId = localStorage.getItem('project_id');
-//         let taskId = localStorage.getItem('task_id');
-//         let activityId = localStorage.getItem('activity_id');
-//         $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
-//         $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
-//         $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
-//     });
+// listen a event
+window.Echo.private(`stopwatch-event.${loggedInUserId}`)
+    .listen('StopWatchStop', () => {
+        enableTimerData();
+        stopTimerData();
+    })
+    .listen('StartTimer', () => {
+        startWatch();
+        let projectId = localStorage.getItem('project_id');
+        let taskId = localStorage.getItem('task_id');
+        let activityId = localStorage.getItem('activity_id');
+        $('#tmProjectId').val(projectId).trigger('change').attr('disabled', true);
+        $('#tmTaskId').val(taskId).trigger('change').attr('disabled', true);
+        $('#tmActivityId').val(activityId).trigger('change').attr('disabled', true);
+    });
 
 $('#tmActivityId,#tmTaskId,#tmProjectId').select2({
     width: '100%',

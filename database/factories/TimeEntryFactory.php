@@ -24,5 +24,6 @@ $factory->define(TimeEntry::class, function (Faker $faker) {
         'end_time'         => $endTime,
         'duration'         => $faker->randomDigit,
         'note'             => $faker->sentence,
+        'entry_type'       => TimeEntry::STOPWATCH,
     ];
 });
