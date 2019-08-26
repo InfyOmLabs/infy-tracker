@@ -148,8 +148,7 @@ class TaskControllerTest extends TestCase
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
 
-        $this->taskRepository->shouldReceive('getTaskDetails')
-            ->once()
+        $this->taskRepository->expects('getTaskDetails')
             ->with($task->id, ['user_id' => $timeEntry->user_id])
             ->andReturn($task->toArray());
 
