@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -53,7 +54,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
+     * @param int $id
      * @param array $columns
      *
      * @return Task
@@ -66,7 +67,7 @@ class TaskRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return Task|\Illuminate\Database\Eloquent\Model
+     * @return Task
      */
     public function store($input)
     {
@@ -97,7 +98,7 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param array $input
-     * @param int   $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -135,7 +136,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array     $input
+     * @param array $input
      * @param Task|null $task
      *
      * @return bool
@@ -230,7 +231,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task  $task
+     * @param Task $task
      * @param array $tags
      */
     public function attachTags($task, $tags)
@@ -262,6 +263,7 @@ class TaskRepository extends BaseRepository
 
     /**
      * @param int $id
+     * @param array $input
      *
      * @return Task
      */
@@ -269,7 +271,7 @@ class TaskRepository extends BaseRepository
     {
         if (isset($input['user_id']) && $input['user_id'] > 0) {
             $task = Task::with([
-                'timeEntries' => function ($query) use ($input) {
+                'timeEntries' => function (HasMany $query) use ($input) {
                     $query->where('time_entries.user_id', '=', $input['user_id'])
                         ->with('user');
                 },
@@ -349,10 +351,9 @@ class TaskRepository extends BaseRepository
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 
+        $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
+        $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
         try {
-            $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
-            $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
-
             DB::beginTransaction();
             $task->attachments()->save($attachment);
             DB::commit();
@@ -424,7 +425,6 @@ class TaskRepository extends BaseRepository
     public function addComment($input)
     {
         $input['created_by'] = Auth::id();
-        $input['comment'] = $input['comment'];
         $comment = Comment::create($input);
 
         return Comment::with('createdUser')->findOrFail($comment->id);
