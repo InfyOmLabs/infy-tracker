@@ -87,7 +87,7 @@ class DashboardRepositoryTest extends TestCase
 
         $input = [
             'start_date' => $firstTimeEntry->start_time,
-            'end_date'   => $firstTimeEntry->end_time,
+            'end_date'   => $secondTimeEntry->end_time,
         ];
 
         $workReport = $this->dashboardRepo->getDeveloperWorkReport($input);
@@ -97,7 +97,6 @@ class DashboardRepositoryTest extends TestCase
         $firstEntryHours = round($firstTimeEntry->duration / 60, 2);
         $secondEntryHours = round($secondTimeEntry->duration / 60, 2);
         $totalHours = $firstEntryHours + $secondEntryHours;
-
         $this->assertEquals($firstEntryHours, $workReport['result'][1]->total_hours);
         $this->assertEquals($firstTimeEntry->user->name, $workReport['result'][1]->name);
 
