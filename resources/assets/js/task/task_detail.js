@@ -456,3 +456,6 @@ CKEDITOR.replace( 'editDesc', {
 $(document).on('click', '#btnCancel', function () {
     CKEDITOR.instances.comment.setData('');
 });
+
+//modal not closed on click outside
+$('.modal').modal({show: false, backdrop: 'static'});
