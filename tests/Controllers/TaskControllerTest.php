@@ -139,6 +139,26 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
+    public function test_can_get_task_details_from_given_user()
+    {
+        $this->mockRepository();
+
+        $task = factory(Task::class)->create();
+
+        /** @var TimeEntry $timeEntry */
+        $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
+
+        $this->taskRepository->shouldReceive('getTaskDetails')
+            ->once()
+            ->with($task->id, ['user_id' => $timeEntry->user_id])
+            ->andReturn($task->toArray());
+
+        $response = $this->getJson("task-details/$task->id?user_id=$timeEntry->user_id");
+
+        $this->assertExactResponseData($response, $task->toArray(), 'Task retrieved successfully.');
+    }
+
+    /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
         $this->mockRepository();
@@ -169,5 +189,22 @@ class TaskControllerTest extends TestCase
             'data'    => 1,
             'message' => 'Comments count retrieved successfully.',
         ]);
+    }
+
+    /** @test */
+    public function test_can_get_assignee_of_given_task()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+        $task->taskAssignee()->sync([$farhan->id]);
+
+        $response = $this->getJson("tasks/{$task->id}/users");
+
+        $response = $response->original;
+        $this->assertEquals($farhan->id, key($response));
+        $this->assertContains($farhan->name, $response);
     }
 }
