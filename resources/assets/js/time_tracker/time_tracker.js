@@ -42,8 +42,7 @@ window.loadProjects = function() {
                 $("#tmProjectId").append($('<option></option>').attr('value', e.id).text(e.name));
             });
             if (getItemFromLocalStorage('clockRunning') !== null) {
-            // if (localStorage.getItem('clockRunning') !== null) {
-                lastProjectId = getItemFromLocalStorage('project_id');//localStorage.getItem('project_id');
+                lastProjectId = getItemFromLocalStorage('project_id');
                 $('#tmProjectId').val(lastProjectId).trigger("change");
                 $('#tmProjectId').attr('disabled', true);
             }
@@ -52,7 +51,7 @@ window.loadProjects = function() {
 };
 
 loadProjects();
-let isClockRunning = getItemFromLocalStorage('clockRunning'); //localStorage.getItem('clockRunning');
+let isClockRunning = getItemFromLocalStorage('clockRunning');
 $(window).on("load", function () {
     console.log('isClockRunning =',isClockRunning);
     if (isClockRunning == null) {
@@ -77,14 +76,12 @@ window.showStartTimeButton= function(){
 window.startWatch = function () {
     console.log('here');
     if(getItemFromLocalStorage('clockRunning') == null) {
-    // if(localStorage.getItem('clockRunning') == null) {
         showStartTimeButton();
         return;
     }
     $("#startTimer").hide();
     $("#stopTimer").show();
 
-    // var stTime = (localStorage.getItem('start_time') !== null) ? localStorage.getItem('start_time') : getCurrentTime();
     var stTime = (getItemFromLocalStorage('start_time') !== null) ? getItemFromLocalStorage('start_time') : getCurrentTime();
     var d1 = new Date($.now());
     var d2 = new Date(moment(stTime).format("YYYY-MM-DD HH:mm:ss"));
@@ -125,7 +122,7 @@ $('#imgTimer').click(() => {
 });
 
 // if timer is running then set values as it is
-if (localStorage.getItem('clockRunning') !== null) {
+if (getItemFromLocalStorage('clockRunning') !== null) {
     startWatch();
 }
 
@@ -183,12 +180,10 @@ function setTimerData(activity, task, project) {
     setItemToLocalStorage(setItems);
 
     entryStartTime = getCurrentTime();
-    // if (localStorage.getItem('start_time') !== null) {
     if (getItemFromLocalStorage('start_time') !== null) {
-        entryStartTime = getItemFromLocalStorage('start_time');//localStorage.getItem('start_time');
+        entryStartTime = getItemFromLocalStorage('start_time');
     } else {
         setItemToLocalStorage({'start_time': entryStartTime});
-        // localStorage.setItem('start_time', entryStartTime);
     }
     startWatch();
 }
@@ -225,7 +220,7 @@ function stopTime() {
 }
 
 function storeTimeEntry() {
-    let startTime = getItemFromLocalStorage('start_time');//localStorage.getItem('start_time');
+    let startTime = getItemFromLocalStorage('start_time');
     let endTime = getCurrentTime();
 
     $.ajax({
@@ -307,8 +302,8 @@ function loadTimerData(projectId) {
             $('#tmTaskId').find('option').remove().end().append('<option value="">Select Task</option>');
             $('#tmTaskId').val("").trigger('change');
 
-            let drpTaskId = getItemFromLocalStorage('task_id');//localStorage.getItem('task_id');
-            let drpActivityId = getItemFromLocalStorage('activity_id');//localStorage.getItem('activity_id');
+            let drpTaskId = getItemFromLocalStorage('task_id');
+            let drpActivityId = getItemFromLocalStorage('activity_id');
             let isTaskEmpty = true;
             $(result.data.tasks).each(function (i, e) {
                 $("#tmTaskId").append($('<option></option>').attr('value', e.id).text(e.title));
@@ -325,7 +320,6 @@ function loadTimerData(projectId) {
 
             $("#tmTaskId").removeAttr('disabled');
             // if timer is running then set values as it is
-            // if (localStorage.getItem('clockRunning') !== null) {
             if (getItemFromLocalStorage('clockRunning') !== null) {
                 $('#tmActivityId').val(drpActivityId).trigger("change");
                 $('#tmTaskId').val(drpTaskId).trigger("change");
