@@ -12,12 +12,10 @@ window.Echo = new Echo({
 // listen a event
 window.Echo.private(`stopwatch-event.${loggedInUserId}`)
     .listen('StopWatchStop', () => {
-        console.log('StopWatchStop event');
         enableTimerData();
         stopTimerData();
     })
     .listen('StartTimer', (result) => {
-        console.log('StartTimer event data = ',result);
         $('#tmProjectId').val(result.project).trigger('change').attr('disabled', true);
         $('#tmTaskId').val(result.task).trigger('change').attr('disabled', true);
         $('#tmActivityId').val(result.activity).trigger('change').attr('disabled', true);
@@ -53,7 +51,6 @@ window.loadProjects = function() {
 loadProjects();
 let isClockRunning = getItemFromLocalStorage('clockRunning');
 $(window).on("load", function () {
-    console.log('isClockRunning =',isClockRunning);
     if (isClockRunning == null) {
         getUserLastTaskWork();
     }
@@ -74,7 +71,6 @@ window.showStartTimeButton= function(){
 };
 
 window.startWatch = function () {
-    console.log('here');
     if(getItemFromLocalStorage('clockRunning') == null) {
         showStartTimeButton();
         return;
@@ -346,7 +342,6 @@ function getUserLastTaskWork() {
             if (result.success) {
                 if (result.data) {
                     let lastTask = result.data;
-                    console.log('in fn isClockRunning',isClockRunning);
                     if (isClockRunning == null) {
                         let setItems = {
                             'user_id': loginUserId,
