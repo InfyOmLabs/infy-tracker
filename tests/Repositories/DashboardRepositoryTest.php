@@ -84,7 +84,7 @@ class DashboardRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_work_developer_daily_work_report_of_all_user_between_given_date()
+    public function test_can_get_developer_daily_work_report_of_all_users_between_given_date()
     {
         /** @var TimeEntry $firstTimeEntry */
         $firstTimeEntry = factory(TimeEntry::class)->create();
@@ -118,7 +118,7 @@ class DashboardRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_work_developer_daily_work_report_of_logged_in_user_between_given_date()
+    public function test_can_get_logged_in_developer_daily_work_report_between_given_date()
     {
         /** @var User $user */
         $user = factory(User::class)->create();
