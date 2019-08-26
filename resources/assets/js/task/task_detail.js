@@ -292,12 +292,12 @@ function addCommentSection(comment) {
 };
 
 $('#btnComment').click(function (event) {
-    let loadingButton = $(this);
-    loadingButton.button('loading');
     let comment = CKEDITOR.instances.comment.getData();
     if(comment == '' || comment.trim() == ''){
         return false;
     }
+    let loadingButton = $(this);
+    loadingButton.button('loading');
     $.ajax({
         url: baseUrl + 'tasks/' + taskId+ '/comments',
         type: 'post',
