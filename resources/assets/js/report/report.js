@@ -20,6 +20,8 @@ $('#tagIds').select2({
 });
 $('#filterCreatedBy').select2();
 
+$(".select2-search__field").css('width','100%');
+
 $('#start_date').datetimepicker({
     format: 'YYYY-MM-DD',
     useCurrent: true,
