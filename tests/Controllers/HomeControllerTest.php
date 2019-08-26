@@ -47,7 +47,7 @@ class HomeControllerTest extends TestCase
         $userId = $timeEntry->user_id;
 
         $mockResponse = ['projects' => [$timeEntry->task->project->name]];
-        $this->dashboardRepository->shouldReceive('getWorkReport')->once()
+        $this->dashboardRepository->expects('getWorkReport')
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
@@ -71,8 +71,7 @@ class HomeControllerTest extends TestCase
         $endTime = $timeEntry->end_time;
 
         $mockResponse = ['projects' => [$timeEntry->task->project->name]];
-        $this->dashboardRepository->shouldReceive('getDeveloperWorkReport')
-            ->once()
+        $this->dashboardRepository->expects('getDeveloperWorkReport')
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,

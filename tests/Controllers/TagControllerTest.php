@@ -41,8 +41,7 @@ class TagControllerTest extends TestCase
 
         $tag = factory(Tag::class)->raw();
 
-        $this->tagRepository->shouldReceive('store')
-            ->once()
+        $this->tagRepository->expects('store')
             ->with($tag);
 
         $response = $this->postJson('tags', $tag);
@@ -69,8 +68,7 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $this->tagRepository->shouldReceive('update')
-            ->once()
+        $this->tagRepository->expects('update')
             ->withArgs([['name' => 'Dummy Tag'], $tag->id]);
 
         $response = $this->putJson(
