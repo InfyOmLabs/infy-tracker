@@ -7,7 +7,7 @@
  * Time: 03:32 PM.
  */
 
-namespace Tests\Integration\Models;
+namespace Tests\Models;
 
 use App\Models\TimeEntry;
 use App\Models\User;

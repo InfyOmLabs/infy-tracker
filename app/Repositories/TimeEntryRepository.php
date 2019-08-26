@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Events\StartTimer;
+use App\Events\StopWatchStop;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,6 +27,7 @@ class TimeEntryRepository extends BaseRepository
         'start_time',
         'end_time',
         'duration',
+        'entry_type',
     ];
 
     /**
@@ -134,7 +137,10 @@ class TimeEntryRepository extends BaseRepository
      */
     public function updateTimeEntry($input, $id)
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = $this->find($id);
+        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry, $input) : $timeEntry->entry_type;
+        $input['entry_type'] = $timeEntryType;
         if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {
                 $input['start_time'] = '';
@@ -144,6 +150,21 @@ class TimeEntryRepository extends BaseRepository
         $this->update($input, $id);
 
         return true;
+    }
+
+    /**
+     * @param $timeEntry
+     * @param $input
+     *
+     * @return int
+     */
+    public function checkTimeUpdated($timeEntry, $input)
+    {
+        if ($input['start_time'] != $timeEntry->start_time || $input['end_time'] != $timeEntry->end_time) {
+            return TimeEntry::VIA_FORM;
+        }
+
+        return TimeEntry::STOPWATCH;
     }
 
     /**
@@ -168,5 +189,15 @@ class TimeEntryRepository extends BaseRepository
         if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
+    }
+
+    public function broadcastStartTimerEvent()
+    {
+        broadcast(new StartTimer())->toOthers();
+    }
+
+    public function broadcastStopTimerEvent()
+    {
+        broadcast(new StopWatchStop())->toOthers();
     }
 }

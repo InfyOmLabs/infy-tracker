@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Events\AddComment;
+use App\Events\DeleteComment;
+use App\Events\UpdateComment;
 use App\Models\ActivityType;
 use App\Models\Comment;
 use App\Models\Project;
@@ -13,6 +16,7 @@ use Carbon\Carbon;
 use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -63,7 +67,7 @@ class TaskRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return Task|\Illuminate\Database\Eloquent\Model
+     * @return Task
      */
     public function store($input)
     {
@@ -258,17 +262,20 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param int   $id
+     * @param array $input
      *
      * @return Task
      */
     public function getTaskDetails($id, $input = [])
     {
         if (isset($input['user_id']) && $input['user_id'] > 0) {
-            $task = Task::with(['timeEntries' => function ($query) use ($input) {
-                $query->where('time_entries.user_id', '=', $input['user_id'])
-                    ->with('user');
-            }])->findOrFail($id);
+            $task = Task::with([
+                'timeEntries' => function (HasMany $query) use ($input) {
+                    $query->where('time_entries.user_id', '=', $input['user_id'])
+                        ->with('user');
+                },
+            ])->findOrFail($id);
         } else {
             $task = Task::with('timeEntries.user')->findOrFail($id);
         }
@@ -344,10 +351,10 @@ class TaskRepository extends BaseRepository
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 
-        try {
-            $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
-            $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
+        $fileName = TaskAttachment::makeAttachment($file, TaskAttachment::PATH);
+        $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
 
+        try {
             DB::beginTransaction();
             $task->attachments()->save($attachment);
             DB::commit();
@@ -419,9 +426,32 @@ class TaskRepository extends BaseRepository
     public function addComment($input)
     {
         $input['created_by'] = Auth::id();
-        $input['comment'] = htmlentities($input['comment']);
         $comment = Comment::create($input);
 
         return Comment::with('createdUser')->findOrFail($comment->id);
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function addCommentBroadCast($comment)
+    {
+        broadcast(new AddComment($comment))->toOthers();
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function deleteCommentBroadCast($comment)
+    {
+        broadcast(new DeleteComment($comment))->toOthers();
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    public function editCommentBroadCast($comment)
+    {
+        broadcast(new UpdateComment($comment))->toOthers();
     }
 }

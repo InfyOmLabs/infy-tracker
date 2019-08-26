@@ -53,6 +53,7 @@
                     <div class="form-group col-sm-12">
                         {!! Form::label('note', 'Note') !!}
                         {!! Form::textarea('note', null, ['class' => 'form-control', 'rows' => 5]) !!}
+                        {!! Form::hidden('entry_type', 2) !!}
                     </div>
                 </div>
                 <div class="text-right">
