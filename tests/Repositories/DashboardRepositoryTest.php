@@ -34,7 +34,6 @@ class DashboardRepositoryTest extends TestCase
 
         $starOfDate = Carbon::parse($startDate)->startOfDay();
         $endOfDate = Carbon::parse($endDate)->endOfDay();
-
         $this->assertCount(4, $date['dateArr'], 'start date + 3days');
 
         $startDate = Carbon::parse($startDate)->format('Y-m-d');
@@ -42,7 +41,6 @@ class DashboardRepositoryTest extends TestCase
             $this->assertEquals($startDate, $dateValue);
             $startDate = date('Y-m-d', strtotime($startDate.'+1 days'));
         }
-
         $this->assertEquals($starOfDate, $date['startDate']);
         $this->assertEquals($endOfDate, $date['endDate']);
     }
@@ -68,18 +66,15 @@ class DashboardRepositoryTest extends TestCase
         $projectName = $timeEntry->task->project->name;
         $this->assertCount(1, $workReport['projects']);
         $this->assertEquals($projectName, $workReport['projects'][0]);
-
         $this->assertEquals($projectName, $workReport['data'][0]->label);
 
         $duration = round($timeEntry->duration / 60, 2);
         $this->assertEquals($duration, $workReport['data'][0]->data[0]);
-
         $this->assertEquals($timeEntry->duration, $workReport['totalRecords']);
 
         $datePeriod = Carbon::parse($input['start_date'])
                 ->format('d M, Y').' - '.Carbon::parse($input['end_date'])
                 ->format('d M, Y');
-
         $this->assertEquals($datePeriod, $workReport['label']);
     }
 
@@ -88,7 +83,6 @@ class DashboardRepositoryTest extends TestCase
     {
         /** @var TimeEntry $firstTimeEntry */
         $firstTimeEntry = factory(TimeEntry::class)->create();
-
         $secondTimeEntry = factory(TimeEntry::class)->create();
 
         $input = [
@@ -105,12 +99,10 @@ class DashboardRepositoryTest extends TestCase
         $totalHours = $firstEntryHours + $secondEntryHours;
 
         $this->assertEquals($firstEntryHours, $workReport['result'][1]->total_hours);
-
         $this->assertEquals($firstTimeEntry->user->name, $workReport['result'][1]->name);
 
         $hours = Arr::pluck($workReport['result'], 'total_hours');
         $this->assertEquals($hours[1], $workReport['data']['data'][1]);
-
         $this->assertEquals($totalHours, $workReport['totalRecords']);
 
         $day = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
@@ -136,12 +128,10 @@ class DashboardRepositoryTest extends TestCase
 
         $totalHours = round($timeEntry->duration / 60, 2);
         $this->assertEquals($totalHours, $workReport['result'][0]->total_hours);
-
         $this->assertEquals($timeEntry->user->name, $workReport['result'][0]->name);
 
         $hours = Arr::pluck($workReport['result'], 'total_hours');
         $this->assertEquals($hours[0], $workReport['data']['data'][0]);
-
         $this->assertEquals($totalHours, $workReport['totalRecords']);
 
         $day = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
