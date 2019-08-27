@@ -61,6 +61,17 @@ class ClientControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_shows_clients()
+    {
+        $response = $this->get(route('clients.index'), ['X-Requested-With' => '']);
+
+        $response->assertStatus(200)
+            ->assertViewIs('clients.index')
+            ->assertSeeText('Clients')
+            ->assertSeeText('New Client');
+    }
+
+    /** @test */
     public function it_can_store_client()
     {
         $this->mockClientRepository();
