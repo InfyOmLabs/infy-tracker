@@ -9,31 +9,16 @@ use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class UserControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $userRepo;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->userRepo = \Mockery::mock(UserRepository::class);
-        app()->instance(UserRepository::class, $this->userRepo);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
     }
 
     /** @test */
@@ -83,7 +68,7 @@ class UserControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
         $this->userRepo->expects('resendEmailVerification')
             ->with($user->id);
@@ -99,7 +84,7 @@ class UserControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
         $this->userRepo->expects('activeDeActiveUser')
             ->with($user->id);
@@ -116,7 +101,7 @@ class UserControllerTest extends TestCase
         $user = factory(User::class)->raw();
         unset($user['email_verified_at']);
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
         $this->userRepo->expects('profileUpdate')
             ->with($user);
