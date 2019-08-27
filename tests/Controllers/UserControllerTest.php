@@ -5,9 +5,7 @@ namespace Tests\Controllers;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 

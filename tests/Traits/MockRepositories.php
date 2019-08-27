@@ -14,25 +14,32 @@ use App\Repositories\UserRepository;
 use Mockery\MockInterface;
 
 /**
- * Trait MockRepositories
- * @package Tests\Traits
+ * Trait MockRepositories.
  */
 trait MockRepositories
 {
-    static $user = 'userRepo';
-    static $project = 'projectRepo';
-    static $role = 'roleRepo';
-    static $permission = 'permissionRepo';
-    static $tag = 'tagRepo';
-    static $client = 'clientRepo';
-    static $dashboard = 'dashboardRepo';
-    static $timeEntry = 'timeEntryRepo';
-    static $task = 'taskRepo';
-    static $activityType = 'activityTypeRepo';
+    public static $user = 'userRepo';
+    public static $project = 'projectRepo';
+    public static $role = 'roleRepo';
+    public static $permission = 'permissionRepo';
+    public static $tag = 'tagRepo';
+    public static $client = 'clientRepo';
+    public static $dashboard = 'dashboardRepo';
+    public static $timeEntry = 'timeEntryRepo';
+    public static $task = 'taskRepo';
+    public static $activityType = 'activityTypeRepo';
 
     /** @var MockInterface */
-    public $userRepo, $projectRepo, $roleRepo, $permissionRepo, $tagRepo, $clientRepo, $taskRepo, $dashboardRepo,
-        $timeEntryRepo, $activityTypeRepo;
+    public $userRepo;
+    public $projectRepo;
+    public $roleRepo;
+    public $permissionRepo;
+    public $tagRepo;
+    public $clientRepo;
+    public $taskRepo;
+    public $dashboardRepo;
+    public $timeEntryRepo;
+    public $activityTypeRepo;
 
     public function mockRepo($repoNames)
     {
@@ -43,31 +50,31 @@ trait MockRepositories
         foreach ($repoNames as $repoName) {
             $repoInstance = null;
             switch ($repoName) {
-                case self::$user;
+                case self::$user:
                     $repoInstance = UserRepository::class;
                     break;
-                case self::$role;
+                case self::$role:
                     $repoInstance = RoleRepository::class;
                     break;
-                case self::$permission;
+                case self::$permission:
                     $repoInstance = PermissionRepository::class;
                     break;
-                case self::$task;
+                case self::$task:
                     $repoInstance = TaskRepository::class;
                     break;
-                case self::$tag;
+                case self::$tag:
                     $repoInstance = TagRepository::class;
                     break;
-                case self::$project;
+                case self::$project:
                     $repoInstance = ProjectRepository::class;
                     break;
-                case self::$activityType;
+                case self::$activityType:
                     $repoInstance = ActivityTypeRepository::class;
                     break;
-                case self::$client;
+                case self::$client:
                     $repoInstance = ClientRepository::class;
                     break;
-                case self::$dashboard;
+                case self::$dashboard:
                     $repoInstance = DashboardRepository::class;
                     break;
             }
