@@ -3,9 +3,7 @@
 namespace Tests\Controllers;
 
 use App\Models\Tag;
-use App\Repositories\TagRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 

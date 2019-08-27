@@ -3,9 +3,7 @@
 namespace Tests\Controllers;
 
 use App\Models\ActivityType;
-use App\Repositories\ActivityTypeRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
