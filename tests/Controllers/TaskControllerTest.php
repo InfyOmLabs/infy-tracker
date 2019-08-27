@@ -11,34 +11,79 @@ use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 /**
  * Class TaskControllerTest.
  */
 class TaskControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $taskRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    /** @test */
+    public function it_can_shows_tasks()
     {
-        $this->taskRepository = \Mockery::mock(TaskRepository::class);
-        app()->instance(TaskRepository::class, $this->taskRepository);
+        $this->mockRepo(self::$task);
+
+        $mockTaskResponse = $this->prepareTaskInputs();
+        $this->taskRepository->expects('getTaskData')
+            ->andReturn($mockTaskResponse);
+
+        $response = $this->getJson(route('tasks.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('tasks.index')
+            ->assertSeeText('Tasks')
+            ->assertSeeText('Assign To')
+            ->assertSeeText('Due Date')
+            ->assertViewHasAll($mockTaskResponse);
     }
 
-    public function tearDown(): void
+    /** @test */
+    public function it_can_shows_task_details()
     {
-        parent::tearDown();
-        \Mockery::close();
+        /** @var Task $task */
+        $task = factory(Task::class)->create(['description' => 'N/A']);
+        $prefix = substr($task->prefix_task_number, 1);
+
+        $this->mockRepo(self::$task);
+
+        $mockTaskResponse = array_merge($this->prepareTaskInputs(),
+            ['task' => $task, 'attachmentUrl' => url(Task::PATH)]
+        );
+        $this->taskRepository->expects('getTaskData')
+            ->andReturn($mockTaskResponse);
+
+        $response = $this->getJson(route('tasks.show', $prefix));
+
+        $response->assertStatus(200)
+            ->assertViewIs('tasks.show')
+            ->assertSeeText('Task Details')
+            ->assertSeeText('Edit Detail')
+            ->assertSeeText('No comments added yet')
+            ->assertSeeText('N/A')
+            ->assertViewHasAll($mockTaskResponse);
+    }
+
+    public function prepareTaskInputs()
+    {
+        return [
+            'assignees'     => ['id' => 1, 'name' => 'Dummy User'],
+            'projects'      => ['id' => 1, 'name' => 'Dummy Project'],
+            'tags'          => ['id' => 1, 'name' => 'Dummy Tag'],
+            'activityTypes' => ['id' => 1, 'name' => 'Dummy ActivityType'],
+            'status'        => Task::STATUS_ARR,
+            'tasks'         => ['id' => 1, 'name' => 'Dummy Task'],
+            'taskStatus'    => Task::STATUS_ARR,
+            'priority'      => Task::PRIORITY,
+            'taskBadges'    => ['id' => 1, 'name' => 'Dummy Badge'],
+        ];
     }
 
     /** @test */
@@ -105,7 +150,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_update_status_of_task()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -124,7 +169,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_details()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -141,7 +186,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
