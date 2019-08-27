@@ -32,14 +32,23 @@ trait MockRepositories
 
     /** @var MockInterface */
     public $userRepository;
+    /** @var MockInterface */
     public $projectRepository;
+    /** @var MockInterface */
     public $roleRepository;
+    /** @var MockInterface */
     public $permissionRepository;
+    /** @var MockInterface */
     public $tagRepository;
+    /** @var MockInterface */
     public $clientRepository;
+    /** @var MockInterface */
     public $taskRepository;
+    /** @var MockInterface */
     public $dashboardRepository;
+    /** @var MockInterface */
     public $timeEntryRepository;
+    /** @var MockInterface */
     public $activityTypeRepository;
 
     public function mockRepo($repoNames)
