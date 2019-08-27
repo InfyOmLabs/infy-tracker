@@ -22,6 +22,28 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_can_shows_users()
+    {
+        $this->mockRepo([self::$project, self::$role]);
+
+        $mockProjectResponse = [['id' => 1, 'name' => 'Dummy Project']];
+        $this->projectRepo->expects('getProjectsList')
+            ->andReturn($mockProjectResponse);
+
+        $mockRoleResponse = [['id' => 1, 'name' => 'Dummy Role']];
+        $this->roleRepo->expects('getRolesList')
+            ->andReturn($mockRoleResponse);
+
+        $response = $this->get(route('users.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('users.index')
+            ->assertSeeText('Users')
+            ->assertSeeText('New User')
+            ->assertViewHasAll(['projects' => $mockProjectResponse, 'roles' => $mockRoleResponse]);
+    }
+
+    /** @test */
     public function test_can_retrieve_user_with_its_projects_and_roles()
     {
         $vishal = factory(User::class)->create();
