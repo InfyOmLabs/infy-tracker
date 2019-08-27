@@ -1,5 +1,9 @@
 $('#editProfileForm').submit(function (event) {
     event.preventDefault();
+    isValidate = validatePassword();
+    if(!isValidate){
+        return false;
+    }
     let loadingButton = jQuery(this).find("#btnEditSave");
     loadingButton.button('loading');
     $.ajax({
@@ -86,3 +90,34 @@ $(document).on('keyup', '#name', function (e) {
         }
     }
 });
+
+$(".confirm-pwd").hide();
+$(document).on('blur', '#pfNewPassword', function () {
+    let password = $("#pfNewPassword").val();
+    if(password == '' || password.trim() == ''){
+        $(".confirm-pwd").hide();
+        return false;
+    }
+
+    $(".confirm-pwd").show();
+});
+$(document).on('blur', '#pfNewConfirmPassword', function () {
+    let confirmPassword = $("#pfNewConfirmPassword").val();
+    if(confirmPassword == '' || confirmPassword.trim() == ''){
+        $(".confirm-pwd").hide();
+        return false;
+    }
+
+    $(".confirm-pwd").show();
+});
+
+function validatePassword() {
+    let password = $("#pfNewPassword").val().trim();
+    let confirmPassword = $("#pfNewConfirmPassword").val().trim();
+
+    if((confirmPassword == '' && password != '') || (confirmPassword != '' && password == '')) {
+        $('#editProfileValidationErrorsBox').show().html("Please enter password and confirm password");
+        return false;
+    }
+    return true;
+}

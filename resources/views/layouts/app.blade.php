@@ -45,9 +45,6 @@
                 <span class="pr-3 align-middle">{!! Auth::user()->name !!}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-header text-center">
-                    <strong>Account</strong>
-                </div>
                 <a href="#" class="dropdown-item btn btn-primary btn btn-default btn-flat edit-profile"
                    data-toggle="modal" data-id="{{ getLoggedInUserId() }}">
                     <i class="fa fa-user"></i>Profile
