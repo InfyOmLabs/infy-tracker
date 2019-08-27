@@ -18,28 +18,20 @@ use Mockery\MockInterface;
  */
 trait MockRepositories
 {
-    public static $user = 'userRepo';
-    public static $project = 'projectRepo';
-    public static $role = 'roleRepo';
-    public static $permission = 'permissionRepo';
-    public static $tag = 'tagRepo';
-    public static $client = 'clientRepo';
-    public static $dashboard = 'dashboardRepo';
-    public static $timeEntry = 'timeEntryRepo';
-    public static $task = 'taskRepo';
-    public static $activityType = 'activityTypeRepo';
+    static $user = 'userRepository';
+    static $project = 'projectRepository';
+    static $role = 'roleRepository';
+    static $permission = 'permissionRepository';
+    static $tag = 'tagRepository';
+    static $client = 'clientRepository';
+    static $dashboard = 'dashboardRepository';
+    static $timeEntry = 'timeEntryRepository';
+    static $task = 'taskRepository';
+    static $activityType = 'activityTypeRepository';
 
     /** @var MockInterface */
-    public $userRepo;
-    public $projectRepo;
-    public $roleRepo;
-    public $permissionRepo;
-    public $tagRepo;
-    public $clientRepo;
-    public $taskRepo;
-    public $dashboardRepo;
-    public $timeEntryRepo;
-    public $activityTypeRepo;
+    public $userRepository, $projectRepository, $roleRepository, $permissionRepository, $tagRepository,
+        $clientRepository, $taskRepository, $dashboardRepository, $timeEntryRepository, $activityTypeRepository;
 
     public function mockRepo($repoNames)
     {

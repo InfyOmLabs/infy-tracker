@@ -25,11 +25,11 @@ class UserControllerTest extends TestCase
         $this->mockRepo([self::$project, self::$role]);
 
         $mockProjectResponse = [['id' => 1, 'name' => 'Dummy Project']];
-        $this->projectRepo->expects('getProjectsList')
+        $this->projectRepository->expects('getProjectsList')
             ->andReturn($mockProjectResponse);
 
         $mockRoleResponse = [['id' => 1, 'name' => 'Dummy Role']];
-        $this->roleRepo->expects('getRolesList')
+        $this->roleRepository->expects('getRolesList')
             ->andReturn($mockRoleResponse);
 
         $response = $this->get(route('users.index'));
@@ -90,7 +90,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('resendEmailVerification')
+        $this->userRepository->expects('resendEmailVerification')
             ->with($user->id);
 
         $response = $this->getJson("users/$user->id/send-email");
@@ -106,7 +106,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('activeDeActiveUser')
+        $this->userRepository->expects('activeDeActiveUser')
             ->with($user->id);
 
         $response = $this->postJson("users/$user->id/active-de-active", []);
@@ -123,7 +123,7 @@ class UserControllerTest extends TestCase
 
         $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('profileUpdate')
+        $this->userRepository->expects('profileUpdate')
             ->with($user);
 
         $response = $this->postJson('users/profile-update', $user);
