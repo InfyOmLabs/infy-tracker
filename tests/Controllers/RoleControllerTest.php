@@ -6,15 +6,27 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class RoleControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
+    }
+
+    /** @test */
+    public function it_can_shows_roles()
+    {
+        $response = $this->getJson(route('roles.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('roles.index')
+            ->assertSeeText('Roles')
+            ->assertSeeText('New Role');
     }
 
     /** @test */

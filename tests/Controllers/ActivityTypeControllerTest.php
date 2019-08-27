@@ -7,40 +7,33 @@ use App\Repositories\ActivityTypeRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class ActivityTypeControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $activityTypeRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
-
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    /** @test */
+    public function it_can_shows_activity_types()
     {
-        $this->activityTypeRepository = \Mockery::mock(ActivityTypeRepository::class);
-        app()->instance(ActivityTypeRepository::class, $this->activityTypeRepository);
-    }
+        $response = $this->getJson(route('activity-types.index'));
 
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        \Mockery::close();
+        $response->assertStatus(200)
+            ->assertViewIs('activity_types.index')
+            ->assertSeeText('Activity Types')
+            ->assertSeeText('New Activity Type');
     }
 
     /** @test */
     public function it_can_store_activity_type()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$activityType);
 
         $activityType = factory(ActivityType::class)->raw();
 
@@ -66,7 +59,7 @@ class ActivityTypeControllerTest extends TestCase
     /** @test */
     public function it_can_update_activity_type()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$activityType);
 
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();

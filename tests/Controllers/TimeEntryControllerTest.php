@@ -4,41 +4,54 @@ namespace Tests\Controllers;
 
 use App\Models\Task;
 use App\Models\TimeEntry;
-use App\Repositories\TimeEntryRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class TimeEntryControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $timeEntryRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    /** @test */
+    public function it_can_shows_time_entries()
     {
-        $this->timeEntryRepository = \Mockery::mock(TimeEntryRepository::class);
-        app()->instance(TimeEntryRepository::class, $this->timeEntryRepository);
+        $this->mockRepo(self::$timeEntry);
+
+        $mockResponse = $this->prepareTimeEntryInputs();
+        $this->timeEntryRepository->expects('getEntryData')
+            ->andReturn($mockResponse);
+
+        $response = $this->getJson(route('time-entries.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('time_entries.index')
+            ->assertSeeText('Time Entries')
+            ->assertSeeText('New Time Entry')
+            ->assertSeeText('Activity Type')
+            ->assertSeeText('Project')
+            ->assertViewHasAll($mockResponse);
     }
 
-    public function tearDown(): void
+    public function prepareTimeEntryInputs()
     {
-        parent::tearDown();
-        \Mockery::close();
+        return [
+            'tasks'         => ['id' => 1, 'title' => 'Dummy Task'],
+            'users'         => ['id' => 1, 'title' => 'Dummy user'],
+            'projects'      => ['id' => 1, 'title' => 'Dummy Project'],
+            'activityTypes' => ['id' => 1, 'title' => 'Dummy ActivityType'],
+        ];
     }
 
     /** @test */
     public function test_can_get_time_entry_details()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timerEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -77,7 +90,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_last_task_details_of_logged_in_user()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -99,7 +112,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_tasks_of_given_project()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
