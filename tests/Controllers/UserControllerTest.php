@@ -5,35 +5,40 @@ namespace Tests\Controllers;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\User;
-use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class UserControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $userRepo;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    /** @test */
+    public function it_can_shows_users()
     {
-        $this->userRepo = \Mockery::mock(UserRepository::class);
-        app()->instance(UserRepository::class, $this->userRepo);
-    }
+        $this->mockRepo([self::$project, self::$role]);
 
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
+        $mockProjectResponse = [['id' => 1, 'name' => 'Dummy Project']];
+        $this->projectRepository->expects('getProjectsList')
+            ->andReturn($mockProjectResponse);
+
+        $mockRoleResponse = [['id' => 1, 'name' => 'Dummy Role']];
+        $this->roleRepository->expects('getRolesList')
+            ->andReturn($mockRoleResponse);
+
+        $response = $this->get(route('users.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('users.index')
+            ->assertSeeText('Users')
+            ->assertSeeText('New User')
+            ->assertViewHasAll(['projects' => $mockProjectResponse, 'roles' => $mockRoleResponse]);
     }
 
     /** @test */
@@ -83,9 +88,9 @@ class UserControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('resendEmailVerification')
+        $this->userRepository->expects('resendEmailVerification')
             ->with($user->id);
 
         $response = $this->getJson("users/$user->id/send-email");
@@ -99,9 +104,9 @@ class UserControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('activeDeActiveUser')
+        $this->userRepository->expects('activeDeActiveUser')
             ->with($user->id);
 
         $response = $this->postJson("users/$user->id/active-de-active", []);
@@ -117,9 +122,9 @@ class UserControllerTest extends TestCase
         unset($user['email_verified_at']);
         $user['password_confirmation'] = $user['password'];
 
-        $this->mockRepository();
+        $this->mockRepo(self::$user);
 
-        $this->userRepo->expects('profileUpdate')
+        $this->userRepository->expects('profileUpdate')
             ->with($user);
 
         $response = $this->postJson('users/profile-update', $user);

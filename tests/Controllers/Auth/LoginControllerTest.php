@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Auth;
+namespace Tests\Controllers\Auth;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -15,10 +15,10 @@ class LoginControllerTest extends TestCase
         $response = $this->get(route('login'));
 
         $response->assertStatus(200)
-                 ->assertViewIs('auth.login')
-                 ->assertSeeText('Login')
-                 ->assertSeeText('Sign In to your account')
-                 ->assertSeeText('Forgot password?');
+            ->assertViewIs('auth.login')
+            ->assertSeeText('Login')
+            ->assertSeeText('Sign In to your account')
+            ->assertSeeText('Forgot password?');
     }
 
     /** @test */
@@ -27,8 +27,8 @@ class LoginControllerTest extends TestCase
         $response = $this->get(route('password.request'));
 
         $response->assertStatus(200)
-                 ->assertViewIs('auth.passwords.email')
-                 ->assertSeeText('Reset Your Password')
-                 ->assertSeeText('Enter Email to reset password');
+            ->assertViewIs('auth.passwords.email')
+            ->assertSeeText('Reset Your Password')
+            ->assertSeeText('Enter Email to reset password');
     }
 }

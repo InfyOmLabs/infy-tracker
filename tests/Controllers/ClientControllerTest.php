@@ -30,15 +30,10 @@ class ClientControllerTest extends TestCase
     /** @var MockInterface */
     protected $projectRepository;
 
-    protected $defaultUserId = 1;
-
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
-
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
     public function mockClientRepository()
@@ -53,11 +48,15 @@ class ClientControllerTest extends TestCase
         app()->instance(ProjectRepository::class, $this->projectRepository);
     }
 
-    public function tearDown(): void
+    /** @test */
+    public function it_shows_clients()
     {
-        parent::tearDown();
+        $response = $this->getJson(route('clients.index'));
 
-        \Mockery::close();
+        $response->assertStatus(200)
+            ->assertViewIs('clients.index')
+            ->assertSeeText('Clients')
+            ->assertSeeText('New Client');
     }
 
     /** @test */
