@@ -30,15 +30,10 @@ class ClientControllerTest extends TestCase
     /** @var MockInterface */
     protected $projectRepository;
 
-    protected $defaultUserId = 1;
-
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
-
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
     public function mockClientRepository()
@@ -53,11 +48,15 @@ class ClientControllerTest extends TestCase
         app()->instance(ProjectRepository::class, $this->projectRepository);
     }
 
-    public function tearDown(): void
+    /** @test */
+    public function it_shows_clients()
     {
-        parent::tearDown();
+        $response = $this->getJson(route('clients.index'));
 
-        \Mockery::close();
+        $response->assertStatus(200)
+            ->assertViewIs('clients.index')
+            ->assertSeeText('Clients')
+            ->assertSeeText('New Client');
     }
 
     /** @test */
@@ -67,8 +66,7 @@ class ClientControllerTest extends TestCase
 
         $client = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('create')
-            ->once()
+        $this->clientRepository->expects('create')
             ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
 
         $response = $this->postJson('clients', $client);
@@ -94,8 +92,7 @@ class ClientControllerTest extends TestCase
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('update')
-            ->once()
+        $this->clientRepository->expects('update')
             ->withArgs([$fakeClient, $client->id]);
 
         $response = $this->putJson(
@@ -137,8 +134,7 @@ class ClientControllerTest extends TestCase
 
         $mockResponse = ['id' => $project->id, 'name' => $project->name];
 
-        $this->projectRepository->shouldReceive('getProjectsList')
-            ->once()
+        $this->projectRepository->expects('getProjectsList')
             ->with($client->id)
             ->andReturn($mockResponse);
 

@@ -4,6 +4,7 @@ namespace Tests\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -20,11 +21,13 @@ class ProjectControllerTest extends TestCase
     /** @var MockInterface */
     protected $userRepo;
 
+    /** @var MockInterface */
+    private $clientRepo;
+
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
     private function mockRepository()
@@ -35,10 +38,33 @@ class ProjectControllerTest extends TestCase
         app()->instance(UserRepository::class, $this->userRepo);
     }
 
-    public function tearDown(): void
+    public function mockClientRepo()
     {
-        parent::tearDown();
-        \Mockery::close();
+        $this->clientRepo = \Mockery::mock(ClientRepository::class);
+        app()->instance(ClientRepository::class, $this->clientRepo);
+    }
+
+    /** @test */
+    public function it_can_shows_projects()
+    {
+        $this->mockClientRepo();
+        $this->mockRepository();
+
+        $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
+        $this->clientRepo->expects('getClientList')
+            ->andReturn($mockClientResponse);
+
+        $mockUserResponse = [['id' => 1, 'name' => 'Dummy User']];
+        $this->userRepo->expects('getUserList')
+            ->andReturn($mockUserResponse);
+
+        $response = $this->get(route('projects.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('projects.index')
+            ->assertSeeText('Projects')
+            ->assertSeeText('New Project')
+            ->assertViewHasAll(['clients' => $mockClientResponse, 'users' => $mockUserResponse]);
     }
 
     /** @test */
@@ -88,8 +114,7 @@ class ProjectControllerTest extends TestCase
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $this->projectRepository->shouldReceive('getMyProjects')
-            ->once()
+        $this->projectRepository->expects('getMyProjects')
             ->andReturn($project->toArray());
 
         $response = $this->getJson('my-projects');
@@ -111,8 +136,7 @@ class ProjectControllerTest extends TestCase
 
         $mockResponse = [$farhan->id => $farhan->name];
 
-        $this->userRepo->shouldReceive('getUserList')
-            ->once()
+        $this->userRepo->expects('getUserList')
             ->with([$project->id])
             ->andReturn($mockResponse);
 
