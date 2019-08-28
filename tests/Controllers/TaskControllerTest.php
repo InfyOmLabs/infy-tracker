@@ -29,9 +29,9 @@ class TaskControllerTest extends TestCase
     {
         $this->mockRepo(self::$task);
 
-        $mockTaskResponse = $this->prepareTaskInputs();
+        $mockedTaskResponse = $this->prepareTaskInputs();
         $this->taskRepository->expects('getTaskData')
-            ->andReturn($mockTaskResponse);
+            ->andReturn($mockedTaskResponse);
 
         $response = $this->getJson(route('tasks.index'));
 
@@ -40,7 +40,7 @@ class TaskControllerTest extends TestCase
             ->assertSeeText('Tasks')
             ->assertSeeText('Assign To')
             ->assertSeeText('Due Date')
-            ->assertViewHasAll($mockTaskResponse);
+            ->assertViewHasAll($mockedTaskResponse);
     }
 
     /** @test */
@@ -52,11 +52,11 @@ class TaskControllerTest extends TestCase
 
         $this->mockRepo(self::$task);
 
-        $mockTaskResponse = array_merge($this->prepareTaskInputs(),
+        $mockedTaskResponse = array_merge($this->prepareTaskInputs(),
             ['task' => $task, 'attachmentUrl' => url(Task::PATH)]
         );
         $this->taskRepository->expects('getTaskData')
-            ->andReturn($mockTaskResponse);
+            ->andReturn($mockedTaskResponse);
 
         $response = $this->getJson(route('tasks.show', $prefix));
 
@@ -66,7 +66,7 @@ class TaskControllerTest extends TestCase
             ->assertSeeText('Edit Detail')
             ->assertSeeText('No comments added yet')
             ->assertSeeText('N/A')
-            ->assertViewHasAll($mockTaskResponse);
+            ->assertViewHasAll($mockedTaskResponse);
     }
 
     public function prepareTaskInputs()
