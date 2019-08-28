@@ -8,9 +8,12 @@
             </div>
             <div class="modal-body task-detail__body">
                 @include('loader')
-                <div class="row no-gutters">
-                    <div class="col-4 offset-8 mb-2" id="user-drop-down-body">
-                        {!!Form::select('task_users',[],null,['id'=>'task_users','class'=>'form-control'])  !!}
+                <div class="row no-gutters time-entry-data">
+                    <div class="col-sm-12 mb-2 d-flex">
+                        <div class="col-sm-8 pl-0 pt-2" id="total-duration"></div>
+                        <div class="col-sm-4 mb-2 pr-0" id="user-drop-down-body">
+                            {!!Form::select('task_users',[],null,['id'=>'task_users','class'=>'form-control'])  !!}
+                        </div>
                     </div>
                     <table class="col-12 table table-responsive-sm table-striped table-bordered" id="taskDetailsTable">
                         <thead>
