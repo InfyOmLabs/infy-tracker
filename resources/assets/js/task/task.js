@@ -573,3 +573,6 @@ function loadProjectAssignees(projectId, selector) {
         }
     });
 }
+
+//modal not closed on click outside
+$('.modal').modal({show: false, backdrop: 'static'});
