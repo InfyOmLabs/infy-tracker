@@ -23,9 +23,9 @@ class TimeEntryControllerTest extends TestCase
     {
         $this->mockRepo(self::$timeEntry);
 
-        $mockResponse = $this->prepareTimeEntryInputs();
+        $mockedResponse = $this->prepareTimeEntryInputs();
         $this->timeEntryRepository->expects('getEntryData')
-            ->andReturn($mockResponse);
+            ->andReturn($mockedResponse);
 
         $response = $this->getJson(route('time-entries.index'));
 
@@ -35,7 +35,7 @@ class TimeEntryControllerTest extends TestCase
             ->assertSeeText('New Time Entry')
             ->assertSeeText('Activity Type')
             ->assertSeeText('Project')
-            ->assertViewHasAll($mockResponse);
+            ->assertViewHasAll($mockedResponse);
     }
 
     public function prepareTimeEntryInputs()
