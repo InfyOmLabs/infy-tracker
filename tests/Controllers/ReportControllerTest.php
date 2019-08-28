@@ -229,7 +229,6 @@ class ReportControllerTest extends TestCase
         $response->assertStatus(302);
     }
 
-
     public function prepareReports()
     {
         return [
@@ -261,4 +260,3 @@ class ReportControllerTest extends TestCase
         ];
     }
 }
-
