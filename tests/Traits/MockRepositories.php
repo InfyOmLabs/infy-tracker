@@ -7,6 +7,7 @@ use App\Repositories\ClientRepository;
 use App\Repositories\DashboardRepository;
 use App\Repositories\PermissionRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\ReportRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
@@ -28,6 +29,7 @@ trait MockRepositories
     public static $dashboard = 'dashboardRepository';
     public static $timeEntry = 'timeEntryRepository';
     public static $task = 'taskRepository';
+    public static $report = 'reportRepository';
     public static $activityType = 'activityTypeRepository';
 
     /** @var MockInterface */
@@ -50,6 +52,8 @@ trait MockRepositories
     public $timeEntryRepository;
     /** @var MockInterface */
     public $activityTypeRepository;
+    /** @var MockInterface */
+    public $reportRepository;
 
     public function mockRepo($repoNames)
     {
@@ -89,6 +93,9 @@ trait MockRepositories
                     break;
                 case self::$timeEntry:
                     $repoInstance = TimeEntryRepository::class;
+                    break;
+                case self::$report:
+                    $repoInstance = ReportRepository::class;
                     break;
             }
 
