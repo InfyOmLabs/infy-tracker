@@ -181,6 +181,7 @@ let tbl = $('#report_table').DataTable({
         },
         {
             data: 'user.name',
+            defaultContent: "",
             name: 'user.name'
         },
         {

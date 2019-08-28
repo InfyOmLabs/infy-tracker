@@ -36,6 +36,20 @@
 @endsection
 @section('scripts')
     <script>
+        $( document ).ready(function() {
+            $(".reports__client-row-title").click(function(){
+                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
+                $(this).parent().parent().find('.collapse-row').slideToggle();
+            });
+            $(".reports__project-header").click(function(){
+                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
+                $(this).parent().next('.reports__project-container').slideToggle();
+            });
+            $(".reports__developer-header").click(function(){
+                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
+                $(this).parent().next('.reports__task-container').slideToggle();
+            });
+        });
         let reportUrl = "{{ url('reports') }}/";
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
