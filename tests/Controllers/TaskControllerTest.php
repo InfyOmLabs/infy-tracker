@@ -110,8 +110,7 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
-        $this->taskRepository->shouldReceive('updateStatus')
-            ->once()
+        $this->taskRepository->expects('updateStatus')
             ->with($task->id);
 
         $response = $this->postJson("tasks/$task->id/update-status");
@@ -130,8 +129,7 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
-        $this->taskRepository->shouldReceive('getTaskDetails')
-            ->once()
+        $this->taskRepository->expects('getTaskDetails')
             ->with($task->id, [])
             ->andReturn($task->toArray());
 
@@ -149,8 +147,7 @@ class TaskControllerTest extends TestCase
         $task = factory(Task::class)->create();
 
         $mockResponse = ['tasks' => ['id' => $task->id, 'title' => $task->title]];
-        $this->taskRepository->shouldReceive('myTasks')
-            ->once()
+        $this->taskRepository->expects('myTasks')
             ->with(['project_id' => $task->project_id])
             ->andReturn($mockResponse);
 
