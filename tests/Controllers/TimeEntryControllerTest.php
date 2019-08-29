@@ -88,8 +88,7 @@ class TimeEntryControllerTest extends TestCase
             'project_id'  => $timeEntry->task->project_id,
         ];
 
-        $this->timeEntryRepository->expects('myLastTask')
-            ->andReturn($mockResponse);
+        $this->timeEntryRepository->expects('myLastTask')->andReturn($mockResponse);
 
         $response = $this->getJson('user-last-task-work');
 

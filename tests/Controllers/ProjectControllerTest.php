@@ -78,11 +78,10 @@ class ProjectControllerTest extends TestCase
 
         $response = $this->getJson('projects/'.$project->id.'/edit');
 
-        $this->assertSuccessDataResponse($response,
-            [
-                'project' => $project->toArray(),
-                'users'   => [$user->id],
-            ],
+        $this->assertSuccessDataResponse($response, [
+            'project' => $project->toArray(),
+            'users'   => [$user->id],
+        ],
             'Project retrieved successfully.'
         );
     }

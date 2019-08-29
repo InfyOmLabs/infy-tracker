@@ -25,7 +25,6 @@ class TimeEntryRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->timeEntryRepo = app(TimeEntryRepository::class);
         $this->signInWithDefaultAdminUser();
     }
@@ -96,9 +95,12 @@ class TimeEntryRepositoryTest extends TestCase
     {
         $timeEntry = factory(TimeEntry::class)->create();
 
-        $result = $this->timeEntryRepo->updateTimeEntry(
-            ['duration' => 120, 'start_time' => '', 'end_time' => ''], $timeEntry->id
-        );
+        $result = $this->timeEntryRepo->updateTimeEntry([
+            'duration'   => 120,
+            'start_time' => '',
+            'end_time'   => '',
+        ], $timeEntry->id);
+
         $this->assertTrue($result);
 
         $timeEntry = $timeEntry->fresh();

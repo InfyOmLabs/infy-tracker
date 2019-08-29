@@ -60,7 +60,11 @@ class ActivityTypeControllerTest extends TestCase
 
         $response = $this->getJson('activity-types/'.$activityType->id.'/edit');
 
-        $this->assertSuccessDataResponse($response, $activityType->toArray(), 'Activity Type retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $activityType->toArray(),
+            'Activity Type retrieved successfully.'
+        );
     }
 
     /** @test */

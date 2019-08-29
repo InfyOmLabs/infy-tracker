@@ -77,6 +77,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_retrieve_client()
     {
+        /** @var Client $client */
         $client = factory(Client::class)->create();
 
         $response = $this->getJson('clients/'.$client->id.'/edit');

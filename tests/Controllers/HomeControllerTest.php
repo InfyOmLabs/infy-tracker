@@ -101,6 +101,10 @@ class HomeControllerTest extends TestCase
 
         $response = $this->getJson("/developer-work-report?start_date=$startTime&end_date=$endTime");
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Daily Work Report retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $mockResponse,
+            'Daily Work Report retrieved successfully.'
+        );
     }
 }
