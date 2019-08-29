@@ -24,13 +24,13 @@ class CommentControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
     public function test_delete_comment_fails_when_invalid_comment_id_passed()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
         $result = $this->delete(route('task.delete-comment', [$task->id, 999]));
 

@@ -18,7 +18,6 @@ class ClientControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
@@ -32,6 +31,7 @@ class ClientControllerValidationTest extends TestCase
     /** @test */
     public function test_update_client_fails_when_name_is_not_passed()
     {
+        /** @var Client $client */
         $client = factory(Client::class)->create();
 
         $this->put(route('clients.update', $client->id), ['name' => ''])
@@ -68,13 +68,11 @@ class ClientControllerValidationTest extends TestCase
         /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $this->put(route('clients.update', $client->id),
-            [
-                'name'    => $client->name,
-                'email'   => 'valid.email@abc.com',
-                'website' => 'http://valid-website.com',
-            ])
-            ->assertSessionHasNoErrors();
+        $this->put(route('clients.update', $client->id), [
+            'name'    => $client->name,
+            'email'   => 'valid.email@abc.com',
+            'website' => 'http://valid-website.com',
+        ]);
 
         $this->assertEquals('valid.email@abc.com', $client->fresh()->email);
         $this->assertEquals('http://valid-website.com', $client->fresh()->website);
