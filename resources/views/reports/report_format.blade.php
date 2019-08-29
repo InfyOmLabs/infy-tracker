@@ -34,6 +34,7 @@
                         </div>
                         <span>{{$project['time']}} ({{round($project['duration'] * 100 / $client['duration'], 2)}} %)</span>
                     </div>
+                    <div class="reports__project-container">
                     @foreach($project['users'] as $user)
                         <div class="reports__developer-task">
                             <div class="reports__developer-row">
@@ -56,6 +57,7 @@
                             </div>
                         </div>
                     @endforeach
+                    </div>
                 @endforeach
                 </div>
             </div>
@@ -63,23 +65,3 @@
     </div>
 </div>
 
-@section('scripts')
-    <script>
-        $( document ).ready(function() {
-            $(".reports__client-row-title").click(function(){
-            $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
-            $(this).parent().parent().find('.collapse-row').slideToggle();
-            });
-
-            $(".reports__project-header").click(function(){
-                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
-                $(this).parent().next('.reports__developer-task').slideToggle();
-            });
-            $(".reports__developer-header").click(function(){
-                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
-                $(this).parent().next('.reports__task-container').slideToggle();
-            });
-        });
-
-    </script>
-@endsection
