@@ -14,7 +14,6 @@ class TaskControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
@@ -54,6 +53,7 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_update_task_fails_when_title_is_not_passed()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
 
         $this->put(route('tasks.update', $task->id), ['title' => ''])
@@ -63,6 +63,7 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_update_task_fails_when_project_id_is_not_passed()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
 
         $this->put(route('tasks.update', $task->id), ['title' => 'random string', 'project_id' => ''])
@@ -72,6 +73,7 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_update_task_fail_with_non_existing_project_id()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
 
         $this->put(route('tasks.update', $task->id), ['project_id' => 999])
@@ -81,6 +83,7 @@ class TaskControllerValidationTest extends TestCase
     /** @test */
     public function test_update_task_fail_with_invalid_due_date()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
         $dueDate = date('Y-m-d H:i:s', strtotime('-1 day'));
 

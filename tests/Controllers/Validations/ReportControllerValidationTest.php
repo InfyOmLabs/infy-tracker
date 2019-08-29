@@ -58,6 +58,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_update_report_fails_when_name_is_not_passed()
     {
+        /** @var Report $report */
         $report = factory(Report::class)->create();
 
         $this->put(route('reports.update', $report->id), ['name' => ''])
@@ -67,6 +68,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_update_report_fails_when_start_date_is_not_passed()
     {
+        /** @var Report $report */
         $report = factory(Report::class)->create();
 
         $this->put(route('reports.update', $report->id), ['start_date' => ''])
@@ -76,6 +78,7 @@ class ReportControllerValidationTest extends TestCase
     /** @test */
     public function test_update_report_fails_when_end_date_is_not_passed()
     {
+        /** @var Report $report */
         $report = factory(Report::class)->create();
 
         $this->put(route('reports.update', $report->id), ['end_date' => ''])

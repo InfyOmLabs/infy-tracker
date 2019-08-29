@@ -72,6 +72,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_update_user_fails_when_name_is_not_passed()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
 
         $this->put(route('users.update', $user->id), ['name' => ''])
@@ -81,6 +82,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_update_user_fails_when_email_is_not_passed()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
 
         $this->put(route('users.update', $user->id), ['email' => ''])
@@ -90,6 +92,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_update_user_fails_when_phone_number_is_more_than_ten_digits()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
 
         $this->put(route('users.update', $user->id), ['phone' => '999999999999'])->assertSessionHasErrors([
@@ -100,6 +103,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_update_user_fails_when_phone_number_is_not_numeric()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
 
         $this->put(route('users.update', $user->id),
@@ -111,6 +115,7 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_update_user_fails_when_email_is_invalid()
     {
+        /** @var User $user */
         $user = factory(User::class)->create();
 
         $this->put(route('users.update', $user->id), ['email' => 'random email'])->assertSessionHasErrors([

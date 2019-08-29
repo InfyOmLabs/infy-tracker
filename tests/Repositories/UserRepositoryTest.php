@@ -23,7 +23,6 @@ class UserRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->userRepo = app(UserRepository::class);
     }
 
