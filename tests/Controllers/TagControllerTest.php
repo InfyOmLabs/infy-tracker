@@ -82,11 +82,11 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $response = $this->deleteJson('tags/'.$tag->id);
+        $response = $this->deleteJson(route('tags.destroy', $tag->id));
 
         $this->assertSuccessMessageResponse($response, 'Tag deleted successfully.');
 
-        $response = $this->deleteJson(route('tags.destroy', $tag->id));
+        $response = $this->getJson(route('tags.edit', $tag->id));
 
         $response->assertStatus(404);
         $response->assertJson([
