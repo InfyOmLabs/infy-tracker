@@ -3,29 +3,13 @@
 namespace Tests\Controllers;
 
 use App\Models\Comment;
-use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class CommentControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $taskRepository;
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
-    }
-
-    private function mockRepository()
-    {
-        $this->taskRepository = \Mockery::mock(TaskRepository::class);
-        app()->instance(TaskRepository::class, $this->taskRepository);
-    }
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
@@ -37,7 +21,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function test_can_add_comment()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         $comment = factory(Comment::class)->make();
 
@@ -58,7 +42,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function test_can_update_comment_with_valid_input()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
         $newText = $this->faker->text;
@@ -74,7 +58,7 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function test_can_delete_given_comment()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
 

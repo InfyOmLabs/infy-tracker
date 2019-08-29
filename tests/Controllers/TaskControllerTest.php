@@ -7,38 +7,22 @@ use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
-use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 /**
  * Class TaskControllerTest.
  */
 class TaskControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $taskRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->taskRepository = \Mockery::mock(TaskRepository::class);
-        app()->instance(TaskRepository::class, $this->taskRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
     }
 
     /** @test */
@@ -105,7 +89,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_update_status_of_task()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$task]);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -124,7 +108,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_details()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$task]);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -141,7 +125,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$task]);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
