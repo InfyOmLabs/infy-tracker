@@ -11,41 +11,21 @@ namespace Tests\Controllers;
 
 use App\Models\Client;
 use App\Models\Project;
-use App\Repositories\ClientRepository;
-use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 /**
  * Class ClientControllerTest.
  */
 class ClientControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $clientRepository;
-
-    /** @var MockInterface */
-    protected $projectRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-    }
-
-    public function mockClientRepository()
-    {
-        $this->clientRepository = \Mockery::mock(ClientRepository::class);
-        app()->instance(ClientRepository::class, $this->clientRepository);
-    }
-
-    public function mockProjectRepository()
-    {
-        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
-        app()->instance(ProjectRepository::class, $this->projectRepository);
     }
 
     /** @test */
@@ -62,7 +42,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_store_client()
     {
-        $this->mockClientRepository();
+        $this->mockRepo(self::$client);
 
         $client = factory(Client::class)->raw();
 
@@ -88,7 +68,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_update_client()
     {
-        $this->mockClientRepository();
+        $this->mockRepo(self::$client);
 
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
@@ -122,7 +102,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_projects_of_given_client()
     {
-        $this->mockProjectRepository();
+        $this->mockRepo(self::$project);
 
         /** @var Client $client */
         $client = factory(Client::class)->create();
