@@ -7,38 +7,22 @@ use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
-use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 /**
  * Class TaskControllerTest.
  */
 class TaskControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $taskRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->taskRepository = \Mockery::mock(TaskRepository::class);
-        app()->instance(TaskRepository::class, $this->taskRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
     }
 
     /** @test */
@@ -105,7 +89,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_update_status_of_task()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -124,7 +108,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_details()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -139,28 +123,42 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_task_details_from_given_user()
+    public function test_can_get_sum_of_total_duration_on_given_task_for_specific_user()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         $task = factory(Task::class)->create();
+        $user = factory(User::class)->create();
 
-        /** @var TimeEntry $timeEntry */
-        $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create([
+            'task_id'  => $task->id,
+            'user_id'  => $user->id,
+            'duration' => 20,
+        ]);
+        /** @var TimeEntry $secondEntry */
+        $secondEntry = factory(TimeEntry::class)->create([
+            'task_id'  => $task->id,
+            'user_id'  => $user->id,
+            'duration' => 20,
+        ]);
 
+        $totalDuration = '00 Hours and 40 Minutes';
+        $mockTaskResponse = array_merge($task->toArray(), ['totalDuration' => $totalDuration]);
         $this->taskRepository->expects('getTaskDetails')
-            ->with($task->id, ['user_id' => $timeEntry->user_id])
-            ->andReturn($task->toArray());
+            ->with($task->id, ['user_id' => $user->id])
+            ->andReturn($mockTaskResponse);
 
-        $response = $this->getJson("task-details/$task->id?user_id=$timeEntry->user_id");
+        $response = $this->getJson("task-details/$task->id?user_id=$user->id");
 
-        $this->assertExactResponseData($response, $task->toArray(), 'Task retrieved successfully.');
+        $this->assertExactResponseData($response, $mockTaskResponse, 'Task retrieved successfully.');
+        $this->assertEquals($totalDuration, $response->original['data']['totalDuration']);
     }
 
     /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -203,7 +201,7 @@ class TaskControllerTest extends TestCase
         $response = $this->getJson("tasks/{$task->id}/users");
 
         $response = $response->original;
-        $this->assertEquals($farhan->id, key($response));
+        $this->assertContains($farhan->id, array_keys($response));
         $this->assertContains($farhan->name, $response);
     }
 }

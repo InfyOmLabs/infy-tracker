@@ -219,15 +219,29 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_task_details_of_given_user()
     {
-        /** @var TimeEntry $timeEntry */
-        $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
+        $user = factory(User::class)->create();
+        $task = factory(Task::class)->create();
 
-        $taskDetails = $this->taskRepo->getTaskDetails($timeEntry->task_id, [
-            'user_id' => $timeEntry->user_id,
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create([
+            'duration' => 30,
+            'task_id'  => $task->id,
+            'user_id'  => $user->id,
         ]);
 
-        $this->assertEquals($timeEntry->task_id, $taskDetails->id);
-        $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+        /** @var TimeEntry $secondEntry */
+        $secondEntry = factory(TimeEntry::class)->create([
+            'duration' => 20,
+            'task_id'  => $task->id,
+            'user_id'  => $user->id,
+        ]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($task->id, [
+            'user_id' => $user->id,
+        ]);
+
+        $this->assertEquals($task->id, $taskDetails->id);
+        $this->assertEquals('00 Hours and 50 Minutes', $taskDetails->totalDuration);
     }
 
     /** @test */
