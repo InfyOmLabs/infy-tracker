@@ -286,6 +286,7 @@ class TaskRepository extends BaseRepository
             $totalDuration = sprintf('%02d Hours and %02d Minutes', floor($minutes / 60), $minutes % 60);
         }
         $task->totalDuration = $totalDuration;
+        $task->totalDurationMin = $minutes;
 
         return $task;
     }

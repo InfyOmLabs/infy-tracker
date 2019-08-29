@@ -277,6 +277,7 @@ $(document).on('click', '.taskDetails', function (event) {
     startLoader();
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
+    $('.time-entry-data').hide();
 
     $.ajax({
         url: taskUrl + id + '/' + 'users',
@@ -305,6 +306,10 @@ $(document).on('click', '.taskDetails', function (event) {
     });
 });
 
+function formatCollapsableRow(data) {
+    return '<div style="padding-left:50px;">' + data.note + '</div>';
+}
+
 $(document).on('change', '#task_users', function () {
     let taskId = $(this).attr('data-task_id');
     let taskUserId = $(this).val().split('-');
@@ -328,42 +333,64 @@ $(document).on('change', '#task_users', function () {
         }
     });
 });
-
 window.drawTaskDetailTable = function (data) {
-    stopLoader();
     if (data.totalDuration === 0) {
         $('#no-record-info-msg').show();
-        $('#taskDetailsTable').hide();
+        $('.time-entry-data').hide();
+        stopLoader();
         return true;
-    } else {
-        $('#taskDetailsTable').show();
-        $('#user-drop-down-body').show();
-        $('#no-record-info-msg').hide();
     }
-    var table = $("#taskDetailsTable tbody").html("");
-    let totalMin = 0;
-    $.each(data.time_entries, function (idx, elem) {
-        totalMin = totalMin + elem.duration;
-        table.append(
-            "<tr>" +
-            "<td id='tdCollapse" + elem.id + "' onclick='manageCollapseIcon(" + JSON.stringify(elem.id) + ")' class='clickable' data-toggle='collapse' data-target='#collapse" + elem.id + "' aria-expanded='false' aria-controls='collapse" + elem.id + "'>" +
-            "<a title='Expand' class='btn btn-success action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a></td>" +
-            "<td>" + elem.user.name + "</td>" +
-            "<td>" + elem.start_time + "</td>" +
-            "<td>" + elem.end_time + "</td>" +
-            "<td>" + elem.duration + "</td>" +
-            "<td><a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + elem.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
-            "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + elem.id + ")'><i class='cui-trash action-icon'></i></a></td>" +
-            "</tr>"
-        );
-        table.append("<tr id='collapse" + elem.id + "' class='collapse'><td colspan='6'><div class='pull-left'>" +
-            "<b>Notes: </b><pre>" + elem.note + "</pre>" +
-            "</div></td></tr>");
+
+    let taskDetailsTable = $('#taskDetailsTable').DataTable({
+        destroy: true,
+        paging: true,
+        data: data.time_entries,
+        searching: false,
+        lengthChange: false,
+        columns: [
+            {
+                className: 'details-control',
+                defaultContent: "<a title='Expand' class='btn btn-success collapse-icon action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a>",
+                data: null,
+                orderable: false,
+            },
+            {data: "user.name"},
+            {data: "start_time"},
+            {data: "end_time"},
+            {data: "duration"},
+            {
+                orderable: false,
+                data: function (data) {
+                    return "<a title='Edit' class='btn action-btn btn-primary btn-sm mr-1' onclick='renderTimeEntry(" + data.id + ")' ><i class='cui-pencil action-icon'></i></a>" +
+                        "<a title='Delete' class='btn action-btn btn-danger btn-sm'  onclick='deleteTimeEntry(" + data.id + ")'><i class='cui-trash action-icon'></i></a>";
+                }
+            }
+        ],
     });
-    table.append("<tr>" +
-        "<td colspan='3'><strong>Total duration in hours : " + data.totalDuration + "</strong></td>" +
-        "<td colspan='3'><strong>Total duration in minutes:" + totalMin + "</strong></td>" +
-        "</tr>");
+
+    $('.time-entry-data').show();
+    $('#taskDetailsTable').show();
+    $('#user-drop-down-body').show();
+    $('#no-record-info-msg').hide();
+    stopLoader();
+
+    $('#taskDetailsTable tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = taskDetailsTable.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child(formatCollapsableRow(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+    $("#taskDetailsTable_wrapper").css('width', "100%");
+    $("#total-duration").html("<strong>Total duration: " + data.totalDuration + " || " + data.totalDurationMin + " Minutes</strong>");
 };
 
 $('#addNewForm').submit(function (event) {
@@ -464,6 +491,15 @@ $(function () {
                 }
             }
         });
+    }
+});
+
+$(document).on('click', '.collapse-icon', function () {
+    let isShow = $(this).parent().parent().hasClass('shown');
+    if(isShow) {
+        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
+    } else {
+        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
     }
 });
 
