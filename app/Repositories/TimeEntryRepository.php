@@ -191,9 +191,9 @@ class TimeEntryRepository extends BaseRepository
         }
     }
 
-    public function broadcastStartTimerEvent()
+    public function broadcastStartTimerEvent($input)
     {
-        broadcast(new StartTimer())->toOthers();
+        broadcast(new StartTimer($input))->toOthers();
     }
 
     public function broadcastStopTimerEvent()
