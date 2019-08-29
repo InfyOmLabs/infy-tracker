@@ -165,3 +165,7 @@ window.displaySuccessMessage = function (message) {
         position: 'top-right',
     });
 };
+
+$(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+    $(this).closest(".select2-container").siblings('select:enabled').select2('open');
+});
