@@ -83,12 +83,9 @@ class TaskRepositoryTest extends TestCase
     public function test_can_generate_unique_task_number_when_task_project_is_different()
     {
         $task = factory(Task::class)->create();
+        $updateTask = factory(Task::class)->raw(['due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))]);
 
-        $prepareTask = factory(Task::class)->raw([
-            'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
-        ]);
-
-        $updatedTask = $this->taskRepo->update($prepareTask, $task->id);
+        $updatedTask = $this->taskRepo->update($updateTask, $task->id);
 
         $this->assertNotEmpty(Task::findOrFail($task->id)->pluck('task_number'));
     }
@@ -226,29 +223,15 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_task_details_of_given_user()
     {
-        $user = factory(User::class)->create();
-        $task = factory(Task::class)->create();
-
         /** @var TimeEntry $firstEntry */
-        $firstEntry = factory(TimeEntry::class)->create([
-            'duration' => 30,
-            'task_id'  => $task->id,
-            'user_id'  => $user->id,
+        $firstEntry = factory(TimeEntry::class)->create(['duration' => 125]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($firstEntry->task_id, [
+            'user_id' => $firstEntry->user_id,
         ]);
 
-        /** @var TimeEntry $secondEntry */
-        $secondEntry = factory(TimeEntry::class)->create([
-            'duration' => 20,
-            'task_id'  => $task->id,
-            'user_id'  => $user->id,
-        ]);
-
-        $taskDetails = $this->taskRepo->getTaskDetails($task->id, [
-            'user_id' => $user->id,
-        ]);
-
-        $this->assertEquals($task->id, $taskDetails->id);
-        $this->assertEquals('00 Hours and 50 Minutes', $taskDetails->totalDuration);
+        $this->assertEquals($firstEntry->task_id, $taskDetails->id);
+        $this->assertEquals('02 Hours and 05 Minutes', $taskDetails->totalDuration);
     }
 
     /** @test */

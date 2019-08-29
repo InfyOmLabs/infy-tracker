@@ -125,29 +125,18 @@ class TaskControllerTest extends TestCase
     {
         $this->mockRepo(self::$task);
 
-        $task = factory(Task::class)->create();
-        $user = factory(User::class)->create();
-
         /** @var TimeEntry $firstEntry */
-        $firstEntry = factory(TimeEntry::class)->create([
-            'task_id'  => $task->id,
-            'user_id'  => $user->id,
-            'duration' => 20,
-        ]);
+        $firstEntry = factory(TimeEntry::class)->create();
         /** @var TimeEntry $secondEntry */
-        $secondEntry = factory(TimeEntry::class)->create([
-            'task_id'  => $task->id,
-            'user_id'  => $user->id,
-            'duration' => 20,
-        ]);
+        $secondEntry = factory(TimeEntry::class)->create();
 
         $totalDuration = '00 Hours and 40 Minutes';
-        $mockTaskResponse = array_merge($task->toArray(), ['totalDuration' => $totalDuration]);
+        $mockTaskResponse = array_merge($firstEntry->task->toArray(), ['totalDuration' => $totalDuration]);
         $this->taskRepository->expects('getTaskDetails')
-            ->with($task->id, ['user_id' => $user->id])
+            ->with($firstEntry->task_id, ['user_id' => $firstEntry->user_id])
             ->andReturn($mockTaskResponse);
 
-        $response = $this->getJson("task-details/$task->id?user_id=$user->id");
+        $response = $this->getJson("task-details/$firstEntry->task_id?user_id=$firstEntry->user_id");
 
         $this->assertExactResponseData($response, $mockTaskResponse, 'Task retrieved successfully.');
         $this->assertEquals($totalDuration, $response->original['data']['totalDuration']);

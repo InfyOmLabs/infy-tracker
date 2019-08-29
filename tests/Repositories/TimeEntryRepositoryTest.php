@@ -117,13 +117,10 @@ class TimeEntryRepositoryTest extends TestCase
         $result = $this->timeEntryRepo->updateTimeEntry([
             'start_time' => $timeEntry->start_time,
             'end_time'   => $timeEntry->end_time,
-        ], $timeEntry->id
-        );
+        ], $timeEntry->id);
 
         $this->assertTrue($result);
-
-        $timeEntry = $timeEntry->fresh();
-        $this->assertEquals(TimeEntry::STOPWATCH, $timeEntry->entry_type);
+        $this->assertEquals(TimeEntry::STOPWATCH, $timeEntry->fresh()->entry_type);
     }
 
     /** @test */
