@@ -48,7 +48,7 @@ class CommentControllerTest extends TestCase
         $this->taskRepository->expects('addCommentBroadCast')
             ->with($comment);
 
-        $response = $this->postJson("tasks/{$comment->task_id}/comments", [
+        $response = $this->postJson(route('task.comments', $comment->task_id), [
             'comment' => $comment->comment,
         ]);
 
@@ -60,6 +60,7 @@ class CommentControllerTest extends TestCase
     {
         $this->mockRepository();
 
+        /** @var Comment $comment */
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
         $newText = $this->faker->text;
 
@@ -76,11 +77,12 @@ class CommentControllerTest extends TestCase
     {
         $this->mockRepository();
 
+        /** @var Comment $comment */
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
 
         $this->taskRepository->expects('deleteCommentBroadCast');
 
-        $result = $this->delete('tasks/'.$comment->task_id.'/comments/'.$comment->id);
+        $result = $this->delete(route('task.delete-comment', [$comment->task_id, $comment->id]));
 
         $this->assertSuccessMessageResponse($result, 'Comment has been deleted successfully.');
         $this->assertEmpty(Comment::find($comment->id));
