@@ -66,7 +66,9 @@ class CommentControllerTest extends TestCase
 
         $this->taskRepository->expects('editCommentBroadCast');
 
-        $result = $this->post('tasks/'.$comment->task_id.'/comments/'.$comment->id.'/update', ['comment' => $newText]);
+        $result = $this->postJson(route('task.update-comment', [$comment->task_id, $comment->id]), [
+            'comment' => $newText,
+        ]);
 
         $this->assertSuccessMessageResponse($result, 'Comment has been updated successfully.');
         $this->assertEquals($newText, $comment->fresh()->comment);
