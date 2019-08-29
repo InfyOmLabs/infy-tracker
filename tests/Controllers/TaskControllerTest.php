@@ -88,7 +88,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_update_status_of_task()
     {
-        $this->mockRepo([self::$task]);
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -107,7 +107,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_details()
     {
-        $this->mockRepo([self::$task]);
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
@@ -124,7 +124,7 @@ class TaskControllerTest extends TestCase
     /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
-        $this->mockRepo([self::$task]);
+        $this->mockRepo(self::$task);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();

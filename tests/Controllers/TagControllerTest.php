@@ -20,7 +20,7 @@ class TagControllerTest extends TestCase
     /** @test */
     public function it_can_store_tag()
     {
-        $this->mockRepo([self::$tag]);
+        $this->mockRepo(self::$tag);
 
         $tag = factory(Tag::class)->raw();
 
@@ -46,7 +46,7 @@ class TagControllerTest extends TestCase
     /** @test */
     public function it_can_update_tag()
     {
-        $this->mockRepo([self::$tag]);
+        $this->mockRepo(self::$tag);
 
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();

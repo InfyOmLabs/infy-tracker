@@ -21,7 +21,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function it_can_shows_projects()
     {
-        $this->mockRepo([self::$client, self::$user]);
+        $this->mockRepo([self::$client, self::$user, self::$project]);
 
         $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
         $this->clientRepository->expects('getClientList')
@@ -82,7 +82,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_can_get_projects_of_logged_in_user()
     {
-        $this->mockRepo([self::$project]);
+        $this->mockRepo([self::$project, self::$user]);
 
         /** @var Project $project */
         $project = factory(Project::class)->create();
@@ -98,7 +98,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_get_can_users_of_given_project_ids()
     {
-        $this->mockRepo([self::$user]);
+        $this->mockRepo([self::$project, self::$user]);
 
         /** @var User $farhan */
         $farhan = factory(User::class)->create();

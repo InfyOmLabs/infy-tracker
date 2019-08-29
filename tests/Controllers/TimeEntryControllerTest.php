@@ -21,7 +21,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_time_entry_details()
     {
-        $this->mockRepo([self::$timeEntry]);
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timerEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -60,7 +60,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_last_task_details_of_logged_in_user()
     {
-        $this->mockRepo([self::$timeEntry]);
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -82,7 +82,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_tasks_of_given_project()
     {
-        $this->mockRepo([self::$timeEntry]);
+        $this->mockRepo(self::$timeEntry);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();
