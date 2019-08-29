@@ -15,7 +15,6 @@ class TagControllerTest extends TestCase
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
     /** @test */
