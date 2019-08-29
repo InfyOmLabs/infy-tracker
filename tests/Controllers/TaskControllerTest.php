@@ -120,6 +120,28 @@ class TaskControllerTest extends TestCase
     }
 
     /** @test */
+    public function test_can_get_sum_of_total_duration_on_given_task_for_specific_user()
+    {
+        $this->mockRepo(self::$task);
+
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create();
+        /** @var TimeEntry $secondEntry */
+        $secondEntry = factory(TimeEntry::class)->create();
+
+        $totalDuration = '00 Hours and 40 Minutes';
+        $mockTaskResponse = array_merge($firstEntry->task->toArray(), ['totalDuration' => $totalDuration]);
+        $this->taskRepository->expects('getTaskDetails')
+            ->with($firstEntry->task_id, ['user_id' => $firstEntry->user_id])
+            ->andReturn($mockTaskResponse);
+
+        $response = $this->getJson("task-details/$firstEntry->task_id?user_id=$firstEntry->user_id");
+
+        $this->assertExactResponseData($response, $mockTaskResponse, 'Task retrieved successfully.');
+        $this->assertEquals($totalDuration, $response->original['data']['totalDuration']);
+    }
+
+    /** @test */
     public function test_can_get_task_of_logged_in_user_for_given_project()
     {
         $this->mockRepo(self::$task);
@@ -150,5 +172,22 @@ class TaskControllerTest extends TestCase
             'data'    => 1,
             'message' => 'Comments count retrieved successfully.',
         ]);
+    }
+
+    /** @test */
+    public function test_can_get_assignee_of_given_task()
+    {
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+
+        /** @var User $farhan */
+        $farhan = factory(User::class)->create();
+        $task->taskAssignee()->sync([$farhan->id]);
+
+        $response = $this->getJson("tasks/{$task->id}/users");
+
+        $response = $response->original;
+        $this->assertContains($farhan->id, array_keys($response));
+        $this->assertContains($farhan->name, $response);
     }
 }
