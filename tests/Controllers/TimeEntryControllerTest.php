@@ -4,41 +4,24 @@ namespace Tests\Controllers;
 
 use App\Models\Task;
 use App\Models\TimeEntry;
-use App\Repositories\TimeEntryRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class TimeEntryControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $timeEntryRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->timeEntryRepository = \Mockery::mock(TimeEntryRepository::class);
-        app()->instance(TimeEntryRepository::class, $this->timeEntryRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
     }
 
     /** @test */
     public function test_can_get_time_entry_details()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -77,7 +60,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_last_task_details_of_logged_in_user()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -98,7 +81,7 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_get_tasks_of_given_project()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$timeEntry);
 
         /** @var Task $task */
         $task = factory(Task::class)->create();

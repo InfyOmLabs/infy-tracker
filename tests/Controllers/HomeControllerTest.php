@@ -3,21 +3,13 @@
 namespace Tests\Controllers;
 
 use App\Models\TimeEntry;
-use App\Repositories\DashboardRepository;
-use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class HomeControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $dashboardRepository;
-
-    /** @var MockInterface */
-    private $userRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
@@ -25,22 +17,10 @@ class HomeControllerTest extends TestCase
         $this->signInWithDefaultAdminUser();
     }
 
-    private function mockRepository()
-    {
-        $this->dashboardRepository = \Mockery::mock(DashboardRepository::class);
-        app()->instance(DashboardRepository::class, $this->dashboardRepository);
-    }
-
-    private function mockUserRepo()
-    {
-        $this->userRepository = \Mockery::mock(UserRepository::class);
-        app()->instance(UserRepository::class, $this->userRepository);
-    }
-
     /** @test */
     public function it_shows_dashboard()
     {
-        $this->mockUserRepo();
+        $this->mockRepo(self::$user);
 
         $mockedResponse = [['id' => 1, 'name' => 'Dummy User']];
         $this->userRepository->expects('getUserList')
@@ -59,7 +39,7 @@ class HomeControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_report_of_given_user()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$dashboard);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -88,7 +68,7 @@ class HomeControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_developer_work_report()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$dashboard);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
