@@ -36,14 +36,14 @@
                         {!! Form::text('email', null, ['id'=>'pfEmail','class' => 'form-control','required']) !!}
                     </div>
                     <div class="form-group col-sm-6">
-                        {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
-                        {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'pfNewPassword']) !!}
+                        {!! Form::label('phone', 'Phone') !!}
+                        {!! Form::text('phone', null, ['id'=>'pfPhone','class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        {!! Form::label('phone', 'Phone') !!}
-                        {!! Form::text('phone', null, ['id'=>'pfPhone','class' => 'form-control']) !!}
+                        {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
+                        {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'pfNewPassword']) !!}
                     </div>
                     <div class="form-group col-sm-6">
                         {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
