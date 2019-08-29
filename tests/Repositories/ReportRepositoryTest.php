@@ -70,6 +70,7 @@ class ReportRepositoryTest extends TestCase
     public function it_can_retrieve_user_ids_of_report()
     {
         $report = factory(Report::class)->create();
+        /** @var User[] $users */
         $users = factory(User::class)->times(2)->create();
         $project = factory(Project::class)->create();
         $this->generateReportFilter($report->id, $users[0]->id, User::class);
@@ -100,6 +101,7 @@ class ReportRepositoryTest extends TestCase
     /** @test */
     public function it_will_return_empty_when_client_filter_not_exist_on_given_report()
     {
+        /** @var Report[] $reports */
         $reports = factory(Report::class)->times(2)->create();
         $vishal = factory(Client::class)->create();
 
@@ -114,6 +116,7 @@ class ReportRepositoryTest extends TestCase
     /** @test */
     public function it_can_delete_report_filter_of_given_report()
     {
+        /** @var ReportFilter $reportFilter */
         $reportFilter = factory(ReportFilter::class)->create();
 
         $this->reportRepo->deleteFilter($reportFilter->report_id);

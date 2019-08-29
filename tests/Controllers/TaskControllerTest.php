@@ -38,7 +38,7 @@ class TaskControllerTest extends TestCase
         $tag = factory(Tag::class)->create();
         $task->tags()->sync([$tag->id]);
 
-        $response = $this->getJson('tasks/'.$task->id.'/edit');
+        $response = $this->getJson(route('tasks.edit', $task->id));
 
         $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
 
@@ -58,11 +58,11 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
-        $response = $this->deleteJson('tasks/'.$task->id);
+        $response = $this->deleteJson(route('tasks.destroy', $task->id));
 
         $this->assertSuccessMessageResponse($response, 'Task deleted successfully.');
 
-        $response = $this->getJson('tasks/'.$task->id.'/edit');
+        $response = $this->getJson(route('tasks.edit', $task->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -77,7 +77,7 @@ class TaskControllerTest extends TestCase
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
-        $response = $this->deleteJson('tasks/'.$timeEntry->task_id);
+        $response = $this->deleteJson(route('tasks.destroy', $timeEntry->task_id));
 
         $response->assertJson([
             'success' => false,
@@ -93,11 +93,9 @@ class TaskControllerTest extends TestCase
         /** @var Task $task */
         $task = factory(Task::class)->create();
 
-        $this->taskRepository->expects('updateStatus')
-            ->with($task->id);
+        $this->taskRepository->expects('updateStatus')->with($task->id);
 
-        $response = $this->postJson("tasks/$task->id/update-status");
-
+        $response = $this->postJson(route('task.update-status', $task->id), []);
         $response->assertJson([
             'success' => true,
             'message' => 'Task status Update successfully.',
@@ -116,7 +114,7 @@ class TaskControllerTest extends TestCase
             ->with($task->id, [])
             ->andReturn($task->toArray());
 
-        $response = $this->getJson("task-details/$task->id");
+        $response = $this->getJson(route('task.get-details', $task->id));
 
         $this->assertExactResponseData($response, $task->toArray(), 'Task retrieved successfully.');
     }
@@ -134,7 +132,7 @@ class TaskControllerTest extends TestCase
             ->with(['project_id' => $task->project_id])
             ->andReturn($mockResponse);
 
-        $response = $this->getJson("my-tasks?project_id=$task->project_id");
+        $response = $this->getJson(route('my-tasks', ['project_id' => $task->project_id]));
 
         $this->assertExactResponseData($response, $mockResponse, 'My tasks retrieved successfully.');
     }
@@ -145,7 +143,7 @@ class TaskControllerTest extends TestCase
         /** @var Comment $comment */
         $comment = factory(Comment::class)->create();
 
-        $response = $this->getJson("tasks/{$comment->task_id}/comments-count");
+        $response = $this->getJson(route('task.comments-count', $comment->task_id));
 
         $response->assertJson([
             'success' => true,

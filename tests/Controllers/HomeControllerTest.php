@@ -56,7 +56,11 @@ class HomeControllerTest extends TestCase
                 'user_id'    => $userId,
             ])->andReturn($mockResponse);
 
-        $response = $this->getJson("/users-work-report?start_date=$startTime&end_date=$endTime&user_id=$userId");
+        $response = $this->getJson(route('users-work-report', [
+            'start_date' => $startTime,
+            'end_date'   => $endTime,
+            'user_id'    => $userId,
+        ]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Custom Report retrieved successfully.');
     }
@@ -79,8 +83,15 @@ class HomeControllerTest extends TestCase
                 'end_date'   => $endTime,
             ])->andReturn($mockResponse);
 
-        $response = $this->getJson("/developer-work-report?start_date=$startTime&end_date=$endTime");
+        $response = $this->getJson(route('developers-work-report', [
+            'start_date' => $startTime,
+            'end_date'   => $endTime,
+        ]));
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Daily Work Report retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $mockResponse,
+            'Daily Work Report retrieved successfully.'
+        );
     }
 }

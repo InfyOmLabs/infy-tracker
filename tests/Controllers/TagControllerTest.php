@@ -24,10 +24,9 @@ class TagControllerTest extends TestCase
 
         $tag = factory(Tag::class)->raw();
 
-        $this->tagRepository->expects('store')
-            ->with($tag);
+        $this->tagRepository->expects('store')->with($tag);
 
-        $response = $this->postJson('tags', $tag);
+        $response = $this->postJson(route('tags.store'), $tag);
 
         $this->assertSuccessMessageResponse($response, 'Tag created successfully.');
     }
@@ -38,7 +37,7 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $response = $this->getJson('tags/'.$tag->id.'/edit');
+        $response = $this->getJson(route('tags.edit', $tag->id));
 
         $this->assertSuccessDataResponse($response, $tag->toArray(), 'Tag retrieved successfully.');
     }
@@ -51,13 +50,11 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $this->tagRepository->expects('update')
-            ->withArgs([['name' => 'Dummy Tag'], $tag->id]);
+        $this->tagRepository->expects('update')->withArgs([['name' => 'Dummy Tag'], $tag->id]);
 
-        $response = $this->putJson(
-            'tags/'.$tag->id,
-            ['name' => 'Dummy Tag']
-        );
+        $response = $this->putJson(route('tags.update', $tag->id), [
+            'name' => 'Dummy Tag',
+        ]);
 
         $this->assertSuccessMessageResponse($response, 'Tag updated successfully.');
     }
@@ -68,11 +65,11 @@ class TagControllerTest extends TestCase
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
-        $response = $this->deleteJson('tags/'.$tag->id);
+        $response = $this->deleteJson(route('tags.destroy', $tag->id));
 
         $this->assertSuccessMessageResponse($response, 'Tag deleted successfully.');
 
-        $response = $this->getJson('tags/'.$tag->id.'/edit');
+        $response = $this->getJson(route('tags.edit', $tag->id));
 
         $response->assertStatus(404);
         $response->assertJson([

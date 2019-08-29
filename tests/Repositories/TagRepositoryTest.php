@@ -18,14 +18,13 @@ class TagRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->tagRepo = app(TagRepository::class);
     }
 
     /** @test */
     public function it_can_retrieve_tags_list()
     {
-        /** @var Collection $tag */
+        /** @var Collection $tags */
         $tags = factory(Tag::class)->times(3)->create();
 
         $tagResult = $this->tagRepo->getTagList();

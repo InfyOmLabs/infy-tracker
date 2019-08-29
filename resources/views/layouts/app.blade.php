@@ -53,7 +53,7 @@
                     <i class="fa fa-user"></i>Profile
                 </a>
                 <a class="dropdown-item" href="{!! url('/logout') !!}" class="btn btn-default btn-flat"
-                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                   onclick="event.preventDefault(); localStorage.clear(); document.getElementById('logout-form').submit();">
                     <i class="fa fa-lock"></i>Logout
                 </a>
                 <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">

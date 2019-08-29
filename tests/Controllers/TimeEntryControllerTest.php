@@ -23,7 +23,7 @@ class TimeEntryControllerTest extends TestCase
     {
         $this->mockRepo(self::$timeEntry);
 
-        /** @var TimeEntry $timerEntry */
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
         $projectId = $timeEntry->fresh()->task->project_id;
@@ -33,7 +33,7 @@ class TimeEntryControllerTest extends TestCase
             ->with($timeEntry->id)
             ->andReturn($mockResponse);
 
-        $response = $this->getJson("time-entries/$timeEntry->id/edit");
+        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
 
         $this->assertExactResponseData($response, $mockResponse, 'Time Entry retrieved successfully.');
     }
@@ -44,11 +44,11 @@ class TimeEntryControllerTest extends TestCase
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
-        $response = $this->deleteJson('time-entries/'.$timeEntry->id);
+        $response = $this->deleteJson(route('time-entries.destroy', $timeEntry->id));
 
         $this->assertSuccessMessageResponse($response, 'TimeEntry deleted successfully.');
 
-        $response = $this->getJson('time-entries/'.$timeEntry->id.'/edit');
+        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -71,10 +71,9 @@ class TimeEntryControllerTest extends TestCase
             'project_id'  => $timeEntry->task->project_id,
         ];
 
-        $this->timeEntryRepository->expects('myLastTask')
-            ->andReturn($mockResponse);
+        $this->timeEntryRepository->expects('myLastTask')->andReturn($mockResponse);
 
-        $response = $this->getJson('user-last-task-work');
+        $response = $this->getJson(route('user-last-task-work'));
 
         $this->assertExactResponseData($response, $mockResponse, 'User Task retrieved successfully.');
     }
@@ -93,7 +92,7 @@ class TimeEntryControllerTest extends TestCase
             ->with($task->project_id, null)
             ->andReturn($mockResponse);
 
-        $response = $this->getJson("projects/{$task->project_id}/tasks");
+        $response = $this->getJson(route('project-tasks', $task->project_id));
 
         $this->assertExactResponseData($response, $mockResponse, 'Project Tasks retrieved successfully.');
     }

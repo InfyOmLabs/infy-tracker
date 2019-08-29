@@ -27,7 +27,7 @@ class RoleControllerTest extends TestCase
 
         $this->assertSuccessMessageResponse($response, 'Role deleted successfully.');
 
-        $response = $this->getJson('roles/'.$role->id.'/edit');
+        $response = $this->getJson(route('roles.edit', $role->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -44,7 +44,7 @@ class RoleControllerTest extends TestCase
         $farhan = factory(User::class)->create();
         $role->users()->sync([$farhan->id]);
 
-        $response = $this->deleteJson('roles/'.$role->id);
+        $response = $this->deleteJson(route('roles.destroy', $role->id));
 
         $response->assertStatus(400);
         $response->assertJson([

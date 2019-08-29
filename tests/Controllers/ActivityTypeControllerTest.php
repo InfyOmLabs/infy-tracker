@@ -27,7 +27,7 @@ class ActivityTypeControllerTest extends TestCase
         $this->activityTypeRepository->expects('create')
             ->with(array_merge($activityType, ['created_by' => getLoggedInUserId()]));
 
-        $response = $this->postJson('activity-types', $activityType);
+        $response = $this->postJson(route('activity-types.store'), $activityType);
 
         $this->assertSuccessMessageResponse($response, 'Activity Type created successfully.');
     }
@@ -38,9 +38,13 @@ class ActivityTypeControllerTest extends TestCase
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $response = $this->getJson('activity-types/'.$activityType->id.'/edit');
+        $response = $this->getJson(route('activity-types.edit', $activityType->id));
 
-        $this->assertSuccessDataResponse($response, $activityType->toArray(), 'Activity Type retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $activityType->toArray(),
+            'Activity Type retrieved successfully.'
+        );
     }
 
     /** @test */
@@ -54,10 +58,9 @@ class ActivityTypeControllerTest extends TestCase
         $this->activityTypeRepository->expects('update')
             ->withArgs([['name' => 'Dummy Name'], $activityType->id]);
 
-        $response = $this->putJson(
-            'activity-types/'.$activityType->id,
-            ['name' => 'Dummy Name']
-        );
+        $response = $this->putJson(route('activity-types.update', $activityType->id), [
+            'name' => 'Dummy Name',
+        ]);
 
         $this->assertSuccessMessageResponse($response, 'Activity Type updated successfully.');
     }
@@ -68,7 +71,7 @@ class ActivityTypeControllerTest extends TestCase
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $response = $this->deleteJson('activity-types/'.$activityType->id);
+        $response = $this->deleteJson(route('activity-types.destroy', $activityType->id));
 
         $this->assertSuccessMessageResponse($response, 'Activity Type deleted successfully.');
 

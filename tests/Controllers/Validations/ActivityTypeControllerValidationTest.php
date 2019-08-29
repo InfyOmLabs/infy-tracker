@@ -13,7 +13,6 @@ class ActivityTypeControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
@@ -36,6 +35,7 @@ class ActivityTypeControllerValidationTest extends TestCase
     /** @test */
     public function update_activity_type_fails_when_name_is_duplicate()
     {
+        /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
         $this->put(route('activity-types.update', $activityType->id), ['name' => 'Development'])
