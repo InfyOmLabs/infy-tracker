@@ -76,7 +76,7 @@ class ProjectControllerTest extends TestCase
         $project = factory(Project::class)->create();
         $project->users()->sync([$user->id]);
 
-        $response = $this->getJson('projects/'.$project->id.'/edit');
+        $response = $this->getJson(route('projects.edit', $project->id));
 
         $this->assertSuccessDataResponse($response, [
             'project' => $project->toArray(),
@@ -92,11 +92,11 @@ class ProjectControllerTest extends TestCase
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $response = $this->deleteJson('projects/'.$project->id);
+        $response = $this->deleteJson(route('projects.destroy', $project->id));
 
         $this->assertSuccessMessageResponse($response, 'Project deleted successfully.');
 
-        $response = $this->getJson('projects/'.$project->id.'/edit');
+        $response = $this->getJson(route('projects.edit', $project->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -113,10 +113,9 @@ class ProjectControllerTest extends TestCase
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $this->projectRepository->expects('getMyProjects')
-            ->andReturn($project->toArray());
+        $this->projectRepository->expects('getMyProjects')->andReturn($project->toArray());
 
-        $response = $this->getJson('my-projects');
+        $response = $this->getJson(route('my-projects'));
 
         $this->assertSuccessDataResponse($response, $project->toArray(), 'Project Retrieved successfully.');
     }
@@ -139,7 +138,7 @@ class ProjectControllerTest extends TestCase
             ->with([$project->id])
             ->andReturn($mockResponse);
 
-        $response = $this->getJson('users-of-projects?projectIds='.$project->id);
+        $response = $this->getJson(route('users-of-projects', ['projectIds' => $project->id]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Users Retrieved successfully.');
     }

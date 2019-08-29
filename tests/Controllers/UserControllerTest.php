@@ -55,7 +55,7 @@ class UserControllerTest extends TestCase
         $role = factory(Role::class)->create();
         $role->users()->sync([$farhan->id]);
 
-        $response = $this->getJson("users/$farhan->id/edit");
+        $response = $this->getJson(route('users.edit', $farhan->id));
 
         $assertData = array_merge($farhan->toArray(), [
             'project_ids' => [$project->id],
@@ -70,11 +70,12 @@ class UserControllerTest extends TestCase
         /** @var User $farhan */
         $farhan = factory(User::class)->create();
 
-        $response = $this->deleteJson('users/'.$farhan->id);
+        $response = $this->deleteJson(route('users.destroy', $farhan->id));
 
         $this->assertSuccessMessageResponse($response, 'User deleted successfully.');
 
-        $response = $this->getJson('users/'.$farhan->id.'/edit');
+        $response = $this->getJson(route('users.edit', $farhan->id));
+
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
@@ -85,15 +86,14 @@ class UserControllerTest extends TestCase
     /** @test */
     public function test_can_resend_email_verification()
     {
+        $this->mockRepo(self::$user);
+
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepo(self::$user);
+        $this->userRepository->expects('resendEmailVerification')->with($user->id);
 
-        $this->userRepository->expects('resendEmailVerification')
-            ->with($user->id);
-
-        $response = $this->getJson("users/$user->id/send-email");
+        $response = $this->getJson(route('send-email', $user->id));
 
         $this->assertSuccessMessageResponse($response, 'Verification email has been sent successfully.');
     }
@@ -101,15 +101,14 @@ class UserControllerTest extends TestCase
     /** @test */
     public function test_can_activate_user()
     {
+        $this->mockRepo(self::$user);
+
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->mockRepo(self::$user);
+        $this->userRepository->expects('activeDeActiveUser')->with($user->id);
 
-        $this->userRepository->expects('activeDeActiveUser')
-            ->with($user->id);
-
-        $response = $this->postJson("users/$user->id/active-de-active", []);
+        $response = $this->postJson(route('active-de-active-user', $user->id), []);
 
         $this->assertSuccessMessageResponse($response, 'User updated successfully.');
     }
@@ -117,16 +116,15 @@ class UserControllerTest extends TestCase
     /** @test */
     public function test_can_update_profile()
     {
+        $this->mockRepo(self::$user);
+
         /** @var User $user */
         $user = factory(User::class)->raw();
         unset($user['email_verified_at']);
 
-        $this->mockRepo(self::$user);
+        $this->userRepository->expects('profileUpdate')->with($user);
 
-        $this->userRepository->expects('profileUpdate')
-            ->with($user);
-
-        $response = $this->postJson('users/profile-update', $user);
+        $response = $this->postJson(route('update-profile'), $user);
 
         $this->assertSuccessMessageResponse($response, 'Profile updated successfully.');
     }

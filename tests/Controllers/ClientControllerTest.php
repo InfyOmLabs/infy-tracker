@@ -80,7 +80,7 @@ class ClientControllerTest extends TestCase
         /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $response = $this->getJson('clients/'.$client->id.'/edit');
+        $response = $this->getJson(route('clients.edit', $client->id));
 
         $this->assertSuccessDataResponse($response, $client->toArray(), 'Client retrieved successfully.');
     }
@@ -93,13 +93,9 @@ class ClientControllerTest extends TestCase
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
 
-        $this->clientRepository->expects('update')
-            ->withArgs([$fakeClient, $client->id]);
+        $this->clientRepository->expects('update')->withArgs([$fakeClient, $client->id]);
 
-        $response = $this->putJson(
-            'clients/'.$client->id,
-            $fakeClient
-        );
+        $response = $this->putJson(route('clients.update', $client->id), $fakeClient);
 
         $this->assertSuccessMessageResponse($response, 'Client updated successfully.');
     }
@@ -107,13 +103,14 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_delete_client()
     {
+        /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $response = $this->deleteJson('clients/'.$client->id);
+        $response = $this->deleteJson(route('clients.destroy', $client->id));
 
         $this->assertSuccessMessageResponse($response, 'Client deleted successfully.');
 
-        $response = $this->getJson('clients/'.$client->id.'/edit');
+        $response = $this->getJson(route('clients.edit', $client->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -139,7 +136,7 @@ class ClientControllerTest extends TestCase
             ->with($client->id)
             ->andReturn($mockResponse);
 
-        $response = $this->getJson("projects-of-client?client_id=$client->id");
+        $response = $this->getJson(route('projects-of-client', ['client_id' => $client->id]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Projects retrieved successfully.');
     }
