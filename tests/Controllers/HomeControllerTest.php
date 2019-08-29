@@ -108,6 +108,10 @@ class HomeControllerTest extends TestCase
             'end_date'   => $endTime,
         ]));
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Daily Work Report retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $mockResponse,
+            'Daily Work Report retrieved successfully.'
+        );
     }
 }

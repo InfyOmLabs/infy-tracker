@@ -18,7 +18,6 @@ class ActivityTypeRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->activityTypeRepo = app(ActivityTypeRepository::class);
     }
 
