@@ -29,6 +29,7 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function test_create_role_fails_when_name_is_duplicate()
     {
+        /** @var Role $role */
         $role = factory(Role::class)->create();
 
         $this->post(route('roles.store'), ['name' => $role->name])
@@ -50,6 +51,7 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function test_update_role_fails_when_name_is_not_passed()
     {
+        /** @var Role $role */
         $role = factory(Role::class)->create();
 
         $this->put(route('roles.update', $role->id), ['name' => ''])
@@ -69,6 +71,7 @@ class RoleControllerValidationTest extends TestCase
     /** @test */
     public function test_can_update_role_with_valid_input()
     {
+        /** @var Role $role */
         $role = factory(Role::class)->create();
         $fakeRole = factory(Role::class)->raw();
 

@@ -20,7 +20,6 @@ class TimeEntryControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
@@ -111,6 +110,7 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_not_allow_to_add_duplicate_time_entry()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
         $inputs = $this->timeEntryInputs([
             'start_time' => $timeEntry->start_time,
@@ -138,6 +138,7 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_update_time_entry_fails_when_task_id_is_not_passed()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
 
         $this->put(route('time-entries.update', $timeEntry->id), ['task_id' => ''])
@@ -147,18 +148,19 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_update_time_entry_fails_when_user_try_to_update_another_users_entry()
     {
+        /** @var TimeEntry $timeEntry1 */
         $timeEntry1 = factory(TimeEntry::class)->create();
         $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $response = $this->put(route('time-entries.update', $timeEntry1->id), $this->timeEntryInputs());
 
-        $this->assertEquals('Time Entry not found.',
-            $response->original['message']);
+        $this->assertEquals('Time Entry not found.', $response->original['message']);
     }
 
     /** @test */
     public function test_update_time_entry_fails_when_duration_is_greater_than_12_hours()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
         $startTime = date('Y-m-d H:i:s', strtotime('-12 hours'));
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+ 13 hours'));
@@ -168,12 +170,13 @@ class TimeEntryControllerValidationTest extends TestCase
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
-        $this->assertEquals('Time Entry must be less than 12 hours.', $response->exception->getMessage());
+        $this->assertExceptionMessage($response, 'Time Entry must be less than 12 hours.');
     }
 
     /** @test */
     public function test_update_time_entry_fails_when_duration_is_less_than_1_minutes()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
         $startTime = date('Y-m-d H:i:s', strtotime('-45 seconds'));
         $endTime = date('Y-m-d H:i:s', strtotime('-10 seconds'));
@@ -183,12 +186,13 @@ class TimeEntryControllerValidationTest extends TestCase
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
-        $this->assertEquals('Minimum Entry time should be 1 minute.', $response->exception->getMessage());
+        $this->assertExceptionMessage($response, 'Minimum Entry time should be 1 minute.');
     }
 
     /** @test */
     public function test_not_allow_to_update_duplicate_time_entry()
     {
+        /** @var TimeEntry $firstEntry */
         $firstEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $startTime = date('Y-m-d h:i:s', strtotime($firstEntry->end_time.'+1 hours'));
@@ -212,6 +216,7 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function it_can_update_time_entry()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
 
         $inputs = $this->timeEntryInputs();

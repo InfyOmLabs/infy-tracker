@@ -26,6 +26,7 @@ class TagControllerValidationTest extends TestCase
     /** @test */
     public function test_create_tag_fails_when_same_name_is_already_exist()
     {
+        /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
         $this->post(route('tags.store'), ['name' => $tag->name])
@@ -47,6 +48,7 @@ class TagControllerValidationTest extends TestCase
     /** @test */
     public function test_update_tag_fails_when_name_is_not_passed()
     {
+        /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
         $this->put(route('tags.update', $tag->id), ['name' => ''])
