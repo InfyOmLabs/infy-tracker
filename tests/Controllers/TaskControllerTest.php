@@ -38,22 +38,18 @@ class TaskControllerTest extends TestCase
             'status'     => Task::STATUS_ACTIVE,
             'project_id' => $project->id,
         ]);
-
         /** @var Task $completedTask */
         $completedTask = factory(Task::class)->create([
             'status'     => Task::STATUS_COMPLETED,
             'project_id' => $project->id,
         ]);
 
-        $response = $this->getJson(route('tasks.index', ['filter_status' => 0]));
+        $response = $this->getJson(route('tasks.index', ['filter_status' => Task::STATUS_ACTIVE]));
 
         $data = $response->original['data'];
-        $taskId = $data[0]['id'];
-        $status = $data[0]['status'];
-
         $this->assertCount(1, $data);
-        $this->assertEquals($activeTask->id, $taskId);
-        $this->assertEquals(Task::STATUS_ACTIVE, $status);
+        $this->assertEquals($activeTask->id, $data[0]['id']);
+        $this->assertEquals(Task::STATUS_ACTIVE, $data[0]['status']);
     }
 
     /** @test */
@@ -69,19 +65,15 @@ class TaskControllerTest extends TestCase
 
         /** @var Task $firstTask */
         $firstTask = factory(Task::class)->create(['project_id' => $firstProject->id]);
-
         /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $secondProject->id]);
 
         $response = $this->getJson(route('tasks.index', ['filter_project' => $firstProject->id]));
 
         $data = $response->original['data'];
-        $taskId = $data[0]['id'];
-        $projectId = $data[0]['project']['id'];
-
         $this->assertCount(1, $data);
-        $this->assertEquals($firstTask->id, $taskId);
-        $this->assertEquals($firstTask->project_id, $projectId);
+        $this->assertEquals($firstTask->id, $data[0]['id']);
+        $this->assertEquals($firstTask->project_id, $data[0]['project']['id']);
     }
 
     /** @test */
@@ -108,12 +100,9 @@ class TaskControllerTest extends TestCase
         $response = $this->getJson(route('tasks.index', ['filter_user' => $this->loggedInUserId]));
 
         $data = $response->original['data'];
-        $taskId = $data[0]['id'];
-        $assigneeId = $data[0]['task_assignee'][0]['id'];
-
         $this->assertCount(1, $data);
-        $this->assertEquals($firstTask->id, $taskId);
-        $this->assertEquals($this->loggedInUserId, $assigneeId);
+        $this->assertEquals($firstTask->id, $data[0]['id']);
+        $this->assertEquals($this->loggedInUserId, $data[0]['task_assignee'][0]['id']);
     }
 
     /** @test */
@@ -129,19 +118,15 @@ class TaskControllerTest extends TestCase
             'project_id' => $project->id,
             'due_date'   => $dueDate,
         ]);
-
         /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $project->id]);
 
         $response = $this->getJson(route('tasks.index', ['due_date_filter' => $dueDate]));
 
         $data = $response->original['data'];
-        $taskId = $data[0]['id'];
-        $dueDate = $data[0]['due_date'];
-
         $this->assertCount(1, $data);
-        $this->assertEquals($firstTask->id, $taskId);
-        $this->assertEquals($firstTask->due_date, $dueDate);
+        $this->assertEquals($firstTask->id, $data[0]['id']);
+        $this->assertEquals($firstTask->due_date, $data[0]['due_date']);
     }
 
     /** @test */
@@ -163,13 +148,9 @@ class TaskControllerTest extends TestCase
         $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
 
         $data = $response->original['data'];
-        $projectId = $data['project']['id'];
-        $tagId = $data['tags'][0]['id'];
-        $taskAssigneeId = $data['taskAssignee'][0]['id'];
-
-        $this->assertEquals($task->project_id, $projectId);
-        $this->assertEquals($tag->id, $tagId);
-        $this->assertEquals($farhan->id, $taskAssigneeId);
+        $this->assertEquals($task->project_id, $data['project']['id']);
+        $this->assertEquals($tag->id, $data['tags'][0]['id']);
+        $this->assertEquals($farhan->id, $data['taskAssignee'][0]['id']);
     }
 
     /** @test */

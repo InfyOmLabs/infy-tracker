@@ -47,7 +47,6 @@ class ProjectControllerTest extends TestCase
 
         /** @var Project $firstProject */
         $firstProject = factory(Project::class)->create();
-
         /** @var Project $secondProject */
         $secondProject = factory(Project::class)->create();
 
@@ -56,12 +55,9 @@ class ProjectControllerTest extends TestCase
         ]));
 
         $data = $response->original['data'];
-        $projectId = $data[0]['id'];
-        $clientId = $data[0]['client']['id'];
-
         $this->assertCount(1, $data);
-        $this->assertEquals($firstProject->id, $projectId);
-        $this->assertEquals($firstProject->client_id, $clientId);
+        $this->assertEquals($firstProject->id, $data[0]['id']);
+        $this->assertEquals($firstProject->client_id, $data[0]['client']['id']);
     }
 
     /** @test */
