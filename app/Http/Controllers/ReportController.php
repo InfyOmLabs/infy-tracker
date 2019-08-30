@@ -167,7 +167,7 @@ class ReportController extends AppBaseController
         $this->reportRepository->updateReportFilter($input, $report);
         Flash::success('Report updated successfully.');
 
-        return redirect(route('reports.index', $report));
+        return redirect(route('reports.show', $report));
     }
 
     /**
