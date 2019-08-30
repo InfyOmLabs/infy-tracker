@@ -102,7 +102,7 @@ class ProjectRepositoryTest extends TestCase
         $allProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
 
         $this->assertCount(2, $allProjects);
-        $this->assertArrayHasKey($projectOfLoggedInUser->id, $allProjects);
+        $this->assertContain($projectOfLoggedInUser->id, array_keys($allProjects));
     }
 
     /** @test */
@@ -119,6 +119,6 @@ class ProjectRepositoryTest extends TestCase
         $allProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
 
         $this->assertCount(1, $allProjects);
-        $this->assertArrayHasKey($projectOfLoggedInUser->id, $allProjects);
+        $this->assertContain($projectOfLoggedInUser->id, array_keys($allProjects));
     }
 }
