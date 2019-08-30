@@ -90,22 +90,34 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_projects_list_array_of_logged_in_user()
+    public function test_user_with_manage_projects_permission_will_get_all_projects()
     {
         $mitul = factory(User::class)->create();
         $project = factory(Project::class)->create();
         $project->users()->sync([$mitul->id]);
 
-        $projectsOfLoggedInUser = factory(Project::class)->create();
-        $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
+        $projectOfLoggedInUser = factory(Project::class)->create();
+        $projectOfLoggedInUser->users()->sync([$this->defaultUserId]);
 
-        $myProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
-        $this->assertCount(1, $myProjects);
+        $allProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
 
-        $totalProjects = $this->projectRepo->getProjectsList();
-        $this->assertCount(2, $totalProjects);
+        $this->assertCount(2, $allProjects);
+    }
 
-        $this->assertArrayHasKey($projectsOfLoggedInUser->id, $myProjects);
-        $this->assertContains($projectsOfLoggedInUser->name, $myProjects);
+    /** @test */
+    public function it_can_retrieve_assigned_projects_list_array_of_logged_in_user()
+    {
+        $project = factory(Project::class)->create();
+        $project->users()->sync([$this->defaultUserId]);
+
+        $mitul = factory(User::class)->create();
+        $projectOfLoggedInUser = factory(Project::class)->create();
+        $projectOfLoggedInUser->users()->sync([$mitul->id]);
+        $this->actingAs($mitul);
+
+        $allProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
+
+        $this->assertCount(1, $allProjects);
+        $this->assertContains($projectOfLoggedInUser->id, array_keys($allProjects));
     }
 }
