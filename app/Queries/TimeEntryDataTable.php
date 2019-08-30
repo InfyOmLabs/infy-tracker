@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 class TimeEntryDataTable
 {
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return TimeEntry|Builder
      */
