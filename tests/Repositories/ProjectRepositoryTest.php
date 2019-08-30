@@ -99,8 +99,13 @@ class ProjectRepositoryTest extends TestCase
         $projectsOfLoggedInUser = factory(Project::class)->create();
         $projectsOfLoggedInUser->users()->sync([$this->defaultUserId]);
 
+        $authUser = \Auth::user();
         $myProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
-        $this->assertCount(1, $myProjects);
+        if($authUser->can('manage_projects')) {
+            $this->assertCount(2, $myProjects);
+        } else {
+            $this->assertCount(1, $myProjects);
+        }
 
         $totalProjects = $this->projectRepo->getProjectsList();
         $this->assertCount(2, $totalProjects);

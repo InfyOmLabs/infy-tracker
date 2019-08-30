@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Task;
+use App\Repositories\ProjectRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,10 @@ class TaskDataTable
      */
     public function get($input = [])
     {
-        $loginUserProjects = Auth::user()->projects()->get()->pluck('name', 'id')->toArray();
+        /** @var ProjectRepository $projectRepo */
+        $projectRepo = app(ProjectRepository::class);
+        $loginUserProjects = $projectRepo->getLoginUserAssignProjectsArr();
+
         $query = Task::whereIn('project_id', array_keys($loginUserProjects))
             ->leftJoin('projects as p', 'p.id', '=', 'tasks.project_id')
             ->with(['project', 'taskAssignee', 'createdUser'])

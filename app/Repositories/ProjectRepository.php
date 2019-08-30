@@ -47,6 +47,12 @@ class ProjectRepository extends BaseRepository
      */
     public function getLoginUserAssignProjectsArr()
     {
+        $loggedInUser = getLoggedInUser();
+
+        if ($loggedInUser->can('manage_projects')) {
+            return $this->getProjectsList()->toArray();
+        }
+
         return Auth::user()->projects()->orderBy('name')->get()->pluck('name', 'id')->toArray();
     }
 
