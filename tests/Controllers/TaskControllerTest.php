@@ -3,6 +3,7 @@
 namespace Tests\Controllers;
 
 use App\Models\Comment;
+use App\Models\Project;
 use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -22,6 +23,125 @@ class TaskControllerTest extends TestCase
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+    }
+
+    /** @test */
+    public function test_can_filter_tasks_by_task_status()
+    {
+        /** @var Project $project */
+        $project = factory(Project::class)->create();
+        $project->users()->sync([$this->loggedInUserId]);
+
+        /** @var Task $activeTask */
+        $activeTask = factory(Task::class)->create([
+            'status'     => Task::STATUS_ACTIVE,
+            'project_id' => $project->id,
+        ]);
+
+        /** @var Task $completedTask */
+        $completedTask = factory(Task::class)->create([
+            'status'     => Task::STATUS_COMPLETED,
+            'project_id' => $project->id,
+        ]);
+
+        $response = $this->getJson(route('tasks.index', ['filter_status' => 0]));
+
+        $data = $response->original['data'];
+        $taskId = $data[0]['id'];
+        $status = $data[0]['status'];
+
+        $this->assertCount(1, $data);
+        $this->assertEquals($activeTask->id, $taskId);
+        $this->assertEquals(Task::STATUS_ACTIVE, $status);
+    }
+
+    /** @test */
+    public function test_can_filter_tasks_by_project()
+    {
+        /** @var Project $firstProject */
+        $firstProject = factory(Project::class)->create();
+        $firstProject->users()->sync([$this->loggedInUserId]);
+
+        /** @var Project $secondProject */
+        $secondProject = factory(Project::class)->create();
+        $secondProject->users()->sync([$this->loggedInUserId]);
+
+        /** @var Task $firstTask */
+        $firstTask = factory(Task::class)->create(['project_id' => $firstProject->id]);
+
+        /** @var Task $secondTask */
+        $secondTask = factory(Task::class)->create(['project_id' => $secondProject->id]);
+
+        $response = $this->getJson(route('tasks.index', ['filter_project' => $firstProject->id]));
+
+        $data = $response->original['data'];
+        $taskId = $data[0]['id'];
+        $projectId = $data[0]['project']['id'];
+
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTask->id, $taskId);
+        $this->assertEquals($firstTask->project_id, $projectId);
+    }
+
+    /** @test */
+    public function test_can_filter_tasks_by_user()
+    {
+        $user = factory(User::class)->create();
+
+        /** @var Project $firstProject */
+        $firstProject = factory(Project::class)->create();
+        $firstProject->users()->sync([$this->loggedInUserId]);
+
+        /** @var Project $secondProject */
+        $secondProject = factory(Project::class)->create();
+        $secondProject->users()->sync([$user->id]);
+
+        /** @var Task $firstTask */
+        $firstTask = factory(Task::class)->create(['project_id' => $firstProject->id]);
+        $firstTask->taskAssignee()->sync([$this->loggedInUserId]);
+
+        /** @var Task $secondTask */
+        $secondTask = factory(Task::class)->create(['project_id' => $secondProject->id]);
+        $secondTask->taskAssignee()->sync([$user->id]);
+
+        $response = $this->getJson(route('tasks.index', ['filter_user' => $this->loggedInUserId]));
+
+        $data = $response->original['data'];
+        $taskId = $data[0]['id'];
+        $assigneeId = $data[0]['task_assignee'][0]['id'];
+
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTask->id, $taskId);
+        $this->assertEquals($this->loggedInUserId, $assigneeId);
+    }
+
+    /** @test */
+    public function test_can_filter_tasks_by_due_date()
+    {
+        /** @var Project $project */
+        $project = factory(Project::class)->create();
+        $project->users()->sync([$this->loggedInUserId]);
+
+        $dueDate = date('Y-m-d H:i:s');
+        /** @var Task $firstTask */
+        $firstTask = factory(Task::class)->create([
+            'project_id' => $project->id,
+            'due_date'   => $dueDate,
+        ]);
+
+        /** @var Task $secondTask */
+        $secondTask = factory(Task::class)->create(['project_id' => $project->id]);
+
+        $response = $this->getJson(route('tasks.index', ['due_date_filter' => $dueDate]));
+
+        $data = $response->original['data'];
+        $taskId = $data[0]['id'];
+        $dueDate = $data[0]['due_date'];
+
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTask->id, $taskId);
+        $this->assertEquals($firstTask->due_date, $dueDate);
     }
 
     /** @test */
