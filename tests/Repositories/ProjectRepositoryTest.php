@@ -90,7 +90,7 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_projects_list_array_when_logged_in_user_has_manage_projects_permission()
+    public function test_user_with_manage_projects_permission_will_get_all_projects()
     {
         $mitul = factory(User::class)->create();
         $project = factory(Project::class)->create();
@@ -103,9 +103,6 @@ class ProjectRepositoryTest extends TestCase
 
         $this->assertCount(2, $allProjects);
         $this->assertArrayHasKey($projectOfLoggedInUser->id, $allProjects);
-        $this->assertArrayHasKey($project->id, $allProjects);
-        $this->assertContains($projectOfLoggedInUser->name, $allProjects);
-        $this->assertContains($project->name, $allProjects);
     }
 
     /** @test */
@@ -123,7 +120,5 @@ class ProjectRepositoryTest extends TestCase
 
         $this->assertCount(1, $allProjects);
         $this->assertArrayHasKey($projectOfLoggedInUser->id, $allProjects);
-        $this->assertNotContains($project->id, $allProjects);
-        $this->assertNotContains($project->name, $allProjects);
     }
 }
