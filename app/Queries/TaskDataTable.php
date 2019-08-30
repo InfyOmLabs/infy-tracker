@@ -5,7 +5,6 @@ namespace App\Queries;
 use App\Models\Task;
 use App\Repositories\ProjectRepository;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TaskDataTable.

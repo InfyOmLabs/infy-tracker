@@ -101,7 +101,7 @@ class ProjectRepositoryTest extends TestCase
 
         $authUser = \Auth::user();
         $myProjects = $this->projectRepo->getLoginUserAssignProjectsArr();
-        if($authUser->can('manage_projects')) {
+        if ($authUser->can('manage_projects')) {
             $this->assertCount(2, $myProjects);
         } else {
             $this->assertCount(1, $myProjects);
