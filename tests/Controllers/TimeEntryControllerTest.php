@@ -19,6 +19,75 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
+    public function test_can_filter_time_entry_by_activity_type()
+    {
+        $this->markTestIncomplete();
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create();
+        /** @var TimeEntry $secondTimeEntry */
+        $secondTimeEntry = factory(TimeEntry::class)->create();
+
+        $response = $this->getJson(route('time-entries.index', [
+            'filter_activity' => $firstTimeEntry->activity_type_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTimeEntry->id, $data[0]['id']);
+        $this->assertEquals($firstTimeEntry->activity_type_id, $data[0]['activity_type']['id']);
+    }
+
+    /** @test */
+    public function test_can_filter_time_entry_by_project()
+    {
+        $this->markTestIncomplete();
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        /** @var Task $task */
+        $task = factory(Task::class)->create([
+            'status' => Task::STATUS_ACTIVE,
+        ]);
+        $task->taskAssignee()->sync([$this->loggedInUserId]);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create([
+            'task_id' => $task->id,
+        ]);
+        $secondTimeEntry = factory(TimeEntry::class)->create();
+
+        $response = $this->getJson(route('time-entries.index', [
+            'filter_project' => $task->project_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTimeEntry->id, $data[0]['id']);
+        $this->assertEquals($task->project_id, $data[0]['task']['project_id']);
+    }
+
+    /** @test */
+    public function test_can_filter_time_entry_by_user()
+    {
+        $this->markTestIncomplete();
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create();
+        $secondTimeEntry = factory(TimeEntry::class)->create();
+
+        $response = $this->getJson(route('time-entries.index', [
+            'filter_user' => $firstTimeEntry->user_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTimeEntry->id, $data[0]['id']);
+        $this->assertEquals($firstTimeEntry->user_id, $data[0]['user_id']);
+    }
+
+    /** @test */
     public function test_can_get_time_entry_details()
     {
         $this->mockRepo(self::$timeEntry);
