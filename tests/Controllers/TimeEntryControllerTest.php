@@ -21,7 +21,6 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_filter_time_entry_by_activity_type()
     {
-        $this->markTestIncomplete();
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
         /** @var TimeEntry $firstTimeEntry */
@@ -42,7 +41,6 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_filter_time_entry_by_project()
     {
-        $this->markTestIncomplete();
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
         /** @var Task $task */
@@ -70,7 +68,6 @@ class TimeEntryControllerTest extends TestCase
     /** @test */
     public function test_can_filter_time_entry_by_user()
     {
-        $this->markTestIncomplete();
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
         /** @var TimeEntry $firstTimeEntry */
