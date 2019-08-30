@@ -35,10 +35,12 @@ class UpdateUserProfileRequest extends FormRequest
     {
         $id = Auth::user()->id;
         $rules = [
-            'name'  => 'required|unique:users,name,'.$id,
-            'email' => 'required|email|unique:users,email,'.$id.'|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-            'phone' => 'nullable|numeric|digits:10',
-            'photo' => 'mimes:jpeg,jpg,png',
+            'name'                  => 'required|unique:users,name,'.$id,
+            'email'                 => 'required|email|unique:users,email,'.$id.'|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+            'phone'                 => 'nullable|numeric|digits:10',
+            'photo'                 => 'mimes:jpeg,jpg,png',
+            'password'              => 'nullable|min:6|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'nullable|min:6',
         ];
 
         return $rules;
