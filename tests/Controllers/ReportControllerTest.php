@@ -13,8 +13,6 @@ class ReportControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;
 
-    public $defaultReportId = 1;
-
     public function setUp(): void
     {
         parent::setUp();
@@ -42,20 +40,16 @@ class ReportControllerTest extends TestCase
         $this->mockRepo([self::$project, self::$user, self::$client, self::$tag]);
 
         $mockProjectResponse = [['id' => 1, 'name' => 'Dummy Project']];
-        $this->projectRepository->expects('getProjectsList')
-            ->andReturn($mockProjectResponse);
+        $this->projectRepository->expects('getProjectsList')->andReturn($mockProjectResponse);
 
         $mockUserResponse = [['id' => 1, 'name' => 'Dummy User']];
-        $this->userRepository->expects('getUserList')
-            ->andReturn($mockUserResponse);
+        $this->userRepository->expects('getUserList')->andReturn($mockUserResponse);
 
         $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
-        $this->clientRepository->expects('getClientList')
-            ->andReturn($mockClientResponse);
+        $this->clientRepository->expects('getClientList')->andReturn($mockClientResponse);
 
         $mockTagResponse = [['id' => 1, 'name' => 'Dummy Tag']];
-        $this->tagRepository->expects('getTagList')
-            ->andReturn($mockTagResponse);
+        $this->tagRepository->expects('getTagList')->andReturn($mockTagResponse);
 
         $data['tags'] = $mockTagResponse;
         $data['users'] = $mockUserResponse;
@@ -78,7 +72,7 @@ class ReportControllerTest extends TestCase
     /** @test */
     public function it_can_store_reports()
     {
-        $this->mockRepo([self::$report]);
+        $this->mockRepo(self::$report);
 
         $mockReportResponse = factory(Report::class)->raw(['owner_id' => $this->loggedInUserId]);
         $this->reportRepository->expects('create')
@@ -86,8 +80,7 @@ class ReportControllerTest extends TestCase
             ->andReturn($mockReportResponse);
 
         $mockReportFilterResponse = factory(ReportFilter::class)->raw();
-        $this->reportRepository->expects('createReportFilter')
-            ->andReturn($mockReportFilterResponse);
+        $this->reportRepository->expects('createReportFilter')->andReturn($mockReportFilterResponse);
 
         $response = $this->postJson(route('reports.store'), $mockReportResponse);
 
@@ -102,9 +95,7 @@ class ReportControllerTest extends TestCase
         $mockReportResponse = factory(Report::class)->create();
 
         $preparedReports = $this->prepareReports();
-        $this->reportRepository->expects('getReport')
-            ->andReturn($preparedReports);
-
+        $this->reportRepository->expects('getReport')->andReturn($preparedReports);
         $this->reportRepository->expects('getDurationTime');
 
         $duration = array_sum(\Arr::pluck($preparedReports, 'duration'));
@@ -132,36 +123,28 @@ class ReportControllerTest extends TestCase
         $report = factory(Report::class)->create();
 
         $mockProjectIds = [1, 2];
-        $this->reportRepository->expects('getProjectIds')
-            ->andReturn($mockProjectIds);
+        $this->reportRepository->expects('getProjectIds')->andReturn($mockProjectIds);
 
         $mockTagIds = [1, 2];
-        $this->reportRepository->expects('getTagIds')
-            ->andReturn($mockTagIds);
+        $this->reportRepository->expects('getTagIds')->andReturn($mockTagIds);
 
         $mockUserIds = [1, 2];
-        $this->reportRepository->expects('getUserIds')
-            ->andReturn($mockUserIds);
+        $this->reportRepository->expects('getUserIds')->andReturn($mockUserIds);
 
         $mockClientId = 1;
-        $this->reportRepository->expects('getClientId')
-            ->andReturn($mockClientId);
+        $this->reportRepository->expects('getClientId')->andReturn($mockClientId);
 
         $mockProjectResponse = [['id' => 1, 'name' => 'Dummy Project']];
-        $this->projectRepository->expects('getProjectsList')
-            ->andReturn($mockProjectResponse);
+        $this->projectRepository->expects('getProjectsList')->andReturn($mockProjectResponse);
 
         $mockUserResponse = [['id' => 1, 'name' => 'Dummy User']];
-        $this->userRepository->expects('getUserList')
-            ->andReturn($mockUserResponse);
+        $this->userRepository->expects('getUserList')->andReturn($mockUserResponse);
 
         $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
-        $this->clientRepository->expects('getClientList')
-            ->andReturn($mockClientResponse);
+        $this->clientRepository->expects('getClientList')->andReturn($mockClientResponse);
 
         $mockTagResponse = [['id' => 1, 'name' => 'Dummy Tag']];
-        $this->tagRepository->expects('getTagList')
-            ->andReturn($mockTagResponse);
+        $this->tagRepository->expects('getTagList')->andReturn($mockTagResponse);
 
         $data['report'] = $report;
         $data['projectIds'] = $mockProjectIds;
@@ -194,7 +177,7 @@ class ReportControllerTest extends TestCase
     /** @test */
     public function it_can_update_reports()
     {
-        $this->mockRepo([self::$report]);
+        $this->mockRepo(self::$report);
 
         /** @var Report $report */
         $report = factory(Report::class)->create();
@@ -205,8 +188,7 @@ class ReportControllerTest extends TestCase
             ->andReturn($mockReportResponse);
 
         $mockReportFilterResponse = factory(ReportFilter::class)->raw();
-        $this->reportRepository->expects('updateReportFilter')
-            ->andReturn($mockReportFilterResponse);
+        $this->reportRepository->expects('updateReportFilter')->andReturn($mockReportFilterResponse);
 
         $response = $this->putJson(route('reports.update', $report->id), $mockReportResponse);
 
@@ -216,13 +198,12 @@ class ReportControllerTest extends TestCase
     /** @test */
     public function it_can_delete_reports()
     {
-        $this->mockRepo([self::$report]);
+        $this->mockRepo(self::$report);
 
         /** @var Report $report */
         $report = factory(Report::class)->create();
 
-        $this->reportRepository->expects('deleteFilter')
-            ->with($report->id);
+        $this->reportRepository->expects('deleteFilter')->with($report->id);
 
         $response = $this->deleteJson(route('reports.destroy', $report->id));
 
