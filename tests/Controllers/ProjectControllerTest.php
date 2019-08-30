@@ -41,6 +41,26 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
+    public function test_can_filter_projects_by_client()
+    {
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        /** @var Project $firstProject */
+        $firstProject = factory(Project::class)->create();
+        /** @var Project $secondProject */
+        $secondProject = factory(Project::class)->create();
+
+        $response = $this->getJson(route('projects.index', [
+            'filter_client' => $firstProject->client_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstProject->id, $data[0]['id']);
+        $this->assertEquals($firstProject->client_id, $data[0]['client']['id']);
+    }
+
+    /** @test */
     public function it_can_retrieve_project()
     {
         $user = factory(User::class)->create();
