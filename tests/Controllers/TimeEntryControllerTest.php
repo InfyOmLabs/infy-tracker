@@ -19,7 +19,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_filter_time_entry_by_activity_type()
+    public function test_can_filter_time_entries_by_activity_type()
     {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
@@ -39,7 +39,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_filter_time_entry_by_project()
+    public function test_can_filter_time_entries_by_project()
     {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
@@ -66,7 +66,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_filter_time_entry_by_user()
+    public function test_can_filter_time_entries_by_user()
     {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
