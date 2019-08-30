@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
