@@ -131,8 +131,8 @@ class TimeEntry extends Model
     }
 
     /**
-     * @param  Builder  $query
-     * @param  int  $userId
+     * @param Builder $query
+     * @param int     $userId
      *
      * @return Builder
      */
@@ -142,7 +142,7 @@ class TimeEntry extends Model
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -154,7 +154,7 @@ class TimeEntry extends Model
     public function getEntryTypeStringAttribute()
     {
         if ($this->entry_type == self::STOPWATCH) {
-            return "Stopwatch";
+            return 'Stopwatch';
         }
 
         return 'Via Form';
