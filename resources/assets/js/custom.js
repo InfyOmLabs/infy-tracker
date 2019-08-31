@@ -173,6 +173,8 @@ $(document).on('focus', '.select2-selection.select2-selection--single', function
 
 $(function () {
     $(".modal").on('shown.bs.modal', function () {
-        $(this).find('input:text, .select2-selection.select2-selection--single').first().focus();
+        setTimeout(function () {
+            $(".modal").find('input:text, .select2-selection.select2-selection--single').first().focus();
+        },150);
     });
 });
