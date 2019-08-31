@@ -10,6 +10,7 @@ use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
+use App\Repositories\TimeEntryRepository;
 use App\Repositories\UserRepository;
 use Mockery\MockInterface;
 
@@ -85,6 +86,9 @@ trait MockRepositories
                     break;
                 case self::$dashboard:
                     $repoInstance = DashboardRepository::class;
+                    break;
+                case self::$timeEntry:
+                    $repoInstance = TimeEntryRepository::class;
                     break;
             }
 

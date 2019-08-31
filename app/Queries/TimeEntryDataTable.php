@@ -21,8 +21,7 @@ class TimeEntryDataTable
     public function get($input)
     {
         /** @var TimeEntry $query */
-        $query = TimeEntry::with(['task.project', 'user', 'activityType'])
-            ->select('time_entries.*', \DB::raw("IF(IFNULL(entry_type,1)=1,'Stopwatch','Via Form') as entry_type_string"));
+        $query = TimeEntry::with(['task.project', 'user', 'activityType'])->select('time_entries.*');
 
         /** @var User $user */
         $user = Auth::user();
@@ -33,11 +32,11 @@ class TimeEntryDataTable
             });
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
             function (Builder $q) use ($input) {
+                $filterUserId = (isset($input['filter_user']) && !empty($input['filter_user'])) ? $input['filter_user'] : getLoggedInUser()->id;
                 $taskIds = Task::whereProjectId($input['filter_project'])
-                    ->where('status', '=', Task::STATUS_ACTIVE)
-                    ->where(function ($q) {
-                        $q->whereHas('taskAssignee', function ($q) {
-                            $q->where('user_id', getLoggedInUser()->id);
+                    ->where(function ($q) use ($filterUserId) {
+                        $q->whereHas('taskAssignee', function ($q) use ($filterUserId) {
+                            $q->where('user_id', $filterUserId);
                         });
                     })->get()->pluck('id')->toArray();
                 $q->whereIn('task_id', $taskIds);

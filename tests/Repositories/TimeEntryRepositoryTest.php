@@ -110,6 +110,20 @@ class TimeEntryRepositoryTest extends TestCase
     }
 
     /** @test */
+    public function test_can_update_duration_of_time_entry_via_stop_watch()
+    {
+        $timeEntry = factory(TimeEntry::class)->create();
+
+        $result = $this->timeEntryRepo->updateTimeEntry([
+            'start_time' => $timeEntry->start_time,
+            'end_time'   => $timeEntry->end_time,
+        ], $timeEntry->id);
+
+        $this->assertTrue($result);
+        $this->assertEquals(TimeEntry::STOPWATCH, $timeEntry->fresh()->entry_type);
+    }
+
+    /** @test */
     public function test_can_get_tasks_of_logged_in_user()
     {
         $user = factory(User::class)->create();

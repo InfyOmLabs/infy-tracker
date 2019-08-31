@@ -80,6 +80,17 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
+    public function test_can_generate_unique_task_number_when_task_project_is_different()
+    {
+        $task = factory(Task::class)->create();
+        $updateTask = factory(Task::class)->raw(['due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))]);
+
+        $updatedTask = $this->taskRepo->update($updateTask, $task->id);
+
+        $this->assertNotEmpty(Task::findOrFail($task->id)->pluck('task_number'));
+    }
+
+    /** @test */
     public function it_can_retrieve_task_list()
     {
         $tasks = factory(Task::class)->times(2)->create();
@@ -207,6 +218,20 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertEquals($timeEntry->task_id, $taskDetails->id);
         $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_of_given_user()
+    {
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create(['duration' => 125]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($firstEntry->task_id, [
+            'user_id' => $firstEntry->user_id,
+        ]);
+
+        $this->assertEquals($firstEntry->task_id, $taskDetails->id);
+        $this->assertEquals('02 Hours and 05 Minutes', $taskDetails->totalDuration);
     }
 
     /** @test */

@@ -3,41 +3,24 @@
 namespace Tests\Controllers;
 
 use App\Models\Tag;
-use App\Repositories\TagRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class TagControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $tagRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->tagRepository = \Mockery::mock(TagRepository::class);
-        app()->instance(TagRepository::class, $this->tagRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
     }
 
     /** @test */
     public function it_can_store_tag()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$tag);
 
         $tag = factory(Tag::class)->raw();
 
@@ -62,7 +45,7 @@ class TagControllerTest extends TestCase
     /** @test */
     public function it_can_update_tag()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$tag);
 
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();

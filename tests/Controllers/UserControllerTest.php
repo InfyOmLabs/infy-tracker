@@ -121,6 +121,7 @@ class UserControllerTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->raw();
         unset($user['email_verified_at']);
+        $user['password_confirmation'] = $user['password'];
 
         $this->userRepository->expects('profileUpdate')->with($user);
 

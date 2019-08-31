@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Eloquent as Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -59,6 +59,7 @@ class TimeEntry extends Model
     use SoftDeletes;
 
     public $table = 'time_entries';
+    public $appends = ['entry_type_string'];
 
     const STOPWATCH = 1;
     const VIA_FORM = 2;
@@ -148,5 +149,14 @@ class TimeEntry extends Model
     public function scopeOfCurrentUser(Builder $query)
     {
         return $query->ofUser(getLoggedInUserId());
+    }
+
+    public function getEntryTypeStringAttribute()
+    {
+        if ($this->entry_type == self::STOPWATCH) {
+            return 'Stopwatch';
+        }
+
+        return 'Via Form';
     }
 }

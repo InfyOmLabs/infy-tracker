@@ -4,25 +4,13 @@ namespace Tests\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
-use App\Repositories\ClientRepository;
-use App\Repositories\ProjectRepository;
-use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class ProjectControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $projectRepository;
-
-    /** @var MockInterface */
-    protected $userRepo;
-
-    /** @var MockInterface */
-    private $clientRepo;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
@@ -30,32 +18,17 @@ class ProjectControllerTest extends TestCase
         $this->signInWithDefaultAdminUser();
     }
 
-    private function mockRepository()
-    {
-        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
-        $this->userRepo = \Mockery::mock(UserRepository::class);
-        app()->instance(ProjectRepository::class, $this->projectRepository);
-        app()->instance(UserRepository::class, $this->userRepo);
-    }
-
-    public function mockClientRepo()
-    {
-        $this->clientRepo = \Mockery::mock(ClientRepository::class);
-        app()->instance(ClientRepository::class, $this->clientRepo);
-    }
-
     /** @test */
     public function it_can_shows_projects()
     {
-        $this->mockClientRepo();
-        $this->mockRepository();
+        $this->mockRepo([self::$client, self::$user]);
 
         $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
-        $this->clientRepo->expects('getClientList')
+        $this->clientRepository->expects('getClientList')
             ->andReturn($mockClientResponse);
 
         $mockUserResponse = [['id' => 1, 'name' => 'Dummy User']];
-        $this->userRepo->expects('getUserList')
+        $this->userRepository->expects('getUserList')
             ->andReturn($mockUserResponse);
 
         $response = $this->get(route('projects.index'));
@@ -65,6 +38,26 @@ class ProjectControllerTest extends TestCase
             ->assertSeeText('Projects')
             ->assertSeeText('New Project')
             ->assertViewHasAll(['clients' => $mockClientResponse, 'users' => $mockUserResponse]);
+    }
+
+    /** @test */
+    public function test_can_filter_projects_by_client()
+    {
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        /** @var Project $firstProject */
+        $firstProject = factory(Project::class)->create();
+        /** @var Project $secondProject */
+        $secondProject = factory(Project::class)->create();
+
+        $response = $this->getJson(route('projects.index', [
+            'filter_client' => $firstProject->client_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstProject->id, $data[0]['id']);
+        $this->assertEquals($firstProject->client_id, $data[0]['client']['id']);
     }
 
     /** @test */
@@ -108,7 +101,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_can_get_projects_of_logged_in_user()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$project]);
 
         /** @var Project $project */
         $project = factory(Project::class)->create();
@@ -123,7 +116,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_get_can_users_of_given_project_ids()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$user]);
 
         /** @var User $farhan */
         $farhan = factory(User::class)->create();
@@ -134,7 +127,7 @@ class ProjectControllerTest extends TestCase
 
         $mockResponse = [$farhan->id => $farhan->name];
 
-        $this->userRepo->expects('getUserList')
+        $this->userRepository->expects('getUserList')
             ->with([$project->id])
             ->andReturn($mockResponse);
 

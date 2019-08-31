@@ -20,7 +20,6 @@ let tbl = $('#projects_table').DataTable({
     columnDefs: [
         {
             "targets": [0],
-            "orderable": false,
             "className": 'text-center',
             "width": '7%'
         },
