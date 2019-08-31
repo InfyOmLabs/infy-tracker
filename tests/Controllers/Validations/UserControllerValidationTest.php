@@ -59,8 +59,8 @@ class UserControllerValidationTest extends TestCase
     public function it_can_create_user()
     {
         $input = [
-            'name'  => 'random string',
-            'email' => 'dummy@gmail.com',
+            'name'    => 'random string',
+            'email'   => 'dummy@gmail.com',
             'role_id' => 1,
         ];
         $this->post(route('users.store'), $input)->assertSessionHasNoErrors();
@@ -130,8 +130,8 @@ class UserControllerValidationTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
         $input = [
-            'name'  => 'random string',
-            'email' => 'dummy@gmail.com',
+            'name'    => 'random string',
+            'email'   => 'dummy@gmail.com',
             'role_id' => 1,
         ];
 
