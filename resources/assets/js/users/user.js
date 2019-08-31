@@ -11,7 +11,7 @@ $(function () {
 var tbl = $('#users_table').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[0, "desc"]],
+    "order": [[0, "asc"]],
     ajax: {
         url: usersUrl,
     },

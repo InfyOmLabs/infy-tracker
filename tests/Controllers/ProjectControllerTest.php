@@ -4,41 +4,60 @@ namespace Tests\Controllers;
 
 use App\Models\Project;
 use App\Models\User;
-use App\Repositories\ProjectRepository;
-use App\Repositories\UserRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class ProjectControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $projectRepository;
-
-    /** @var MockInterface */
-    protected $userRepo;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
+    }
+
+    /** @test */
+    public function it_can_shows_projects()
+    {
+        $this->mockRepo([self::$client, self::$user]);
+
+        $mockClientResponse = [['id' => 1, 'name' => 'Dummy Client']];
+        $this->clientRepository->expects('getClientList')
+            ->andReturn($mockClientResponse);
+
+        $mockUserResponse = [['id' => 1, 'name' => 'Dummy User']];
+        $this->userRepository->expects('getUserList')
+            ->andReturn($mockUserResponse);
+
+        $response = $this->get(route('projects.index'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('projects.index')
+            ->assertSeeText('Projects')
+            ->assertSeeText('New Project')
+            ->assertViewHasAll(['clients' => $mockClientResponse, 'users' => $mockUserResponse]);
+    }
+
+    /** @test */
+    public function test_can_filter_projects_by_client()
+    {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
 
-    private function mockRepository()
-    {
-        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
-        $this->userRepo = \Mockery::mock(UserRepository::class);
-        app()->instance(ProjectRepository::class, $this->projectRepository);
-        app()->instance(UserRepository::class, $this->userRepo);
-    }
+        /** @var Project $firstProject */
+        $firstProject = factory(Project::class)->create();
+        /** @var Project $secondProject */
+        $secondProject = factory(Project::class)->create();
 
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
+        $response = $this->getJson(route('projects.index', [
+            'filter_client' => $firstProject->client_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstProject->id, $data[0]['id']);
+        $this->assertEquals($firstProject->client_id, $data[0]['client']['id']);
     }
 
     /** @test */
@@ -50,13 +69,12 @@ class ProjectControllerTest extends TestCase
         $project = factory(Project::class)->create();
         $project->users()->sync([$user->id]);
 
-        $response = $this->getJson('projects/'.$project->id.'/edit');
+        $response = $this->getJson(route('projects.edit', $project->id));
 
-        $this->assertSuccessDataResponse($response,
-            [
-                'project' => $project->toArray(),
-                'users'   => [$user->id],
-            ],
+        $this->assertSuccessDataResponse($response, [
+            'project' => $project->toArray(),
+            'users'   => [$user->id],
+        ],
             'Project retrieved successfully.'
         );
     }
@@ -67,11 +85,11 @@ class ProjectControllerTest extends TestCase
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $response = $this->deleteJson('projects/'.$project->id);
+        $response = $this->deleteJson(route('projects.destroy', $project->id));
 
         $this->assertSuccessMessageResponse($response, 'Project deleted successfully.');
 
-        $response = $this->getJson('projects/'.$project->id.'/edit');
+        $response = $this->getJson(route('projects.edit', $project->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -83,16 +101,14 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_can_get_projects_of_logged_in_user()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$project]);
 
         /** @var Project $project */
         $project = factory(Project::class)->create();
 
-        $this->projectRepository->shouldReceive('getMyProjects')
-            ->once()
-            ->andReturn($project->toArray());
+        $this->projectRepository->expects('getMyProjects')->andReturn($project->toArray());
 
-        $response = $this->getJson('my-projects');
+        $response = $this->getJson(route('my-projects'));
 
         $this->assertSuccessDataResponse($response, $project->toArray(), 'Project Retrieved successfully.');
     }
@@ -100,7 +116,7 @@ class ProjectControllerTest extends TestCase
     /** @test */
     public function test_get_can_users_of_given_project_ids()
     {
-        $this->mockRepository();
+        $this->mockRepo([self::$user]);
 
         /** @var User $farhan */
         $farhan = factory(User::class)->create();
@@ -111,12 +127,11 @@ class ProjectControllerTest extends TestCase
 
         $mockResponse = [$farhan->id => $farhan->name];
 
-        $this->userRepo->shouldReceive('getUserList')
-            ->once()
+        $this->userRepository->expects('getUserList')
             ->with([$project->id])
             ->andReturn($mockResponse);
 
-        $response = $this->getJson('users-of-projects?projectIds='.$project->id);
+        $response = $this->getJson(route('users-of-projects', ['projectIds' => $project->id]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Users Retrieved successfully.');
     }

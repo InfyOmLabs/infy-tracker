@@ -3,52 +3,31 @@
 namespace Tests\Controllers;
 
 use App\Models\ActivityType;
-use App\Repositories\ActivityTypeRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class ActivityTypeControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $activityTypeRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
-
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
-    }
-
-    private function mockRepository()
-    {
-        $this->activityTypeRepository = \Mockery::mock(ActivityTypeRepository::class);
-        app()->instance(ActivityTypeRepository::class, $this->activityTypeRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        \Mockery::close();
     }
 
     /** @test */
     public function it_can_store_activity_type()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$activityType);
 
         $activityType = factory(ActivityType::class)->raw();
 
-        $this->activityTypeRepository->shouldReceive('create')
-            ->once()
+        $this->activityTypeRepository->expects('create')
             ->with(array_merge($activityType, ['created_by' => getLoggedInUserId()]));
 
-        $response = $this->postJson('activity-types', $activityType);
+        $response = $this->postJson(route('activity-types.store'), $activityType);
 
         $this->assertSuccessMessageResponse($response, 'Activity Type created successfully.');
     }
@@ -59,27 +38,29 @@ class ActivityTypeControllerTest extends TestCase
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $response = $this->getJson('activity-types/'.$activityType->id.'/edit');
+        $response = $this->getJson(route('activity-types.edit', $activityType->id));
 
-        $this->assertSuccessDataResponse($response, $activityType->toArray(), 'Activity Type retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $activityType->toArray(),
+            'Activity Type retrieved successfully.'
+        );
     }
 
     /** @test */
     public function it_can_update_activity_type()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$activityType);
 
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $this->activityTypeRepository->shouldReceive('update')
-            ->once()
+        $this->activityTypeRepository->expects('update')
             ->withArgs([['name' => 'Dummy Name'], $activityType->id]);
 
-        $response = $this->putJson(
-            'activity-types/'.$activityType->id,
-            ['name' => 'Dummy Name']
-        );
+        $response = $this->putJson(route('activity-types.update', $activityType->id), [
+            'name' => 'Dummy Name',
+        ]);
 
         $this->assertSuccessMessageResponse($response, 'Activity Type updated successfully.');
     }
@@ -90,7 +71,7 @@ class ActivityTypeControllerTest extends TestCase
         /** @var ActivityType $activityType */
         $activityType = factory(ActivityType::class)->create();
 
-        $response = $this->deleteJson('activity-types/'.$activityType->id);
+        $response = $this->deleteJson(route('activity-types.destroy', $activityType->id));
 
         $this->assertSuccessMessageResponse($response, 'Activity Type deleted successfully.');
 

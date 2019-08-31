@@ -41,6 +41,7 @@ class TaskRepositoryTest extends TestCase
 
         $createdTask = $this->taskRepo->store($task);
 
+        /** @var Task $taskRecord */
         $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($createdTask->id);
         $this->assertEquals($task['title'], $taskRecord->title);
         $this->assertEquals($task['tags'][0], $taskRecord->tags[0]->id);
@@ -54,6 +55,7 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_update_task_with_tags_and_assignees()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
         $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
@@ -66,6 +68,7 @@ class TaskRepositoryTest extends TestCase
 
         $this->assertTrue($updatedTask);
 
+        /** @var Task $taskRecord */
         $taskRecord = Task::with(['tags', 'taskAssignee'])->findOrFail($task->id);
         $this->assertEquals('random string', $taskRecord->title);
         $this->assertEquals($preparedTask['tags'][0], $taskRecord->tags[0]->id);
@@ -74,6 +77,17 @@ class TaskRepositoryTest extends TestCase
         collect($task['assignees'])->map(function ($userId) use ($assigneeIds) {
             $this->assertContains($userId, $assigneeIds);
         });
+    }
+
+    /** @test */
+    public function test_can_generate_unique_task_number_when_task_project_is_different()
+    {
+        $task = factory(Task::class)->create();
+        $updateTask = factory(Task::class)->raw(['due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))]);
+
+        $updatedTask = $this->taskRepo->update($updateTask, $task->id);
+
+        $this->assertNotEmpty(Task::findOrFail($task->id)->pluck('task_number'));
     }
 
     /** @test */
@@ -114,6 +128,7 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function it_can_add_comment()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
         $comment = $this->taskRepo->addComment([
             'comment' => 'random text',
@@ -133,6 +148,7 @@ class TaskRepositoryTest extends TestCase
             'project_id'  => $project->id,
             'task_number' => 3,
         ]);
+
         $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
 
         $this->assertNotEmpty($uniqueTaskNumber);
@@ -142,6 +158,7 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_return_unique_task_number_one_when_no_tasks_on_given_project()
     {
+        /** @var Project $project */
         $project = factory(Project::class)->create();
 
         $uniqueTaskNumber = $this->taskRepo->getUniqueTaskNumber($project->id);
@@ -194,12 +211,27 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_task_details_with_task_duration()
     {
+        /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
 
         $taskDetails = $this->taskRepo->getTaskDetails($timeEntry->task_id);
 
         $this->assertEquals($timeEntry->task_id, $taskDetails->id);
         $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_of_given_user()
+    {
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create(['duration' => 125]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($firstEntry->task_id, [
+            'user_id' => $firstEntry->user_id,
+        ]);
+
+        $this->assertEquals($firstEntry->task_id, $taskDetails->id);
+        $this->assertEquals('02 Hours and 05 Minutes', $taskDetails->totalDuration);
     }
 
     /** @test */

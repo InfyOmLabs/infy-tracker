@@ -3,54 +3,35 @@
 namespace Tests\Controllers;
 
 use App\Models\Comment;
-use App\Repositories\TaskRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class CommentControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $taskRepository;
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
-    }
-
-    private function mockRepository()
-    {
-        $this->taskRepository = \Mockery::mock(TaskRepository::class);
-        app()->instance(TaskRepository::class, $this->taskRepository);
-    }
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
     /** @test */
     public function test_can_add_comment()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
         $comment = factory(Comment::class)->make();
 
-        $this->taskRepository->shouldReceive('addComment')
-            ->once()
+        $this->taskRepository->expects('addComment')
             ->with(['comment' => $comment->comment, 'task_id' => $comment->task_id])
             ->andReturn($comment);
 
-        $this->taskRepository->shouldReceive('addCommentBroadCast')
-            ->once()
+        $this->taskRepository->expects('addCommentBroadCast')
             ->with($comment);
 
-        $response = $this->postJson("tasks/{$comment->task_id}/comments", [
+        $response = $this->postJson(route('task.comments', $comment->task_id), [
             'comment' => $comment->comment,
         ]);
 
@@ -60,15 +41,17 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function test_can_update_comment_with_valid_input()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
+        /** @var Comment $comment */
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
         $newText = $this->faker->text;
 
-        $this->taskRepository->shouldReceive('editCommentBroadCast')
-            ->once();
+        $this->taskRepository->expects('editCommentBroadCast');
 
-        $result = $this->post('tasks/'.$comment->task_id.'/comments/'.$comment->id.'/update', ['comment' => $newText]);
+        $result = $this->postJson(route('task.update-comment', [$comment->task_id, $comment->id]), [
+            'comment' => $newText,
+        ]);
 
         $this->assertSuccessMessageResponse($result, 'Comment has been updated successfully.');
         $this->assertEquals($newText, $comment->fresh()->comment);
@@ -77,14 +60,14 @@ class CommentControllerTest extends TestCase
     /** @test */
     public function test_can_delete_given_comment()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$task);
 
+        /** @var Comment $comment */
         $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
 
-        $this->taskRepository->shouldReceive('deleteCommentBroadCast')
-            ->once();
+        $this->taskRepository->expects('deleteCommentBroadCast');
 
-        $result = $this->delete('tasks/'.$comment->task_id.'/comments/'.$comment->id);
+        $result = $this->delete(route('task.delete-comment', [$comment->task_id, $comment->id]));
 
         $this->assertSuccessMessageResponse($result, 'Comment has been deleted successfully.');
         $this->assertEmpty(Comment::find($comment->id));

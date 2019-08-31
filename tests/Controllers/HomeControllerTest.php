@@ -3,41 +3,43 @@
 namespace Tests\Controllers;
 
 use App\Models\TimeEntry;
-use App\Repositories\DashboardRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 class HomeControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $dashboardRepository;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->signInWithDefaultAdminUser();
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    private function mockRepository()
+    /** @test */
+    public function it_shows_dashboard()
     {
-        $this->dashboardRepository = \Mockery::mock(DashboardRepository::class);
-        app()->instance(DashboardRepository::class, $this->dashboardRepository);
-    }
+        $this->mockRepo(self::$user);
 
-    public function tearDown(): void
-    {
-        parent::tearDown();
-        \Mockery::close();
+        $mockedResponse = [['id' => 1, 'name' => 'Dummy User']];
+        $this->userRepository->expects('getUserList')
+            ->andReturn($mockedResponse);
+
+        $response = $this->get(route('home'));
+
+        $response->assertStatus(200)
+            ->assertViewIs('dashboard.index')
+            ->assertViewHas('users', $mockedResponse)
+            ->assertSeeText('Dashboard')
+            ->assertSeeText('Custom Report')
+            ->assertSeeText('Daily Work Report');
     }
 
     /** @test */
     public function test_can_retrieve_report_of_given_user()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$dashboard);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -47,14 +49,18 @@ class HomeControllerTest extends TestCase
         $userId = $timeEntry->user_id;
 
         $mockResponse = ['projects' => [$timeEntry->task->project->name]];
-        $this->dashboardRepository->shouldReceive('getWorkReport')->once()
+        $this->dashboardRepository->expects('getWorkReport')
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
                 'user_id'    => $userId,
             ])->andReturn($mockResponse);
 
-        $response = $this->getJson("/users-work-report?start_date=$startTime&end_date=$endTime&user_id=$userId");
+        $response = $this->getJson(route('users-work-report', [
+            'start_date' => $startTime,
+            'end_date'   => $endTime,
+            'user_id'    => $userId,
+        ]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Custom Report retrieved successfully.');
     }
@@ -62,7 +68,7 @@ class HomeControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_developer_work_report()
     {
-        $this->mockRepository();
+        $this->mockRepo(self::$dashboard);
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = factory(TimeEntry::class)->create();
@@ -71,15 +77,21 @@ class HomeControllerTest extends TestCase
         $endTime = $timeEntry->end_time;
 
         $mockResponse = ['projects' => [$timeEntry->task->project->name]];
-        $this->dashboardRepository->shouldReceive('getDeveloperWorkReport')
-            ->once()
+        $this->dashboardRepository->expects('getDeveloperWorkReport')
             ->with([
                 'start_date' => $startTime,
                 'end_date'   => $endTime,
             ])->andReturn($mockResponse);
 
-        $response = $this->getJson("/developer-work-report?start_date=$startTime&end_date=$endTime");
+        $response = $this->getJson(route('developers-work-report', [
+            'start_date' => $startTime,
+            'end_date'   => $endTime,
+        ]));
 
-        $this->assertSuccessDataResponse($response, $mockResponse, 'Daily Work Report retrieved successfully.');
+        $this->assertSuccessDataResponse(
+            $response,
+            $mockResponse,
+            'Daily Work Report retrieved successfully.'
+        );
     }
 }

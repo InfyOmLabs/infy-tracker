@@ -11,64 +11,42 @@ namespace Tests\Controllers;
 
 use App\Models\Client;
 use App\Models\Project;
-use App\Repositories\ClientRepository;
-use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery\MockInterface;
 use Tests\TestCase;
+use Tests\Traits\MockRepositories;
 
 /**
  * Class ClientControllerTest.
  */
 class ClientControllerTest extends TestCase
 {
-    use DatabaseTransactions;
-
-    /** @var MockInterface */
-    protected $clientRepository;
-
-    /** @var MockInterface */
-    protected $projectRepository;
-
-    protected $defaultUserId = 1;
+    use DatabaseTransactions, MockRepositories;
 
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
-
-        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
     }
 
-    public function mockClientRepository()
+    /** @test */
+    public function it_shows_clients()
     {
-        $this->clientRepository = \Mockery::mock(ClientRepository::class);
-        app()->instance(ClientRepository::class, $this->clientRepository);
-    }
+        $response = $this->getJson(route('clients.index'));
 
-    public function mockProjectRepository()
-    {
-        $this->projectRepository = \Mockery::mock(ProjectRepository::class);
-        app()->instance(ProjectRepository::class, $this->projectRepository);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        \Mockery::close();
+        $response->assertStatus(200)
+            ->assertViewIs('clients.index')
+            ->assertSeeText('Clients')
+            ->assertSeeText('New Client');
     }
 
     /** @test */
     public function it_can_store_client()
     {
-        $this->mockClientRepository();
+        $this->mockRepo(self::$client);
 
         $client = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('create')
-            ->once()
+        $this->clientRepository->expects('create')
             ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
 
         $response = $this->postJson('clients', $client);
@@ -79,9 +57,10 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_retrieve_client()
     {
+        /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $response = $this->getJson('clients/'.$client->id.'/edit');
+        $response = $this->getJson(route('clients.edit', $client->id));
 
         $this->assertSuccessDataResponse($response, $client->toArray(), 'Client retrieved successfully.');
     }
@@ -89,19 +68,14 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_update_client()
     {
-        $this->mockClientRepository();
+        $this->mockRepo(self::$client);
 
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
 
-        $this->clientRepository->shouldReceive('update')
-            ->once()
-            ->withArgs([$fakeClient, $client->id]);
+        $this->clientRepository->expects('update')->withArgs([$fakeClient, $client->id]);
 
-        $response = $this->putJson(
-            'clients/'.$client->id,
-            $fakeClient
-        );
+        $response = $this->putJson(route('clients.update', $client->id), $fakeClient);
 
         $this->assertSuccessMessageResponse($response, 'Client updated successfully.');
     }
@@ -109,13 +83,14 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function it_can_delete_client()
     {
+        /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $response = $this->deleteJson('clients/'.$client->id);
+        $response = $this->deleteJson(route('clients.destroy', $client->id));
 
         $this->assertSuccessMessageResponse($response, 'Client deleted successfully.');
 
-        $response = $this->getJson('clients/'.$client->id.'/edit');
+        $response = $this->getJson(route('clients.edit', $client->id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -127,7 +102,7 @@ class ClientControllerTest extends TestCase
     /** @test */
     public function test_can_retrieve_projects_of_given_client()
     {
-        $this->mockProjectRepository();
+        $this->mockRepo(self::$project);
 
         /** @var Client $client */
         $client = factory(Client::class)->create();
@@ -137,12 +112,11 @@ class ClientControllerTest extends TestCase
 
         $mockResponse = ['id' => $project->id, 'name' => $project->name];
 
-        $this->projectRepository->shouldReceive('getProjectsList')
-            ->once()
+        $this->projectRepository->expects('getProjectsList')
             ->with($client->id)
             ->andReturn($mockResponse);
 
-        $response = $this->getJson("projects-of-client?client_id=$client->id");
+        $response = $this->getJson(route('projects-of-client', ['client_id' => $client->id]));
 
         $this->assertSuccessDataResponse($response, $mockResponse, 'Projects retrieved successfully.');
     }

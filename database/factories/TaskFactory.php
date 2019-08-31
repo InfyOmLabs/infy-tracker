@@ -16,6 +16,7 @@ $factory->define(Task::class, function (Faker $faker) {
         'description' => $faker->text,
         'project_id'  => $project->id,
         'due_date'    => $faker->dateTime,
+        'status'      => Task::STATUS_ALL,
         'task_number' => $faker->unique()->randomDigitNotNull,
     ];
 });

@@ -25,7 +25,6 @@ class TimeEntryRepositoryTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->timeEntryRepo = app(TimeEntryRepository::class);
         $this->signInWithDefaultAdminUser();
     }
@@ -96,15 +95,32 @@ class TimeEntryRepositoryTest extends TestCase
     {
         $timeEntry = factory(TimeEntry::class)->create();
 
-        $result = $this->timeEntryRepo->updateTimeEntry(
-            ['duration' => 120, 'start_time' => '', 'end_time' => ''], $timeEntry->id
-        );
+        $result = $this->timeEntryRepo->updateTimeEntry([
+            'duration'   => 120,
+            'start_time' => '',
+            'end_time'   => '',
+        ], $timeEntry->id);
+
         $this->assertTrue($result);
 
         $timeEntry = $timeEntry->fresh();
         $this->assertEquals(120, $timeEntry->duration);
         $this->assertEmpty($timeEntry->start_time);
         $this->assertEmpty($timeEntry->end_time);
+    }
+
+    /** @test */
+    public function test_can_update_duration_of_time_entry_via_stop_watch()
+    {
+        $timeEntry = factory(TimeEntry::class)->create();
+
+        $result = $this->timeEntryRepo->updateTimeEntry([
+            'start_time' => $timeEntry->start_time,
+            'end_time'   => $timeEntry->end_time,
+        ], $timeEntry->id);
+
+        $this->assertTrue($result);
+        $this->assertEquals(TimeEntry::STOPWATCH, $timeEntry->fresh()->entry_type);
     }
 
     /** @test */

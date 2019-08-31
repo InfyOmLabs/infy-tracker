@@ -203,9 +203,9 @@ class TimeEntryController extends AppBaseController
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getStartTimer()
+    public function getStartTimer(Request $request)
     {
-        $this->timeEntryRepository->broadcastStartTimerEvent();
+        $this->timeEntryRepository->broadcastStartTimerEvent($request->all());
 
         return $this->sendSuccess('Start timer broadcasted successfully.');
     }

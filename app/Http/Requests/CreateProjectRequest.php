@@ -33,7 +33,7 @@ class CreateProjectRequest extends FormRequest
     public function rules()
     {
         $rules = Project::$rules;
-        $rules['prefix'] = 'required|alpha_num|max:4|min:2|unique:projects,prefix';
+        $rules['prefix'] = 'required|alpha_num|max:6|min:2|unique:projects,prefix';
 
         return $rules;
     }

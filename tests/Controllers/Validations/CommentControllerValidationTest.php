@@ -24,13 +24,13 @@ class CommentControllerValidationTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-
         $this->signInWithDefaultAdminUser();
     }
 
     /** @test */
     public function test_delete_comment_fails_when_invalid_comment_id_passed()
     {
+        /** @var Task $task */
         $task = factory(Task::class)->create();
         $result = $this->delete(route('task.delete-comment', [$task->id, 999]));
 
@@ -49,18 +49,6 @@ class CommentControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_given_comment()
-    {
-        $this->markTestSkipped();
-        $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
-
-        $result = $this->delete(route('task.delete-comment', [$comment->task_id, $comment->id]));
-
-        $this->assertSuccessMessageResponse($result, 'Comment has been deleted successfully.');
-        $this->assertEmpty(Comment::find($comment->id));
-    }
-
-    /** @test */
     public function test_unable_to_update_comment_with_invalid_input()
     {
         $task = factory(Task::class)->create();
@@ -69,18 +57,5 @@ class CommentControllerValidationTest extends TestCase
         $result = $this->post(route('task.update-comment', [$task->id, $comment->id]));
 
         $this->assertExceptionMessage($result, 'Unable to update comment.');
-    }
-
-    /** @test */
-    public function test_can_update_comment_with_valid_input()
-    {
-        $this->markTestSkipped();
-        $comment = factory(Comment::class)->create(['created_by' => $this->loggedInUserId]);
-        $newText = $this->faker->text;
-
-        $result = $this->post(route('task.update-comment', [$comment->task_id, $comment->id]), ['comment' => $newText]);
-
-        $this->assertSuccessMessageResponse($result, 'Comment has been updated successfully.');
-        $this->assertEquals($newText, $comment->fresh()->comment);
     }
 }

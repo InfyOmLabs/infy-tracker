@@ -45,13 +45,14 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     });
 
     Route::middleware('permission:manage_users')->group(function () {
-        Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser');
+        Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser')
+            ->name('active-de-active-user');
         Route::resource('users', 'UserController');
-        Route::get('users/{user}/send-email', 'UserController@resendEmailVerification');
+        Route::get('users/{user}/send-email', 'UserController@resendEmailVerification')->name('send-email');
     });
 
-    Route::get('users/{user}/edit', 'UserController@edit');
-    Route::post('users/profile-update', 'UserController@profileUpdate');
+    Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
+    Route::post('users/profile-update', 'UserController@profileUpdate')->name('update-profile');
 
     Route::middleware('permission:manage_tags')->group(function () {
         Route::resource('tags', 'TagController');
@@ -69,8 +70,10 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
             ->name('task.delete-attachment');
         Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment')->name('task.attachments');
         Route::post('tasks/{task}/comments', 'CommentController@addComment')->name('task.comments');
-        Route::post('tasks/{task}/comments/{comment}/update', 'CommentController@editComment')->name('task.update-comment');
-        Route::delete('tasks/{task}/comments/{comment}', 'CommentController@deleteComment')->name('task.delete-comment');
+        Route::post('tasks/{task}/comments/{comment}/update',
+            'CommentController@editComment')->name('task.update-comment');
+        Route::delete('tasks/{task}/comments/{comment}',
+            'CommentController@deleteComment')->name('task.delete-comment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails')->name('task.get-details');
         Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount')->name('task.comments-count');
         Route::get('tasks/{task}/users', 'TaskController@getTaskUsers')->name('task.users');
@@ -78,18 +81,18 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::resource('time-entries', 'TimeEntryController');
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
-    Route::get('start-timer', 'TimeEntryController@getStartTimer');
+    Route::post('start-timer', 'TimeEntryController@getStartTimer');
 
     Route::middleware('permission:manage_reports')->group(function () {
         Route::resource('reports', 'ReportController');
-        Route::get('users-of-projects', 'ProjectController@users');
-        Route::get('projects-of-client', 'ClientController@projects');
+        Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
+        Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
     });
 
-    Route::get('my-tasks', 'TaskController@myTasks');
-    Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask');
-    Route::get('projects/{project}/tasks', 'TimeEntryController@getTasks');
-    Route::get('my-projects', 'ProjectController@getMyProjects');
+    Route::get('my-tasks', 'TaskController@myTasks')->name('my-tasks');
+    Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask')->name('user-last-task-work');
+    Route::get('projects/{project}/tasks', 'TimeEntryController@getTasks')->name('project-tasks');
+    Route::get('my-projects', 'ProjectController@getMyProjects')->name('my-projects');
 
     Route::middleware('permission:manage_roles')->group(function () {
         Route::resource('roles', 'RoleController');

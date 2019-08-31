@@ -145,12 +145,12 @@ class ReportRepository extends BaseRepository
 
         $clientId = $this->getClientId($report->id);
         if ($input['client_id'] != 0) {
-            if ($input['client_id'] !== $clientId) {
+            if ($input['client_id'] != $clientId) {
                 $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
             }
         }
 
-        if (!empty($clientId) && $input['client_id'] !== $clientId) {
+        if (!empty($clientId) && $input['client_id'] != $clientId) {
             ReportFilter::ofParamType(Client::class)->whereParamId($clientId)->delete();
         }
 

@@ -165,5 +165,3 @@ window.displaySuccessMessage = function (message) {
         position: 'top-right',
     });
 };
-//modal not closed on click outside
-$('.modal').modal({show: false, backdrop: 'static'});

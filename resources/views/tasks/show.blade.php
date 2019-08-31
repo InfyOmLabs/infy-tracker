@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    Task Detail
+    Task Details
 @endsection
 @section('page_css')
     <link rel="stylesheet"
@@ -16,7 +16,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Task Detail</h3>
+                <h3>Task Details</h3>
                 <div class="filter-container__btn">
                     <button class="btn btn-primary edit-btn" type="button" data-id="{{$task->id}}"
                             data-loading-text="<span class='spinner-border spinner-border-sm'></span> Processing...">

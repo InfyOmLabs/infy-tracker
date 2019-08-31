@@ -11,15 +11,16 @@ use Illuminate\Queue\SerializesModels;
 class StartTimer implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+    public $timerData;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($timerData = [])
     {
-        //
+        $this->timerData = $timerData;
     }
 
     /**
@@ -30,5 +31,10 @@ class StartTimer implements ShouldBroadcast
     public function broadcastOn()
     {
         return new PrivateChannel('stopwatch-event.'.getLoggedInUserId());
+    }
+
+    public function broadcastWith()
+    {
+        return $this->timerData;
     }
 }
