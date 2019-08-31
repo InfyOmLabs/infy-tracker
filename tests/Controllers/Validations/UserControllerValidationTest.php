@@ -61,6 +61,7 @@ class UserControllerValidationTest extends TestCase
         $input = [
             'name'  => 'random string',
             'email' => 'dummy@gmail.com',
+            'role_id' => 1,
         ];
         $this->post(route('users.store'), $input)->assertSessionHasNoErrors();
 
@@ -131,6 +132,7 @@ class UserControllerValidationTest extends TestCase
         $input = [
             'name'  => 'random string',
             'email' => 'dummy@gmail.com',
+            'role_id' => 1,
         ];
 
         $this->put(route('users.update', $user->id), $input)->assertSessionHasNoErrors();
