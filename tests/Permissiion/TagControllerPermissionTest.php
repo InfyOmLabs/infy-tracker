@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -8,9 +9,13 @@ class TagControllerPermissionTest extends TestCase
 {
     use DatabaseTransactions;
 
+    public $user;
+
     public function setUp(): void
     {
         parent::setUp();
+        $this->user = factory(User::class)->create();
+        $this->actingAs($this->user);
     }
 
     /**
@@ -18,13 +23,11 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_can_get_tags_with_valid_permission()
     {
-        $user = $this->makeUserWithPermissions(['manage_tags']);
-        $this->actingAs($user);
+        $this->attachPermissions($this->user->id, ['manage_tags']);
 
         $response = $this->getJson(route('tags.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('tags.index');
     }
 
     /**
@@ -32,9 +35,6 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_not_allow_to_get_tags_without_permission()
     {
-        $user = $this->makeUserWithPermissions();
-        $this->actingAs($user);
-
         $response = $this->get(route('tags.index'));
 
         $response->assertStatus(403);
@@ -45,8 +45,7 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_can_create_tag_with_valid_permission()
     {
-        $user = $this->makeUserWithPermissions(['manage_tags']);
-        $this->actingAs($user);
+        $this->attachPermissions($this->user->id, ['manage_tags']);
 
         /** @var Tag $tag */
         $tag = factory(Tag::class)->raw();
@@ -62,9 +61,6 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_not_allow_to_create_tag_without_permission()
     {
-        $user = $this->makeUserWithPermissions();
-        $this->actingAs($user);
-
         /** @var Tag $tag */
         $tag = factory(Tag::class)->raw();
 
@@ -78,8 +74,7 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_can_update_tag_with_valid_permission()
     {
-        $user = $this->makeUserWithPermissions(['manage_tags']);
-        $this->actingAs($user);
+        $this->attachPermissions($this->user->id, ['manage_tags']);
 
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
@@ -96,9 +91,6 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_not_allow_to_update_tag_without_permission()
     {
-        $user = $this->makeUserWithPermissions();
-        $this->actingAs($user);
-
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
         $updateTag = factory(Tag::class)->raw(['id' => $tag->id]);
@@ -113,8 +105,7 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_can_delete_tag_with_valid_permission()
     {
-        $user = $this->makeUserWithPermissions(['manage_tags']);
-        $this->actingAs($user);
+        $this->attachPermissions($this->user->id, ['manage_tags']);
 
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
@@ -130,9 +121,6 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_not_allow_to_delete_tag_without_permission()
     {
-        $user = $this->makeUserWithPermissions();
-        $this->actingAs($user);
-
         /** @var Tag $tag */
         $tag = factory(Tag::class)->create();
 
