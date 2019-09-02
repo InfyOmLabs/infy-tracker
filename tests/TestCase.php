@@ -83,13 +83,14 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param array $permissions
+     * @param int $userId
      *
      * @return User
      */
-    public function makeUserWithPermissions($permissions = [])
+    public function attachPermissions($userId, $permissions = [])
     {
         /** @var User $user */
-        $user = factory(User::class)->create();
+        $user = User::findOrFail($userId);
         $permissionIds = Permission::whereIn('name', $permissions)->get()->pluck('id');
 
         /** @var Role $role */
