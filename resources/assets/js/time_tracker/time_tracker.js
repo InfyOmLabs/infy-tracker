@@ -191,7 +191,7 @@ $("#stopTimer").click(function (e) {
     enableTimerData();
 
     $('#loader').show();
-    storeTimeEntry();
+    checkTimeEntry();
 });
 
 function enableTimerData() {
@@ -215,10 +215,102 @@ function stopTime() {
     seconds = minutes = hours = 0;
 }
 
-function storeTimeEntry() {
+function diff_mins(dt2, dt1) {
+    dt2 = new Date(dt2);
+    dt1 = new Date(dt1);
+    var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+    diff /= (60);
+    return Math.abs(Math.round(diff));
+}
+
+function adjustTimeEntry() {
+    let endDate = moment().format('YYYY-MM-DD HH:mm:ss');
+    $("#tmAdjustValidationErrorsBox").show();
+    $("#tmAdjustValidationErrorsBox").html("Time Entry must be less than 12 hours.");
+    $('#adjustEndTime').val(endDate);
+    $('#adjustEndTime').attr('disabled', 'true');
+    $("#timeEntryAdjustModal").modal();
+    $('#stopTimer').removeAttr('disabled');
+}
+
+$('#timeEntryAdjustModal').on('hidden.bs.modal', function () {
+    $('#adjustEndTime').prop('disabled', false);
+    $('#adjustStartTime').prop('disabled', false);
+    $("#adjustEndTime").data("DateTimePicker").date(null);
+    $("#adjustStartTime").data("DateTimePicker").date(null);
+    resetModalForm('#timeEntryAdjustForm');
+    $('#tmAdjustValidationErrorsBox').hide();
+});
+
+$('#adjustStartTime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: true,
+    icons: {
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
+    },
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
+});
+$('#adjustEndTime').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss',
+    useCurrent: true,
+    icons: {
+        up: "icon-arrow-up icons",
+        down: "icon-arrow-down icons",
+        previous: 'icon-arrow-left icons',
+        next: 'icon-arrow-right icons',
+    },
+    sideBySide: true,
+    maxDate: moment().endOf('day'),
+});
+
+$('#adjustStartTime,#adjustEndTime').on('dp.change', function () {
+    const startTime = $('#adjustStartTime').val();
+    const endTime = $('#adjustEndTime').val();
+    let minutes = 0;
+    if (endTime) {
+        const diff = new Date(Date.parse(endTime) - Date.parse(startTime));
+        minutes = diff / (1000 * 60);
+        if (!Number.isInteger(minutes)) {
+            minutes = minutes.toFixed(2);
+        }
+    }
+    $('#adjustDuration').val(minutes).prop('disabled', true);
+    $('#adjustStartTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    $('#adjustEndTime').data("DateTimePicker").maxDate(moment().endOf('now'));
+    if(minutes < 720) {
+        $('#tmAdjustValidationErrorsBox').hide();
+    }
+});
+
+$('#adjustBtnSave').click(function () {
+    let startTime = $('#adjustStartTime').val();
+    let endTime = $('#adjustEndTime').val();
+    let totalMin = diff_mins(endTime, startTime);
+    if(totalMin > 720) {
+        $("#tmAdjustValidationErrorsBox").show();
+        $("#tmAdjustValidationErrorsBox").html("Time Entry must be less than 12 hours.");
+    } else {
+        $("#adjustBtnCancel").trigger('click');
+        storeTimeEntry(startTime, endTime);
+    }
+});
+
+function checkTimeEntry() {
     let startTime = getItemFromLocalStorage('start_time');
     let endTime = getCurrentTime();
+    let totalMin = diff_mins(endTime, startTime);
+    if(totalMin > 720) {
+        adjustTimeEntry();
+    } else {
+        storeTimeEntry(startTime, endTime);
+    }
+}
 
+function storeTimeEntry(startTime, endTime) {
     $.ajax({
         url: storeTimeEntriesUrl,
         type: 'POST',

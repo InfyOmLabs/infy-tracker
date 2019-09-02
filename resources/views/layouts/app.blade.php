@@ -70,6 +70,7 @@
 </div>
 
 @include('time_tracker.index');
+@include('time_tracker.adjust_time_entry');
 
 <footer class="app-footer justify-content-between">
     <div>
