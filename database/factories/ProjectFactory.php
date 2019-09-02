@@ -11,7 +11,7 @@ $factory->define(Project::class, function (Faker $faker) {
 
     return [
         'name'        => $faker->name,
-        'prefix'      => 'TRAC'.$faker->randomDigitNotNull,
+        'prefix'      => $faker->name,
         'description' => $faker->sentence,
         'client_id'   => $client->id,
     ];
