@@ -239,10 +239,11 @@ Dropzone.options.dropzone = {
         let newFileName = fileNameExtArr[0];
         let newFileExt = fileNameExtArr[1];
         let prevFileName = fileuploded.innerHTML.split('.')[0];
+        let fileUrl = attachmentUrl + fileName;
         fileuploded.innerHTML = fileName;
 
-        $(file.previewTemplate).find('.dz-remove').attr('data-file-id', attachment.id);
-        $(file.previewTemplate).find('.dz-remove').attr('data-file-url', attachment.file_url);
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-id', attachment.id);
+        $(".dz-preview:last-child").children(':last-child').attr('data-file-url', attachment.file_url);
         if($.inArray(newFileExt,['jpg','jpge','png']) > -1) {
             $(".previewEle").find('.' + prevFileName).attr('href', attachment.file_url);
             $(".previewEle").find('.' + prevFileName).attr('class', newFileName);
