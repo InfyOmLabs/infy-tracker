@@ -165,3 +165,19 @@ window.displaySuccessMessage = function (message) {
         position: 'top-right',
     });
 };
+
+$(function () {
+    $(".dataTables_length").css('padding-top', '6px');
+    $(".dataTables_info").css('padding-top', '24px');
+});
+
+$.extend($.fn.dataTable.defaults, {
+    drawCallback: function (settings) {
+        let thisTableId = settings.sTableId;
+        if (settings.fnRecordsDisplay() > settings._iDisplayLength) {
+            $('#' + thisTableId + '_paginate').show();
+        } else {
+            $('#' + thisTableId + '_paginate').hide();
+        }
+    }
+});
