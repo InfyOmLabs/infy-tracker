@@ -10,7 +10,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Task::class, function (Faker $faker) {
     $project = factory(Project::class)->create();
-
     $dueDate = date('Y-m-d H:i:s', strtotime('+ 4hours'));
 
     return [
