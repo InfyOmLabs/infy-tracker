@@ -28,7 +28,6 @@ class RolePermissionControllerTest extends TestCase
         $response = $this->getJson(route('roles.index'));
 
         $response->assertStatus(200);
-        $response->assertViewIs('roles.index');
     }
 
     /**
@@ -37,6 +36,7 @@ class RolePermissionControllerTest extends TestCase
     public function test_not_allow_to_get_roles_without_permission()
     {
         $response = $this->get(route('roles.index'));
+
         $response->assertStatus(403);
     }
 
