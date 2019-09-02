@@ -96,12 +96,15 @@ window.prepareUserWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
+                        result = roundToQuarterHour(tooltipItem.yLabel);
+                        if(result == '0min') {
+                            return '';
+                        }
                         let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': ';
                         }
-                        result = roundToQuarterHour(tooltipItem.yLabel);
                         return label + result;
                     }
                 }
