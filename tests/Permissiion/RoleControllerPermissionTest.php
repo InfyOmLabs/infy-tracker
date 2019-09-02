@@ -5,7 +5,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class RolePermissionControllerTest extends TestCase
+class RoleControllerPermissionTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -47,12 +47,12 @@ class RolePermissionControllerTest extends TestCase
     {
         $this->attachPermissions($this->user->id, ['manage_roles']);
 
-        /** @var Role $role */
         $role = factory(Role::class)->raw();
 
         $response = $this->postJson(route('roles.store'), $role);
 
         $response->assertStatus(302);
+        $response->assertRedirect('roles');
     }
 
     /**
@@ -60,7 +60,6 @@ class RolePermissionControllerTest extends TestCase
      */
     public function test_not_allow_to_create_role_without_permission()
     {
-        /** @var Role $role */
         $role = factory(Role::class)->raw();
 
         $response = $this->post(route('roles.store'), $role);
@@ -82,6 +81,7 @@ class RolePermissionControllerTest extends TestCase
         $response = $this->putJson(route('roles.update', $role->id), $updateRole);
 
         $response->assertStatus(302);
+        $response->assertRedirect('roles');
     }
 
     /**
