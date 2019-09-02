@@ -5,7 +5,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class TagControllerPermissionTest extends TestCase
+class TagPermissionControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -51,7 +51,6 @@ class TagControllerPermissionTest extends TestCase
 
         $response = $this->postJson(route('tags.store'), $tag);
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag created successfully.');
     }
 
@@ -80,7 +79,6 @@ class TagControllerPermissionTest extends TestCase
 
         $response = $this->putJson(route('tags.update', $tag->id), $updateTag);
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag updated successfully.');
     }
 
@@ -110,7 +108,6 @@ class TagControllerPermissionTest extends TestCase
 
         $response = $this->deleteJson(route('tags.destroy', $tag->id));
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag deleted successfully.');
     }
 
