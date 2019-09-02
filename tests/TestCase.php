@@ -83,7 +83,7 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * @param array $permissions
-     * @param int $userId
+     * @param int   $userId
      *
      * @return User
      */
