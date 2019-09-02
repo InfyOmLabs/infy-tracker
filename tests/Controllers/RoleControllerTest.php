@@ -11,7 +11,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-
 class RoleControllerTest extends TestCase
 {
     use DatabaseTransactions, WithoutMiddleware;
