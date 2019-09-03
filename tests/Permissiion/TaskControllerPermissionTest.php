@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
