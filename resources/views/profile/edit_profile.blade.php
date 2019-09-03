@@ -43,15 +43,29 @@
                 <div class="row">
                     <div class="form-group col-sm-6">
                         {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
-                        {!! Form::text('password', null, ['class' => 'form-control', 'id' => 'pfNewPassword']) !!}
+                        <div class="input-group">
+                            <input class="form-control input-group__addon" id="pfNewPassword" type="password" name="password">
+                            <div class="input-group-append">
+                                <span class="input-group-text changeType">
+                                    <i class="icon-eye icons"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group col-sm-6">
                         {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
-                        {!! Form::text('password_confirmation', null, ['class' => 'form-control', 'id' => 'pfNewConfirmPassword']) !!}
+                        <div class="input-group">
+                            <input class="form-control input-group__addon" id="pfNewConfirmPassword" type="password" name="password_confirmation">
+                            <div class="input-group-append">
+                                <span class="input-group-text changeType">
+                                    <i class="icon-eye icons"></i>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    {!! Form::button('Save', ['type'=>'submit','class' => 'btn btn-primary','id'=>'btnEditSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
+                    {!! Form::button('Save', ['type'=>'submit','class' => 'btn btn-primary','id'=>'btnPrEditSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
                     <button type="button" class="btn btn-light" data-dismiss="modal"
                             style="margin-left: 5px">Cancel
                     </button>

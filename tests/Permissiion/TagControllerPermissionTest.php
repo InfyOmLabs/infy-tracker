@@ -47,12 +47,10 @@ class TagControllerPermissionTest extends TestCase
     {
         $this->attachPermissions($this->user->id, ['manage_tags']);
 
-        /** @var Tag $tag */
         $tag = factory(Tag::class)->raw();
 
         $response = $this->postJson(route('tags.store'), $tag);
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag created successfully.');
     }
 
@@ -61,7 +59,6 @@ class TagControllerPermissionTest extends TestCase
      */
     public function test_not_allow_to_create_tag_without_permission()
     {
-        /** @var Tag $tag */
         $tag = factory(Tag::class)->raw();
 
         $response = $this->post(route('tags.store'), $tag);
@@ -82,7 +79,6 @@ class TagControllerPermissionTest extends TestCase
 
         $response = $this->putJson(route('tags.update', $tag->id), $updateTag);
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag updated successfully.');
     }
 
@@ -112,7 +108,6 @@ class TagControllerPermissionTest extends TestCase
 
         $response = $this->deleteJson(route('tags.destroy', $tag->id));
 
-        $response->assertStatus(200);
         $this->assertSuccessMessageResponse($response, 'Tag deleted successfully.');
     }
 

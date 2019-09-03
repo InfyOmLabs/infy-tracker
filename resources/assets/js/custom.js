@@ -165,3 +165,32 @@ window.displaySuccessMessage = function (message) {
         position: 'top-right',
     });
 };
+
+$(function () {
+    $(".dataTables_length").css('padding-top', '6px');
+    $(".dataTables_info").css('padding-top', '24px');
+});
+
+$.extend($.fn.dataTable.defaults, {
+    drawCallback: function (settings) {
+        let thisTableId = settings.sTableId;
+        if (settings.fnRecordsDisplay() > settings._iDisplayLength) {
+            $('#' + thisTableId + '_paginate').show();
+        } else {
+            $('#' + thisTableId + '_paginate').hide();
+        }
+    }
+});
+
+//focus on select2
+$(document).on('focus', '.select2-selection.select2-selection--single', function (e) {
+    $(this).closest(".select2-container").siblings('select:enabled').select2('open');
+});
+
+$(function () {
+    $(".modal").on('shown.bs.modal', function () {
+        setTimeout(function () {
+            $(".modal").find('input:text, .select2-selection.select2-selection--single').first().focus();
+        },150);
+    });
+});
