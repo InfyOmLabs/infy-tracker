@@ -8,7 +8,7 @@
             </div>
             {!! Form::open(['id'=>'timeEntryAdjustForm']) !!}
             <div class="modal-body">
-                <div class="alert alert-danger alert-dismissible" style="display: none" id="tmAdjustValidationErrorsBox"></div>
+                <div class="alert alert-warning" style="display: none" id="tmAdjustValidationErrorsBox"></div>
                 <div class="form-group row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('start_time', 'Start Time') !!}<span class="required">*</span>

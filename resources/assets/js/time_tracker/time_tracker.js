@@ -224,11 +224,11 @@ function diff_mins(dt2, dt1) {
 }
 
 function adjustTimeEntry() {
-    let endDate = moment().format('YYYY-MM-DD HH:mm:ss');
+    let startDate = getItemFromLocalStorage('start_time');
     $("#tmAdjustValidationErrorsBox").show();
     $("#tmAdjustValidationErrorsBox").html("Time Entry must be less than 12 hours.");
-    $('#adjustEndTime').val(endDate);
-    $('#adjustEndTime').attr('disabled', 'true');
+    $('#adjustStartTime').val(startDate);
+    $('#adjustStartTime').attr('disabled', 'true');
     $("#timeEntryAdjustModal").modal();
     $('#stopTimer').removeAttr('disabled');
 }
