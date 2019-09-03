@@ -35,8 +35,8 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        {!! Form::label('role_id', 'Role') !!}
-                        {!! Form::select('role_id', $roles, null, ['class' => 'form-control', 'id' => 'roleId','placeholder'=>'Select Role']) !!}
+                        {!! Form::label('role_id', 'Role') !!}<span class="required">*</span>
+                        {!! Form::select('role_id', $roles, null, ['class' => 'form-control', 'id' => 'roleId','placeholder'=>'Select Role', 'required']) !!}
                     </div>
                 </div>
                 <div class="row">
