@@ -36,6 +36,8 @@
                 checkboxClass: 'icheckbox_flat-blue',
                 increaseArea: '10%'
             });
+
+            $('form').find('input:text').filter(':input:visible:first').first().focus();
         });
     </script>
 @endsection

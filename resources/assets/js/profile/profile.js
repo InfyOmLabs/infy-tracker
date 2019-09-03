@@ -4,7 +4,7 @@ $('#editProfileForm').submit(function (event) {
     if(!isValidate){
         return false;
     }
-    let loadingButton = jQuery(this).find("#btnEditSave");
+    let loadingButton = jQuery(this).find("#btnPrEditSave");
     loadingButton.button('loading');
     $.ajax({
         url: usersUrl + 'profile-update',
@@ -121,3 +121,13 @@ function validatePassword() {
     }
     return true;
 }
+
+$(".changeType").click(function () {
+    let inputField = $(this).parent().siblings();
+    let oldType = inputField.attr('type');
+    if(oldType == 'password') {
+        inputField.attr('type', 'text');
+    } else {
+        inputField.attr('type', 'password');
+    }
+});

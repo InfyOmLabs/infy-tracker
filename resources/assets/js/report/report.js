@@ -44,6 +44,10 @@ $('#end_date').datetimepicker({
     maxDate: moment()
 });
 
+$(function () {
+    $('form').find('input:text').filter(':input:visible:first').first().focus();
+});
+
 $("#start_date").on("dp.change", function (e) {
     $('#end_date').data("DateTimePicker").minDate(e.date);
 });

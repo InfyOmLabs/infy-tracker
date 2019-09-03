@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Faker\Factory;
@@ -77,5 +79,26 @@ abstract class TestCase extends BaseTestCase
         Carbon::setTestNow(Carbon::parse($string, $timezone));
 
         return Carbon::now();
+    }
+
+    /**
+     * @param array $permissions
+     * @param int   $userId
+     *
+     * @return User
+     */
+    public function attachPermissions($userId, $permissions = [])
+    {
+        /** @var User $user */
+        $user = User::findOrFail($userId);
+        $permissionIds = Permission::whereIn('name', $permissions)->get()->pluck('id');
+
+        /** @var Role $role */
+        $role = factory(Role::class)->create();
+        $role->perms()->sync($permissionIds);
+
+        $user->attachRole($role);
+
+        return $user;
     }
 }
