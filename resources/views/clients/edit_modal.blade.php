@@ -30,7 +30,7 @@
                 </div>
                 <div class="text-right">
                     {!! Form::button('Save', ['type'=>'submit','class' => 'btn btn-primary','id'=>'btnEditSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
-                    <button type="button" id="btnEditCancel" class="btn btn-light ml-1" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="btnCancel" class="btn btn-light ml-1" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
             {!! Form::close() !!}
