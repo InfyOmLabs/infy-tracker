@@ -20,7 +20,7 @@ timeRange.on('apply.daterangepicker', function (ev, picker) {
 });
 
 window.cb = function (start, end) {
-    timeRange.find('span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    timeRange.find('span').html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
 };
 
 cb(start, end);
@@ -67,7 +67,6 @@ window.loadUserWorkReport = function (startDate, endDate, userId) {
 window.prepareUserWorkReport = function (result) {
     $('#daily-work-report').html('');
     let data = result.data;
-    console.log(result);
     if (data.totalRecords === 0) {
         $('#work-report-container').html('');
         $('#work-report-container').append('<div align="center" class="no-record">No Records Found</div>');
