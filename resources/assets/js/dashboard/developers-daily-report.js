@@ -11,7 +11,7 @@ $datePicker.on('apply.daterangepicker', function (ev, picker) {
 });
 
 window.cb = function (start) {
-    $datePicker.find('span').html(start.format('MMMM D, YYYY'));
+    $datePicker.find('span').html(start.format('MMM D, YYYY'));
 };
 
 cb(start);

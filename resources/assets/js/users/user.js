@@ -4,7 +4,8 @@ $(function () {
     });
     $('#roleId,#editRoleId').select2({
         width: '100%',
-        placeholder: "Select Role"
+        placeholder: "Select Role",
+        minimumResultsForSearch: -1
     });
 });
 

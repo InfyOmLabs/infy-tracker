@@ -18,6 +18,10 @@
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
     @yield('page_css')
     <link href="{{mix('assets/style/css/style.css')}}" rel="stylesheet" type="text/css"/>
     @yield('css')
@@ -70,6 +74,7 @@
 </div>
 
 @include('time_tracker.index');
+@include('time_tracker.adjust_time_entry');
 
 <footer class="app-footer justify-content-between">
     <div>
@@ -91,6 +96,7 @@
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 @yield('page_js')
 <script src="{{mix('assets/js/custom.js')}}" type="text/javascript"></script>
 <script>

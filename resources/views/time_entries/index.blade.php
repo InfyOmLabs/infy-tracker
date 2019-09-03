@@ -2,12 +2,6 @@
 @section('title')
     Time Entries
 @endsection
-@section('page_css')
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
-@endsection
 
 @section('content')
     <div class="container-fluid">
@@ -50,9 +44,6 @@
             </div>
         </div>
     </div>
-@endsection
-@section('page_js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 @endsection
 
 @section('scripts')

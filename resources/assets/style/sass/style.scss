@@ -483,7 +483,7 @@ table.dataTable {
 }
 
 .edit-profile__file-upload {
-    padding: 10px;
+    padding: 7px 10px;
     background: #20a8d8;
     display: table;
     color: $white;
@@ -550,3 +550,9 @@ table.dataTable {
     overflow-y: auto;
     max-height: 750px;
 }
+
+.input-group__addon {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
