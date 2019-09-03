@@ -285,7 +285,7 @@ class TaskControllerTest extends TestCase
         $farhan = factory(User::class)->create();
         $task->taskAssignee()->sync([$farhan->id]);
 
-        $response = $this->getJson("tasks/{$task->id}/users");
+        $response = $this->getJson(route('task.users', $task->id));
 
         $response = $response->original;
         $this->assertContains($farhan->id, array_keys($response));
