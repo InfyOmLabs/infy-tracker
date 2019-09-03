@@ -318,9 +318,9 @@ $(document).on('change', '#task_users', function () {
         taskId = taskUserId[1];
         userId = taskUserId[0];
     }
-    let url =  taskDetailUrl + '/' + taskId
+    let url =  taskDetailUrl + '/' + taskId;
     if (userId !== 0) {
-        url = url + '?user_id=' + userId
+        url = url + '?user_id=' + userId;
     }
     $.ajax({
         url: url,
@@ -374,7 +374,8 @@ window.drawTaskDetailTable = function (data) {
     $('#no-record-info-msg').hide();
     stopLoader();
 
-    $('#taskDetailsTable tbody').on('click', 'td.details-control', function () {
+    $('#taskDetailsTable tbody').off('click', 'tr td.details-control');
+    $('#taskDetailsTable tbody').on('click', 'tr td.details-control', function () {
         var tr = $(this).closest('tr');
         var row = taskDetailsTable.row(tr);
 
@@ -384,7 +385,7 @@ window.drawTaskDetailTable = function (data) {
             tr.removeClass('shown');
         } else {
             // Open this row
-            row.child(formatCollapsableRow(row.data())).show();
+            row.child('<div style="padding-left:50px;">' + row.data().note + '</div>').show();
             tr.addClass('shown');
         }
     });
