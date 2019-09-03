@@ -157,7 +157,7 @@ class ReportControllerPermissionTest extends TestCase
     /**
      * @test
      */
-    public function test_can_get_users_of_project_with_valid_permission()
+    public function test_can_get_users_of_projects_with_valid_permission()
     {
         $this->attachPermissions($this->user->id, ['manage_reports']);
 
@@ -169,7 +169,7 @@ class ReportControllerPermissionTest extends TestCase
     /**
      * @test
      */
-    public function test_not_allow_to_get_users_of_project_without_permission()
+    public function test_not_allow_to_get_users_of_projects_without_permission()
     {
         $response = $this->get(route('users-of-projects'));
 
@@ -179,7 +179,7 @@ class ReportControllerPermissionTest extends TestCase
     /**
      * @test
      */
-    public function test_can_get_client_projects_with_valid_permission()
+    public function test_can_get_projects_of_client_with_valid_permission()
     {
         $this->attachPermissions($this->user->id, ['manage_reports']);
 
@@ -191,7 +191,7 @@ class ReportControllerPermissionTest extends TestCase
     /**
      * @test
      */
-    public function test_not_allow_to_get_client_of_projects_without_permission()
+    public function test_not_allow_to_get_projects_of_client_without_permission()
     {
         $response = $this->get(route('projects-of-client'));
 
