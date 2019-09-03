@@ -395,7 +395,7 @@ window.drawTaskDetailTable = function (data) {
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
-    let loadingButton = jQuery(this).find("#btnSave");
+    let loadingButton = jQuery(this).find("#btnTaskSave");
     loadingButton.button('loading');
 
     let formdata = $(this).serialize();
@@ -424,7 +424,7 @@ $('#addNewForm').submit(function (event) {
 
 $('#editForm').submit(function (event) {
     event.preventDefault();
-    let loadingButton = jQuery(this).find("#btnEditSave");
+    let loadingButton = jQuery(this).find("#btnTaskEditSave");
     loadingButton.button('loading');
     let id = $('#tagId').val();
     let formdata = $(this).serializeArray();
