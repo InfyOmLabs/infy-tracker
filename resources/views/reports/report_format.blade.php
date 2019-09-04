@@ -48,9 +48,9 @@
                             <div class="reports__task-container">
                                 @foreach($user['tasks'] as $task)
                                     <div class="reports__task-row">
-                                                        <span class="reports__task-header">
-                                                          <a href="{{url('tasks') . '/' . $task['project_prefix'] . '-' . $task['task_number']}}">{{$task['name']}}</a>
-                                                        </span>
+                                        <span class="reports__task-header">
+                                            <a data-toggle="modal" class="taskDetails" data-target="#taskDetailsModal" data-id="{{$task['task_id']}}">{{$task['name']}}</a>
+                                        </span>
                                         <span>{{$task['time']}}</span>
                                     </div>
                                 @endforeach

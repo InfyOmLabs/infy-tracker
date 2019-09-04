@@ -25,6 +25,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     @include('reports.report_format')
+                    @include('tasks.task_details')
                 </div>
             </div>
         </div>
@@ -51,6 +52,10 @@
             });
         });
         let reportUrl = "{{ url('reports') }}/";
+        let taskUrl = '{{url('tasks')}}/';
+        let taskDetailUrl = '{{url('task-details')}}';
+        let taskDetailActionColumnIsVisible = false;
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
+    <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
 @endsection
