@@ -99,7 +99,7 @@ $(document).on('click', '.edit-btn', function (event) {
 
 $('#editForm').submit(function (event) {
     event.preventDefault();
-    var loadingButton = jQuery(this).find("#btnEditSave");
+    var loadingButton = jQuery(this).find("#btnTaskEditSave");
     loadingButton.button('loading');
     var id = $('#tagId').val();
     let formdata = $(this).serializeArray();
