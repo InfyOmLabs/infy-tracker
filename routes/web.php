@@ -102,3 +102,12 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 Route::fallback(function () {
     abort(\Symfony\Component\HttpFoundation\Response::HTTP_NOT_FOUND);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Swagger
+|--------------------------------------------------------------------------
+*/
+Route::get('open-api', function () {
+    return view('swagger');
+});

@@ -1,0 +1,668 @@
+openapi: 3.0.0
+info:
+  description: 'Infy Tracker'
+  title: 'Infy Tracker'
+  version: ""
+host: local.infy-tracker.com
+basePath: /api
+schemes:
+  - http
+paths:
+  /activity-types:
+    post:
+      security: [{Bearer: []}]
+      tags: [ActivityTypes]
+      summary: 'Add a new activity type'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/ActivityType'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [ActivityTypes]
+      summary: 'Gets a collection of activity types.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/ActivityType'}}}}, '400': {description: 'Bad request'}}
+  '/activity-types/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [ActivityTypes]
+      summary: 'Get Activity Type by ActivityType id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of ActivityType to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/ActivityType'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [ActivityTypes]
+      summary: 'Update ActivityType'
+      description: ""
+      operationId: updateActivityType
+      requestBody: {$ref: '#/components/requestBodies/ActivityType'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [ActivityTypes]
+      summary: 'Delete ActivityType by ActivityType id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of ActivityType to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /permissions:
+    post:
+      security: [{Bearer: []}]
+      tags: [Permissions]
+      summary: 'Add a new permission'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Permission'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Permissions]
+      summary: 'Gets a collection of permission list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Permission'}}}}, '400': {description: 'Bad request'}}
+  '/permissions/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Permissions]
+      summary: 'Get Permission by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Permission to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Permission'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Permissions]
+      summary: 'Update Permission'
+      description: ""
+      operationId: updatePermissions
+      requestBody: {$ref: '#/components/requestBodies/Permission'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Permissions]
+      summary: 'Delete Permission by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Permission to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /projects:
+    post:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Add a new product'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Project'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Gets a collection of Project list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Project'}}}}, '400': {description: 'Bad request'}}
+  '/projects/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Get project by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Project to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Project'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Update Project'
+      description: ""
+      operationId: updateProject
+      requestBody: {$ref: '#/components/requestBodies/Project'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Delete Project by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Project to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /my-projects:
+    get:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Gets a collection of My Projects.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Project'}}}}, '400': {description: 'Bad request'}}
+  /users-of-projects:
+    get:
+      security: [{Bearer: []}]
+      tags: [Projects]
+      summary: 'Gets a collection of Project Users.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  /clients:
+    post:
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Add a new Client'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Client'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Gets a collection of Client list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Client'}}}}, '400': {description: 'Bad request'}}
+  '/clients/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Get Client by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Client to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Client'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Update Client'
+      description: ""
+      operationId: updateClient
+      requestBody: {$ref: '#/components/requestBodies/Client'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Delete Client by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Client to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /projects-of-client:
+    get:
+      security: [{Bearer: []}]
+      tags: [Clients]
+      summary: 'Gets a collection of Client Projects.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Project'}}}}, '400': {description: 'Bad request'}}
+  /time-entries:
+    post:
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Add a new TimeEntry'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/TimeEntry'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Gets a collection of TimeEntry list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/TimeEntry'}}}}, '400': {description: 'Bad request'}}
+  '/time-entries/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Get TimeEntry by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of TimeEntry to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/TimeEntry'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Update TimeEntry'
+      description: ""
+      operationId: updateTimeEntry
+      requestBody: {$ref: '#/components/requestBodies/TimeEntry'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Delete TimeEntry by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of TimeEntry to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /start-timer:
+    post:
+      security: [{Bearer: []}]
+      tags: ['Time Entries']
+      summary: 'Start timer'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/TimeEntry'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /tags:
+    post:
+      security: [{Bearer: []}]
+      tags: [Tags]
+      summary: 'Add a new tag'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Tag'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Tags]
+      summary: 'Gets a collection of Tag list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Tag'}}}}, '400': {description: 'Bad request'}}
+  '/tags/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tags]
+      summary: 'Get tag by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of tag to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Tag'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Tags]
+      summary: 'Update Tag'
+      description: ""
+      operationId: updateTag
+      requestBody: {$ref: '#/components/requestBodies/Tag'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Tags]
+      summary: 'Delete Tag by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Tag to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /roles:
+    post:
+      security: [{Bearer: []}]
+      tags: [Roles]
+      summary: 'Add a new Role'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Role'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Roles]
+      summary: 'Gets a collection of Role list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Role'}}}}, '400': {description: 'Bad request'}}
+  '/roles/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Roles]
+      summary: 'Get Role by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Role to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Role'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Roles]
+      summary: 'Update Role'
+      description: ""
+      operationId: updateRole
+      requestBody: {$ref: '#/components/requestBodies/Role'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Roles]
+      summary: 'Delete Roles by Role id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Roles to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /users:
+    post:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Add a new user'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/User'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Gets a collection of user list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  '/users/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Get user by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of user to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Update User'
+      description: ""
+      operationId: updatePermissions
+      requestBody: {$ref: '#/components/requestBodies/User'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Delete User by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of User to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/users/{id}/active-de-active':
+    post:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Active Deactive User'
+      description: ""
+      operationId: updateUsers
+      parameters: [{name: id, in: path, description: 'Id of User to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  '/users/{id}/send-email':
+    get:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Send email verification'
+      description: ""
+      operationId: updateUsers
+      parameters: [{name: id, in: path, description: 'Id of User to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  '/users/{id}/edit':
+    get:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Get user by id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of user to return', required: true, schema: {type: integer, format: int64}}, {name: token, in: path, description: token, required: true, schema: {type: string}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  /users/profile-update:
+    post:
+      security: [{Bearer: []}]
+      tags: [Users]
+      summary: 'Update user profile'
+      description: ""
+      operationId: updateUsers
+      parameters: [{name: id, in: path, description: 'Id of User to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}}, '400': {description: 'Bad request'}}
+  /tasks:
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Add a new task'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Task'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Gets a collection of task list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}}, '400': {description: 'Bad request'}}
+  '/tasks/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get tasks by task id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Update task'
+      description: ""
+      operationId: updateTask
+      requestBody: {$ref: '#/components/requestBodies/Task'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Delete tasks by task id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /my-tasks:
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get my task.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/update-status':
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Update task status'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Task'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/add-attachment':
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Add task attachment'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Task'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/delete-attachment':
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Delete task attachment'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Task'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/get-attachments':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get task attachments'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/task-details/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get task details'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/comments-count':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get task comments count'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/users':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Get task users'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/projects/{id}/tasks':
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Gets task by project id.'
+      parameters: [{name: id, in: path, description: 'Id of project to return', required: true, schema: {type: integer, format: int64}}]
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}}, '400': {description: 'Bad request'}}
+  /user-last-task-work:
+    get:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Gets user last task.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/comments':
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Add a comment for task'
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Comment'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/comments/{id}/update':
+    post:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Update cooment for task'
+      parameters: [{name: id, in: path, description: 'Id of task to return', required: true, schema: {type: integer, format: int64}}]
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Comment'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  '/tasks/{id}/comments/{id}':
+    delete:
+      security: [{Bearer: []}]
+      tags: [Tasks]
+      summary: 'Delete task comment.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Task to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /reports:
+    post:
+      security: [{Bearer: []}]
+      tags: [Reports]
+      summary: 'Add a new report'
+      description: ""
+      requestBody: {$ref: '#/components/requestBodies/Report'}
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+    get:
+      security: [{Bearer: []}]
+      tags: [Reports]
+      summary: 'Gets a collection of report list.'
+      description: ""
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Report'}}}}, '400': {description: 'Bad request'}}
+  '/reports/{id}':
+    get:
+      security: [{Bearer: []}]
+      tags: [Reports]
+      summary: 'Get reports by report id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Report to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation', content: {application/json: {schema: {$ref: '#/components/schemas/Report'}}}}, '400': {description: 'Bad request'}}
+    put:
+      '200': {description: 'successful operation'}
+      '400': {description: 'Bad request'}
+      security: [{Bearer: []}]
+      tags: [Reports]
+      summary: 'Update report'
+      description: ""
+      operationId: updateReport
+      requestBody: {$ref: '#/components/requestBodies/Report'}
+      responses: {default: {description: 'Default response'}}
+    delete:
+      security: [{Bearer: []}]
+      tags: [Reports]
+      summary: 'Delete reports by report id.'
+      description: ""
+      parameters: [{name: id, in: path, description: 'Id of Report to return', required: true, schema: {type: integer, format: int64}}]
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /users-work-report:
+    get:
+      security: [{Bearer: []}]
+      tags: [Dashboards]
+      summary: 'Get users daily work report.'
+      description: ""
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+  /developer-work-report:
+    get:
+      security: [{Bearer: []}]
+      tags: [Dashboards]
+      summary: 'Get developers daily work report.'
+      description: ""
+      responses: {'200': {description: 'successful operation'}, '400': {description: 'Bad request'}}
+components:
+  requestBodies:
+    TimeEntry:
+      content: {application/json: {schema: {$ref: '#/components/schemas/TimeEntry'}}}
+      required: true
+    ActivityType:
+      content: {application/json: {schema: {$ref: '#/components/schemas/ActivityType'}}}
+      required: true
+    Client:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Client'}}}
+      required: true
+    Permission:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Permission'}}}
+      required: true
+    Project:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Project'}}}
+      required: true
+    Tag:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Tag'}}}
+      required: true
+    Role:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Role'}}}
+      required: true
+    User:
+      content: {application/json: {schema: {$ref: '#/components/schemas/User'}}}
+      required: true
+    Task:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Task'}}}
+      required: true
+    Report:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Report'}}}
+      required: true
+    Comment:
+      content: {application/json: {schema: {$ref: '#/components/schemas/Comment'}}}
+      required: true
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    ActivityType:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}}
+      xml: {name: ActivityType}
+    Permission:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, display_name: {type: string}, description: {type: string}}
+      xml: {name: Permission}
+    Project:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, display_name: {type: string}, description: {type: string}}
+      xml: {name: Project}
+    Client:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, email: {type: string}, website: {type: string}, created_by: {type: integer}}
+      xml: {name: Client}
+    Tag:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, created_by: {type: integer}}
+      xml: {name: Tag}
+    TimeEntry:
+      type: object
+      properties: {id: {type: integer}, task_id: {type: integer}, activity_type_id: {type: integer}, user_id: {type: integer}, start_time: {type: string}, end_time: {type: string}, duration: {type: integer}, entry_type: {type: integer}, deleted_by: {type: integer}, note: {type: string}}
+      xml: {name: TimeEntry}
+    Role:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, display_name: {type: string}, description: {type: string}}
+      xml: {name: Role}
+    User:
+      type: object
+      properties: {id: {type: integer}, name: {type: string}, email: {type: string}, password: {type: string}, phone: {type: string}, created_by: {type: integer}, is_email_verified: {type: integer}, activation_code: {type: string}, is_active: {type: integer}, image_path: {type: string}}
+      xml: {name: User}
+    Task:
+      type: object
+      properties: {id: {type: integer}, title: {type: string}, description: {type: string}, project_id: {type: integer}, status: {type: integer}, due_date: {type: string}, is_active: {type: integer}, image_path: {type: string}}
+      xml: {name: Task}
+    Report:
+      type: object
+      properties: {id: {type: integer}, owner_id: {type: integer}, start_date: {type: datetime}, end_date: {type: datetime}}
+      xml: {name: Report}
+    Comment:
+      type: object
+      properties: {id: {type: integer}, comment: {type: string}, task_id: {type: integer}, created_by: {type: integer}}
+      xml: {name: Comment}
