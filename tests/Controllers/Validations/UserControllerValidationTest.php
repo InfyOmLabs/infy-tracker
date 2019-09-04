@@ -56,6 +56,14 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function test_create_user_fails_when_role_id_is_not_passed()
+    {
+        $this->post(route('users.store'), ['role_id' => ''])->assertSessionHasErrors([
+            'role_id' => 'Please select user role.',
+        ]);
+    }
+
+    /** @test */
     public function it_can_create_user()
     {
         $input = [
@@ -88,6 +96,16 @@ class UserControllerValidationTest extends TestCase
 
         $this->put(route('users.update', $user->id), ['email' => ''])
             ->assertSessionHasErrors(['email' => 'The email field is required.']);
+    }
+
+    /** @test */
+    public function test_update_user_fails_when_role_id_is_not_passed()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $this->put(route('users.update', $user->id), ['role_id' => ''])
+            ->assertSessionHasErrors(['role_id' => 'Please select user role.']);
     }
 
     /** @test */
