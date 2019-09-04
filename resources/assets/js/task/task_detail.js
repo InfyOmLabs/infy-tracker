@@ -90,12 +90,45 @@ $(document).on('click', '.edit-btn', function (event) {
 
                 $("#editAssignee").val(userIds).trigger('change');
                 $("#editPriority").val(task.priority).trigger('change');
-                loadingButton.button('reset');
-                $('#EditModal').modal('show');
+
+                setTimeout(function () {
+                    $.each(task.task_assignee, function (i, e) {
+                        $("#editAssignee option[value='" + e.id + "']").prop("selected", true).trigger('change');
+                    });
+                    loadingButton.button('reset');
+                    $('#EditModal').modal('show');
+
+                }, 1500);
             }
+        },
+        error: function () {
+            loadingButton.button('reset');
         }
     });
 });
+
+$(document).on('change', '#editProjectId', function (event) {
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'editAssignee')
+});
+
+function loadProjectAssignees(projectId, selector) {
+    let url = usersOfProjects + '?projectIds='+projectId;
+    $('#'+selector).empty();
+    $('#'+selector).trigger("change");
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (result) {
+            const users = result.data;
+            for (const key in users) {
+                if (users.hasOwnProperty(key)) {
+                    $('#' + selector).append($('<option>', { value: key, text: users[key] }));
+                }
+            }
+        }
+    });
+}
 
 $('#editForm').submit(function (event) {
     event.preventDefault();
@@ -110,8 +143,8 @@ $('#editForm').submit(function (event) {
         }
     });
     $.ajax({
-        url: taskUrl + id + '/update',
-        type: 'post',
+        url: taskUrl + id,
+        type: 'put',
         data: formdata,
         success: function (result) {
             if (result.success) {
