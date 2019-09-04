@@ -49,7 +49,7 @@
                                 @foreach($user['tasks'] as $task)
                                     <div class="reports__task-row">
                                                         <span class="reports__task-header">
-                                                          {{$task['name']}}
+                                                          <a href="{{url('tasks') . '/' . $task['project_prefix'] . '-' . $task['task_number']}}">{{$task['name']}}</a>
                                                         </span>
                                         <span>{{$task['time']}}</span>
                                     </div>

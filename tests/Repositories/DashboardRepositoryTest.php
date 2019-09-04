@@ -60,7 +60,7 @@ class DashboardRepositoryTest extends TestCase
 
         $workReport = $this->dashboardRepo->getWorkReport($input);
 
-        $starDate = date('d-M', strtotime($input['start_date']));
+        $starDate = date('jS M', strtotime($input['start_date']));
         $this->assertEquals($starDate, $workReport['date'][0]);
 
         $projectName = $timeEntry->task->project->name;

@@ -66,7 +66,7 @@ class DashboardRepository
         $result = [];
         // preparing a date array for displaying a labels
         foreach ($dates['dateArr'] as $date) {
-            $date = date('d-M', strtotime($date));
+            $date = date('jS M', strtotime($date));
             $result['date'][] = $date;
         }
         $result['projects'] = array_keys($projects);

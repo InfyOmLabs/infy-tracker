@@ -261,6 +261,7 @@ $('#startTime,#endTime').on('dp.change', function (selected) {
     $('#startTime').data("DateTimePicker").maxDate(moment().endOf('now'));
     $('#endTime').data("DateTimePicker").maxDate(moment().endOf('now'));
 });
+$('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'));
 
 $('#editTimeEntryForm').submit(function (event) {
     event.preventDefault();

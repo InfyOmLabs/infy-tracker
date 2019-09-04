@@ -10,12 +10,15 @@ use Faker\Generator as Faker;
 
 $factory->define(Task::class, function (Faker $faker) {
     $project = factory(Project::class)->create();
+    $dueDate = date('Y-m-d H:i:s', strtotime('+ 4hours'));
+
+    $dueDate = date('Y-m-d H:i:s', strtotime('+ 4hours'));
 
     return [
         'title'       => $faker->sentence,
         'description' => $faker->text,
         'project_id'  => $project->id,
-        'due_date'    => $faker->dateTime,
+        'due_date'    => $dueDate,
         'status'      => Task::STATUS_ALL,
         'task_number' => $faker->unique()->randomDigitNotNull,
     ];

@@ -34,9 +34,10 @@ class UpdateUserRequest extends FormRequest
     {
         $id = $this->route('user')->id;
         $rules = [
-            'name'  => 'required|unique:users,name,'.$id,
-            'email' => 'required|email|unique:users,email,'.$id.'|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-            'phone' => 'nullable|numeric|digits:10',
+            'name'      => 'required|unique:users,name,'.$id,
+            'email'     => 'required|email|unique:users,email,'.$id.'|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+            'phone'     => 'nullable|numeric|digits:10',
+            'role_id'   => 'required',
         ];
 
         return $rules;
