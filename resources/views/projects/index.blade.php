@@ -8,7 +8,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Projects</h3>
+                <h3 class="page__heading">Projects</h3>
                 <div class="filter-container">
                     <div class="mr-2">
                         <label for="clients" class="lbl-block"><b>Client</b></label>
