@@ -20,7 +20,7 @@
                     <tbody>
                     @foreach($task->timeEntries as $entry)
                         <tr>
-                            <td>{!! $entry->note !!}</td>
+                            <td>{!! nl2br($entry->note) !!}</td>
                             <td>{{$entry->activityType->name}}</td>
                             <td class="text-nowrap text-center">{{$entry->user->name}}</td>
                             <td class="text-nowrap text-center">{{$entry->duration}}</td>
