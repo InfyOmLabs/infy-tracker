@@ -28,7 +28,7 @@
                                 <div class="col-4">
                                     <div class="row">
                                         @permission('manage_users')
-                                        <div class="col-6">
+                                        <div class="col-4 offset-2">
                                             {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
                                         </div>
                                         @endpermission
