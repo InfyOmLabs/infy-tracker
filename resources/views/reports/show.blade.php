@@ -12,7 +12,7 @@
             @include('coreui-templates::common.errors')
             @include('flash::message')
             <div class="page-header">
-                <h3>View Report</h3>
+                <h3 class="page__heading">View Report</h3>
                 <div class="filter-container">
                     <a href="{{ route('reports.edit', $report->id) }}"
                        class="btn btn-primary filter-container__btn mr-1">

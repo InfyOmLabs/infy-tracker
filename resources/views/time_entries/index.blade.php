@@ -8,7 +8,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Time Entries</h3>
+                <h3 class="page__heading">Time Entries</h3>
                 <div class="filter-container">
                     @permission('manage_time_entries')
                     <div class="mr-2">

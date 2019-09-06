@@ -14,7 +14,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Tasks</h3>
+                <h3 class="page__heading">Tasks</h3>
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Assign To</b></label>
