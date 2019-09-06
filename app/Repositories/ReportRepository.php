@@ -266,8 +266,6 @@ class ReportRepository extends BaseRepository
             $project = $entry->task->project;
             $client = $project->client;
             $duration = $entry->duration;
-            $projectPrefix = $project->prefix;
-            $taskNumber = $entry->task->task_number;
 
             // prepare client and duration
             $result[$clientId]['name'] = $client->name;
@@ -308,8 +306,7 @@ class ReportRepository extends BaseRepository
             $time = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['project_prefix'] = $projectPrefix;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_number'] = $taskNumber;
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id'] = $entry->task->id;
         }
 
         return $result;
