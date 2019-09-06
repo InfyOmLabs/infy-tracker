@@ -175,7 +175,7 @@ class User extends Authenticatable
             return $this->imageUrl(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$value);
         }
 
-        return asset('assets/img/user-avatar.png');
+        return getUserImageInitial($this->id, $this->name);
     }
 
     /**
