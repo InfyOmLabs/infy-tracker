@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Client.
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Client extends Model
 {
+    use softDeletes;
     public $table = 'clients';
 
     public $fillable = [
@@ -37,6 +39,7 @@ class Client extends Model
         'email',
         'website',
         'created_by',
+        'deleted_by',
     ];
 
     /**

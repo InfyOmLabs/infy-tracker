@@ -133,6 +133,8 @@ class ProjectController extends AppBaseController
      */
     public function destroy(Project $project)
     {
+        $project->deleted_by = getLoggedInUserId();
+        $project->save();
         $project->delete();
 
         return $this->sendSuccess('Project deleted successfully.');

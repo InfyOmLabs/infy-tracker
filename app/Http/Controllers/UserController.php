@@ -177,6 +177,8 @@ class UserController extends AppBaseController
      */
     public function destroy(User $user)
     {
+        $user->deleted_by = getLoggedInUserId();
+        $user->save();
         $user->delete();
 
         return $this->sendSuccess('User deleted successfully.');

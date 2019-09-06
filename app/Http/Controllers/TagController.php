@@ -98,6 +98,8 @@ class TagController extends AppBaseController
      */
     public function destroy(Tag $tag)
     {
+        $tag->deleted_by = getLoggedInUserId();
+        $tag->save();
         $tag->delete();
 
         return $this->sendSuccess('Tag deleted successfully.');

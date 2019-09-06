@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Project.
@@ -36,6 +37,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Project extends Model
 {
+    use softDeletes;
     const TEAM_ARR = ['1' => 'Backend', '2' => 'Frontend', '3' => 'Mobile', '4' => 'QA'];
 
     public $table = 'projects';
@@ -46,6 +48,7 @@ class Project extends Model
         'description',
         'client_id',
         'created_by',
+        'deleted_by',
         'prefix',
     ];
 

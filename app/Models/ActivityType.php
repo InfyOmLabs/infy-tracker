@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\ActivityType.
@@ -26,10 +27,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ActivityType extends Model
 {
+    use SoftDeletes;
     public $table = 'activity_types';
 
     public $fillable = [
-        'name',
+        'name', 'created_by', 'deleted_by'
     ];
 
     /**
@@ -38,8 +40,9 @@ class ActivityType extends Model
      * @var array
      */
     protected $casts = [
-        'id'   => 'integer',
-        'name' => 'string',
+        'id'         => 'integer',
+        'name'       => 'string',
+        'created_by' => 'integer',
     ];
 
     const ACTIVITY_TYPES = [
