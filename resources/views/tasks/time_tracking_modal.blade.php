@@ -14,7 +14,7 @@
                         <th scope="col">Note</th>
                         <th scope="col">Activity</th>
                         <th scope="col" class="text-nowrap text-center">Tracked By</th>
-                        <th scope="col" class="text-nowrap text-center">Time (Minutes)</th>
+                        <th scope="col" class="text-nowrap text-center">Time (Mins)</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -22,7 +22,7 @@
                         <tr>
                             <td>{!! $entry->note !!}</td>
                             <td>{{$entry->activityType->name}}</td>
-                            <td class="text-nowrap text-center">{{$entry->user->name}}</td>
+                            <td class="text-nowrap text-center"><img src="{{$entry->user->img_avatar}}"></td>
                             <td class="text-nowrap text-center">{{$entry->duration}}</td>
                         </tr>
                     @endforeach
