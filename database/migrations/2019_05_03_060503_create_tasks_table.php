@@ -25,18 +25,11 @@ class CreateTasksTable extends Migration
             $table->softDeletes();
 
             // foreign
-            $table->foreign('deleted_by')->references('id')->on('users')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreign('deleted_by')->references('id')->on('users');
 
-            $table->foreign('project_id')
-                ->references('id')->on('projects')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreign('project_id')->references('id')->on('projects');
 
-            $table->foreign('created_by')->references('id')->on('users')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 

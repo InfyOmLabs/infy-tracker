@@ -19,10 +19,7 @@ class CreateTableTaskAttachment extends Migration
             $table->string('file')->nullable();
             $table->timestamps();
 
-            $table->foreign('task_id')
-                ->references('id')->on('tasks')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks');
         });
     }
 

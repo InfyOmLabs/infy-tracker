@@ -15,23 +15,28 @@ class AddSoftDeleteInAllTable extends Migration
     {
         Schema::table('activity_types', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
         Schema::table('clients', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
         Schema::table('projects', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
         Schema::table('tags', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
         Schema::table('users', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
 
@@ -44,22 +49,27 @@ class AddSoftDeleteInAllTable extends Migration
     {
         Schema::table('activity_types', function (Blueprint $table) {
             $table->dropSoftDeletes();
+            $table->dropForeign(['deleted_by']);
             $table->dropColumn('deleted_by');
         });
         Schema::table('clients', function (Blueprint $table) {
             $table->dropSoftDeletes();
+            $table->dropForeign(['deleted_by']);
             $table->dropColumn('deleted_by');
         });
         Schema::table('projects', function (Blueprint $table) {
             $table->dropSoftDeletes();
+            $table->dropForeign(['deleted_by']);
             $table->dropColumn('deleted_by');
         });
         Schema::table('tags', function (Blueprint $table) {
             $table->dropSoftDeletes();
+            $table->dropForeign(['deleted_by']);
             $table->dropColumn('deleted_by');
         });
         Schema::table('users', function (Blueprint $table) {
             $table->dropSoftDeletes();
+            $table->dropForeign(['deleted_by']);
             $table->dropColumn('deleted_by');
         });
     }
