@@ -31,7 +31,7 @@ class ActivityType extends Model
     public $table = 'activity_types';
 
     public $fillable = [
-        'name', 'created_by', 'deleted_by'
+        'name', 'created_by', 'deleted_by',
     ];
 
     /**
