@@ -93,6 +93,7 @@ let tbl = $('#timeEntryTable').DataTable({
         {
             data: 'activity_type.name',
             name: 'activityType.name',
+            defaultContent: '',
         },
         {
             data: 'start_time',
