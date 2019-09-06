@@ -96,6 +96,8 @@ class ActivityTypeController extends AppBaseController
      */
     public function destroy(ActivityType $activityType)
     {
+        $activityType->deleted_by = getLoggedInUserId();
+        $activityType->save();
         $activityType->delete();
 
         return $this->sendSuccess('Activity Type deleted successfully.');

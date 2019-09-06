@@ -21,13 +21,9 @@ class CreateProjectsTable extends Migration
             $table->timestamps();
 
             //foreign
-            $table->foreign('client_id')->references('id')->on('clients')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreign('client_id')->references('id')->on('clients');
 
-            $table->foreign('created_by')->references('id')->on('users')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 

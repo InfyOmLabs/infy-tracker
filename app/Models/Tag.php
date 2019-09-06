@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Tag.
@@ -26,11 +27,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Tag extends Model
 {
+    use softDeletes;
     public $table = 'tags';
 
     public $fillable = [
         'name',
         'created_by',
+        'deleted_by',
     ];
 
     /**
@@ -42,6 +45,7 @@ class Tag extends Model
         'id'         => 'integer',
         'name'       => 'string',
         'created_by' => 'integer',
+        'deleted_by' => 'integer',
     ];
 
     /**

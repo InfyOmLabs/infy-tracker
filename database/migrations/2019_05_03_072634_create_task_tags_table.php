@@ -18,15 +18,9 @@ class CreateTaskTagsTable extends Migration
             $table->unsignedInteger('task_id');
             $table->unsignedInteger('tag_id');
 
-            $table->foreign('task_id')
-                ->references('id')->on('tasks')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks');
 
-            $table->foreign('tag_id')
-                ->references('id')->on('tags')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags');
         });
     }
 

@@ -19,10 +19,7 @@ class CreateReportsTable extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();
-            $table->foreign('owner_id')
-                ->references('id')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreign('owner_id')->references('id')->on('users');
         });
     }
 

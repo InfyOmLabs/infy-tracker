@@ -41,6 +41,7 @@ let tbl = $('#projects_table').DataTable({
         },
         {
             data: 'client.name',
+            defaultContent: '',
             name: 'client.name'
         },
         {
