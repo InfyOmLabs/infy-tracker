@@ -8,7 +8,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Activity Types</h3>
+                <h3 class="page__heading">Activity Types</h3>
                 <div style="display: flex;align-items: center">
                     <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"></i>New
                         Activity Type</a>

@@ -8,7 +8,7 @@
         <div class="animated fadeIn">
              @include('flash::message')
             <div class="page-header">
-                <h3>Roles</h3>
+                <h3 class="page__heading">Roles</h3>
                 <div style="display: flex;align-items: center">
                     <a class="pull-right btn btn-primary" href="{!! route('roles.create') !!}">New Role</a>
                 </div>
