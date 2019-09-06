@@ -15,23 +15,23 @@ class AddSoftDeleteInAllTable extends Migration
     {
         Schema::table('activity_types', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by');
+            $table->integer('deleted_by')->nullable();
         });
         Schema::table('clients', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by');
+            $table->integer('deleted_by')->nullable();
         });
         Schema::table('projects', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by');
+            $table->integer('deleted_by')->nullable();
         });
         Schema::table('tags', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by');
+            $table->integer('deleted_by')->nullable();
         });
         Schema::table('users', function (Blueprint $table) {
             $table->softDeletes();
-            $table->integer('deleted_by');
+            $table->integer('deleted_by')->nullable();
         });
     }
 
