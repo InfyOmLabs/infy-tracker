@@ -96,8 +96,11 @@ class ActivityTypeController extends AppBaseController
      */
     public function destroy(ActivityType $activityType)
     {
-        $activityType->deleted_by = getLoggedInUserId();
-        $activityType->save();
+        if ($activityType->timeEntries()->count() > 0) {
+            return $this->sendError('This activity has more than one time entry, so it can\'t be deleted.');
+        }
+
+        $activityType->update(['deleted_by' => getLoggedInUserId()]);
         $activityType->delete();
 
         return $this->sendSuccess('Activity Type deleted successfully.');

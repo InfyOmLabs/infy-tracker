@@ -3,6 +3,7 @@
 namespace Tests\Controllers;
 
 use App\Models\ActivityType;
+use App\Models\TimeEntry;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
@@ -81,6 +82,20 @@ class ActivityTypeControllerTest extends TestCase
         $response->assertJson([
             'success' => false,
             'message' => 'ActivityType not found.',
+        ]);
+    }
+
+    /** @test */
+    public function test_not_allow_to_delete_activity_type_when_time_entries_attached_with_it()
+    {
+        /** @var ActivityType $activityType */
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->loggedInUserId]);
+
+        $response = $this->deleteJson(route('activity-types.destroy', $timeEntry->activity_type_id));
+
+        $response->assertJson([
+            'success' => false,
+            'message' => 'This activity has more than one time entry, so it can\'t be deleted.',
         ]);
     }
 }

@@ -73,4 +73,9 @@ class ActivityType extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function timeEntries()
+    {
+        return $this->hasMany(TimeEntry::class, 'activity_type_id');
+    }
 }
