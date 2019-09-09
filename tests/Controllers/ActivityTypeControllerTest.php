@@ -11,7 +11,6 @@ use Tests\Traits\MockRepositories;
 class ActivityTypeControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;
-    private $defaultUserId = 1;
 
     public function setUp(): void
     {
@@ -87,16 +86,16 @@ class ActivityTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_not_delete_activity_type()
+    public function test_not_allow_to_delete_activity_type_when_time_entries_attached_with_it()
     {
         /** @var ActivityType $activityType */
-        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+        $timeEntry = factory(TimeEntry::class)->create(['user_id' => $this->loggedInUserId]);
 
         $response = $this->deleteJson(route('activity-types.destroy', $timeEntry->activity_type_id));
 
         $response->assertJson([
             'success' => false,
-            'message' => 'This activity has more than one time entry, so it cann\'t be deleted.',
+            'message' => 'This activity has more than one time entry, so it can\'t be deleted.',
         ]);
     }
 }
