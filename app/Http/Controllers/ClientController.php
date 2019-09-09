@@ -121,9 +121,7 @@ class ClientController extends AppBaseController
      */
     public function destroy(Client $client)
     {
-        $client->deleted_by = getLoggedInUserId();
-        $client->save();
-        $client->delete();
+        $this->clientRepository->delete($client->id);
 
         return $this->sendSuccess('Client deleted successfully.');
     }
