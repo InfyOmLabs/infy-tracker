@@ -82,7 +82,7 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_client_with_all_its_child_records()
+    public function test_can_delete_project_with_all_its_child_records()
     {
         /** @var Project $project */
         $project = factory(Project::class)->create();
