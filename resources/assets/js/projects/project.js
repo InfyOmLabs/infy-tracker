@@ -4,7 +4,8 @@ $('#client_id,#edit_client_id').select2({
 });
 
 $('#filterClient').select2({
-    minimumResultsForSearch: -1
+    placeholder: "Select Client"
+    // minimumResultsForSearch: -1
 });
 
 let tbl = $('#projects_table').DataTable({
