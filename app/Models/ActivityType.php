@@ -11,10 +11,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name
  * @property int|null $created_by
+ * @property int $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType query()
@@ -31,7 +31,9 @@ class ActivityType extends Model
     public $table = 'activity_types';
 
     public $fillable = [
-        'name', 'created_by', 'deleted_by',
+        'name',
+        'created_by',
+        'deleted_by',
     ];
 
     /**
@@ -43,6 +45,7 @@ class ActivityType extends Model
         'id'         => 'integer',
         'name'       => 'string',
         'created_by' => 'integer',
+        'deleted_by' => 'integer',
     ];
 
     const ACTIVITY_TYPES = [
