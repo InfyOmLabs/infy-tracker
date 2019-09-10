@@ -60,6 +60,7 @@ class ClientRepository extends BaseRepository
      */
     public function delete($clientId)
     {
+        /** @var Client $client */
         $client = $this->find($clientId);
 
         $projectIds = Project::where('client_id', '=', $client->id)->get()->pluck('id');
