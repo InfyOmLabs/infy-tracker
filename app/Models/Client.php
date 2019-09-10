@@ -86,7 +86,8 @@ class Client extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function projects(){
+    public function projects()
+    {
         return $this->hasMany(Project::class);
     }
 }

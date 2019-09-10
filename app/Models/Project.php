@@ -118,7 +118,8 @@ class Project extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tasks(){
+    public function tasks()
+    {
         return $this->hasMany(Task::class);
     }
 }

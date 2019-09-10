@@ -93,8 +93,10 @@ class ProjectRepository extends BaseRepository
 
     /**
      * @param int $id
-     * @return bool|mixed|void|null
+     *
      * @throws \Exception
+     *
+     * @return bool|mixed|void|null
      */
     public function delete($id)
     {

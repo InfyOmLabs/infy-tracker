@@ -53,8 +53,10 @@ class ClientRepository extends BaseRepository
 
     /**
      * @param int $clientId
-     * @return bool|mixed|void|null
+     *
      * @throws \Exception
+     *
+     * @return bool|mixed|void|null
      */
     public function delete($clientId)
     {
