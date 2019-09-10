@@ -51,6 +51,11 @@ class ClientRepository extends BaseRepository
         return Client::orderBy('name')->pluck('name', 'id');
     }
 
+    /**
+     * @param int $clientId
+     * @return bool|mixed|void|null
+     * @throws \Exception
+     */
     public function delete($clientId)
     {
         $client = $this->find($clientId);

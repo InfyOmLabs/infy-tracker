@@ -11,6 +11,8 @@ namespace Tests\Controllers;
 
 use App\Models\Client;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\TimeEntry;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
@@ -85,17 +87,48 @@ class ClientControllerTest extends TestCase
     {
         /** @var Client $client */
         $client = factory(Client::class)->create();
+        $project = factory(Project::class)->create(['client_id' => $client->id]);
+        $task = factory(Task::class)->create(['project_id' => $project->id]);
+        $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
 
         $response = $this->deleteJson(route('clients.destroy', $client->id));
 
         $this->assertSuccessMessageResponse($response, 'Client deleted successfully.');
 
+        //testing client deleted or not.
         $response = $this->getJson(route('clients.edit', $client->id));
 
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
             'message' => 'Client not found.',
+        ]);
+
+        //testing project deleted or not.
+        $response = $this->getJson(route('projects.edit', $project->id));
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'Project not found.',
+        ]);
+
+        //testing task deleted or not.
+        $response = $this->getJson(route('tasks.edit', $task->id));
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'Task not found.',
+        ]);
+
+        //testing timeEntry deleted or not.
+        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'TimeEntry not found.',
         ]);
     }
 

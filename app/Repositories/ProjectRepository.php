@@ -91,6 +91,11 @@ class ProjectRepository extends BaseRepository
         return $query->pluck('name', 'id');
     }
 
+    /**
+     * @param int $id
+     * @return bool|mixed|void|null
+     * @throws \Exception
+     */
     public function delete($id)
     {
         $project = $this->find($id);
