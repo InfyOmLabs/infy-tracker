@@ -126,7 +126,7 @@ $(document).on('click', '.edit-btn', function (event) {
 $(document).on('click', '.delete-btn', function (event) {
     let clientId = $(event.currentTarget).data('id');
     let alertMessage = '<div class="alert alert-warning swal__text-div">\n' +
-        '<strong class="swal__bold">Are you sure want to delete this client?</strong><div class="swal__m-top">By deleting this client all its project, task and time entries will be deleted.</div></div>';
+        '<strong class="swal__text-warning">Are you sure want to delete this client?</strong><div class="swal__text-message">By deleting this client all its project, task and time entries will be deleted.</div></div>';
 
     deleteItemInputConfirmation(clientUrl + clientId, '#clients_table', 'Client', alertMessage);
 });

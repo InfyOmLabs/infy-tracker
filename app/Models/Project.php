@@ -115,6 +115,9 @@ class Project extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function tasks(){
         return $this->hasMany(Task::class);
     }
