@@ -4,6 +4,7 @@ namespace Tests\Controllers;
 
 use App\Models\Task;
 use App\Models\TimeEntry;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
@@ -39,7 +40,7 @@ class TimeEntryControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_filter_time_entries_by_project()
+    public function test_can_filter_time_entries_by_project_with_permission()
     {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
@@ -63,6 +64,36 @@ class TimeEntryControllerTest extends TestCase
         $this->assertCount(1, $data);
         $this->assertEquals($firstTimeEntry->id, $data[0]['id']);
         $this->assertEquals($task->project_id, $data[0]['task']['project_id']);
+    }
+
+    /** @test */
+    public function test_can_filter_time_entries_by_project()
+    {
+        $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
+
+        $user = factory(User::class)->create();
+        $this->actingAs($user);
+
+        /** @var Task $task */
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$user->id]);
+
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create([
+            'task_id' => $task->id,
+            'user_id' => $user->id,
+        ]);
+        $secondTimeEntry = factory(TimeEntry::class)->create();
+
+        $response = $this->getJson(route('time-entries.index', [
+            'filter_project' => $task->project_id,
+        ]));
+
+        $data = $response->original['data'];
+        $this->assertCount(1, $data);
+        $this->assertEquals($firstTimeEntry->id, $data[0]['id']);
+        $this->assertEquals($task->project_id, $data[0]['task']['project_id']);
+        $this->assertEquals($user->id, $data[0]['user_id']);
     }
 
     /** @test */
