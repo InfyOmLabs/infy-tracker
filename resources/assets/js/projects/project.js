@@ -3,10 +3,7 @@ $('#client_id,#edit_client_id').select2({
     placeholder: "Select Client"
 });
 
-$('#filterClient').select2({
-    placeholder: "Select Client"
-    // minimumResultsForSearch: -1
-});
+$('#filterClient').select2();
 
 let tbl = $('#projects_table').DataTable({
     processing: true,
