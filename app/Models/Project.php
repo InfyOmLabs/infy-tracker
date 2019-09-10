@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\User|null $createdUser
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property int $deleted_by
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project query()
