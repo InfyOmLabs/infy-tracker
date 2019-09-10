@@ -78,6 +78,8 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
+let taskAssignees = [];
+
 function getRandomColor() {
     let num = Math.floor(Math.random() * 12) + 1;
     let coloCodes = ['0095ff', '9594fe', 'da4342', '8e751c', 'ac1f87', 'c86069', '370e1c', 'ca4e7d', 'c02bd8', '289e05', '3aad14', '0D8ABC', '511852'];
@@ -238,11 +240,13 @@ $(document).on('click', '.edit-btn', function (event) {
 
                 var tagsIds = [];
                 var userIds = [];
+                taskAssignees = [];
                 $(task.tags).each(function (i, e) {
                     tagsIds.push(e.id);
                 });
                 $(task.task_assignee).each(function (i, e) {
                     userIds.push(e.id);
+                    taskAssignees.push(e.id);
                 });
                 $("#editTagIds").val(tagsIds).trigger('change');
 
@@ -269,8 +273,6 @@ $(document).on('click', '.delete-btn', function (event) {
     let id = $(event.currentTarget).data('id');
     deleteItem(taskUrl + id, '#task_table', 'Task');
 });
-
-
 
 $('#addNewForm').submit(function (event) {
     event.preventDefault();
@@ -469,6 +471,9 @@ $(document).on('change', '#projectId', function (event) {
 $(document).on('change', '#editProjectId', function (event) {
     let projectId = $(this).val();
     loadProjectAssignees(projectId, 'editAssignee')
+    setTimeout(function () {
+        $("#editAssignee").val(taskAssignees).trigger('change');
+    }, 1500)
 });
 
 function loadProjectAssignees(projectId, selector) {
