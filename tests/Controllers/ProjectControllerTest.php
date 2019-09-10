@@ -3,6 +3,8 @@
 namespace Tests\Controllers;
 
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\TimeEntry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -84,17 +86,38 @@ class ProjectControllerTest extends TestCase
     {
         /** @var Project $project */
         $project = factory(Project::class)->create();
+        $task = factory(Task::class)->create(['project_id' => $project->id]);
+        $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
 
         $response = $this->deleteJson(route('projects.destroy', $project->id));
 
         $this->assertSuccessMessageResponse($response, 'Project deleted successfully.');
 
+        //testing project deleted or not.
         $response = $this->getJson(route('projects.edit', $project->id));
 
         $response->assertStatus(404);
         $response->assertJson([
             'success' => false,
             'message' => 'Project not found.',
+        ]);
+
+        //testing task deleted or not.
+        $response = $this->getJson(route('tasks.edit', $task->id));
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'Task not found.',
+        ]);
+
+        //testing timeEntry deleted or not.
+        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
+
+        $response->assertStatus(404);
+        $response->assertJson([
+            'success' => false,
+            'message' => 'TimeEntry not found.',
         ]);
     }
 

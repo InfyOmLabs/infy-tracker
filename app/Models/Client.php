@@ -82,4 +82,12 @@ class Client extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

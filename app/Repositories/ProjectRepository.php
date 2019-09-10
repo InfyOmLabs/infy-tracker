@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\TimeEntry;
 use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
@@ -87,5 +89,27 @@ class ProjectRepository extends BaseRepository
         }
 
         return $query->pluck('name', 'id');
+    }
+
+    /**
+     * @param int $id
+     *
+     * @throws \Exception
+     *
+     * @return bool|mixed|void|null
+     */
+    public function delete($id)
+    {
+        $project = $this->find($id);
+
+        $taskIds = Task::whereProjectId($project->id)->pluck('id')->toArray();
+        TimeEntry::whereIn('task_id', $taskIds)->update(['deleted_by' => getLoggedInUserId()]);
+        TimeEntry::whereIn('task_id', $taskIds)->delete();
+
+        $project->tasks()->update(['deleted_by' => getLoggedInUserId()]);
+        $project->tasks()->delete();
+
+        $project->update(['deleted_by' => getLoggedInUserId()]);
+        $project->delete();
     }
 }

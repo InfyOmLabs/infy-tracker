@@ -153,10 +153,13 @@ $(document).on('click', '.edit-btn', function (event) {
 
 $(document).on('click', '.delete-btn', function (event) {
     let projectId = $(event.currentTarget).data('id');
-    deleteItem(projectUrl + projectId, '#projects_table', 'Project');
+    let alertMessage = '<div class="alert alert-warning swal__alert">\n' +
+        '<strong class="swal__text-warning">Are you sure want to delete this project?</strong><div class="swal__text-message">By deleting this project all its task and time entries will be deleted.</div></div>';
+
+    deleteItemInputConfirmation(projectUrl + projectId, '#projects_table', 'Project', alertMessage);
     setTimeout(function () {
         revokerTracker();
-    }, 1000)
+    }, 1000);
 });
 
 $('#user_ids,#edit_user_ids').select2({
