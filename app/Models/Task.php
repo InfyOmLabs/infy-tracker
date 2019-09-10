@@ -162,10 +162,11 @@ class Task extends Model
         return $this->hasMany(TimeEntry::class, 'task_id')->latest();
     }
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
 
-        static::deleting(function($task) {
+        static::deleting(function ($task) {
             $task->timeEntries()->update(['deleted_by' => getLoggedInUserId()]);
             $task->timeEntries()->delete();
         });
