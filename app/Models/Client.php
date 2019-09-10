@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $name
  * @property string $email
  * @property string $website
+ * @property int $deleted_by
  * @property int|null $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -48,10 +49,11 @@ class Client extends Model
      * @var array
      */
     protected $casts = [
-        'id'      => 'integer',
-        'name'    => 'string',
-        'email'   => 'string',
-        'website' => 'string',
+        'id'         => 'integer',
+        'name'       => 'string',
+        'email'      => 'string',
+        'website'    => 'string',
+        'deleted_by' => 'integer',
     ];
 
     /**
@@ -60,14 +62,14 @@ class Client extends Model
      * @var array
      */
     public static $rules = [
-        'name'     => 'required|unique:clients,name',
-        'email'    => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'website'  => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'name'    => 'required|unique:clients,name',
+        'email'   => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'website' => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
     ];
 
     public static $editRules = [
-        'email'    => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'website'  => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'email'   => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'website' => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
     ];
 
     public static $messages = [

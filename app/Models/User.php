@@ -24,6 +24,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  * @property string|null $activation_code
  * @property int|null $created_by
  * @property string|null $remember_token
+ * @property int $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
@@ -120,17 +121,17 @@ class User extends Authenticatable
      * @var array
      */
     public static $rules = [
-        'name'      => 'required|unique:users,name',
-        'email'     => 'required|email|unique:users,email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'phone'     => 'nullable|numeric|digits:10',
-        'role_id'   => 'required',
+        'name'    => 'required|unique:users,name',
+        'email'   => 'required|email|unique:users,email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'phone'   => 'nullable|numeric|digits:10',
+        'role_id' => 'required',
     ];
 
     public static $messages = [
-        'phone.digits'      => 'The phone number must be 10 digits long.',
-        'email.regex'       => 'Please enter valid email.',
-        'photo.mimes'       => 'The profile image must be a file of type: jpeg, jpg, png.',
-        'role_id.required'  => 'Please select user role.',
+        'phone.digits'     => 'The phone number must be 10 digits long.',
+        'email.regex'      => 'Please enter valid email.',
+        'photo.mimes'      => 'The profile image must be a file of type: jpeg, jpg, png.',
+        'role_id.required' => 'Please select user role.',
     ];
 
     public static $setPasswordRules = [
