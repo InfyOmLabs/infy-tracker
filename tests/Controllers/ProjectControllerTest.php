@@ -82,7 +82,7 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_project()
+    public function test_can_delete_project_with_task_and_time_entries()
     {
         /** @var Project $project */
         $project = factory(Project::class)->create();
@@ -93,7 +93,6 @@ class ProjectControllerTest extends TestCase
 
         $this->assertSuccessMessageResponse($response, 'Project deleted successfully.');
 
-        //testing project deleted or not.
         $response = $this->getJson(route('projects.edit', $project->id));
 
         $response->assertStatus(404);
@@ -102,23 +101,10 @@ class ProjectControllerTest extends TestCase
             'message' => 'Project not found.',
         ]);
 
-        //testing task deleted or not.
-        $response = $this->getJson(route('tasks.edit', $task->id));
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'success' => false,
-            'message' => 'Task not found.',
-        ]);
-
-        //testing timeEntry deleted or not.
-        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'success' => false,
-            'message' => 'TimeEntry not found.',
-        ]);
+        $task = Task::withTrashed()->find($task->id);
+        $this->assertEquals($this->loggedInUserId, $task->deleted_by);
+        $timeEntry = TimeEntry::withTrashed()->find($timeEntry->id);
+        $this->assertEquals($this->loggedInUserId, $timeEntry->deleted_by);
     }
 
     /** @test */

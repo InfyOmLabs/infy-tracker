@@ -83,20 +83,18 @@ class ClientControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_client()
+    public function it_can_delete_client_with_project_and_task_with_time_entries()
     {
-        /** @var Client $client */
-        $client = factory(Client::class)->create();
-        $project = factory(Project::class)->create(['client_id' => $client->id]);
+        /** @var Project $project */
+        $project = factory(Project::class)->create();
         $task = factory(Task::class)->create(['project_id' => $project->id]);
         $timeEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
 
-        $response = $this->deleteJson(route('clients.destroy', $client->id));
+        $response = $this->deleteJson(route('clients.destroy', $project->client_id));
 
         $this->assertSuccessMessageResponse($response, 'Client deleted successfully.');
 
-        //testing client deleted or not.
-        $response = $this->getJson(route('clients.edit', $client->id));
+        $response = $this->getJson(route('clients.edit', $project->client_id));
 
         $response->assertStatus(404);
         $response->assertJson([
@@ -104,32 +102,11 @@ class ClientControllerTest extends TestCase
             'message' => 'Client not found.',
         ]);
 
-        //testing project deleted or not.
-        $response = $this->getJson(route('projects.edit', $project->id));
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'success' => false,
-            'message' => 'Project not found.',
-        ]);
-
-        //testing task deleted or not.
-        $response = $this->getJson(route('tasks.edit', $task->id));
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'success' => false,
-            'message' => 'Task not found.',
-        ]);
-
-        //testing timeEntry deleted or not.
-        $response = $this->getJson(route('time-entries.edit', $timeEntry->id));
-
-        $response->assertStatus(404);
-        $response->assertJson([
-            'success' => false,
-            'message' => 'TimeEntry not found.',
-        ]);
+        $this->assertEmpty(Project::whereClientId($project->client_id)->first());
+        $task = Task::withTrashed()->find($task->id);
+        $this->assertEquals($this->loggedInUserId, $task->deleted_by);
+        $timeEntry = TimeEntry::withTrashed()->find($timeEntry->id);
+        $this->assertEquals($this->loggedInUserId, $timeEntry->deleted_by);
     }
 
     /** @test */

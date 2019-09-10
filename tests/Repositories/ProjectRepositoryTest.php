@@ -4,6 +4,8 @@ namespace Tests\Repositories;
 
 use App\Models\Client;
 use App\Models\Project;
+use App\Models\Task;
+use App\Models\TimeEntry;
 use App\Models\User;
 use App\Repositories\ProjectRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -119,5 +121,24 @@ class ProjectRepositoryTest extends TestCase
 
         $this->assertCount(1, $allProjects);
         $this->assertContains($projectOfLoggedInUser->id, array_keys($allProjects));
+    }
+
+    /** @test */
+    public function test_can_delete_project_with_tasks_and_entries()
+    {
+        $project = factory(Project::class)->create();
+        /** @var Task $firstTask */
+        $firstTask = factory(Task::class)->create(['project_id' => $project->id]);
+        $secondTask = factory(Task::class)->create(['project_id' => $project->id]);
+        $timeEntry = factory(TimeEntry::class)->create(['task_id' => $firstTask->id]);
+
+        $this->projectRepo->delete($firstTask->project_id);
+
+        $this->assertEmpty(Project::find($project->id));
+        $task = Task::withTrashed()->find($firstTask->id);
+        $this->assertEquals($this->loggedInUserId, $task->deleted_by);
+
+        $timeEntry = TimeEntry::withTrashed()->find($timeEntry->id);
+        $this->assertEquals($this->loggedInUserId, $timeEntry->deleted_by);
     }
 }
