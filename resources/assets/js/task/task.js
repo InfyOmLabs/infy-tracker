@@ -2,7 +2,8 @@ $(function () {
     $('#no-record-info-msg').hide();
     $('#user-drop-down-body').hide();
 
-    $('#filter_project,#filter_status,#filter_user').select2({
+    $('#filter_project,#filter_user').select2();
+    $('#filter_status').select2({
         minimumResultsForSearch: -1
     });
     $('#assignTo,#editAssignTo').select2({
