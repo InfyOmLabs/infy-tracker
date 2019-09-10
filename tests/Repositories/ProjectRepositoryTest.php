@@ -124,7 +124,7 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_project_with_tasks_and_entries()
+    public function test_can_delete_project_with_all_its_child_records()
     {
         $project = factory(Project::class)->create();
         /** @var Task $firstTask */

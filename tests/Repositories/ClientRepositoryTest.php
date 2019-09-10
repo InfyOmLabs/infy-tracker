@@ -41,7 +41,7 @@ class ClientRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_delete_client_with_tasks_and_entries()
+    public function test_can_delete_client_with_all_its_child_records()
     {
         /** @var Client $client */
         $client = factory(Client::class)->create();

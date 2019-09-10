@@ -83,7 +83,7 @@ class ClientControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_client_with_project_and_task_with_time_entries()
+    public function test_can_delete_client_with_all_its_child_records()
     {
         /** @var Project $project */
         $project = factory(Project::class)->create();
