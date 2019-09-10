@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType query()
