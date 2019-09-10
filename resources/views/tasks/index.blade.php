@@ -14,7 +14,7 @@
         <div class="animated fadeIn">
             @include('flash::message')
             <div class="page-header">
-                <h3>Tasks</h3>
+                <h3 class="page__heading">Tasks</h3>
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Assign To</b></label>
@@ -74,9 +74,11 @@
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
         let taskStatus = $.parseJSON(taskStatusJson)
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
-        let taskBadges = $.parseJSON(taskBadgesJson)
+        let taskBadges = $.parseJSON(taskBadgesJson);
+        let taskDetailActionColumnIsVisible = true;
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
+    <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>
 @endsection
 

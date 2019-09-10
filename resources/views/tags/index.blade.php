@@ -8,7 +8,7 @@
         <div class="animated fadeIn">
              @include('flash::message')
             <div class="page-header">
-                <h3>Tags</h3>
+                <h3 class="page__heading">Tags</h3>
                 <div style="display: flex;align-items: center">
                     <a href="#" class="btn btn-primary" onclick="setBulkTags()" data-toggle="modal"
                        data-target="#AddModal"></i>Bulk Tags</a>

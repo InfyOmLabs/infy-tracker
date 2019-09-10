@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <div class="animated fadeIn">
             <div class="page-header">
-                <h3>Reports</h3>
+                <h3 class="page__heading">Reports</h3>
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Created By</b></label>

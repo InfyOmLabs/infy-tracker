@@ -26,21 +26,13 @@ class CreateTimeEntriesTable extends Migration
             $table->softDeletes();
 
             // foreign
-            $table->foreign('deleted_by')->references('id')->on('users')
-                ->onDelete('set null')
-                ->onUpdate('set null');
+            $table->foreign('deleted_by')->references('id')->on('users');
 
-            $table->foreign('task_id')->references('id')->on('tasks')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks');
 
-            $table->foreign('activity_type_id')->references('id')->on('activity_types')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreign('activity_type_id')->references('id')->on('activity_types');
 
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

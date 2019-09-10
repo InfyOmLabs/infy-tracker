@@ -12,7 +12,7 @@
             @include('coreui-templates::common.errors')
             @include('flash::message')
             <div class="page-header">
-                <h3>View Report</h3>
+                <h3 class="page__heading">View Report</h3>
                 <div class="filter-container">
                     <a href="{{ route('reports.edit', $report->id) }}"
                        class="btn btn-primary filter-container__btn mr-1">
@@ -25,6 +25,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     @include('reports.report_format')
+                    @include('tasks.task_details')
                 </div>
             </div>
         </div>
@@ -51,6 +52,10 @@
             });
         });
         let reportUrl = "{{ url('reports') }}/";
+        let taskUrl = '{{url('tasks')}}/';
+        let taskDetailUrl = '{{url('task-details')}}';
+        let taskDetailActionColumnIsVisible = false;
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
+    <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
 @endsection

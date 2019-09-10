@@ -10,9 +10,7 @@ $('#timeProjectId,#editTimeProjectId').select2({
     placeholder: "Select Project"
 });
 
-$('#filterActivity,#filterUser,#filter_project').select2({
-    minimumResultsForSearch: -1
-});
+$('#filterActivity,#filterUser,#filter_project').select2();
 
 $('#activityTypeId,#editActivityTypeId').select2({
     width: '100%',
@@ -93,6 +91,7 @@ let tbl = $('#timeEntryTable').DataTable({
         {
             data: 'activity_type.name',
             name: 'activityType.name',
+            defaultContent: '',
         },
         {
             data: 'start_time',

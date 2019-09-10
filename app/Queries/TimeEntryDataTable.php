@@ -31,15 +31,19 @@ class TimeEntryDataTable
                 $q->where('activity_type_id', $input['filter_activity']);
             });
         $query->when(isset($input['filter_project']) && !empty($input['filter_project']),
-            function (Builder $q) use ($input) {
-                $filterUserId = (isset($input['filter_user']) && !empty($input['filter_user'])) ? $input['filter_user'] : getLoggedInUser()->id;
-                $taskIds = Task::whereProjectId($input['filter_project'])
-                    ->where(function ($q) use ($filterUserId) {
-                        $q->whereHas('taskAssignee', function ($q) use ($filterUserId) {
-                            $q->where('user_id', $filterUserId);
-                        });
-                    })->get()->pluck('id')->toArray();
-                $q->whereIn('task_id', $taskIds);
+            function (Builder $q) use ($input,$user) {
+                if ($user->can('manage_time_entries')) {
+                    $taskIds = Task::whereProjectId($input['filter_project'])->get()->pluck('id')->toArray();
+                    $q->whereIn('task_id', $taskIds);
+                } else {
+                    $taskIds = Task::whereProjectId($input['filter_project'])
+                        ->where(function ($q) {
+                            $q->whereHas('taskAssignee', function ($q) {
+                                $q->where('user_id', getLoggedInUserId());
+                            });
+                        })->get()->pluck('id')->toArray();
+                    $q->whereIn('task_id', $taskIds);
+                }
             });
         if (!$user->can('manage_time_entries')) {
             return $query->OfCurrentUser();

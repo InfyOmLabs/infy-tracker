@@ -131,7 +131,7 @@ class Task extends Model
      */
     public function project()
     {
-        return $this->belongsTo(Project::class, 'project_id');
+        return $this->belongsTo(Project::class, 'project_id')->withTrashed();
     }
 
     /**
@@ -160,6 +160,16 @@ class Task extends Model
     public function timeEntries()
     {
         return $this->hasMany(TimeEntry::class, 'task_id')->latest();
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($task) {
+            $task->timeEntries()->update(['deleted_by' => getLoggedInUserId()]);
+            $task->timeEntries()->delete();
+        });
     }
 
     /**

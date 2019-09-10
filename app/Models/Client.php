@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Client.
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Client extends Model
 {
+    use softDeletes;
     public $table = 'clients';
 
     public $fillable = [
@@ -37,6 +39,7 @@ class Client extends Model
         'email',
         'website',
         'created_by',
+        'deleted_by',
     ];
 
     /**
@@ -78,5 +81,13 @@ class Client extends Model
     public function createdUser()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 }

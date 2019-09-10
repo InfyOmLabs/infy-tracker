@@ -12,19 +12,19 @@
             {!! Form::textarea('description', null, ['class' => 'form-control','rows'=>5]) !!}
         </div>
     </div>
-    <div class="col-6">
-        <div class="form-group col-sm-12 col-lg-12">
+    <div class="col-6 pl-0">
+        <div class="form-group col-sm-12 col-lg-12 pl-0 pr-0">
             {!! Form::label('permissions', 'Permissions') !!}
             <div class="row">
                 @foreach($permissions as $key=>$value)
                     @if(in_array($key,$roles->perms->pluck('id')->toArray()))
-                        <div class="checkbox col-lg-4 role-checkbox">
+                        <div class="checkbox col-md-6 role-checkbox">
                             <label class="role-checkbox__label d-flex align-items-center"><input name="permissions[]" type="checkbox"
                                                                        class="permission-checkbox"
                                                                        value="{{$key}}" checked> {{$value}}</label>
                         </div>
                     @else
-                        <div class="checkbox col-lg-4 role-checkbox">
+                        <div class="checkbox col-md-6 role-checkbox">
                             <label class="role-checkbox__label d-flex align-items-center"><input name="permissions[]" type="checkbox"
                                                                        class="permission-checkbox"
                                                                        value="{{$key}}"> {{$value}}</label>

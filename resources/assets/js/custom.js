@@ -52,6 +52,36 @@ $(document).on('click', '.btn-task-delete', function (event) {
     }, 1000);
 });
 
+function deleteItemAjax(url, tableId, header, callFunction = null) {
+    $.ajax({
+        url: url,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (obj) {
+            if (obj.success) {
+                $(tableId).DataTable().ajax.reload(null, false);
+            }
+            swal({
+                title: 'Deleted!',
+                text: header + ' has been deleted.',
+                type: 'success',
+                timer: 2000
+            });
+            if (callFunction) {
+                eval(callFunction);
+            }
+        },
+        error: function (data) {
+            swal({
+                title: '',
+                text: data.responseJSON.message,
+                type: 'error',
+                timer: 5000
+            });
+        }
+    });
+}
+
 window.deleteItem = function (url, tableId, header, callFunction = null) {
     swal({
             title: "Delete !",
@@ -66,33 +96,38 @@ window.deleteItem = function (url, tableId, header, callFunction = null) {
             confirmButtonText: 'Yes'
         },
         function () {
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                dataType: 'json',
-                success: function (obj) {
-                    if (obj.success) {
-                        $(tableId).DataTable().ajax.reload(null, false);
-                    }
-                    swal({
-                        title: 'Deleted!',
-                        text: header + ' has been deleted.',
-                        type: 'success',
-                        timer: 2000
-                    });
-                    if (callFunction) {
-                        eval(callFunction);
-                    }
-                },
-                error: function (data) {
-                    swal({
-                        title: '',
-                        text: data.responseJSON.message,
-                        type: 'error',
-                        timer: 5000
-                    });
-                }
-            });
+            deleteItemAjax(url, tableId, header, callFunction = null);
+        });
+};
+
+window.deleteItemInputConfirmation = function (url, tableId, header, alertMessage, callFunction = null) {
+    swal({
+            type: "input",
+            inputPlaceholder: "Please type \"delete\" to delete this "+header+".",
+            title: "Delete !",
+            text: alertMessage,
+            html: true,
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#5cb85c',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+            imageUrl: "http://infy-tracker/images/warning.png"
+        },
+        function (inputVal) {
+            if (inputVal===false) {
+                return false;
+            }
+            if (inputVal=='' || inputVal.toLowerCase() != "delete") {
+                swal.showInputError("Please type \"delete\" to delete this client.");
+                $(".sa-input-error").css('top','23px!important');
+                return false;
+            }
+            if(inputVal.toLowerCase() === "delete"){
+                deleteItemAjax(url, tableId, header, callFunction = null);
+            }
         });
 };
 
