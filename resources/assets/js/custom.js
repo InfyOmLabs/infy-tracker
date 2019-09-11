@@ -224,9 +224,11 @@ $(document).on('focus', '.select2-selection.select2-selection--single', function
 
 $(function () {
     $(".modal").on('shown.bs.modal', function () {
-        setTimeout(function () {
-            $(".modal").find('input:text, .select2-selection.select2-selection--single').first().focus();
-        },150);
+        if($(this).find('.timeEntryAddForm').hasClass('timeEntryAddForm') || $(this).find('.editTimeEntryForm').hasClass('editTimeEntryForm')){
+            $(this).find('textarea').first().focus();
+        } else {
+            $(this).find('input:text').first().focus();
+        }
     });
 });
 

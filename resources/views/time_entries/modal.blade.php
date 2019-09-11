@@ -6,7 +6,7 @@
                 <h5 class="modal-title">New Time Entry</h5>
                 <button type="button" aria-label="Close" class="close" data-dismiss="modal">×</button>
             </div>
-            {!! Form::open(['id'=>'timeEntryAddForm']) !!}
+            {!! Form::open(['id'=>'timeEntryAddForm', 'class'=>'timeEntryAddForm']) !!}
             <div class="modal-body">
                 <div class="alert alert-danger" style="display: none" id="tmValidationErrorsBox"></div>
                 <div class="form-group row">
