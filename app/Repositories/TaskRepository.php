@@ -278,7 +278,7 @@ class TaskRepository extends BaseRepository
                     }
                     $query->with('user');
                 },
-                'project'
+                'project',
             ])->findOrFail($id);
         } else {
             if (isset($input['start_time']) && isset($input['end_time']) && !empty($input['start_time']) && !empty($input['end_time'])) {
@@ -289,10 +289,10 @@ class TaskRepository extends BaseRepository
                         }
                         $query->with('user');
                     },
-                    'project'
+                    'project',
                 ])->findOrFail($id);
             } else {
-                $task = Task::with('timeEntries.user','project')->findOrFail($id);
+                $task = Task::with('timeEntries.user', 'project')->findOrFail($id);
             }
         }
 
