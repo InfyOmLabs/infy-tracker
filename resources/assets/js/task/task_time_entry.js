@@ -1,5 +1,7 @@
 $('#task_users').select2({ width: '100%', placeholder: "All", minimumResultsForSearch: -1 });
 
+let firstTime = true;
+
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
     let id = $(event.currentTarget).data('id');
@@ -7,6 +9,7 @@ $(document).on('click', '.taskDetails', function (event) {
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
     $('.time-entry-data').hide();
+    firstTime = true;
 
     $.ajax({
         url: taskUrl + id + '/' + 'users',
@@ -47,6 +50,8 @@ $(document).on('change', '#task_users', function () {
         success: function (result) {
             if (result.success) {
                 let data = result.data;
+                let url = taskUrl + data.project.prefix + '-' + data.task_number;
+                $("#task-heading").html("<h5>Task: <a href='" + url + "' style='color: #0f6683'>" + data.title + "</a></h5>");
                 drawTaskDetailTable(data);
             }
         }
@@ -54,13 +59,13 @@ $(document).on('change', '#task_users', function () {
 });
 
 window.drawTaskDetailTable = function (data) {
-    if (data.totalDuration === 0) {
+    if (data.totalDuration === 0 && firstTime) {
         $('#no-record-info-msg').show();
         $('.time-entry-data').hide();
         stopLoader();
         return true;
     }
-
+    firstTime = false;
     let taskDetailsTable = $('#taskDetailsTable').DataTable({
         destroy: true,
         paging: true,
