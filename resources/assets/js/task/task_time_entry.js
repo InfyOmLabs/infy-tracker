@@ -1,13 +1,5 @@
 $('#task_users').select2({ width: '100%', placeholder: "All", minimumResultsForSearch: -1 });
 
-function nl2br (str, is_xhtml) {
-    if (typeof str === 'undefined' || str === null) {
-        return '';
-    }
-    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-}
-
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
     let id = $(event.currentTarget).data('id');
@@ -91,7 +83,11 @@ window.drawTaskDetailTable = function (data) {
             {data: "user.name"},
             {data: "start_time"},
             {data: "end_time"},
-            {data: "duration"},
+            {
+                data: function (row) {
+                    return roundToQuarterHourAll(row.duration);
+                }
+            },
             {
                 orderable: false,
                 data: function (data) {

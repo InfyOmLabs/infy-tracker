@@ -22,7 +22,7 @@ let editTaskId, editProjectId = null;
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
-    "order": [[7, "desc"]],
+    "order": [[9, "desc"]],
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
@@ -33,42 +33,45 @@ let tbl = $('#timeEntryTable').DataTable({
     },
     columnDefs: [
         {
+            "targets": [9],
+            "width": "7%",
+            "className": 'text-center',
+            "visible": false
+        },
+        {
+            "targets": [6],
+            "width": "9%"
+        },
+        {
+            "targets": [7],
+            "width": "4%"
+        },
+        {
+            "targets": [4, 5],
+            "width": "10%"
+        },
+        {
             "targets": [8],
             "orderable": false,
             "className": 'text-center',
             "width": '5%'
         },
         {
-            "targets": [10, 9],
-            "visible": false,
-        },
-        {
-            "targets": [5],
-            "width": "9%"
-        },
-        {
-            "targets": [6],
-            "width": "4%"
-        },
-        {
-            "targets": [3, 4],
-            "width": "10%"
-        },
-        {
-            "targets": [7],
-            "width": "7%",
-            "className": 'text-center',
-        },
-        {
-            "targets": [2],
+            "targets": [3],
             "width": "8%"
         },
         {
-            "targets": [0],
+            "targets": [0, 1],
             "width": "3%"
         },
     ],
     columns: [
+        {
+            className: 'details-control',
+            defaultContent: "<a title='Expand' class='btn btn-success collapse-icon action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a>",
+            data: null,
+            orderable: false,
+        },
         {
             data: function (row) {
                 if (row.user) {
@@ -102,7 +105,9 @@ let tbl = $('#timeEntryTable').DataTable({
             name: 'end_time'
         },
         {
-            data: 'duration',
+            data: function (row) {
+                return roundToQuarterHourAll(row.duration);
+            },
             name: 'duration'
         },
         {
@@ -119,15 +124,6 @@ let tbl = $('#timeEntryTable').DataTable({
         },
         {
             data: function (row) {
-                return row;
-            },
-            render: function (row) {
-                return '<span data-toggle="tooltip" title="' + format(row.created_at, "hh:mm:ss a") + '">' + format(row.created_at) + '</span>';
-            },
-            name: 'created_at'
-        },
-        {
-            data: function (row) {
                 return '<a title="Edit" class="btn action-btn btn-primary btn-sm btn-edit mr-1" data-id="' + row.id + '">' +
                     '<i class="cui-pencil action-icon"></i>' + '</a>' +
                     '<a title="Delete" class="btn action-btn btn-danger btn-sm btn-delete" data-id="' + row.id + '" >' +
@@ -135,12 +131,13 @@ let tbl = $('#timeEntryTable').DataTable({
             }, name: 'id'
         },
         {
-            data: 'task.project.prefix',
-            name: 'task.project.prefix'
-        },
-        {
-            data: 'task.task_number',
-            name: 'task.task_number'
+            data: function (row) {
+                return row;
+            },
+            render: function (row) {
+                return '<span data-toggle="tooltip" title="' + format(row.created_at, "hh:mm:ss a") + '">' + format(row.created_at) + '</span>';
+            },
+            name: 'created_at'
         },
     ],
     "fnInitComplete": function () {
@@ -149,6 +146,21 @@ let tbl = $('#timeEntryTable').DataTable({
         });
     }
 });
+
+$('#timeEntryTable tbody').off('click', 'tr td.details-control');
+$('#timeEntryTable tbody').on('click', 'tr td.details-control', function () {
+    var tr = $(this).closest('tr');
+    var row = tbl.row(tr);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+        tr.removeClass('shown');
+    } else {
+        row.child('<div style="padding-left:50px;">' + nl2br(row.data().note) + '</div>').show();
+        tr.addClass('shown');
+    }
+});
+
 if (!canManageEntries) {
     tbl.columns([0]).visible(false);
 }
