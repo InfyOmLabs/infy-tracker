@@ -30,17 +30,6 @@ $(document).on('click', '.taskDetails', function (event) {
             });
         }
     });
-
-    $.ajax({
-        url: taskDetailUrl + '/' + id,
-        type: 'GET',
-        success: function (result) {
-            if (result.success) {
-                let data = result.data;
-                drawTaskDetailTable(data);
-            }
-        }
-    });
 });
 
 $(document).on('change', '#task_users', function () {
@@ -52,8 +41,13 @@ $(document).on('change', '#task_users', function () {
         userId = taskUserId[0];
     }
     let url =  taskDetailUrl + '/' + taskId;
+    let startSymbol = '?';
     if (userId !== 0) {
+        startSymbol = '&';
         url = url + '?user_id=' + userId;
+    }
+    if (reportStartDate != '' && reportEndDate != '') {
+        url = url + startSymbol + 'start_time=' + reportStartDate + '&end_time=' + reportEndDate;
     }
     $.ajax({
         url: url,
@@ -103,6 +97,8 @@ window.drawTaskDetailTable = function (data) {
         ],
     });
 
+    $('#taskDetailsTable th:first').removeClass('sorting_asc');
+
     $('.time-entry-data').show();
     $('#taskDetailsTable').show();
     $('#user-drop-down-body').show();
@@ -128,3 +124,12 @@ window.drawTaskDetailTable = function (data) {
     $("#taskDetailsTable_wrapper").css('width', "100%");
     $("#total-duration").html("<strong>Total duration: " + data.totalDuration + " || " + data.totalDurationMin + " Minutes</strong>");
 };
+
+$(document).on('click', '.collapse-icon', function () {
+    let isShow = $(this).parent().parent().hasClass('shown');
+    if(isShow) {
+        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
+    } else {
+        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
+    }
+});

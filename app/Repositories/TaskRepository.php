@@ -272,12 +272,26 @@ class TaskRepository extends BaseRepository
         if (isset($input['user_id']) && $input['user_id'] > 0) {
             $task = Task::with([
                 'timeEntries' => function (HasMany $query) use ($input) {
-                    $query->where('time_entries.user_id', '=', $input['user_id'])
-                        ->with('user');
+                    $query->where('time_entries.user_id', '=', $input['user_id']);
+                    if (isset($input['start_time']) && isset($input['end_time']) && !empty($input['start_time']) && !empty($input['end_time'])) {
+                        $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
+                    }
+                    $query->with('user');
                 },
             ])->findOrFail($id);
         } else {
-            $task = Task::with('timeEntries.user')->findOrFail($id);
+            if (isset($input['start_time']) && isset($input['end_time']) && !empty($input['start_time']) && !empty($input['end_time'])) {
+                $task = Task::with([
+                    'timeEntries' => function (HasMany $query) use ($input) {
+                        if (isset($input['start_time']) && isset($input['end_time']) && !empty($input['start_time']) && !empty($input['end_time'])) {
+                            $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
+                        }
+                        $query->with('user');
+                    },
+                ])->findOrFail($id);
+            } else {
+                $task = Task::with('timeEntries.user')->findOrFail($id);
+            }
         }
 
         $minutes = $task->timeEntries->pluck('duration')->sum();

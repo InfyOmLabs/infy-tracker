@@ -19,7 +19,7 @@
                         Edit
                     </a>
                     <button class="btn btn-danger delete-btn" data-id="{{$report->id}}">Delete</button>
-                    <a class="btn btn-secondary ml-1" href="{{url(route('reports.index'))}}">Back</a>
+                    <a class="btn btn-secondary ml-1" href="{{url()->previous()}}">Back</a>
                 </div>
             </div>
             <div class="row">
@@ -55,6 +55,8 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskDetailUrl = '{{url('task-details')}}';
         let taskDetailActionColumnIsVisible = false;
+        let reportStartDate = '{{$report->start_date->startOfDay()}}';
+        let reportEndDate = '{{$report->end_date->endOfDay()}}';
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
