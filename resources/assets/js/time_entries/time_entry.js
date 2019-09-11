@@ -391,10 +391,3 @@ $("#new_entry").click(function () {
     $("#timeProjectId").trigger('change');
     getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox');
 });
-
-//here we are overriding custom.js's same function focus for input
-$(".modal").on('shown.bs.modal', function () {
-    setTimeout(function () {
-        $(".modal").find('textarea').first().focus();
-    },150);
-});

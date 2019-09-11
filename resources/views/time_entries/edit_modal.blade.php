@@ -6,7 +6,7 @@
                 <h5 class="modal-title">Edit Time Entry</h5>
                 <button type="button" aria-label="Close" class="close" data-dismiss="modal">×</button>
             </div>
-            {!! Form::open(['id'=>'editTimeEntryForm','files'=>true]) !!}
+            {!! Form::open(['id'=>'editTimeEntryForm','class'=>'editTimeEntryForm','files'=>true]) !!}
             <div class="modal-body">
                 <div class="alert alert-danger" style="display: none" id="teEditValidationErrorsBox"></div>
                 {!! Form::hidden('entry_id',null,['id'=>'entryId']) !!}
