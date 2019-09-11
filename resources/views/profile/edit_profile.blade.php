@@ -45,9 +45,9 @@
                         {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
                         <div class="input-group">
                             <input class="form-control input-group__addon" id="pfNewPassword" type="password" name="password">
-                            <div class="input-group-append">
+                            <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
-                                    <i class="icon-eye icons"></i>
+                                    <i class="icon-ban icons"></i>
                                 </span>
                             </div>
                         </div>
@@ -56,9 +56,9 @@
                         {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
                         <div class="input-group">
                             <input class="form-control input-group__addon" id="pfNewConfirmPassword" type="password" name="password_confirmation">
-                            <div class="input-group-append">
+                            <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
-                                    <i class="icon-eye icons"></i>
+                                    <i class="icon-ban icons"></i>
                                 </span>
                             </div>
                         </div>
