@@ -100,6 +100,7 @@ class ProjectRepository extends BaseRepository
      */
     public function delete($id)
     {
+        /** @var Project $project */
         $project = $this->find($id);
 
         $taskIds = Task::whereProjectId($project->id)->pluck('id')->toArray();
