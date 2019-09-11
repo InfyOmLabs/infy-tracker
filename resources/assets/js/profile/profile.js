@@ -126,8 +126,12 @@ $(".changeType").click(function () {
     let inputField = $(this).parent().siblings();
     let oldType = inputField.attr('type');
     if(oldType == 'password') {
+        $(this).children().addClass('icon-eye');
+        $(this).children().removeClass('icon-ban');
         inputField.attr('type', 'text');
     } else {
+        $(this).children().removeClass('icon-eye');
+        $(this).children().addClass('icon-ban');
         inputField.attr('type', 'password');
     }
 });
