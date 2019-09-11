@@ -376,15 +376,6 @@ $(function () {
     }
 });
 
-$(document).on('click', '.collapse-icon', function () {
-    let isShow = $(this).parent().parent().hasClass('shown');
-    if(isShow) {
-        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
-    } else {
-        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
-    }
-});
-
 window.manageCollapseIcon = function (id) {
     var isExpanded = $('#tdCollapse' + id).attr('aria-expanded');
     if (isExpanded == 'true') {
