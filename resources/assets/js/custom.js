@@ -225,7 +225,7 @@ $(document).on('focus', '.select2-selection.select2-selection--single', function
 $(function () {
     $(".modal").on('shown.bs.modal', function () {
         setTimeout(function () {
-            $(".modal").find('input:text, .select2-selection.select2-selection--single').first().focus();
+            $(".modal").find('input:text').first().focus();
         },150);
     });
 });
