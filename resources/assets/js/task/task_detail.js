@@ -59,6 +59,8 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
 
+let taskAssignees = [];
+
 // open edit user model
 $(document).on('click', '.edit-btn', function (event) {
     let id = $(event.currentTarget).data('id');
@@ -80,11 +82,13 @@ $(document).on('click', '.edit-btn', function (event) {
                 $('#editStatus').val(task.status);
                 var tagsIds = [];
                 var userIds = [];
+                taskAssignees = [];
                 $(task.tags).each(function (i, e) {
                     tagsIds.push(e.id);
                 });
                 $(task.task_assignee).each(function (i, e) {
                     userIds.push(e.id);
+                    taskAssignees.push(e.id);
                 });
                 $("#editTagIds").val(tagsIds).trigger('change');
 
@@ -110,6 +114,9 @@ $(document).on('click', '.edit-btn', function (event) {
 $(document).on('change', '#editProjectId', function (event) {
     let projectId = $(this).val();
     loadProjectAssignees(projectId, 'editAssignee')
+    setTimeout(function () {
+        $("#editAssignee").val(taskAssignees).trigger('change');
+    }, 1500)
 });
 
 function loadProjectAssignees(projectId, selector) {
