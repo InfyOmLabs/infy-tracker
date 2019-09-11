@@ -7,7 +7,7 @@
         <th>Activity</th>
         <th>Start Time</th>
         <th>End Time</th>
-        <th>Duration (min)</th>
+        <th>Duration</th>
         <th>Type</th>
         <th>Action</th>
         <th>Created At</th>

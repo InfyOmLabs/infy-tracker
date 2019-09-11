@@ -83,4 +83,3 @@
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>
 @endsection
-

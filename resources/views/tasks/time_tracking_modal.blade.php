@@ -14,7 +14,7 @@
                         <th scope="col">Note</th>
                         <th scope="col">Activity</th>
                         <th scope="col" class="text-nowrap text-center">Tracked By</th>
-                        <th scope="col" class="text-nowrap text-center">Time (Mins)</th>
+                        <th scope="col" class="text-nowrap text-center">Time</th>
                     </tr>
                     </thead>
                     <tbody>
