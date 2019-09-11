@@ -229,3 +229,35 @@ $(function () {
         },150);
     });
 });
+
+window.roundToQuarterHourAll = function (minuts) {
+    var hours = Math.floor(minuts / 60);
+    var minutes = minuts % 60;
+    if (hours > 0) {
+        return pad(hours) + ":" + pad(minutes) + ' h';
+    } else {
+        return pad(hours) + ":" + pad(minutes) + ' m';
+    }
+};
+
+window.pad = function (d) {
+    return (d < 10) ? '0' + d : d;
+};
+
+window.nl2br = function (str, is_xhtml) {
+    if (typeof str === 'undefined' || str === null) {
+        return '';
+    }
+    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
+};
+
+$(document).on('click', '.collapse-icon', function () {
+    let isShow = $(this).parent().parent().hasClass('shown');
+    if (isShow) {
+        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
+    } else {
+        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
+    }
+});
+
