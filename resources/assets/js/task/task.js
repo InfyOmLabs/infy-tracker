@@ -79,12 +79,6 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
-function getRandomColor() {
-    let num = Math.floor(Math.random() * 12) + 1;
-    let coloCodes = ['0095ff', '9594fe', 'da4342', '8e751c', 'ac1f87', 'c86069', '370e1c', 'ca4e7d', 'c02bd8', '289e05', '3aad14', '0D8ABC', '511852'];
-    return coloCodes[num];
-}
-
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
