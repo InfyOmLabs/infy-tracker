@@ -104,6 +104,7 @@ class TimeEntryRepositoryTest extends TestCase
         $completedTask->taskAssignee()->attach($this->defaultUserId);
 
         $result = $this->timeEntryRepo->getTasksByProject($task2->project_id);
+
         $this->assertCount(2, $result);
         $this->assertContains($task2->id, $result->keys());
     }
