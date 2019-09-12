@@ -60,7 +60,7 @@ class TaskRepositoryTest extends TestCase
         $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
             ->raw([
-                'title' => 'random string',
+                'title'    => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
             ]);
 
@@ -145,7 +145,7 @@ class TaskRepositoryTest extends TestCase
     {
         $project = factory(Project::class)->create();
         factory(Task::class)->create([
-            'project_id' => $project->id,
+            'project_id'  => $project->id,
             'task_number' => 3,
         ]);
 
