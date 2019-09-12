@@ -98,12 +98,15 @@ class TimeEntryRepository extends BaseRepository
      */
     public function getTasksByProject($projectId, $taskId = null)
     {
+        $user = getLoggedInUser();
         /** @var Builder $query */
         $query = Task::ofProject($projectId)
-            ->where('status', '=', Task::STATUS_ACTIVE)
-            ->whereHas('taskAssignee', function (Builder $query) {
+            ->where('status', '=', Task::STATUS_ACTIVE);
+        if(!$user->can('manage_projects')) {
+            $query = $query->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
             });
+        }
 
         if (!empty($taskId)) {
             $query->orWhere('id', $taskId);

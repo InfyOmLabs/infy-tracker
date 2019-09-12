@@ -189,7 +189,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_active_task_of_logged_in_user()
+    public function test_can_get_active_task_of_logged_in_user_not_having_permission_manage_projects()
     {
         $farhan = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -201,11 +201,32 @@ class TaskRepositoryTest extends TestCase
         $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
         $completedTask->taskAssignee()->sync([$this->defaultUserId]);
 
+        $this->actingAs($farhan);
+
         $myTasks = $this->taskRepo->myTasks();
 
         $this->assertCount(1, $myTasks['tasks']);
-        $this->assertEquals($activeTask->id, $myTasks['tasks'][0]->id);
+        $this->assertEquals($task->id, $myTasks['tasks'][0]->id);
         $this->assertEquals(Task::STATUS_ACTIVE, $myTasks['tasks'][0]->status);
+    }
+
+    public function test_can_get_active_task_of_logged_in_user_having_manage_project_permission()
+    {
+        $monika = factory(User::class)->create();
+        $task = factory(Task::class)->create();
+        $task->taskAssignee()->sync([$monika->id]);
+
+        $activeTask = factory(Task::class)->create();
+        $activeTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $this->attachPermissions($this->defaultUserId, ['manage_projects']);
+
+        $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $completedTask->taskAssignee()->sync([$this->defaultUserId]);
+
+        $myTasks = $this->taskRepo->myTasks();
+
+        $this->assertCount(2, $myTasks['tasks']);
     }
 
     /** @test */

@@ -91,6 +91,27 @@ class TimeEntryRepositoryTest extends TestCase
     }
 
     /** @test */
+    public function test_can_get_active_task_of_logged_in_user_having_manage_projects_permission_for_given_project()
+    {
+        $monika = factory(User::class)->create();
+
+        $task1 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task1->taskAssignee()->attach($monika->id);
+
+        $task2 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE, 'project_id' => $task1->project_id]);
+        $task2->taskAssignee()->attach($this->defaultUserId);
+        $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]); // this should not return
+        $completedTask->taskAssignee()->attach($this->defaultUserId);
+
+        $this->actingAs($monika);
+        $this->attachPermissions($monika->id, ['manage_projects']);
+
+        $result = $this->timeEntryRepo->getTasksByProject($task2->project_id);
+        $this->assertCount(2, $result);
+        $this->assertContains($task2->id, $result->keys());
+    }
+
+    /** @test */
     public function test_can_update_duration_of_time_entry_and_make_start_and_end_time_to_empty()
     {
         $timeEntry = factory(TimeEntry::class)->create();

@@ -312,10 +312,14 @@ class TaskRepository extends BaseRepository
      */
     public function myTasks($input = [])
     {
+        $user = getLoggedInUser();
         /** @var Builder|Task $query */
-        $query = Task::whereHas('taskAssignee', function (Builder $query) {
-            $query->where('user_id', getLoggedInUserId());
-        })->whereNotIn('status', [Task::STATUS_COMPLETED]);
+        $query = Task::whereNotIn('status', [Task::STATUS_COMPLETED]);
+        if(!$user->can('manage_projects')) {
+            $query = $query->whereHas('taskAssignee', function (Builder $query) {
+                $query->where('user_id', getLoggedInUserId());
+            });
+        }
 
         if (!empty($input['project_id'])) {
             $query->ofProject($input['project_id']);
