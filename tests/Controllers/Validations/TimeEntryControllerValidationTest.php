@@ -147,7 +147,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_update_time_entry_fails_when_user_try_to_update_another_users_entry_when_loggin_user_having_manage_projects_permission()
+    public function test_user_with_valid_permission_can_update_other_users_time_entry()
     {
         $this->attachPermissions(getLoggedInUserId(), ['manage_projects']);
         /** @var TimeEntry $timeEntry1 */
