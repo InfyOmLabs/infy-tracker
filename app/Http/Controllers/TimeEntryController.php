@@ -90,7 +90,7 @@ class TimeEntryController extends AppBaseController
     public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
         $user = getLoggedInUser();
-        if(!$user->can('manage_projects')) {
+        if (!$user->can('manage_projects')) {
             $entry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         } else {
             $entry = $timeEntry;

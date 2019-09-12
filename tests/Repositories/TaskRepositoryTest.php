@@ -60,7 +60,7 @@ class TaskRepositoryTest extends TestCase
         $preparedTask = factory(Task::class)
             ->states('tag', 'assignees')
             ->raw([
-                'title'    => 'random string',
+                'title' => 'random string',
                 'due_date' => date('Y-m-d h:i:s', strtotime('+3 days')),
             ]);
 
@@ -145,7 +145,7 @@ class TaskRepositoryTest extends TestCase
     {
         $project = factory(Project::class)->create();
         factory(Task::class)->create([
-            'project_id'  => $project->id,
+            'project_id' => $project->id,
             'task_number' => 3,
         ]);
 
@@ -210,6 +210,7 @@ class TaskRepositoryTest extends TestCase
         $this->assertEquals(Task::STATUS_ACTIVE, $myTasks['tasks'][0]->status);
     }
 
+    /** @test */
     public function test_can_get_active_task_of_logged_in_user_having_manage_project_permission()
     {
         $monika = factory(User::class)->create();
