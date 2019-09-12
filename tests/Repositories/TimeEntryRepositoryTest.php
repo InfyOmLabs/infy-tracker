@@ -103,9 +103,6 @@ class TimeEntryRepositoryTest extends TestCase
         $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]); // this should not return
         $completedTask->taskAssignee()->attach($this->defaultUserId);
 
-        $this->actingAs($monika);
-        $this->attachPermissions($monika->id, ['manage_projects']);
-
         $result = $this->timeEntryRepo->getTasksByProject($task2->project_id);
         $this->assertCount(2, $result);
         $this->assertContains($task2->id, $result->keys());

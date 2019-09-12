@@ -189,7 +189,7 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_active_task_of_logged_in_user_not_having_permission_manage_projects()
+    public function test_can_get_active_task_of_logged_in_user()
     {
         $farhan = factory(User::class)->create();
         $task = factory(Task::class)->create();
@@ -211,19 +211,19 @@ class TaskRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_get_active_task_of_logged_in_user_having_manage_project_permission()
+    public function test_user_with_manage_project_permission_can_get_all_active_tasks()
     {
         $monika = factory(User::class)->create();
         $task = factory(Task::class)->create();
         $task->taskAssignee()->sync([$monika->id]);
 
         $activeTask = factory(Task::class)->create();
-        $activeTask->taskAssignee()->sync([$this->defaultUserId]);
+        $activeTask->taskAssignee()->sync([$monika->id]);
 
         $this->attachPermissions($this->defaultUserId, ['manage_projects']);
 
         $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
-        $completedTask->taskAssignee()->sync([$this->defaultUserId]);
+        $completedTask->taskAssignee()->sync([$monika->id]);
 
         $myTasks = $this->taskRepo->myTasks();
 
