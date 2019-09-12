@@ -156,7 +156,7 @@ class TimeEntryControllerValidationTest extends TestCase
 
         $response = $this->put(route('time-entries.update', $timeEntry1->id), $this->timeEntryInputs());
 
-        $this->assertSuccessMessageResponse( $response, 'Time Entry updated successfully.');
+        $this->assertSuccessMessageResponse($response, 'Time Entry updated successfully.');
     }
 
     /** @test */
