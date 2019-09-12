@@ -38,7 +38,7 @@ class HelpersTest extends TestCase
         $response = getUserImageInitial($user->id, $user->name);
 
         $this->assertNotEmpty($response);
-        $this->assertContains($user->name, $response);
+        $this->assertStringContainsString($user->name, $response);
     }
 
     /** @test */
