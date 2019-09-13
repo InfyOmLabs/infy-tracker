@@ -274,7 +274,7 @@ class TaskRepository extends BaseRepository
                 $query->where('time_entries.user_id', '=', $input['user_id']);
             }
 
-            if (! empty($input['start_time']) && ! empty($input['end_time'])) {
+            if (!empty($input['start_time']) && !empty($input['end_time'])) {
                 $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
             }
             $query->with('user');
