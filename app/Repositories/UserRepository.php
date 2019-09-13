@@ -46,7 +46,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $projectIds
+     * @param array $projectIds
      *
      * @return Collection
      */
@@ -54,7 +54,7 @@ class UserRepository extends BaseRepository
     {
         /** @var Builder $query */
         $query = User::orderBy('name');
-        if (! empty($projectIds)) {
+        if (!empty($projectIds)) {
             $query = $query->whereHas('projects', function (Builder $query) use ($projectIds) {
                 $query->whereIn('projects.id', $projectIds);
             });
@@ -64,7 +64,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @throws Exception
      *
@@ -86,7 +86,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -115,7 +115,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return User
      */
@@ -123,7 +123,7 @@ class UserRepository extends BaseRepository
     {
         /** @var User $user */
         $user = $this->findOrFail($id);
-        $user->is_active = ! $user->is_active;
+        $user->is_active = !$user->is_active;
         $user->save();
 
         return $user;
@@ -134,26 +134,26 @@ class UserRepository extends BaseRepository
         /** @var User $user */
         $user = $this->findOrFail(Auth::id());
 
-        if (! empty($input['password'])) {
+        if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
             unset($input['password']);
         }
 
         try {
-            if (isset($input['photo']) && ! empty($input['photo'])) {
+            if (isset($input['photo']) && !empty($input['photo'])) {
                 $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH,
                     ['width' => 150, 'height' => 150]);
                 $imagePath = $user->image_path;
             }
 
-            if (! empty($imagePath)) {
+            if (!empty($imagePath)) {
                 $user->deleteImage();
             }
 
             $user->update($input);
         } catch (Exception $e) {
-            if (! empty($input['image_path'])) {
+            if (!empty($input['image_path'])) {
                 unlink(User::IMAGE_PATH.DIRECTORY_SEPARATOR.$input['image_url']);
             }
         }
