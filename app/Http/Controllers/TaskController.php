@@ -35,7 +35,7 @@ class TaskController extends AppBaseController
     /**
      * Display a listing of the Task.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -55,7 +55,7 @@ class TaskController extends AppBaseController
             })->filterColumn('title', function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%$search%")
-                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
+                        ->orWhereRaw("concat(if null(p.prefix,''),'-',if null(tasks.task_number,'')) LIKE ?",
                             ["%$search%"]);
                 });
             })
@@ -69,7 +69,7 @@ class TaskController extends AppBaseController
     /**
      * Store a newly created Task in storage.
      *
-     * @param CreateTaskRequest $request
+     * @param  CreateTaskRequest  $request
      *
      * @throws Exception
      *
@@ -88,14 +88,14 @@ class TaskController extends AppBaseController
 
     private function fill($input)
     {
-        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : Task::STATUS_ACTIVE;
+        $input['status'] = (isset($input['status']) && ! empty($input['status'])) ? $input['status'] : Task::STATUS_ACTIVE;
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
         return $input;
     }
 
     /**
-     * @param string $slug
+     * @param  string  $slug
      *
      * @return Factory|JsonResponse|View
      */
@@ -135,7 +135,7 @@ class TaskController extends AppBaseController
     /**
      * Show the form for editing the specified Task.
      *
-     * @param Task $task
+     * @param  Task  $task
      *
      * @return JsonResponse
      */
@@ -152,8 +152,8 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param Task              $task
-     * @param UpdateTaskRequest $request
+     * @param  Task  $task
+     * @param  UpdateTaskRequest  $request
      *
      * @throws Exception
      *
@@ -171,7 +171,7 @@ class TaskController extends AppBaseController
     /**
      * Remove the specified Task from storage.
      *
-     * @param Task $task
+     * @param  Task  $task
      *
      * @throws Exception
      *
@@ -190,7 +190,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param  Task  $task
      *
      * @return JsonResponse
      */
@@ -202,8 +202,8 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -215,7 +215,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -228,7 +228,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param TaskAttachment $taskAttachment
+     * @param  TaskAttachment  $taskAttachment
      *
      * @throws Exception
      *
@@ -242,8 +242,8 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -255,7 +255,7 @@ class TaskController extends AppBaseController
         /** @var UploadedFile $file */
         $file = $input['file'];
         $extension = $file->getClientOriginalExtension();
-        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
+        if (! in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
             return $this->sendError('You can not upload this file.');
         }
         $result = $this->taskRepository->uploadFile($task->id, $input['file']);
@@ -276,7 +276,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param  Task  $task
      *
      * @return JsonResponse
      */
@@ -286,7 +286,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param Task $task
+     * @param  Task  $task
      *
      * @return array
      */

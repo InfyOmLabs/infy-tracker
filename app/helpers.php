@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 /**
  * @return int
  */
@@ -9,7 +11,7 @@ function getLoggedInUserId()
 }
 
 /**
- * @return \Illuminate\Contracts\Auth\Authenticatable|null
+ * @return User
  */
 function getLoggedInUser()
 {
@@ -17,8 +19,8 @@ function getLoggedInUser()
 }
 
 /**
- * @param string $str
- * @param string $delimiter
+ * @param  string  $str
+ * @param  string  $delimiter
  *
  * @return array
  */
@@ -59,7 +61,7 @@ function time_elapsed_string($datetime, $full = false)
         }
     }
 
-    if (!$full) {
+    if (! $full) {
         $string = array_slice($string, 0, 1);
     }
 
@@ -94,7 +96,7 @@ function getColorCode()
 /**
  * return random color.
  *
- * @param int $userId
+ * @param  int  $userId
  *
  * @return string
  */
@@ -119,8 +121,8 @@ function getAvatarUrl()
 /**
  * return avatar full url.
  *
- * @param int    $userId
- * @param string $name
+ * @param  int  $userId
+ * @param  string  $name
  *
  * @return string
  */

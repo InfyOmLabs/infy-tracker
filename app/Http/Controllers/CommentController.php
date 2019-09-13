@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Task;
 use App\Repositories\TaskRepository;
+use Auth;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -19,10 +22,10 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function addComment(Task $task, Request $request)
     {
@@ -35,16 +38,16 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Comment $comment
+     * @param  Task  $task
+     * @param  Comment  $comment
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function deleteComment(Task $task, Comment $comment)
     {
-        if ($comment->task_id != $task->id || $comment->created_by != \Auth::user()->id) {
+        if ($comment->task_id != $task->id || $comment->created_by != Auth::user()->id) {
             throw new UnprocessableEntityHttpException('Unable to delete comment.');
         }
 
@@ -55,15 +58,15 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Comment $comment
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Comment  $comment
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function editComment(Task $task, Comment $comment, Request $request)
     {
-        if ($comment->task_id != $task->id || $comment->created_by != \Auth::user()->id) {
+        if ($comment->task_id != $task->id || $comment->created_by != Auth::user()->id) {
             throw new UnprocessableEntityHttpException('Unable to update comment.');
         }
 

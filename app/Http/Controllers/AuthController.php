@@ -7,7 +7,10 @@ use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
 use Crypt;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 use Session;
 
 class AuthController extends AppBaseController
@@ -27,7 +30,7 @@ class AuthController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @return RedirectResponse|Redirector|View
      */
     public function verifyAccount()
     {
@@ -84,7 +87,7 @@ class AuthController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function setPassword(Request $request)
     {

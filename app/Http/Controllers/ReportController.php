@@ -17,7 +17,10 @@ use Auth;
 use DataTables;
 use Exception;
 use Flash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Response;
 
 class ReportController extends AppBaseController
@@ -54,7 +57,7 @@ class ReportController extends AppBaseController
     /**
      * Display a listing of the Reports.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -88,7 +91,7 @@ class ReportController extends AppBaseController
     /**
      * Store a newly created Report in storage.
      *
-     * @param CreateReportRequest $request
+     * @param  CreateReportRequest  $request
      *
      * @return Response
      */
@@ -108,7 +111,7 @@ class ReportController extends AppBaseController
     /**
      * Display the specified Report.
      *
-     * @param Report $report
+     * @param  Report  $report
      *
      * @return Response
      */
@@ -130,7 +133,7 @@ class ReportController extends AppBaseController
     /**
      * Show the form for editing the specified Report.
      *
-     * @param Report $report
+     * @param  Report  $report
      *
      * @return Response
      */
@@ -153,8 +156,8 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param Report              $report
-     * @param UpdateReportRequest $request
+     * @param  Report  $report
+     * @param  UpdateReportRequest  $request
      *
      * @throws Exception
      *
@@ -173,11 +176,11 @@ class ReportController extends AppBaseController
     /**
      * Remove the specified Report from storage.
      *
-     * @param Report $report
+     * @param  Report  $report
      *
      * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return JsonResponse|RedirectResponse|Redirector
      */
     public function destroy(Report $report)
     {

@@ -10,9 +10,13 @@ use App\Repositories\TimeEntryRepository;
 use Auth;
 use Carbon\Carbon;
 use DataTables;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use Illuminate\View\View;
 use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -29,11 +33,11 @@ class TimeEntryController extends AppBaseController
     /**
      * Display a listing of the TimeEntry.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -51,9 +55,9 @@ class TimeEntryController extends AppBaseController
     /**
      * Store a newly created TimeEntry in storage.
      *
-     * @param CreateTimeEntryRequest $request
+     * @param  CreateTimeEntryRequest  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(CreateTimeEntryRequest $request)
     {
@@ -68,9 +72,9 @@ class TimeEntryController extends AppBaseController
     /**
      * Show the form for editing the specified TimeEntry.
      *
-     * @param TimeEntry $timeEntry
+     * @param  TimeEntry  $timeEntry
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function edit(TimeEntry $timeEntry)
     {
@@ -82,15 +86,15 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param TimeEntry              $timeEntry
-     * @param UpdateTimeEntryRequest $request
+     * @param  TimeEntry  $timeEntry
+     * @param  UpdateTimeEntryRequest  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
         $user = getLoggedInUser();
-        if (!$user->can('manage_projects')) {
+        if (! $user->can('manage_projects')) {
             $timeEntry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         }
         if (empty($timeEntry)) {
@@ -108,7 +112,7 @@ class TimeEntryController extends AppBaseController
             'note',
         ]);
         $inputDiff = array_diff($existEntry, $input);
-        if (!empty($inputDiff)) {
+        if (! empty($inputDiff)) {
             Log::info('Entry Id: '.$timeEntry->id);
             Log::info('Task Id: '.$timeEntry->task_id);
             Log::info('fields changed: ', $inputDiff);
@@ -120,16 +124,16 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param TimeEntry $timeEntry
+     * @param  TimeEntry  $timeEntry
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(TimeEntry $timeEntry)
     {
         $user = Auth::user();
-        if (!$user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
+        if (! $user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
             throw new UnauthorizedException('You are not allow to delete this entry.', 402);
         }
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
@@ -139,9 +143,11 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
-     * @return array|\Illuminate\Http\JsonResponse
+     * @param  null  $id
+     *
+     * @return array|JsonResponse
      */
     public function validateInput($input, $id = null)
     {
@@ -172,7 +178,7 @@ class TimeEntryController extends AppBaseController
         $this->timeEntryRepository->checkDuplicateEntry($input, $id);
 
         $input['user_id'] = getLoggedInUserId();
-        if (!isset($input['note']) || empty($input['note'])) {
+        if (! isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
 
@@ -180,7 +186,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getUserLastTask()
     {
@@ -190,21 +196,22 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param int     $projectId
-     * @param Request $request
+     * @param  int  $projectId
+     * @param  Request  $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getTasks($projectId, Request $request)
     {
-        $taskId = (!is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
+        $taskId = (! is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
         $result = $this->timeEntryRepository->getTasksByProject($projectId, $taskId);
 
         return $this->sendResponse($result, 'Project Tasks retrieved successfully.');
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @param  Request  $request
+     * @return JsonResponse
      */
     public function getStartTimer(Request $request)
     {
