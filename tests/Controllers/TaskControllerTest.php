@@ -34,10 +34,8 @@ class TaskControllerTest extends TestCase
         $project->users()->sync([$this->loggedInUserId]);
 
         /** @var Task $activeTask */
-        $activeTask = factory(Task::class)->create([
-            'status'     => Task::STATUS_ACTIVE,
-            'project_id' => $project->id,
-        ]);
+        $activeTask = factory(Task::class)->create(['project_id' => $project->id]);
+
         /** @var Task $completedTask */
         $completedTask = factory(Task::class)->create([
             'status'     => Task::STATUS_COMPLETED,

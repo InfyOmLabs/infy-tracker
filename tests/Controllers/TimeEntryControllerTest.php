@@ -45,9 +45,7 @@ class TimeEntryControllerTest extends TestCase
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest']);
 
         /** @var Task $task */
-        $task = factory(Task::class)->create([
-            'status' => Task::STATUS_ACTIVE,
-        ]);
+        $task = factory(Task::class)->create();
         $task->taskAssignee()->sync([$this->loggedInUserId]);
 
         /** @var TimeEntry $firstTimeEntry */
