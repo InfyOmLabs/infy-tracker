@@ -149,7 +149,6 @@ class TimeEntryControllerValidationTest extends TestCase
     /** @test */
     public function test_user_with_valid_permission_can_update_other_users_time_entry()
     {
-        $this->attachPermissions(getLoggedInUserId(), ['manage_projects']);
         /** @var TimeEntry $timeEntry1 */
         $timeEntry1 = factory(TimeEntry::class)->create();
         $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
