@@ -9,6 +9,7 @@
             <div class="modal-body task-detail__body">
                 @include('loader')
                 <div class="row no-gutters time-entry-data">
+                    <div class="col-sm-12" id="task-heading"></div>
                     <div class="col-sm-12 mb-2 d-flex">
                         <div class="col-sm-8 pl-0 pt-2" id="total-duration"></div>
                         <div class="col-sm-4 mb-2 pr-0" id="user-drop-down-body">
