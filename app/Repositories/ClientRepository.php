@@ -6,6 +6,8 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use Exception;
+use Illuminate\Support\Collection;
 
 /**
  * Class ClientRepository.
@@ -44,7 +46,7 @@ class ClientRepository extends BaseRepository
     /**
      * get clients.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getClientList()
     {
@@ -54,12 +56,13 @@ class ClientRepository extends BaseRepository
     /**
      * @param int $clientId
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|mixed|void|null
      */
     public function delete($clientId)
     {
+        /** @var Client $client */
         $client = $this->find($clientId);
 
         $projectIds = Project::where('client_id', '=', $client->id)->get()->pluck('id');

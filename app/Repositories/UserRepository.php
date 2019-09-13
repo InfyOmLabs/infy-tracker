@@ -80,7 +80,7 @@ class UserRepository extends BaseRepository
         $user->set_password = true;
         $user->save();
 
-        \Auth::login($user);
+        Auth::login($user);
 
         return true;
     }

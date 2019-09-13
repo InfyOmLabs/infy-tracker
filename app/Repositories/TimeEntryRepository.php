@@ -98,12 +98,15 @@ class TimeEntryRepository extends BaseRepository
      */
     public function getTasksByProject($projectId, $taskId = null)
     {
+        $user = getLoggedInUser();
         /** @var Builder $query */
         $query = Task::ofProject($projectId)
-            ->where('status', '=', Task::STATUS_ACTIVE)
-            ->whereHas('taskAssignee', function (Builder $query) {
+            ->where('status', '=', Task::STATUS_ACTIVE);
+        if (!$user->can('manage_projects')) {
+            $query = $query->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
             });
+        }
 
         if (!empty($taskId)) {
             $query->orWhere('id', $taskId);
@@ -139,7 +142,8 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = $this->find($id);
-        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry, $input) : $timeEntry->entry_type;
+        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry,
+            $input) : $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
         if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {

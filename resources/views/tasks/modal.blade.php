@@ -11,12 +11,12 @@
                 <div class="alert alert-danger" id="validationErrorsBox" style="display: none"></div>
                 <div class="row">
                     <div class="form-group col-sm-6">
-                        {!! Form::label('project_id', 'Project') !!}<span class="required">*</span>
-                        {!! Form::select('project_id', $projects, null, ['class' => 'form-control','required', 'id' => 'projectId', 'placeholder'=>'Select Project']) !!}
-                    </div>
-                    <div class="form-group col-sm-6">
                         {!! Form::label('title', 'Title') !!}<span class="required">*</span>
                         {!! Form::text('title', null, ['id'=>'title','class' => 'form-control','required']) !!}
+                    </div>
+                    <div class="form-group col-sm-6">
+                        {!! Form::label('project_id', 'Project') !!}<span class="required">*</span>
+                        {!! Form::select('project_id', $projects, null, ['class' => 'form-control','required', 'id' => 'projectId', 'placeholder'=>'Select Project']) !!}
                     </div>
                 </div>
                 <div class="row">

@@ -76,9 +76,10 @@
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
         let taskBadges = $.parseJSON(taskBadgesJson);
         let taskDetailActionColumnIsVisible = true;
+        let reportStartDate = '';
+        let reportEndDate = '';
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>
 @endsection
-

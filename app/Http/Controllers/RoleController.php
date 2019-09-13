@@ -12,7 +12,10 @@ use App\Repositories\RoleRepository;
 use DataTables;
 use Exception;
 use Flash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -106,10 +109,10 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role    $role
-     * @param Request $request
+     * @param Role              $role
+     * @param UpdateRoleRequest $request
      *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return RedirectResponse|Redirector
      */
     public function update(Role $role, UpdateRoleRequest $request)
     {
@@ -131,7 +134,7 @@ class RoleController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return JsonResponse|RedirectResponse|Redirector
      */
     public function destroy(Role $role)
     {

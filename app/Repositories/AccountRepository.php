@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App;
 use Exception;
+use Illuminate\Mail\Message;
 use Mail;
 use URL;
 
@@ -23,11 +23,11 @@ class AccountRepository
 
         try {
             Mail::send('auth.emails.account_verification', ['data' => $data],
-                function ($message) use ($email) {
+                function (Message $message) use ($email) {
                     $message->subject('Activate your account');
                     $message->to($email);
                 });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new Exception('Account created, but unable to send email');
         }
     }

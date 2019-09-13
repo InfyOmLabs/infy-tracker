@@ -125,7 +125,7 @@ class TaskControllerValidationTest extends TestCase
     public function it_can_update_task_status_from_active_to_completed()
     {
         /** @var Task $task */
-        $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task = factory(Task::class)->create();
 
         $this->post(route('task.update-status', $task->id), [])->assertSessionHasNoErrors();
 

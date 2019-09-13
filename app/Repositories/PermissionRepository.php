@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Permission;
+use Illuminate\Support\Collection;
 
 /**
  * Class PermissionRepository.
@@ -37,7 +38,7 @@ class PermissionRepository extends BaseRepository
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function permissionList()
     {

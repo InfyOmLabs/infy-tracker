@@ -5,6 +5,7 @@ namespace Tests\Controllers\Validations;
 use App\Models\ActivityType;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -146,8 +147,23 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /** @test */
-    public function test_update_time_entry_fails_when_user_try_to_update_another_users_entry()
+    public function test_user_with_valid_permission_can_update_other_users_time_entry()
     {
+        /** @var TimeEntry $timeEntry1 */
+        $timeEntry1 = factory(TimeEntry::class)->create();
+        $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);
+
+        $response = $this->put(route('time-entries.update', $timeEntry1->id), $this->timeEntryInputs());
+
+        $this->assertSuccessMessageResponse($response, 'Time Entry updated successfully.');
+    }
+
+    /** @test */
+    public function test_user_can_not_update_other_users_time_entry_without_valid_permission()
+    {
+        $monika = factory(User::class)->create();
+        $this->actingAs($monika);
+
         /** @var TimeEntry $timeEntry1 */
         $timeEntry1 = factory(TimeEntry::class)->create();
         $timeEntry2 = factory(TimeEntry::class)->create(['user_id' => $this->defaultUserId]);

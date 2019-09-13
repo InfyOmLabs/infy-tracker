@@ -41,11 +41,17 @@ class TaskAttachment extends Model
         'file',
     ];
 
+    /**
+     * @return string
+     */
     public function getFilePathAttribute()
     {
         return Storage::path('attachments'.DIRECTORY_SEPARATOR.$this->file);
     }
 
+    /**
+     * @return string
+     */
     public function getFileUrlAttribute()
     {
         return $this->imageUrl(self::PATH.DIRECTORY_SEPARATOR.$this->file);

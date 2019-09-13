@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Permissions;
+
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Repositories\DashboardRepository;
 use App\Repositories\UserRepository;
 use Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class HomeController extends AppBaseController
 {
@@ -31,7 +33,7 @@ class HomeController extends AppBaseController
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -43,7 +45,7 @@ class HomeController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function workReport(Request $request)
     {
@@ -58,7 +60,7 @@ class HomeController extends AppBaseController
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function developerWorkReport(Request $request)
     {

@@ -14,7 +14,7 @@
             <div class="page-header">
                 <h3 class="page__heading">New Report</h3>
                 <div class="filter-container">
-                    <a class="btn btn-secondary ml-1" href="{{route('reports.index')}}">Back</a>
+                    <a class="btn btn-secondary ml-1" href="{{url()->previous()}}">Back</a>
                 </div>
             </div>
             <div class="row">

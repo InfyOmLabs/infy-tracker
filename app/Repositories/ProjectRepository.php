@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use Auth;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -94,12 +95,13 @@ class ProjectRepository extends BaseRepository
     /**
      * @param int $id
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|mixed|void|null
      */
     public function delete($id)
     {
+        /** @var Project $project */
         $project = $this->find($id);
 
         $taskIds = Task::whereProjectId($project->id)->pluck('id')->toArray();

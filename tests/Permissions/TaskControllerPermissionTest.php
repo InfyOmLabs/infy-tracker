@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Permissions;
+
 use App\Models\Comment;
 use App\Models\Task;
 use App\Models\User;

@@ -55,7 +55,7 @@ class TaskController extends AppBaseController
             })->filterColumn('title', function ($query, $search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('title', 'like', "%$search%")
-                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
+                        ->orWhereRaw("concat(if null(p.prefix,''),'-',if null(tasks.task_number,'')) LIKE ?",
                             ["%$search%"]);
                 });
             })
@@ -88,7 +88,7 @@ class TaskController extends AppBaseController
 
     private function fill($input)
     {
-        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : 0;
+        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : Task::STATUS_ACTIVE;
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
         return $input;

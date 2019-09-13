@@ -1,12 +1,6 @@
 $('#task_users').select2({ width: '100%', placeholder: "All", minimumResultsForSearch: -1 });
 
-function nl2br (str, is_xhtml) {
-    if (typeof str === 'undefined' || str === null) {
-        return '';
-    }
-    var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
-    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + breakTag + '$2');
-}
+let firstTime = true;
 
 // open detail confirmation model
 $(document).on('click', '.taskDetails', function (event) {
@@ -15,6 +9,7 @@ $(document).on('click', '.taskDetails', function (event) {
     $('#no-record-info-msg').hide();
     $('#taskDetailsTable').hide();
     $('.time-entry-data').hide();
+    firstTime = true;
 
     $.ajax({
         url: taskUrl + id + '/' + 'users',
@@ -30,17 +25,6 @@ $(document).on('click', '.taskDetails', function (event) {
             });
         }
     });
-
-    $.ajax({
-        url: taskDetailUrl + '/' + id,
-        type: 'GET',
-        success: function (result) {
-            if (result.success) {
-                let data = result.data;
-                drawTaskDetailTable(data);
-            }
-        }
-    });
 });
 
 $(document).on('change', '#task_users', function () {
@@ -52,8 +36,13 @@ $(document).on('change', '#task_users', function () {
         userId = taskUserId[0];
     }
     let url =  taskDetailUrl + '/' + taskId;
+    let startSymbol = '?';
     if (userId !== 0) {
+        startSymbol = '&';
         url = url + '?user_id=' + userId;
+    }
+    if (reportStartDate != '' && reportEndDate != '') {
+        url = url + startSymbol + 'start_time=' + reportStartDate + '&end_time=' + reportEndDate;
     }
     $.ajax({
         url: url,
@@ -61,6 +50,8 @@ $(document).on('change', '#task_users', function () {
         success: function (result) {
             if (result.success) {
                 let data = result.data;
+                let url = taskUrl + data.project.prefix + '-' + data.task_number;
+                $("#task-heading").html("<h5>Task: <a href='" + url + "' style='color: #0f6683'>" + data.title + "</a></h5>");
                 drawTaskDetailTable(data);
             }
         }
@@ -68,13 +59,13 @@ $(document).on('change', '#task_users', function () {
 });
 
 window.drawTaskDetailTable = function (data) {
-    if (data.totalDuration === 0) {
+    if (data.totalDuration === 0 && firstTime) {
         $('#no-record-info-msg').show();
         $('.time-entry-data').hide();
         stopLoader();
         return true;
     }
-
+    firstTime = false;
     let taskDetailsTable = $('#taskDetailsTable').DataTable({
         destroy: true,
         paging: true,
@@ -91,7 +82,11 @@ window.drawTaskDetailTable = function (data) {
             {data: "user.name"},
             {data: "start_time"},
             {data: "end_time"},
-            {data: "duration"},
+            {
+                data: function (row) {
+                    return roundToQuarterHourAll(row.duration);
+                }
+            },
             {
                 orderable: false,
                 data: function (data) {
@@ -102,6 +97,8 @@ window.drawTaskDetailTable = function (data) {
             }
         ],
     });
+
+    $('#taskDetailsTable th:first').removeClass('sorting_asc');
 
     $('.time-entry-data').show();
     $('#taskDetailsTable').show();
@@ -128,3 +125,12 @@ window.drawTaskDetailTable = function (data) {
     $("#taskDetailsTable_wrapper").css('width', "100%");
     $("#total-duration").html("<strong>Total duration: " + data.totalDuration + " || " + data.totalDurationMin + " Minutes</strong>");
 };
+
+$(document).on('click', '.collapse-icon', function () {
+    let isShow = $(this).parent().parent().hasClass('shown');
+    if(isShow) {
+        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
+    } else {
+        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
+    }
+});

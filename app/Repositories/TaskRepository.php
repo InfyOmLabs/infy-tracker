@@ -269,16 +269,16 @@ class TaskRepository extends BaseRepository
      */
     public function getTaskDetails($id, $input = [])
     {
-        if (isset($input['user_id']) && $input['user_id'] > 0) {
-            $task = Task::with([
-                'timeEntries' => function (HasMany $query) use ($input) {
-                    $query->where('time_entries.user_id', '=', $input['user_id'])
-                        ->with('user');
-                },
-            ])->findOrFail($id);
-        } else {
-            $task = Task::with('timeEntries.user')->findOrFail($id);
-        }
+        $task = Task::with(['timeEntries' => function (HasMany $query) use ($input) {
+            if (isset($input['user_id']) && $input['user_id'] > 0) {
+                $query->where('time_entries.user_id', '=', $input['user_id']);
+            }
+
+            if (!empty($input['start_time']) && !empty($input['end_time'])) {
+                $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
+            }
+            $query->with('user');
+        }])->findOrFail($id);
 
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
@@ -298,10 +298,14 @@ class TaskRepository extends BaseRepository
      */
     public function myTasks($input = [])
     {
+        $user = getLoggedInUser();
         /** @var Builder|Task $query */
-        $query = Task::whereHas('taskAssignee', function (Builder $query) {
-            $query->where('user_id', getLoggedInUserId());
-        })->whereNotIn('status', [Task::STATUS_COMPLETED]);
+        $query = Task::whereNotIn('status', [Task::STATUS_COMPLETED]);
+        if (!$user->can('manage_projects')) {
+            $query = $query->whereHas('taskAssignee', function (Builder $query) {
+                $query->where('user_id', getLoggedInUserId());
+            });
+        }
 
         if (!empty($input['project_id'])) {
             $query->ofProject($input['project_id']);

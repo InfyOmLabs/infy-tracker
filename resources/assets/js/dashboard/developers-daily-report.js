@@ -84,7 +84,8 @@ window.prepareDeveloperWorkReport = function (result) {
                         labelString: 'Hours'
                     },
                 }]
-            }
+            },
+            legend: { display: false }
         }
     });
 };

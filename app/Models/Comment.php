@@ -65,6 +65,9 @@ class Comment extends Model
         return $this->belongsTo(Task::class, 'task_id');
     }
 
+    /**
+     * @return string
+     */
     public function getUserAvatarAttribute()
     {
         return getUserImageInitial($this->created_by, $this->createdUser->name);
