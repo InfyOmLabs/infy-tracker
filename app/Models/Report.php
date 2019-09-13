@@ -77,7 +77,6 @@ class Report extends Model
     }
 
     /**
-     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
