@@ -2,6 +2,7 @@
 
 namespace Tests\Repositories;
 
+use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
@@ -73,8 +74,33 @@ class TimeEntryRepositoryTest extends TestCase
         $completedTask->taskAssignee()->attach($this->defaultUserId);
 
         $result = $this->timeEntryRepo->getTasksByProject($task2->project_id);
+
         $this->assertCount(1, $result);
         $this->assertContains($task2->id, $result->keys());
+    }
+
+    /** @test */
+    public function test_can_get_active_task_of_logged_in_user_for_given_project_without_permission()
+    {
+        $project = factory(Project::class)->create();
+        $activeTaskOfAnotherUser = factory(Task::class)->create(['project_id' => $project->id]);
+        $activeTaskOfAnotherUser->taskAssignee()->attach($this->defaultUserId);
+
+        $farhan = factory(User::class)->create();
+        $this->actingAs($farhan);
+        $activeTask = factory(Task::class)->create(['project_id' => $project->id]);
+        $activeTask->taskAssignee()->attach($farhan->id);
+
+        $completedTask = factory(Task::class)->create([
+            'project_id' => $project->id,
+            'status'     => Task::STATUS_COMPLETED,
+        ]);
+        $completedTask->taskAssignee()->attach($farhan->id);
+
+        $tasks = $this->timeEntryRepo->getTasksByProject($project->id);
+
+        $this->assertCount(1, $tasks);
+        $this->assertContains($activeTask->id, $tasks->keys());
     }
 
     /** @test */
@@ -86,6 +112,7 @@ class TimeEntryRepositoryTest extends TestCase
         $task2->taskAssignee()->attach($this->defaultUserId);
 
         $result = $this->timeEntryRepo->getTasksByProject($task2->project_id, $task2->id);
+
         $this->assertCount(1, $result);
         $this->assertContains($task2->id, $result->keys());
     }
