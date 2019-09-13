@@ -139,13 +139,13 @@ class Task extends Model
     }
 
     /**
-     * @param  string  $value
+     * @param string $value
      *
      * @return string
      */
     public function getDueDateAttribute($value)
     {
-        if (! empty($value)) {
+        if (!empty($value)) {
             return Carbon::parse($value)->toDateString();
         }
     }
@@ -209,8 +209,8 @@ class Task extends Model
     }
 
     /**
-     * @param  Builder  $query
-     * @param  int  $projectId
+     * @param Builder $query
+     * @param int     $projectId
      *
      * @return Builder
      */

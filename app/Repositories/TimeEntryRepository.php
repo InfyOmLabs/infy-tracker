@@ -80,7 +80,7 @@ class TimeEntryRepository extends BaseRepository
         /** @var TimeEntry $timeEntry */
         $timeEntry = TimeEntry::ofCurrentUser()->latest()->first();
         if (empty($timeEntry)) {
-            return null;
+            return;
         }
 
         return [
@@ -91,8 +91,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $projectId
-     * @param  int|null  $taskId
+     * @param int      $projectId
+     * @param int|null $taskId
      *
      * @return Collection
      */
@@ -102,13 +102,13 @@ class TimeEntryRepository extends BaseRepository
         /** @var Builder $query */
         $query = Task::ofProject($projectId)
             ->where('status', '=', Task::STATUS_ACTIVE);
-        if (! $user->can('manage_projects')) {
+        if (!$user->can('manage_projects')) {
             $query = $query->whereHas('taskAssignee', function (Builder $query) {
                 $query->where('user_id', getLoggedInUserId());
             });
         }
 
-        if (! empty($taskId)) {
+        if (!empty($taskId)) {
             $query->orWhere('id', $taskId);
         }
 
@@ -118,7 +118,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -133,8 +133,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return bool
      */
@@ -145,7 +145,7 @@ class TimeEntryRepository extends BaseRepository
         $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry,
             $input) : $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
-        if ((isset($input['duration']) && ! empty($input['duration'])) && (! isset($input['start_time']) || empty($input['start_time']) || ! isset($input['end_time']) || empty($input['end_time']))) {
+        if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {
                 $input['start_time'] = '';
                 $input['end_time'] = '';
@@ -173,7 +173,7 @@ class TimeEntryRepository extends BaseRepository
 
     /**
      * @param $input
-     * @param  null  $id
+     * @param null $id
      */
     public function checkDuplicateEntry($input, $id = null)
     {
@@ -185,12 +185,12 @@ class TimeEntryRepository extends BaseRepository
                     ->orWhereRaw("('$timeArr[0]' between start_time and end_time or '$timeArr[1]' between start_time and end_time)");
             });
 
-        if (! empty($id) && $id > 0) {
+        if (!empty($id) && $id > 0) {
             $query->where('id', '!=', $id);
         }
 
         $timeEntry = $query->first();
-        if (! empty($timeEntry)) {
+        if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
     }

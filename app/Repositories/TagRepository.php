@@ -37,7 +37,7 @@ class TagRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return bool
      */
