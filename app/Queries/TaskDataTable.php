@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class TaskDataTable
 {
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Task
      */
