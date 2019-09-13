@@ -89,12 +89,15 @@ class TimeEntryController extends AppBaseController
      */
     public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
-        $entry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
-        if (empty($entry)) {
+        $user = getLoggedInUser();
+        if (!$user->can('manage_projects')) {
+            $timeEntry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
+        }
+        if (empty($timeEntry)) {
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
         $input = $this->validateInput($request->all(), $timeEntry->id);
-        $existEntry = $entry->only([
+        $existEntry = $timeEntry->only([
             'id',
             'task_id',
             'activity_type_id',
@@ -106,8 +109,8 @@ class TimeEntryController extends AppBaseController
         ]);
         $inputDiff = array_diff($existEntry, $input);
         if (!empty($inputDiff)) {
-            Log::info('Entry Id: '.$entry->id);
-            Log::info('Task Id: '.$entry->task_id);
+            Log::info('Entry Id: '.$timeEntry->id);
+            Log::info('Task Id: '.$timeEntry->task_id);
             Log::info('fields changed: ', $inputDiff);
             Log::info('Entry updated by: '.Auth::user()->name);
         }
