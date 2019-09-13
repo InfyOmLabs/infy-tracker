@@ -166,7 +166,7 @@ class Task extends Model
     {
         parent::boot();
 
-        static::deleting(function (Task $task) {
+        static::deleting(function (self $task) {
             $task->timeEntries()->update(['deleted_by' => getLoggedInUserId()]);
             $task->timeEntries()->delete();
         });
