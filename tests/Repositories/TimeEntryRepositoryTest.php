@@ -83,8 +83,8 @@ class TimeEntryRepositoryTest extends TestCase
     public function test_can_get_active_task_of_logged_in_user_for_given_project_without_permission()
     {
         $project = factory(Project::class)->create();
-        $task1 = factory(Task::class)->create(['project_id' => $project->id]);
-        $task1->taskAssignee()->attach($this->defaultUserId);
+        $activeTaskOfAnotherUser = factory(Task::class)->create(['project_id' => $project->id]);
+        $activeTaskOfAnotherUser->taskAssignee()->attach($this->defaultUserId);
 
         $farhan = factory(User::class)->create();
         $this->actingAs($farhan);
@@ -97,7 +97,7 @@ class TimeEntryRepositoryTest extends TestCase
         ]);
         $completedTask->taskAssignee()->attach($farhan->id);
 
-        $tasks = $this->timeEntryRepo->getTasksByProject($activeTask->project_id);
+        $tasks = $this->timeEntryRepo->getTasksByProject($project->id);
 
         $this->assertCount(1, $tasks);
         $this->assertContains($activeTask->id, $tasks->keys());

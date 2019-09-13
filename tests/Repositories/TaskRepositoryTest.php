@@ -231,8 +231,8 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_only_active_tasks_of_logged_in_user_without_permission()
     {
-        $task1 = factory(Task::class)->create();
-        $task1->taskAssignee()->sync([$this->defaultUserId]);
+        $activeTaskOfAnotherUser = factory(Task::class)->create();
+        $activeTaskOfAnotherUser->taskAssignee()->sync([$this->defaultUserId]);
 
         $farhan = factory(User::class)->create();
         $this->actingAs($farhan);
