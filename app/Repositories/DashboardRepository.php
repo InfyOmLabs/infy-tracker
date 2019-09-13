@@ -36,10 +36,10 @@ class DashboardRepository
         foreach ($timeEntry as $entry) {
             $date = Carbon::parse($entry->start_time)->startOfDay()->format('Y-m-d');
             $name = $entry->task->project->name;
-            if (!isset($projects[$name])) {
+            if (! isset($projects[$name])) {
                 $projects[$name]['name'] = $name;
             }
-            if (!isset($projects[$name][$date])) {
+            if (! isset($projects[$name][$date])) {
                 $projects[$name][$date] = 0;
             }
             $oldDuration = $projects[$name][$date];
@@ -87,7 +87,7 @@ class DashboardRepository
         $startDate = Carbon::parse($input['start_date'])->startOfDay()->format('Y-m-d H:i:s');
         $endDate = Carbon::parse($input['start_date'])->endOfDay()->format('Y-m-d H:i:s');
         $timeEntry = TimeEntry::whereBetween('start_time', [$startDate, $endDate])->get();
-        if (!authUserHasPermission('manage_users')) {
+        if (! authUserHasPermission('manage_users')) {
             $users = User::whereId(Auth::id())->get();
         } else {
             $users = User::all();

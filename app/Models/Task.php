@@ -54,6 +54,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property string|null $task_number
  * @property string|null $priority
+ * @property int $totalDuration
+ * @property int $totalDurationMin
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
  *
@@ -75,7 +77,9 @@ class Task extends Model
         self::STATUS_ACTIVE    => 'Pending',
         self::STATUS_COMPLETED => 'Completed',
     ];
-    const PRIORITY = ['highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST'];
+    const PRIORITY = [
+        'highest' => 'HIGHEST', 'high' => 'HIGH', 'medium' => 'MEDIUM', 'low' => 'LOW', 'lowest' => 'LOWEST',
+    ];
     const PATH = 'attachments';
 
     public $table = 'tasks';
@@ -135,13 +139,13 @@ class Task extends Model
     }
 
     /**
-     * @param string $value
+     * @param  string  $value
      *
      * @return string
      */
     public function getDueDateAttribute($value)
     {
-        if (!empty($value)) {
+        if (! empty($value)) {
             return Carbon::parse($value)->toDateString();
         }
     }
@@ -205,8 +209,8 @@ class Task extends Model
     }
 
     /**
-     * @param Builder $query
-     * @param int     $projectId
+     * @param  Builder  $query
+     * @param  int  $projectId
      *
      * @return Builder
      */
