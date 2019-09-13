@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class RoleDataTable.
@@ -10,7 +11,7 @@ use App\Models\Role;
 class RoleDataTable
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function get()
     {
