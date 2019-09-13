@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ActivityType;
+use Illuminate\Support\Collection;
 
 /**
  * Class ActivityTypeRepository.
@@ -39,7 +40,7 @@ class ActivityTypeRepository extends BaseRepository
     /**
      * get activity types.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function getActivityTypeList()
     {

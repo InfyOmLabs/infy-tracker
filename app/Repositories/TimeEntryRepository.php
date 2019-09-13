@@ -142,7 +142,8 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = $this->find($id);
-        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry, $input) : $timeEntry->entry_type;
+        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry,
+            $input) : $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
         if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {

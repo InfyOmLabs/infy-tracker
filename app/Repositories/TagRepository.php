@@ -61,6 +61,8 @@ class TagRepository extends BaseRepository
 
         $input['created_by'] = getLoggedInUserId();
         Tag::create($input);
+
+        return true;
     }
 
     /**
