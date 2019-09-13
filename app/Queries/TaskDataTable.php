@@ -12,9 +12,9 @@ use Illuminate\Database\Eloquent\Builder;
 class TaskDataTable
 {
     /**
-     * @param array $input
+     * @param  array  $input
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Task
      */
     public function get($input = [])
     {
@@ -22,6 +22,7 @@ class TaskDataTable
         $projectRepo = app(ProjectRepository::class);
         $loginUserProjects = $projectRepo->getLoginUserAssignProjectsArr();
 
+        /** @var Task $query */
         $query = Task::whereIn('project_id', array_keys($loginUserProjects))
             ->leftJoin('projects as p', 'p.id', '=', 'tasks.project_id')
             ->with(['project', 'taskAssignee', 'createdUser'])

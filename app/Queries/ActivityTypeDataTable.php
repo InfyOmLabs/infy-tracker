@@ -9,6 +9,11 @@ use App\Models\ActivityType;
  */
 class ActivityTypeDataTable
 {
+    /**
+     * @param  null  $input
+
+     * @return ActivityType
+     */
     public function get($input = null)
     {
         /** @var ActivityType $query */
