@@ -88,7 +88,7 @@ class TaskController extends AppBaseController
 
     private function fill($input)
     {
-        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : 0;
+        $input['status'] = (isset($input['status']) && !empty($input['status'])) ? $input['status'] : Task::STATUS_ACTIVE;
         $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
         return $input;

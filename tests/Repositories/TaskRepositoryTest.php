@@ -277,7 +277,7 @@ class TaskRepositoryTest extends TestCase
     public function test_can_update_task_status()
     {
         /** @var Task $task */
-        $task = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task = factory(Task::class)->create();
 
         $updatedTaskStatus = $this->taskRepo->updateStatus($task->id);
 
