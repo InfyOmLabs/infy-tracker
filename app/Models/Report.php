@@ -76,11 +76,18 @@ class Report extends Model
         return $this->belongsToMany(Project::class, 'report_filters', 'report_id', 'param_id');
     }
 
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    /**
+     * @return string
+     */
     public function getFormattedDateAttribute()
     {
         $startDate = Carbon::parse($this->start_date);
