@@ -33,7 +33,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Display a listing of the TimeEntry.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -55,7 +55,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Store a newly created TimeEntry in storage.
      *
-     * @param  CreateTimeEntryRequest  $request
+     * @param CreateTimeEntryRequest $request
      *
      * @return JsonResponse
      */
@@ -72,7 +72,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Show the form for editing the specified TimeEntry.
      *
-     * @param  TimeEntry  $timeEntry
+     * @param TimeEntry $timeEntry
      *
      * @return JsonResponse
      */
@@ -86,15 +86,15 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param  TimeEntry  $timeEntry
-     * @param  UpdateTimeEntryRequest  $request
+     * @param TimeEntry              $timeEntry
+     * @param UpdateTimeEntryRequest $request
      *
      * @return JsonResponse
      */
     public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
         $user = getLoggedInUser();
-        if (! $user->can('manage_projects')) {
+        if (!$user->can('manage_projects')) {
             $timeEntry = TimeEntry::ofCurrentUser()->find($timeEntry->id);
         }
         if (empty($timeEntry)) {
@@ -112,7 +112,7 @@ class TimeEntryController extends AppBaseController
             'note',
         ]);
         $inputDiff = array_diff($existEntry, $input);
-        if (! empty($inputDiff)) {
+        if (!empty($inputDiff)) {
             Log::info('Entry Id: '.$timeEntry->id);
             Log::info('Task Id: '.$timeEntry->task_id);
             Log::info('fields changed: ', $inputDiff);
@@ -124,7 +124,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  TimeEntry  $timeEntry
+     * @param TimeEntry $timeEntry
      *
      * @throws Exception
      *
@@ -133,7 +133,7 @@ class TimeEntryController extends AppBaseController
     public function destroy(TimeEntry $timeEntry)
     {
         $user = Auth::user();
-        if (! $user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
+        if (!$user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
             throw new UnauthorizedException('You are not allow to delete this entry.', 402);
         }
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
@@ -143,9 +143,8 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  array  $input
-     *
-     * @param  null  $id
+     * @param array $input
+     * @param null  $id
      *
      * @return array|JsonResponse
      */
@@ -178,7 +177,7 @@ class TimeEntryController extends AppBaseController
         $this->timeEntryRepository->checkDuplicateEntry($input, $id);
 
         $input['user_id'] = getLoggedInUserId();
-        if (! isset($input['note']) || empty($input['note'])) {
+        if (!isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
 
@@ -196,21 +195,22 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  int  $projectId
-     * @param  Request  $request
+     * @param int     $projectId
+     * @param Request $request
      *
      * @return JsonResponse
      */
     public function getTasks($projectId, Request $request)
     {
-        $taskId = (! is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
+        $taskId = (!is_null($request->get('task_id', null))) ? $request->get('task_id') : null;
         $result = $this->timeEntryRepository->getTasksByProject($projectId, $taskId);
 
         return $this->sendResponse($result, 'Project Tasks retrieved successfully.');
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return JsonResponse
      */
     public function getStartTimer(Request $request)
