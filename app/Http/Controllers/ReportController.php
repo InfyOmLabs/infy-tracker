@@ -17,7 +17,10 @@ use Auth;
 use DataTables;
 use Exception;
 use Flash;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Redirector;
 use Response;
 
 class ReportController extends AppBaseController
@@ -177,7 +180,7 @@ class ReportController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return JsonResponse|RedirectResponse|Redirector
      */
     public function destroy(Report $report)
     {

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 /**
  * @return int
  */
@@ -9,7 +11,7 @@ function getLoggedInUserId()
 }
 
 /**
- * @return \Illuminate\Contracts\Auth\Authenticatable|null
+ * @return User
  */
 function getLoggedInUser()
 {

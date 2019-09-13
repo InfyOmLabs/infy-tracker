@@ -13,9 +13,12 @@ use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use Crypt;
 use DataTables;
+use Exception;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class UserController extends AppBaseController
 {
@@ -58,9 +61,9 @@ class UserController extends AppBaseController
      *
      * @param Request $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -80,7 +83,7 @@ class UserController extends AppBaseController
      *
      * @param CreateUserRequest $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return JsonResponse
      */
@@ -134,7 +137,7 @@ class UserController extends AppBaseController
      * @param User              $user
      * @param UpdateUserRequest $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return JsonResponse|RedirectResponse
      */
@@ -171,7 +174,7 @@ class UserController extends AppBaseController
      *
      * @param User $user
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return JsonResponse
      */
@@ -187,7 +190,7 @@ class UserController extends AppBaseController
     /**
      * @param User $user
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return JsonResponse
      */

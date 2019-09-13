@@ -10,9 +10,13 @@ use App\Repositories\TimeEntryRepository;
 use Auth;
 use Carbon\Carbon;
 use DataTables;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
+use Illuminate\View\View;
 use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -31,9 +35,9 @@ class TimeEntryController extends AppBaseController
      *
      * @param Request $request
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -53,7 +57,7 @@ class TimeEntryController extends AppBaseController
      *
      * @param CreateTimeEntryRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function store(CreateTimeEntryRequest $request)
     {
@@ -70,7 +74,7 @@ class TimeEntryController extends AppBaseController
      *
      * @param TimeEntry $timeEntry
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function edit(TimeEntry $timeEntry)
     {
@@ -85,7 +89,7 @@ class TimeEntryController extends AppBaseController
      * @param TimeEntry              $timeEntry
      * @param UpdateTimeEntryRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function update(TimeEntry $timeEntry, UpdateTimeEntryRequest $request)
     {
@@ -122,9 +126,9 @@ class TimeEntryController extends AppBaseController
     /**
      * @param TimeEntry $timeEntry
      *
-     * @throws \Exception
+     * @throws Exception
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy(TimeEntry $timeEntry)
     {
@@ -140,8 +144,9 @@ class TimeEntryController extends AppBaseController
 
     /**
      * @param array $input
+     * @param null  $id
      *
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return array|JsonResponse
      */
     public function validateInput($input, $id = null)
     {
@@ -180,7 +185,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getUserLastTask()
     {
@@ -193,7 +198,7 @@ class TimeEntryController extends AppBaseController
      * @param int     $projectId
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function getTasks($projectId, Request $request)
     {
@@ -204,7 +209,9 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function getStartTimer(Request $request)
     {
