@@ -64,10 +64,10 @@ class TimeEntryRepositoryTest extends TestCase
     public function test_can_get_active_task_of_logged_in_user_for_given_project()
     {
         $vishal = factory(User::class)->create();
-        $task1 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task1 = factory(Task::class)->create();
         $task1->taskAssignee()->attach($vishal->id);
 
-        $task2 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task2 = factory(Task::class)->create();
         $task2->taskAssignee()->attach($this->defaultUserId);
         $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]); // this should not return
         $completedTask->taskAssignee()->attach($this->defaultUserId);
@@ -80,9 +80,9 @@ class TimeEntryRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_specific_active_task_of_logged_in_user_for_given_project()
     {
-        $task1 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task1 = factory(Task::class)->create();
         $task1->taskAssignee()->attach($this->defaultUserId);
-        $task2 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task2 = factory(Task::class)->create();
         $task2->taskAssignee()->attach($this->defaultUserId);
 
         $result = $this->timeEntryRepo->getTasksByProject($task2->project_id, $task2->id);
@@ -95,10 +95,10 @@ class TimeEntryRepositoryTest extends TestCase
     {
         $monika = factory(User::class)->create();
 
-        $task1 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE]);
+        $task1 = factory(Task::class)->create();
         $task1->taskAssignee()->attach($monika->id);
 
-        $task2 = factory(Task::class)->create(['status' => Task::STATUS_ACTIVE, 'project_id' => $task1->project_id]);
+        $task2 = factory(Task::class)->create(['project_id' => $task1->project_id]);
         $task2->taskAssignee()->attach($this->defaultUserId);
         $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]); // this should not return
         $completedTask->taskAssignee()->attach($this->defaultUserId);
