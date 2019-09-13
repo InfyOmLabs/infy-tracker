@@ -2,6 +2,7 @@
 
 namespace Tests\Repositories;
 
+use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
@@ -81,15 +82,19 @@ class TimeEntryRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_active_task_of_logged_in_user_for_given_project_without_permission()
     {
-        $task1 = factory(Task::class)->create();
+        $project = factory(Project::class)->create();
+        $task1 = factory(Task::class)->create(['project_id' => $project->id]);
         $task1->taskAssignee()->attach($this->defaultUserId);
 
         $farhan = factory(User::class)->create();
         $this->actingAs($farhan);
-        $activeTask = factory(Task::class)->create();
+        $activeTask = factory(Task::class)->create(['project_id' => $project->id]);
         $activeTask->taskAssignee()->attach($farhan->id);
 
-        $completedTask = factory(Task::class)->create(['status' => Task::STATUS_COMPLETED]);
+        $completedTask = factory(Task::class)->create([
+            'project_id' => $project->id,
+            'status'     => Task::STATUS_COMPLETED,
+        ]);
         $completedTask->taskAssignee()->attach($farhan->id);
 
         $tasks = $this->timeEntryRepo->getTasksByProject($activeTask->project_id);
