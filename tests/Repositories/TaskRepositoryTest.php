@@ -303,7 +303,7 @@ class TaskRepositoryTest extends TestCase
             'task_id'  => $task->id,
         ]);
 
-        $startTime = date('Y-m-d H:i:s', strtotime($firstEntry->start_time.'+1 hours'));
+        $startTime = date('Y-m-d H:i:s', strtotime($firstEntry->end_time.'+1 hours'));
         $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+1 hours'));
         $secondEntry = factory(TimeEntry::class)->create([
             'task_id'    => $task->id,
