@@ -86,7 +86,7 @@ class RoleController extends AppBaseController
         /** @var Role $roles */
         $roles = $this->rolesRepository->create($input);
         if (isset($input['permissions']) && !empty($input['permissions'])) {
-            $roles->perms()->sync($input['permissions']);
+            $roles->syncPermissions($input['permissions']);
         }
         Flash::success('Role saved successfully.');
 
@@ -123,7 +123,7 @@ class RoleController extends AppBaseController
         if (isset($input['permissions']) && !empty($input['permissions'])) {
             $permissions = $input['permissions'];
         }
-        $roles->perms()->sync($permissions);
+        $roles->syncPermissions($permissions);
         Flash::success('Role updated successfully.');
 
         return redirect(route('roles.index'));

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTimeEntryRequest;
 use App\Http\Requests\UpdateTimeEntryRequest;
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
@@ -44,7 +45,15 @@ class TimeEntryController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new TimeEntryDataTable())->get(
                 $request->only('filter_activity', 'filter_user', 'filter_project'))
-            )->make(true);
+            )->editColumn('title', function (TimeEntry $timeEntry) {
+                return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
+            })->filterColumn('title', function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('title', 'like', "%$search%")
+                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(t.task_number,'')) LIKE ?",
+                            ["%$search%"]);
+                });
+            })->make(true);
         }
 
         $entryData = $this->timeEntryRepository->getEntryData();

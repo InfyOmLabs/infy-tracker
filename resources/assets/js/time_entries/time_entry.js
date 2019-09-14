@@ -87,9 +87,9 @@ let tbl = $('#timeEntryTable').DataTable({
                 let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
                 let url = taskUrl + taskPrefix;
 
-                return '<a href="' + url + '">' + taskPrefix + ' ' + row.task.title + '</a>'
+                return '<a href="' + url + '">' + row.title + '</a>'
             },
-            name: 'task.title'
+            name: 'title'
         },
         {
             data: 'activity_type.name',

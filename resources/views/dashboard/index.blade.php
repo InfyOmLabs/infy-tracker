@@ -27,11 +27,11 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="row">
-                                        @permission('manage_users')
+                                        @can('manage_users')
                                         <div class="col-4 offset-2">
                                             {!! Form::select('users', $users, Auth::id(), ['id' => 'userId','class'=>'user_filter_dropdown']) !!}
                                         </div>
-                                        @endpermission
+                                        @endcan
                                         <div class="@if(Auth::user()->can('manage_users')) col-6 @else col-6 offset-6 @endif">
                                             <div id="time_range" class="time_range">
                                                 <i class="far fa-calendar-alt"

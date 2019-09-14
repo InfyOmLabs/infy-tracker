@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Permission;
+use App\Models\Role;
 use App\Repositories\RoleRepository;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,27 @@ class DefaultRoleSeeder extends Seeder
      */
     public function run()
     {
-        $userPermissions = [
+        $roles[] = [
+            'name'         => 'admin',
+            'display_name' => 'Admin',
+            'description'  => 'Admin',
+        ];
+        $roles[] = [
+            'name'         => 'team_member',
+            'display_name' => 'Team Member',
+            'description'  => 'Team Member',
+        ];
+        $roles[] = [
+            'name'         => 'developer',
+            'display_name' => 'Developer',
+            'description'  => 'Developer',
+        ];
+
+        foreach ($roles as $role) {
+            Role::create($role);
+        }
+
+        /*$userPermissions = [
             'manage_clients',
             'manage_projects',
             'manage_all_tasks',
@@ -29,9 +50,9 @@ class DefaultRoleSeeder extends Seeder
             'name' => 'Admin',
         ];
         /** @var RoleRepository $roleRepo */
-        $roleRepo = app(RoleRepository::class);
+//        $roleRepo = app(RoleRepository::class);
         /** @var \App\Models\Role $role */
-        $role = $roleRepo->create($input);
-        $role->perms()->sync($permissionIds);
+//        $role = $roleRepo->create($input);
+//        $role->perms()->sync($permissionIds);*/
     }
 }
