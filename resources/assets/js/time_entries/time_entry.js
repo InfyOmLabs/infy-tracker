@@ -71,6 +71,7 @@ let tbl = $('#timeEntryTable').DataTable({
             defaultContent: "<a title='Expand' class='btn btn-success collapse-icon action-btn btn-sm'><span class='fa fa-plus-circle action-icon'></span></a>",
             data: null,
             orderable: false,
+            searchable: false,
         },
         {
             data: function (row) {
