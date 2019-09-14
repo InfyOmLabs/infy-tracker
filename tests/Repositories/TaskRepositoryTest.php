@@ -250,27 +250,81 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function test_can_get_task_details_with_task_duration()
     {
-        /** @var TimeEntry $timeEntry */
-        $timeEntry = factory(TimeEntry::class)->create(['duration' => 5]);
+        $task = factory(Task::class)->create();
+        /** @var TimeEntry $firstTimeEntry */
+        $firstTimeEntry = factory(TimeEntry::class)->create([
+            'duration' => 5,
+            'task_id'  => $task->id,
+        ]);
+        $secondTimeEntry = factory(TimeEntry::class)->create([
+            'duration' => 10,
+            'task_id'  => $task->id,
+        ]);
 
-        $taskDetails = $this->taskRepo->getTaskDetails($timeEntry->task_id);
+        $taskDetails = $this->taskRepo->getTaskDetails($task->id);
 
-        $this->assertEquals($timeEntry->task_id, $taskDetails->id);
-        $this->assertEquals('00 Hours and 05 Minutes', $taskDetails->totalDuration);
+        $this->assertEquals($task->id, $taskDetails->id);
+        $this->assertEquals('00 Hours and 15 Minutes', $taskDetails->totalDuration);
+        $this->assertEquals(15, $taskDetails->totalDurationMin);
     }
 
     /** @test */
     public function test_can_get_task_details_of_given_user()
     {
+        $farhan = factory(User::class)->create();
+        $task = factory(Task::class)->create();
         /** @var TimeEntry $firstEntry */
-        $firstEntry = factory(TimeEntry::class)->create(['duration' => 125]);
+        $firstEntry = factory(TimeEntry::class)->create(['task_id' => $task->id]);
+        $secondTimeEntry = factory(TimeEntry::class)->create([
+            'duration' => 125,
+            'task_id'  => $task->id,
+            'user_id'  => $farhan->id,
+        ]);
 
-        $taskDetails = $this->taskRepo->getTaskDetails($firstEntry->task_id, [
-            'user_id' => $firstEntry->user_id,
+        $taskDetails = $this->taskRepo->getTaskDetails($task->id, [
+            'user_id' => $farhan->id,
         ]);
 
         $this->assertEquals($firstEntry->task_id, $taskDetails->id);
+        $this->assertEquals($farhan->id, $taskDetails->timeEntries[0]->user_id);
         $this->assertEquals('02 Hours and 05 Minutes', $taskDetails->totalDuration);
+        $this->assertEquals(125, $taskDetails->totalDurationMin);
+    }
+
+    /** @test */
+    public function test_can_get_task_details_of_given_user_from_start_time_and_end_time()
+    {
+        $task = factory(Task::class)->create();
+        $farhan = factory(User::class)->create();
+        /** @var TimeEntry $firstEntry */
+        $firstEntry = factory(TimeEntry::class)->create([
+            'duration' => 35,
+            'user_id'  => $farhan->id,
+            'task_id'  => $task->id,
+        ]);
+
+        $startTime = date('Y-m-d H:i:s', strtotime($firstEntry->start_time.'+1 hours'));
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+1 hours'));
+        $secondEntry = factory(TimeEntry::class)->create([
+            'task_id'    => $task->id,
+            'start_time' => $startTime,
+            'end_time'   => $endTime,
+            'duration'   => 130,
+            'user_id'    => $farhan->id,
+        ]);
+
+        $taskDetails = $this->taskRepo->getTaskDetails($task->id, [
+            'user_id'    => $farhan->id,
+            'start_time' => $startTime,
+            'end_time'   => $endTime,
+        ]);
+
+        $this->assertEquals($task->id, $taskDetails->id);
+        $this->assertEquals($farhan->id, $taskDetails->timeEntries[0]->user_id);
+        $this->assertEquals($startTime, $taskDetails->timeEntries[0]->start_time);
+        $this->assertEquals($endTime, $taskDetails->timeEntries[0]->end_time);
+        $this->assertEquals('02 Hours and 10 Minutes', $taskDetails->totalDuration);
+        $this->assertEquals(130, $taskDetails->totalDurationMin);
     }
 
     /** @test */
