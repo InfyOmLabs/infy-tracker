@@ -278,7 +278,7 @@ class TaskRepository extends BaseRepository
                 $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
             }
             $query->with('user');
-        }])->findOrFail($id);
+        }, 'project'])->findOrFail($id);
 
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
