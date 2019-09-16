@@ -110,8 +110,8 @@ class Role extends Model implements RoleContract
     }
 
     /**
-     * @param  string  $name
-     * @param  null|string  $guardName
+     * @param string      $name
+     * @param null|string $guardName
      *
      * @return RoleContract|Builder
      */
@@ -121,7 +121,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             throw RoleDoesNotExist::named($name);
         }
 
@@ -129,8 +129,8 @@ class Role extends Model implements RoleContract
     }
 
     /**
-     * @param  int  $id
-     * @param  null|string  $guardName
+     * @param int         $id
+     * @param null|string $guardName
      *
      * @return RoleContract|Builder
      */
@@ -140,7 +140,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('id', $id)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             throw RoleDoesNotExist::withId($id);
         }
 
@@ -150,8 +150,8 @@ class Role extends Model implements RoleContract
     /**
      * Find or create role by its name (and optionally guardName).
      *
-     * @param  string  $name
-     * @param  string|null  $guardName
+     * @param string      $name
+     * @param string|null $guardName
      *
      * @return RoleContract|Builder
      */
@@ -161,7 +161,7 @@ class Role extends Model implements RoleContract
 
         $role = static::where('name', $name)->where('guard_name', $guardName)->first();
 
-        if (! $role) {
+        if (!$role) {
             return static::query()->create(['name' => $name, 'guard_name' => $guardName]);
         }
 
