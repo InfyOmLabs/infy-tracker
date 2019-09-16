@@ -28,16 +28,14 @@ class AssignDefaultRoleToUserSeeder extends Seeder
         $permissions = Permission::whereIn('name', ['manage_tags', 'manage_activities', 'manage_reports', 'manage_all_tasks'])->get();
         $team_member->givePermissionTo($permissions);
 
-//        $roleIds = [];
-        /** @var Role $role */
-//        $role = Role::whereName('Admin')->first();
-//        if (!empty($role)) {
-//            $roleIds = $role->id;
-//        }
-//        $users = User::get();
+        $roleIds = [];
+        if (!empty($admin)) {
+            $roleIds = $admin->id;
+        }
+        $users = User::get();
         /** @var User $user */
-//        foreach ($users as $user) {
-//            $user->roles()->sync($roleIds);
-//        }
+        foreach ($users as $user) {
+            $user->roles()->sync($roleIds);
+        }
     }
 }

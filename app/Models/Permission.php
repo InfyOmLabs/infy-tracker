@@ -19,6 +19,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $name
  * @property string|null $display_name
  * @property string|null $description
+ * @property string|null $guard_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
@@ -43,6 +44,7 @@ class Permission extends Model implements PermissionContract
         'name',
         'display_name',
         'description',
+        'guard_name',
     ];
     /**
      * The attributes that should be casted to native types.
@@ -54,6 +56,7 @@ class Permission extends Model implements PermissionContract
         'name'         => 'string',
         'display_name' => 'string',
         'description'  => 'string',
+        'guard_name'   => 'string',
     ];
 
     /**

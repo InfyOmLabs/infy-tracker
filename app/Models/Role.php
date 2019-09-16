@@ -18,17 +18,20 @@ use Spatie\Permission\Traits\HasPermissions;
  * @property string $name
  * @property string|null $display_name
  * @property string|null $description
+ * @property string $guard_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Permission[] $perms
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereGuardName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role whereUpdatedAt($value)
@@ -44,6 +47,7 @@ class Role extends Model implements RoleContract
         'name',
         'display_name',
         'description',
+        'guard_name',
     ];
     /**
      * The attributes that should be casted to native types.
@@ -55,6 +59,7 @@ class Role extends Model implements RoleContract
         'name'         => 'string',
         'display_name' => 'string',
         'description'  => 'string',
+        'guard_name'   => 'string',
     ];
 
     /**
