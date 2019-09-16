@@ -110,8 +110,8 @@ class Permission extends Model implements PermissionContract
     /**
      * Find a permission by its name (and optionally guardName).
      *
-     * @param  string  $name
-     * @param  string|null  $guardName
+     * @param string      $name
+     * @param string|null $guardName
      *
      * @throws PermissionDoesNotExist
      *
@@ -121,7 +121,7 @@ class Permission extends Model implements PermissionContract
     {
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermissions(['name' => $name, 'guard_name' => $guardName])->first();
-        if (! $permission) {
+        if (!$permission) {
             throw PermissionDoesNotExist::create($name, $guardName);
         }
 
@@ -129,8 +129,8 @@ class Permission extends Model implements PermissionContract
     }
 
     /**
-     * @param  int  $id
-     * @param  null|string  $guardName
+     * @param int         $id
+     * @param null|string $guardName
      *
      * @return PermissionContract
      */
@@ -139,7 +139,7 @@ class Permission extends Model implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermissions(['id' => $id, 'guard_name' => $guardName])->first();
 
-        if (! $permission) {
+        if (!$permission) {
             throw PermissionDoesNotExist::withId($id);
         }
 
@@ -149,8 +149,8 @@ class Permission extends Model implements PermissionContract
     /**
      * Find or create permission by its name (and optionally guardName).
      *
-     * @param  string  $name
-     * @param  string|null  $guardName
+     * @param string      $name
+     * @param string|null $guardName
      *
      * @return PermissionContract
      */
@@ -159,7 +159,7 @@ class Permission extends Model implements PermissionContract
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermissions(['name' => $name, 'guard_name' => $guardName])->first();
 
-        if (! $permission) {
+        if (!$permission) {
             return static::query()->create(['name' => $name, 'guard_name' => $guardName]);
         }
 
@@ -167,7 +167,7 @@ class Permission extends Model implements PermissionContract
     }
 
     /**
-     * @param  array  $params
+     * @param array $params
      *
      * @return Collection
      */

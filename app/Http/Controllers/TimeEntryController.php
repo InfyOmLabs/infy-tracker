@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTimeEntryRequest;
 use App\Http\Requests\UpdateTimeEntryRequest;
-use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;

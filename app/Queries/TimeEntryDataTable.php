@@ -22,7 +22,7 @@ class TimeEntryDataTable
     {
         /** @var TimeEntry $query */
         $query = TimeEntry::with(['task.project', 'user', 'activityType'])
-            ->leftJoin('tasks as t','t.id','=','time_entries.task_id')
+            ->leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
             ->leftJoin('projects as p', 'p.id', '=', 't.project_id')
             ->select('time_entries.*');
 
