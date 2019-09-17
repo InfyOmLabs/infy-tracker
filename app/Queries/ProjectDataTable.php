@@ -6,7 +6,7 @@ use App\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ClientDataTable.
+ * Class ProjectDataTable.
  */
 class ProjectDataTable
 {

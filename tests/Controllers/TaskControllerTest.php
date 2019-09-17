@@ -36,7 +36,6 @@ class TaskControllerTest extends TestCase
         /** @var Task $activeTask */
         $activeTask = factory(Task::class)->create(['project_id' => $project->id]);
 
-        /** @var Task $completedTask */
         $completedTask = factory(Task::class)->create([
             'status'     => Task::STATUS_COMPLETED,
             'project_id' => $project->id,
@@ -63,7 +62,6 @@ class TaskControllerTest extends TestCase
 
         /** @var Task $firstTask */
         $firstTask = factory(Task::class)->create(['project_id' => $firstProject->id]);
-        /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $secondProject->id]);
 
         $response = $this->getJson(route('tasks.index', ['filter_project' => $firstProject->id]));
@@ -116,7 +114,6 @@ class TaskControllerTest extends TestCase
             'project_id' => $project->id,
             'due_date'   => $dueDate,
         ]);
-        /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $project->id]);
 
         $response = $this->getJson(route('tasks.index', ['due_date_filter' => $dueDate]));
@@ -225,7 +222,6 @@ class TaskControllerTest extends TestCase
 
         /** @var TimeEntry $firstEntry */
         $firstEntry = factory(TimeEntry::class)->create();
-        /** @var TimeEntry $secondEntry */
         $secondEntry = factory(TimeEntry::class)->create();
 
         $totalDuration = '00 Hours and 40 Minutes';

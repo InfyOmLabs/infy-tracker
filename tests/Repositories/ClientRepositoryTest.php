@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Repositories\ClientRepository;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -40,7 +41,11 @@ class ClientRepositoryTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_delete_client_with_all_its_child_records()
     {
         /** @var Client $client */

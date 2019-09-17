@@ -9,7 +9,7 @@ use Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ClientDataTable.
+ * Class TimeEntryDataTable.
  */
 class TimeEntryDataTable
 {
@@ -37,8 +37,8 @@ class TimeEntryDataTable
                     $q->whereIn('task_id', $taskIds);
                 } else {
                     $taskIds = Task::whereProjectId($input['filter_project'])
-                        ->where(function ($q) {
-                            $q->whereHas('taskAssignee', function ($q) {
+                        ->where(function (Builder $q) {
+                            $q->whereHas('taskAssignee', function (Builder $q) {
                                 $q->where('user_id', getLoggedInUserId());
                             });
                         })->get()->pluck('id')->toArray();

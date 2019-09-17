@@ -8,7 +8,9 @@ use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use App\Repositories\ProjectRepository;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
@@ -82,6 +84,7 @@ class ProjectRepositoryTest extends TestCase
         $totalProjects = $this->projectRepo->getProjectsList();
         $this->assertCount(4, $totalProjects);
 
+        /** @var Collection $myProjects */
         $myProjects = $this->projectRepo->getMyProjects();
         $this->assertCount(3, $myProjects);
 
@@ -123,7 +126,11 @@ class ProjectRepositoryTest extends TestCase
         $this->assertContains($projectOfLoggedInUser->id, array_keys($allProjects));
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_delete_project_with_all_its_child_records()
     {
         $project = factory(Project::class)->create();
