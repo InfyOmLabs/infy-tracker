@@ -3,8 +3,6 @@
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -74,13 +72,13 @@ class AddDefaultPermissionsAndRoles extends Migration
 
         foreach ($oldRoles as $role) {
             $role = Role::create([
-                'name' => $role->name,
+                'name'         => $role->name,
                 'display_name' => $role->display_name,
-                'description' => $role->description,
+                'description'  => $role->description,
             ]);
 
-            $roleOldPermission = DB::table("entrust_permission_role")
-                ->where('role_id','=', $role->id)->get(['permission_id'])
+            $roleOldPermission = DB::table('entrust_permission_role')
+                ->where('role_id', '=', $role->id)->get(['permission_id'])
                 ->pluck('permission_id')
                 ->toArray();
 
@@ -101,6 +99,5 @@ class AddDefaultPermissionsAndRoles extends Migration
      */
     public function down()
     {
-        
     }
 }
