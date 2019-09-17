@@ -3,8 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
+use Auth;
 use Closure;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Session;
@@ -14,15 +16,15 @@ class ValidateUserMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request $request
+     * @param Closure                 $next
      *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         /** @var User $user */
-        $user = \Auth::user();
+        $user = Auth::user();
 
         if (!$user) {
             Session::flash('error', 'Your account is not activated.');
@@ -34,7 +36,7 @@ class ValidateUserMiddleware
         }
 
         if (!$user->is_email_verified) {
-            \Auth::logout();
+            Auth::logout();
             Session::flash('error', 'Your account is not verified.');
             if ($request->ajax()) {
                 return JsonResponse::fromJsonString(ResponseUtil::makeError('Your account is not verified.'), Response::HTTP_UNAUTHORIZED);
@@ -43,7 +45,7 @@ class ValidateUserMiddleware
             return redirect('login');
         }
         if (!$user->is_active) {
-            \Auth::logout();
+            Auth::logout();
             Session::flash('error', 'Your account is deactivated. please contact your administrator.');
             if ($request->ajax()) {
                 return JsonResponse::fromJsonString(ResponseUtil::makeError('Your account is deactivated. please contact your administrator.'), Response::HTTP_UNAUTHORIZED);
@@ -53,7 +55,7 @@ class ValidateUserMiddleware
         }
 
         if (!$user->set_password) {
-            \Auth::logout();
+            Auth::logout();
 
             return response(view('auth.set_password', compact('user')));
         }

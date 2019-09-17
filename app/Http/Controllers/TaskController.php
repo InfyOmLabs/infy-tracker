@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -52,8 +53,8 @@ class TaskController extends AppBaseController
                 'due_date_filter',
             ])))->editColumn('title', function (Task $task) {
                 return $task->prefix_task_number.' '.$task->title;
-            })->filterColumn('title', function ($query, $search) {
-                $query->where(function ($query) use ($search) {
+            })->filterColumn('title', function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
                         ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
                             ["%$search%"]);
