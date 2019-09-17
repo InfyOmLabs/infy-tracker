@@ -17,7 +17,7 @@ class StartTimer implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param  array  $timerData
+     * @param array $timerData
      */
     public function __construct($timerData = [])
     {

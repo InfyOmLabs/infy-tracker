@@ -37,7 +37,6 @@ class AddComment implements ShouldBroadcast
     }
 
     /**
-     *
      * @return array
      */
     public function broadcastWith()
