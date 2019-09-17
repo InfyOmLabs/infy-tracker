@@ -13,17 +13,17 @@ class DefaultRoleSeeder extends Seeder
     public function run()
     {
         $roles[] = [
-            'name'         => 'admin',
+            'name'         => 'Admin',
             'display_name' => 'Admin',
             'description'  => 'Admin',
         ];
         $roles[] = [
-            'name'         => 'team_member',
+            'name'         => 'Team Member',
             'display_name' => 'Team Member',
             'description'  => 'Team Member',
         ];
         $roles[] = [
-            'name'         => 'developer',
+            'name'         => 'Developer',
             'display_name' => 'Developer',
             'description'  => 'Developer',
         ];

@@ -15,11 +15,11 @@ class AssignDefaultRoleToUserSeeder extends Seeder
     public function run()
     {
         /** @var Role $admin */
-        $admin = Role::whereName('admin')->first();
+        $admin = Role::whereName('Admin')->first();
         /** @var Role $developer */
-        $developer = Role::whereName('developer')->first();
+        $developer = Role::whereName('Developer')->first();
         /** @var Role $team_member */
-        $team_member = Role::whereName('team_member')->first();
+        $team_member = Role::whereName('Team Member')->first();
 
         $permissions = Permission::all();
         $admin->givePermissionTo($permissions);
