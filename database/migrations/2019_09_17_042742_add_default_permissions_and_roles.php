@@ -77,15 +77,21 @@ class AddDefaultPermissionsAndRoles extends Migration
                 'description'  => $role->description,
             ]);
 
-            $roleOldPermission = DB::table('entrust_permission_role')
-                ->where('role_id', '=', $role->id)->get(['permission_id'])
+            $roleOldPermission = DB::table('entrust_permission_role as epr')
+                ->leftJoin('entrust_roles as er', 'er.id', '=', 'epr.role_id')
+                ->where('er.name', '=', $role->name)
+                ->get(['epr.permission_id'])
                 ->pluck('permission_id')
                 ->toArray();
 
             $role->givePermissionTo($roleOldPermission);
         }
 
-        $rolUsers = DB::table('entrust_role_user')->get();
+        $rolUsers = DB::table('entrust_role_user as eru')
+            ->leftJoin('entrust_roles as er', 'er.id', '=', 'eru.role_id')
+            ->leftJoin('roles as r', 'er.name', '=', 'r.name')
+            ->get(['eru.user_id', 'r.id as role_id']);
+
         foreach ($rolUsers as $rolUser) {
             $user = User::find($rolUser->user_id);
             $user->roles()->sync($rolUser->role_id);
