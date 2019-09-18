@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "93fcb66e82f7c020810a4e5fd9f8cbdf",
+    "content-hash": "a7455f88e56b8b69a6271c72495ac06f",
     "packages": [
         {
             "name": "appointer/swaggervel",
@@ -1279,12 +1279,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/InfyOmLabs/laravel-generator.git",
-                "reference": "33232e8e54f446e941fee469d0a8242bc3490099"
+                "reference": "5dbf5b2f60253fb65458b09b74b9429605d74371"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/InfyOmLabs/laravel-generator/zipball/33232e8e54f446e941fee469d0a8242bc3490099",
-                "reference": "33232e8e54f446e941fee469d0a8242bc3490099",
+                "url": "https://api.github.com/repos/InfyOmLabs/laravel-generator/zipball/5dbf5b2f60253fb65458b09b74b9429605d74371",
+                "reference": "5dbf5b2f60253fb65458b09b74b9429605d74371",
                 "shasum": ""
             },
             "require": {
@@ -1336,7 +1336,7 @@
                 "test",
                 "view"
             ],
-            "time": "2019-09-13T05:39:11+00:00"
+            "time": "2019-09-15T06:12:59+00:00"
         },
         {
             "name": "infyomlabs/swagger-generator",
@@ -3057,16 +3057,16 @@
         },
         {
             "name": "swagger-api/swagger-ui",
-            "version": "v3.23.9",
+            "version": "v3.23.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swagger-api/swagger-ui.git",
-                "reference": "c3890c210c4cab6073d1b8bb62c32ed69da6c464"
+                "reference": "c8ad396301ca55075234009e8384ca968b950aab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/c3890c210c4cab6073d1b8bb62c32ed69da6c464",
-                "reference": "c3890c210c4cab6073d1b8bb62c32ed69da6c464",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/c8ad396301ca55075234009e8384ca968b950aab",
+                "reference": "c8ad396301ca55075234009e8384ca968b950aab",
                 "shasum": ""
             },
             "type": "library",
@@ -3110,7 +3110,7 @@
                 "swagger",
                 "ui"
             ],
-            "time": "2019-09-10T06:41:52+00:00"
+            "time": "2019-09-15T20:39:36+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5871,16 +5871,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "e899757bb3df5ff6e95089132f32cd59aac2220a"
+                "reference": "995192df77f63a59e47f025390d2d1fdf8f425ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/e899757bb3df5ff6e95089132f32cd59aac2220a",
-                "reference": "e899757bb3df5ff6e95089132f32cd59aac2220a",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/995192df77f63a59e47f025390d2d1fdf8f425ff",
+                "reference": "995192df77f63a59e47f025390d2d1fdf8f425ff",
                 "shasum": ""
             },
             "require": {
@@ -5916,20 +5916,20 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2019-07-25T05:29:42+00:00"
+            "time": "2019-09-17T06:23:10+00:00"
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.15",
+            "version": "7.5.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0"
+                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d79c053d972856b8b941bb233e39dc521a5093f0",
-                "reference": "d79c053d972856b8b941bb233e39dc521a5093f0",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/316afa6888d2562e04aeb67ea7f2017a0eb41661",
+                "reference": "316afa6888d2562e04aeb67ea7f2017a0eb41661",
                 "shasum": ""
             },
             "require": {
@@ -6000,7 +6000,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-08-21T07:05:16+00:00"
+            "time": "2019-09-14T09:08:39+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -6222,16 +6222,16 @@
         },
         {
             "name": "sebastian/exporter",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/exporter.git",
-                "reference": "06a9a5947f47b3029d76118eb5c22802e5869687"
+                "reference": "68609e1261d215ea5b21b7987539cbfbe156ec3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/06a9a5947f47b3029d76118eb5c22802e5869687",
-                "reference": "06a9a5947f47b3029d76118eb5c22802e5869687",
+                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/68609e1261d215ea5b21b7987539cbfbe156ec3e",
+                "reference": "68609e1261d215ea5b21b7987539cbfbe156ec3e",
                 "shasum": ""
             },
             "require": {
@@ -6285,7 +6285,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2019-08-11T12:43:14+00:00"
+            "time": "2019-09-14T09:02:43+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -6669,7 +6669,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.1.3"
+        "php": "^7.2"
     },
     "platform-dev": []
 }
