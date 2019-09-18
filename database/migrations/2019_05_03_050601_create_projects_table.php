@@ -18,12 +18,14 @@ class CreateProjectsTable extends Migration
             $table->unsignedInteger('client_id')->nullable();
             $table->text('description');
             $table->unsignedInteger('created_by')->nullable();
+            $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             //foreign
             $table->foreign('client_id')->references('id')->on('clients');
-
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
 
