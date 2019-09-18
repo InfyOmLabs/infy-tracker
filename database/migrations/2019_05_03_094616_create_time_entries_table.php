@@ -20,6 +20,7 @@ class CreateTimeEntriesTable extends Migration
             $table->string('start_time')->nullable();
             $table->string('end_time')->nullable();
             $table->integer('duration');
+            $table->integer('entry_type')->default(1);
             $table->text('note');
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
