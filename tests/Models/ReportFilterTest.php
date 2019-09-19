@@ -17,6 +17,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ReportFilterTest
+ */
 class ReportFilterTest extends TestCase
 {
     use DatabaseTransactions;

@@ -6,6 +6,9 @@ use App\Models\Project;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ProjectTest
+ */
 class ProjectTest extends TestCase
 {
     use DatabaseTransactions;

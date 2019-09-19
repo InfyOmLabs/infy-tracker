@@ -2,12 +2,13 @@
 
 namespace Tests\Repositories;
 
-use App\Models\ActivityType;
 use App\Repositories\ActivityTypeRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ActivityTypeRepositoryTest
+ */
 class ActivityTypeRepositoryTest extends TestCase
 {
     use DatabaseTransactions;

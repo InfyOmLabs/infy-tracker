@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class RoleControllerTest
+ */
 class RoleControllerTest extends TestCase
 {
     use DatabaseTransactions;

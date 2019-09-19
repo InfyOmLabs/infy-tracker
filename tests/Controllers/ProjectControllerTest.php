@@ -10,6 +10,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class ProjectControllerTest
+ */
 class ProjectControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;

@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class ActivityTypeControllerTest
+ */
 class ActivityTypeControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;

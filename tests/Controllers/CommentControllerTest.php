@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class CommentControllerTest
+ */
 class CommentControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;

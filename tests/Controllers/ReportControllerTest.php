@@ -6,6 +6,9 @@ use App\Models\Report;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ReportControllerTest
+ */
 class ReportControllerTest extends TestCase
 {
     use DatabaseTransactions;

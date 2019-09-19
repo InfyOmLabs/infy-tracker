@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class TimeEntryControllerTest
+ */
 class TimeEntryControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;

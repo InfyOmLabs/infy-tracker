@@ -5,6 +5,9 @@ namespace Tests\Controllers\Auth;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class LoginControllerTest
+ */
 class LoginControllerTest extends TestCase
 {
     use DatabaseTransactions;

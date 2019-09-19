@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ClientControllerPermissionTest
+ */
 class ClientControllerPermissionTest extends TestCase
 {
     use DatabaseTransactions;

@@ -10,6 +10,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 
+/**
+ * Class DashboardRepositoryTest
+ */
 class DashboardRepositoryTest extends TestCase
 {
     use DatabaseTransactions;

@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class HelpersTest
+ */
 class HelpersTest extends TestCase
 {
     use DatabaseTransactions;
