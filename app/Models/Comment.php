@@ -73,6 +73,7 @@ class Comment extends Model
         if (!isset($this->created_by) || empty($this->created_by) || !isset($this->createdUser) || empty($this->createdUser)) {
             return asset('assets/img/user-avatar.png');
         }
+
         return getUserImageInitial($this->created_by, $this->createdUser->name);
     }
 }
