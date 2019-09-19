@@ -11,7 +11,7 @@ use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
 /**
- * Class ProjectControllerTest
+ * Class ProjectControllerTest.
  */
 class ProjectControllerTest extends TestCase
 {

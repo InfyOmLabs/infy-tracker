@@ -18,7 +18,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ReportFilterTest
+ * Class ReportFilterTest.
  */
 class ReportFilterTest extends TestCase
 {

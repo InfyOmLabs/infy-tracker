@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TagControllerPermissionTest
+ * Class TagControllerPermissionTest.
  */
 class TagControllerPermissionTest extends TestCase
 {

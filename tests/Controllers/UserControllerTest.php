@@ -10,7 +10,7 @@ use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
 /**
- * Class UserControllerTest
+ * Class UserControllerTest.
  */
 class UserControllerTest extends TestCase
 {

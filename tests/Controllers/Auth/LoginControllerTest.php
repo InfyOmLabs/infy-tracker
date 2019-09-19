@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class LoginControllerTest
+ * Class LoginControllerTest.
  */
 class LoginControllerTest extends TestCase
 {

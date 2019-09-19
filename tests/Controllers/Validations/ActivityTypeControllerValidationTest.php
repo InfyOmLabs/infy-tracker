@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ActivityTypeControllerValidationTest
+ * Class ActivityTypeControllerValidationTest.
  */
 class ActivityTypeControllerValidationTest extends TestCase
 {
