@@ -2,8 +2,10 @@
 
 namespace Tests\Repositories;
 
+use App\Models\ActivityType;
 use App\Repositories\ActivityTypeRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 /**
