@@ -163,7 +163,7 @@ $('#timeEntryTable tbody').on('click', 'tr td.details-control', function () {
 });
 
 if (!canManageEntries) {
-    tbl.columns([0]).visible(false);
+    tbl.columns([1]).visible(false);
 }
 
 $('#timeEntryTable').on('draw.dt', function () {
