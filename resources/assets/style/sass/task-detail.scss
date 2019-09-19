@@ -175,6 +175,9 @@
             text-decoration: none;
         }
     }
+    &__deleted-user {
+        color: $space-gray;
+    }
     &__description {
       @extend %user-display;
       color: #999;
