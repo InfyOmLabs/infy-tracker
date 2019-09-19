@@ -119,6 +119,7 @@
     let pusherAppKey = "{{config('broadcasting.connections.pusher.key')}}";
     let pusherAppCluster = "{{config('broadcasting.connections.pusher.options.cluster')}}";
     let pusherBroadcaster = "{{config('broadcasting.connections.pusher.driver')}}";
+    let baseUrl = "{{url()}}/";
 </script>
 <script src="{{ mix('assets/js/time_tracker/time_tracker.js') }}"></script>
 @yield('scripts')

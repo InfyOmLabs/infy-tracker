@@ -114,7 +114,7 @@ window.deleteItemInputConfirmation = function (url, tableId, header, alertMessag
             cancelButtonColor: '#d33',
             cancelButtonText: 'No',
             confirmButtonText: 'Yes',
-            imageUrl: "http://infy-tracker/images/warning.png"
+            imageUrl: baseUrl + "images/warning.png"
         },
         function (inputVal) {
             if (inputVal===false) {
