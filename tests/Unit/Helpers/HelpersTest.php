@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class HelpersTest
+ * Class HelpersTest.
  */
 class HelpersTest extends TestCase
 {

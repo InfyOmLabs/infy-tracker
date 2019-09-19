@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TaskControllerValidationTest
+ * Class TaskControllerValidationTest.
  */
 class TaskControllerValidationTest extends TestCase
 {

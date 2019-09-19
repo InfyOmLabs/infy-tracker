@@ -10,7 +10,7 @@ use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
 /**
- * Class TimeEntryControllerTest
+ * Class TimeEntryControllerTest.
  */
 class TimeEntryControllerTest extends TestCase
 {

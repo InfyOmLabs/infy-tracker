@@ -8,7 +8,7 @@ use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
 /**
- * Class HomeControllerTest
+ * Class HomeControllerTest.
  */
 class HomeControllerTest extends TestCase
 {

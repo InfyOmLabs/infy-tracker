@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TaskTest
+ * Class TaskTest.
  */
 class TaskTest extends TestCase
 {

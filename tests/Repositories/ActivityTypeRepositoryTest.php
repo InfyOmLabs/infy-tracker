@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class ActivityTypeRepositoryTest
+ * Class ActivityTypeRepositoryTest.
  */
 class ActivityTypeRepositoryTest extends TestCase
 {

@@ -11,7 +11,7 @@ use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 /**
- * Class DashboardRepositoryTest
+ * Class DashboardRepositoryTest.
  */
 class DashboardRepositoryTest extends TestCase
 {

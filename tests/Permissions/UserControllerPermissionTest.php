@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class UserControllerPermissionTest
+ * Class UserControllerPermissionTest.
  */
 class UserControllerPermissionTest extends TestCase
 {

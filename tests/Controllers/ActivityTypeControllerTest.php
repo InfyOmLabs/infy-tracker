@@ -9,7 +9,7 @@ use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
 /**
- * Class ActivityTypeControllerTest
+ * Class ActivityTypeControllerTest.
  */
 class ActivityTypeControllerTest extends TestCase
 {

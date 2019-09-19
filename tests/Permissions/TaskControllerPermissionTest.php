@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TaskControllerPermissionTest
+ * Class TaskControllerPermissionTest.
  */
 class TaskControllerPermissionTest extends TestCase
 {
