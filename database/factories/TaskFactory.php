@@ -32,7 +32,7 @@ $factory->state(Task::class, 'tag', function () {
 });
 
 $factory->state(Task::class, 'assignees', function () {
-    $assignees = factory(User::class)->times(2)->create();
+    $assignees = factory(User::class, 2)->create();
 
     return [
         'assignees' => [$assignees[0]->id, $assignees[1]->id],

@@ -139,7 +139,7 @@ class TaskControllerTest extends TestCase
         $task->taskAssignee()->sync([$farhan->id]);
 
         /** @var Tag $tag */
-        $tag = factory(Tag::class)->times(2)->create();
+        $tag = factory(Tag::class, 2)->create();
         $task->tags()->sync([$tag[0]->id]);
 
         /** @var TagRepository $tagRepo */
