@@ -54,7 +54,7 @@ class Comment extends Model
      */
     public function createdUser()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     /**
@@ -70,6 +70,10 @@ class Comment extends Model
      */
     public function getUserAvatarAttribute()
     {
+        if (!isset($this->created_by) || empty($this->created_by) || !isset($this->createdUser) || empty($this->createdUser)) {
+            return asset('assets/img/user-avatar.png');
+        }
+
         return getUserImageInitial($this->created_by, $this->createdUser->name);
     }
 }
