@@ -22,7 +22,7 @@ class ReportControllerTest extends TestCase
     /** @test */
     public function it_can_shows_reports()
     {
-        factory(User::class)->times(5)->create();
+        factory(User::class, 5)->create();
 
         $response = $this->get(route('reports.index'));
 
