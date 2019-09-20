@@ -10,12 +10,12 @@
             <div class="page-header">
                 <h3 class="page__heading">Time Entries</h3>
                 <div class="filter-container">
-                    @permission('manage_time_entries')
+                    @can('manage_time_entries')
                     <div class="mr-2">
                         <label for="projects" class="lbl-block"><b>User</b></label>
                         {!!Form::select('drp_user',$users,Auth::id(),['id'=>'filterUser','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
-                    @endpermission
+                    @endcan
                     <div class="mr-2">
                         <label class="lbl-block"><b>Project</b></label>
                         {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}

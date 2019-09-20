@@ -71,7 +71,13 @@ $(document).on('click', '.edit-btn', function (event) {
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                var task = result.data;
+                let task = result.data.task;
+                let allTags = result.data.tags;
+                $('#editTagIds').empty();
+                $.each(allTags, function (i, e) {
+                    $('#editTagIds').append($('<option>', {value: i, text: e}));
+                });
+
                 let desc = $('<div/>').html(task.description).text();
                 CKEDITOR.instances.editDesc.setData(desc);
                 $('#tagId').val(task.id);

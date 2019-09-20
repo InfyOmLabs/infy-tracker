@@ -7,7 +7,7 @@ use App\Traits\ImageTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App\Models\User.
@@ -62,15 +62,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
-    use Notifiable, ImageTrait, softDeletes, EntrustUserTrait {
-        SoftDeletes::restore insteadof EntrustUserTrait;
-        EntrustUserTrait::restore insteadof SoftDeletes;
-    }
+    use Notifiable, ImageTrait, softDeletes, HasRoles;
     use ImageTrait {
         deleteImage as traitDeleteImage;
-    }
-    use SoftDeletes {
-        restore as restoreSoftDeletes;
     }
 
     public $table = 'users';
