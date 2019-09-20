@@ -12,14 +12,6 @@
 </li>
 @endcan
 
-@can('manage_users')
-<li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
-    <a class="nav-link" href="{!! route('users.index') !!}">
-        <i class="fa fa-users nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Users
-    </a>
-</li>
-@endcan
-
 @can('manage_projects')
 <li class="nav-item {{ Request::is('projects*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('projects.index') !!}">
@@ -48,6 +40,15 @@
     </a>
 </li>
 @endcan
+
+@can('manage_users')
+    <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
+        <a class="nav-link" href="{!! route('users.index') !!}">
+            <i class="fa fa-users nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Users
+        </a>
+    </li>
+@endcan
+
 @can('manage_roles')
 <li class="nav-item {{ Request::is('roles*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('roles') !!}">

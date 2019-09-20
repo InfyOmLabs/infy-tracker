@@ -14,23 +14,23 @@ class AssignDefaultRoleToUserSeeder extends Seeder
      */
     public function run()
     {
-        /** @var Role $admin */
-        $admin = Role::whereName('Admin')->first();
-        /** @var Role $developer */
-        $developer = Role::whereName('Developer')->first();
-        /** @var Role $team_member */
-        $team_member = Role::whereName('Team Member')->first();
+        /** @var Role $adminRole */
+        $adminRole = Role::whereName('Admin')->first();
+        /** @var Role $developerRole */
+        $developerRole = Role::whereName('Developer')->first();
+        /** @var Role $teamMemberRole */
+        $teamMemberRole = Role::whereName('Team Member')->first();
 
         $permissions = Permission::all();
-        $admin->givePermissionTo($permissions);
-        $developer->givePermissionTo($permissions);
+        $adminRole->givePermissionTo($permissions);
+        $developerRole->givePermissionTo($permissions);
 
         $permissions = Permission::whereIn('name', ['manage_tags', 'manage_activities', 'manage_reports', 'manage_all_tasks'])->get();
-        $team_member->givePermissionTo($permissions);
+        $teamMemberRole->givePermissionTo($permissions);
 
         $roleIds = [];
-        if (!empty($admin)) {
-            $roleIds = $admin->id;
+        if (!empty($adminRole)) {
+            $roleIds = $adminRole->id;
         }
         $users = User::get();
         /** @var User $user */

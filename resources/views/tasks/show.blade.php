@@ -202,7 +202,6 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskId = '{{$task->id}}';
         let attachmentUrl = '{{ $attachmentUrl }}/';
-        let baseUrl = '{{ url('/') }}/';
         let authId = '{{Auth::id()}}';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
