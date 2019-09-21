@@ -26,7 +26,7 @@ class RoleRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_roles_list()
     {
-        factory(Role::class)->times(3)->create();
+        factory(Role::class, 3)->create();
 
         $roles = $this->roleRepo->getRolesList();
 

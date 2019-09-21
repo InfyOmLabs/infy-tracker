@@ -30,7 +30,7 @@ class UserRepositoryTest extends TestCase
     public function it_can_get_users_of_given_projects()
     {
         /** @var Collection $users */
-        $users = factory(User::class)->times(2)->create();
+        $users = factory(User::class, 2)->create();
 
         $project1 = factory(Project::class)->create();
         $project2 = factory(Project::class)->create();
@@ -49,7 +49,7 @@ class UserRepositoryTest extends TestCase
     public function it_can_get_all_users()
     {
         /** @var Collection $users */
-        $users = factory(User::class)->times(2)->create();
+        $users = factory(User::class, 2)->create();
 
         $userList = $this->userRepo->getUserList();
 
