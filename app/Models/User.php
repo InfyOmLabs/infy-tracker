@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public $table = 'users';
     const IMAGE_PATH = 'users';
-    protected $appends = ['img_avatar','image_path'];
+    protected $appends = ['img_avatar', 'image_path'];
 
     /**
      * The attributes that are mass assignable.
