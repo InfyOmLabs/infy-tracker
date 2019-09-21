@@ -65,4 +65,15 @@ class TimeEntryTest extends TestCase
         $this->assertNotEmpty($timeEntry->entry_type_string);
         $this->assertEquals('Stopwatch', $timeEntry->entry_type_string);
     }
+
+    /** @test */
+    public function test_return_time_entry_type_via_form()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['entry_type' => TimeEntry::VIA_FORM]);
+
+        $timeEntry = TimeEntry::first();
+
+        $this->assertNotEmpty($timeEntry->entry_type_string);
+        $this->assertEquals('Via Form', $timeEntry->entry_type_string);
+    }
 }
