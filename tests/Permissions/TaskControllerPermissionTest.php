@@ -8,6 +8,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TaskControllerPermissionTest.
+ */
 class TaskControllerPermissionTest extends TestCase
 {
     use DatabaseTransactions;
