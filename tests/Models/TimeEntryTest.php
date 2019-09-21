@@ -54,4 +54,15 @@ class TimeEntryTest extends TestCase
         $this->assertEquals($timeEntry2->id, $firstTimeEntry->id);
         $this->assertEquals($user2->id, $firstTimeEntry->user_id);
     }
+
+    /** @test */
+    public function test_return_time_entry_type_in_string()
+    {
+        $timeEntry = factory(TimeEntry::class)->create();
+
+        $timeEntry = TimeEntry::first();
+
+        $this->assertNotEmpty($timeEntry->entry_type_string);
+        $this->assertEquals('Stopwatch', $timeEntry->entry_type_string);
+    }
 }
