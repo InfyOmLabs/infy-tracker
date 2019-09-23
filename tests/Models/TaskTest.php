@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TaskTest.
+ */
 class TaskTest extends TestCase
 {
     use DatabaseTransactions;

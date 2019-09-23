@@ -6,6 +6,9 @@ use App\Models\ActivityType;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class ActivityTypeControllerValidationTest.
+ */
 class ActivityTypeControllerValidationTest extends TestCase
 {
     use DatabaseTransactions;
