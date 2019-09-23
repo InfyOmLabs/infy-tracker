@@ -10,6 +10,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class ProjectControllerTest.
+ */
 class ProjectControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;
@@ -49,7 +52,6 @@ class ProjectControllerTest extends TestCase
 
         /** @var Project $firstProject */
         $firstProject = factory(Project::class)->create();
-        /** @var Project $secondProject */
         $secondProject = factory(Project::class)->create();
 
         $response = $this->getJson(route('projects.index', [

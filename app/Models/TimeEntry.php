@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -108,7 +109,7 @@ class TimeEntry extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function task()
     {
@@ -116,7 +117,7 @@ class TimeEntry extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function activityType()
     {
@@ -124,7 +125,7 @@ class TimeEntry extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function user()
     {
@@ -152,6 +153,9 @@ class TimeEntry extends Model
         return $query->ofUser(getLoggedInUserId());
     }
 
+    /**
+     * @return string
+     */
     public function getEntryTypeStringAttribute()
     {
         if ($this->entry_type == self::STOPWATCH) {

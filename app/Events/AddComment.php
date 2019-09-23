@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\Comment;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -28,13 +29,16 @@ class AddComment implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
         return new PrivateChannel('task-detail');
     }
 
+    /**
+     * @return array
+     */
     public function broadcastWith()
     {
         return $this->comment->toArray();

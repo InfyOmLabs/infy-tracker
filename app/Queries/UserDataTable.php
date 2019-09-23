@@ -14,7 +14,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class SettingDataTable.
+ * Class UserDataTable.
  */
 class UserDataTable
 {
