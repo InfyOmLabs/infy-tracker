@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskAttachment;
 use App\Queries\TaskDataTable;
+use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
 use DataTables;
@@ -147,7 +148,12 @@ class TaskController extends AppBaseController
         $task->taskAssignee;
         $task->attachments;
 
-        return $this->sendResponse($task, 'Task retrieved successfully.');
+        /** @var TagRepository $tagRepo */
+        $tagRepo = app(TagRepository::class);
+        $data['tags'] = $tagRepo->getTagList();
+        $data['task'] = $task;
+
+        return $this->sendResponse($data, 'Task retrieved successfully.');
     }
 
     /**

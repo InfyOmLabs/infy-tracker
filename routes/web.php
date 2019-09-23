@@ -35,16 +35,15 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
 
     Route::post('logout', 'Auth\LoginController@logout');
-
-    Route::middleware('permission:manage_activities')->group(function () {
+    Route::group(['middleware' => ['permission:manage_activities']], function () {
         Route::resource('activity-types', 'ActivityTypeController');
     });
 
-    Route::middleware('permission:manage_clients')->group(function () {
+    Route::group(['middleware' => ['permission:manage_clients']], function () {
         Route::resource('clients', 'ClientController');
     });
 
-    Route::middleware('permission:manage_users')->group(function () {
+    Route::group(['middleware' => ['permission:manage_users']], function () {
         Route::post('users/{user}/active-de-active', 'UserController@activeDeActiveUser')
             ->name('active-de-active-user');
         Route::resource('users', 'UserController');
@@ -54,15 +53,15 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
     Route::post('users/profile-update', 'UserController@profileUpdate')->name('update-profile');
 
-    Route::middleware('permission:manage_tags')->group(function () {
+    Route::group(['middleware' => ['permission:manage_tags']], function () {
         Route::resource('tags', 'TagController');
     });
 
-    Route::middleware('permission:manage_projects')->group(function () {
+    Route::group(['middleware' => ['permission:manage_projects']], function () {
         Route::resource('projects', 'ProjectController');
     });
 
-    Route::middleware('permission:manage_all_tasks')->group(function () {
+    Route::group(['middleware' => ['permission:manage_all_tasks']], function () {
         Route::resource('tasks', 'TaskController');
         Route::post('tasks/{task}/update-status', 'TaskController@updateStatus')->name('task.update-status');
         Route::post('tasks/{task}/add-attachment', 'TaskController@addAttachment')->name('task.add-attachment');
@@ -83,7 +82,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
     Route::post('start-timer', 'TimeEntryController@getStartTimer');
 
-    Route::middleware('permission:manage_reports')->group(function () {
+    Route::group(['middleware' => ['permission:manage_reports']], function () {
         Route::resource('reports', 'ReportController');
         Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
         Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
@@ -94,7 +93,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::get('projects/{project}/tasks', 'TimeEntryController@getTasks')->name('project-tasks');
     Route::get('my-projects', 'ProjectController@getMyProjects')->name('my-projects');
 
-    Route::middleware('permission:manage_roles')->group(function () {
+    Route::group(['middleware' => ['permission:manage_roles']], function () {
         Route::resource('roles', 'RoleController');
     });
 });

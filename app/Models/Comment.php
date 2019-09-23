@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -50,15 +51,15 @@ class Comment extends Model
     protected $appends = ['user_avatar'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function createdUser()
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function task()
     {
@@ -70,6 +71,10 @@ class Comment extends Model
      */
     public function getUserAvatarAttribute()
     {
+        if (!isset($this->created_by) || empty($this->created_by) || !isset($this->createdUser) || empty($this->createdUser)) {
+            return asset('assets/img/user-avatar.png');
+        }
+
         return getUserImageInitial($this->created_by, $this->createdUser->name);
     }
 }

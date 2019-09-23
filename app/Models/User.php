@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Notifications\MailResetPasswordNotification;
 use App\Traits\ImageTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * App\Models\User.
@@ -62,15 +64,9 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
  */
 class User extends Authenticatable
 {
-    use Notifiable, ImageTrait, softDeletes, EntrustUserTrait {
-        SoftDeletes::restore insteadof EntrustUserTrait;
-        EntrustUserTrait::restore insteadof SoftDeletes;
-    }
+    use Notifiable, ImageTrait, softDeletes, HasRoles;
     use ImageTrait {
         deleteImage as traitDeleteImage;
-    }
-    use SoftDeletes {
-        restore as restoreSoftDeletes;
     }
 
     public $table = 'users';
@@ -153,7 +149,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function projects()
     {
@@ -161,13 +157,16 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function createdUser()
     {
         return $this->belongsTo(self::class, 'created_by');
     }
 
+    /**
+     * @return string
+     */
     public function getImgAvatarAttribute()
     {
         return getUserImageInitial($this->id, $this->name);

@@ -29,7 +29,7 @@ class ClientRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_clients_list()
     {
-        factory(Client::class)->times(3)->create();
+        factory(Client::class, 3)->create();
 
         $clients = $this->clientRepo->getClientList();
 
@@ -46,7 +46,7 @@ class ClientRepositoryTest extends TestCase
         /** @var Client $client */
         $client = factory(Client::class)->create();
 
-        $projects = factory(Project::class)->times(2)->create(['client_id' => $client->id]);
+        $projects = factory(Project::class, 2)->create(['client_id' => $client->id]);
 
         /** @var Task $firstTask */
         $firstTask = factory(Task::class)->create(['project_id' => $projects[0]->id]);
