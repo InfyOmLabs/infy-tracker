@@ -5,9 +5,10 @@ namespace Tests\Repositories;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Exception;
+use Hash;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
@@ -83,7 +84,11 @@ class UserRepositoryTest extends TestCase
         $this->assertFalse($user->is_active);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_set_user_password()
     {
         /** @var User $farhan */

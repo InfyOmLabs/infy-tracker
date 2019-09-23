@@ -52,7 +52,6 @@ class ProjectControllerTest extends TestCase
 
         /** @var Project $firstProject */
         $firstProject = factory(Project::class)->create();
-        /** @var Project $secondProject */
         $secondProject = factory(Project::class)->create();
 
         $response = $this->getJson(route('projects.index', [

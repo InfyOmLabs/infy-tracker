@@ -9,6 +9,7 @@ use App\Models\ReportFilter;
 use App\Models\Tag;
 use App\Models\User;
 use App\Repositories\ReportRepository;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -113,7 +114,11 @@ class ReportRepositoryTest extends TestCase
         $this->assertEmpty($clientId);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function it_can_delete_report_filter_of_given_report()
     {
         /** @var ReportFilter $reportFilter */
@@ -160,7 +165,11 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals('2 hr', $duration);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_create_new_project_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
@@ -182,7 +191,11 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals($projects[2]->id, $reportFilter[0]->param_id);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_create_new_user_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
@@ -204,7 +217,11 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals($users[2]->id, $reportFilter[0]->param_id);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_create_new_tag_filters_by_deleting_old_filters()
     {
         $report = factory(Report::class)->create();
@@ -226,7 +243,11 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals($tags[2]->id, $reportFilter[0]->param_id);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_create_new_client_filter_by_deleting_old_filter()
     {
         $report = factory(Report::class)->create();

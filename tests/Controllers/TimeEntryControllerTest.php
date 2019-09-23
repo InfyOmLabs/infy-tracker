@@ -29,7 +29,6 @@ class TimeEntryControllerTest extends TestCase
 
         /** @var TimeEntry $firstTimeEntry */
         $firstTimeEntry = factory(TimeEntry::class)->create();
-        /** @var TimeEntry $secondTimeEntry */
         $secondTimeEntry = factory(TimeEntry::class)->create();
 
         $response = $this->getJson(route('time-entries.index', [

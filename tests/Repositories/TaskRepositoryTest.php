@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use App\Repositories\TaskRepository;
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -52,7 +53,11 @@ class TaskRepositoryTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_update_task_with_tags_and_assignees()
     {
         /** @var Task $task */
@@ -79,13 +84,17 @@ class TaskRepositoryTest extends TestCase
         });
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_generate_unique_task_number_when_task_project_is_different()
     {
         $task = factory(Task::class)->create();
         $updateTask = factory(Task::class)->raw(['due_date' => date('Y-m-d h:i:s', strtotime('+3 days'))]);
 
-        $updatedTask = $this->taskRepo->update($updateTask, $task->id);
+        $this->taskRepo->update($updateTask, $task->id);
 
         $this->assertNotEmpty(Task::findOrFail($task->id)->pluck('task_number'));
     }
