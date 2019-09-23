@@ -12,7 +12,7 @@ class ReportTest extends TestCase
     use DatabaseTransactions;
 
     /** @test */
-    public function test_return_report_formatted_date_with_same_start_date_and_end_date()
+    public function test_return_formatted_date_when_start_and_end_date_is_is_on_same_day()
     {
         $date = date('Y-m-d H:i:s', strtotime('-1 day'));
         factory(Report::class)->create([
@@ -28,7 +28,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function test_return_report_formatted_date_return_month_with_year()
+    public function test_return_report_formatted_date_when_date_is_start_of_month_and_end_date_is_end_of_month()
     {
         $startOfMonth = Carbon::parse(now())->startOfMonth()->format('Y-m-d');
         $endOfMonth = Carbon::parse(now())->endOfMonth()->format('Y-m-d');
@@ -45,7 +45,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function test_return_report_formatted_date_return_between_two_same_date_of_month()
+    public function test_return_report_formatted_date_when_date_is_in_same_month()
     {
         $startDate = Carbon::now()->subDays(1);
         $endDate = Carbon::parse($startDate)->subDays(1);
@@ -62,7 +62,7 @@ class ReportTest extends TestCase
     }
 
     /** @test */
-    public function test_return_report_formatted_date_with_month_name()
+    public function test_return_report_formatted_date_when_date_is_in_different_month()
     {
         $startDate = Carbon::now()->subDays(1);
         $endDate = Carbon::parse($startDate)->months(1);
