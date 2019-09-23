@@ -95,9 +95,9 @@ abstract class TestCase extends BaseTestCase
 
         /** @var Role $role */
         $role = factory(Role::class)->create();
-        $role->perms()->sync($permissionIds);
+        $role->syncPermissions($permissionIds);
 
-        $user->attachRole($role);
+        $user->assignRole($role);
 
         return $user;
     }

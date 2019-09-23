@@ -37,7 +37,7 @@ class ReportRepositoryTest extends TestCase
     {
         $report = factory(Report::class)->create();
         $user = factory(User::class)->create();
-        $projects = factory(Project::class)->times(2)->create();
+        $projects = factory(Project::class, 2)->create();
 
         $this->generateReportFilter($report->id, $projects[0]->id, Project::class);
         $this->generateReportFilter($report->id, $projects[1]->id, Project::class);
@@ -54,7 +54,7 @@ class ReportRepositoryTest extends TestCase
     public function it_can_retrieve_tag_ids_of_report()
     {
         $report = factory(Report::class)->create();
-        $tags = factory(Tag::class)->times(2)->create();
+        $tags = factory(Tag::class, 2)->create();
         $user = factory(User::class)->create();
         $this->generateReportFilter($report->id, $tags[0]->id, Tag::class);
         $this->generateReportFilter($report->id, $tags[1]->id, Tag::class);
@@ -72,7 +72,7 @@ class ReportRepositoryTest extends TestCase
     {
         $report = factory(Report::class)->create();
         /** @var User[] $users */
-        $users = factory(User::class)->times(2)->create();
+        $users = factory(User::class, 2)->create();
         $project = factory(Project::class)->create();
         $this->generateReportFilter($report->id, $users[0]->id, User::class);
         $this->generateReportFilter($report->id, $users[1]->id, User::class);
@@ -88,8 +88,8 @@ class ReportRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_client_ids_of_report()
     {
-        $reports = factory(Report::class)->times(2)->create();
-        $clients = factory(Client::class)->times(2)->create();
+        $reports = factory(Report::class, 2)->create();
+        $clients = factory(Client::class, 2)->create();
         $this->generateReportFilter($reports[0]->id, $clients[0]->id, Client::class);
         $this->generateReportFilter($reports[1]->id, $clients[1]->id, Client::class);
 
@@ -103,7 +103,7 @@ class ReportRepositoryTest extends TestCase
     public function it_will_return_empty_when_client_filter_not_exist_on_given_report()
     {
         /** @var Report[] $reports */
-        $reports = factory(Report::class)->times(2)->create();
+        $reports = factory(Report::class, 2)->create();
         $vishal = factory(Client::class)->create();
 
         $this->generateReportFilter($reports[0]->id, $vishal->id, Client::class); // client filter on another report
@@ -175,7 +175,7 @@ class ReportRepositoryTest extends TestCase
         $report = factory(Report::class)->create();
 
         /** @var Collection $projects */
-        $projects = factory(Project::class)->times(3)->create();
+        $projects = factory(Project::class, 3)->create();
 
         $this->generateReportFilter($report->id, $projects[0]->id, Project::class);
         $this->generateReportFilter($report->id, $projects[1]->id, Project::class);
@@ -201,7 +201,7 @@ class ReportRepositoryTest extends TestCase
         $report = factory(Report::class)->create();
 
         /** @var Collection $users */
-        $users = factory(User::class)->times(3)->create();
+        $users = factory(User::class, 3)->create();
 
         $this->generateReportFilter($report->id, $users[0]->id, User::class);
         $this->generateReportFilter($report->id, $users[1]->id, User::class);
@@ -227,7 +227,7 @@ class ReportRepositoryTest extends TestCase
         $report = factory(Report::class)->create();
 
         /** @var Collection $tags */
-        $tags = factory(Tag::class)->times(3)->create();
+        $tags = factory(Tag::class, 3)->create();
 
         $this->generateReportFilter($report->id, $tags[0]->id, Tag::class);
         $this->generateReportFilter($report->id, $tags[1]->id, Tag::class);
@@ -253,7 +253,7 @@ class ReportRepositoryTest extends TestCase
         $report = factory(Report::class)->create();
 
         /** @var Collection $clients */
-        $clients = factory(Client::class)->times(2)->create();
+        $clients = factory(Client::class, 2)->create();
 
         $this->generateReportFilter($report->id, $clients[1]->id, Client::class);
 

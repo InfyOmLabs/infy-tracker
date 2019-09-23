@@ -36,7 +36,7 @@ class ProjectRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_all_projects()
     {
-        $projects = factory(Project::class)->times(3)->create();
+        $projects = factory(Project::class, 3)->create();
 
         $result = $this->projectRepo->getProjectsList();
         $this->assertCount(3, $result);
@@ -52,8 +52,8 @@ class ProjectRepositoryTest extends TestCase
         $vishal = factory(Client::class)->create();
         $mitul = factory(Client::class)->create();
 
-        $projects = factory(Project::class)->times(3)->create(['client_id' => $vishal->id]);
-        factory(Project::class)->times(2)->create(['client_id' => $mitul->id]); // of another client
+        $projects = factory(Project::class, 3)->create(['client_id' => $vishal->id]);
+        factory(Project::class, 2)->create(['client_id' => $mitul->id]); // of another client
 
         $allProjects = $this->projectRepo->getProjectsList();
         $this->assertCount(5, $allProjects);
@@ -75,7 +75,7 @@ class ProjectRepositoryTest extends TestCase
 
         // projects of logged in user
         $projectIds = [];
-        $projects = factory(Project::class)->times(3)->create();
+        $projects = factory(Project::class, 3)->create();
         foreach ($projects as $project) {
             $project->users()->sync([$this->defaultUserId]);
             $projectIds[] = $project->id;

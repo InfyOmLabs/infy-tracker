@@ -4,10 +4,13 @@ namespace Tests\Repositories;
 
 use App\Models\ActivityType;
 use App\Repositories\ActivityTypeRepository;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
+/**
+ * Class ActivityTypeRepositoryTest.
+ */
 class ActivityTypeRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -25,7 +28,7 @@ class ActivityTypeRepositoryTest extends TestCase
     public function it_can_retrieve_activity_types_list()
     {
         /** @var Collection $activityTypes */
-        $activityTypes = factory(ActivityType::class)->times(3)->create();
+        $activityTypes = factory(ActivityType::class, 3)->create();
 
         $activityTypesResult = $this->activityTypeRepo->getActivityTypeList();
 

@@ -102,7 +102,7 @@ class TaskRepositoryTest extends TestCase
     /** @test */
     public function it_can_retrieve_task_list()
     {
-        $tasks = factory(Task::class)->times(2)->create();
+        $tasks = factory(Task::class, 2)->create();
 
         $taskList = $this->taskRepo->getTaskList();
 
@@ -119,7 +119,7 @@ class TaskRepositoryTest extends TestCase
         factory(Task::class)->create();
 
         $project = factory(Project::class)->create();
-        $tasks = factory(Task::class)->times(2)->create([
+        $tasks = factory(Task::class, 2)->create([
             'project_id' => $project->id,
         ]);
 
