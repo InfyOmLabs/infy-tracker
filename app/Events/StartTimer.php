@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -16,7 +17,7 @@ class StartTimer implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @return void
+     * @param array $timerData
      */
     public function __construct($timerData = [])
     {
@@ -26,13 +27,16 @@ class StartTimer implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
         return new PrivateChannel('stopwatch-event.'.getLoggedInUserId());
     }
 
+    /**
+     * @return array
+     */
     public function broadcastWith()
     {
         return $this->timerData;

@@ -6,6 +6,7 @@ use App\Models\User;
 use Auth;
 use Closure;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Session;
@@ -15,8 +16,8 @@ class CheckUserIsActivated
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
+     * @param Request $request
+     * @param Closure $next
      *
      * @return mixed
      */
