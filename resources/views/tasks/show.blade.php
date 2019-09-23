@@ -139,7 +139,10 @@
                                             <div class="user">
                                                 <img class="user__img" src=" {{ $comment->user_avatar }}" alt="User Image">
                                                 <span class="user__username">
-                                                    <a>{{isset($comment->createdUser->name) ? $comment->createdUser->name : ''}}</a>
+                                                    @php
+                                                        $deletedUser = (isset($comment->createdUser->deleted_at)) ? "<span class='user__deleted-user'>(deactivated user)</span>" : ''
+                                                    @endphp
+                                                    <a>{!! isset($comment->createdUser->name) ? $comment->createdUser->name . ' ' . $deletedUser : '' !!}</a>
                                                     @if($comment->created_by == Auth::id())
                                                         <a class="user__icons del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
                                                         <a class="user__icons edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
@@ -199,7 +202,6 @@
         let taskUrl = '{{url('tasks')}}/';
         let taskId = '{{$task->id}}';
         let attachmentUrl = '{{ $attachmentUrl }}/';
-        let baseUrl = '{{ url('/') }}/';
         let authId = '{{Auth::id()}}';
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>

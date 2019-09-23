@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 /**
- * Class TimeEntryControllerTest.
+ * Class TimeEntryControllerValidationTest.
  */
 class TimeEntryControllerValidationTest extends TestCase
 {

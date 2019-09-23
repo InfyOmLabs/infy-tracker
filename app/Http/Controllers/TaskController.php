@@ -8,11 +8,13 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskAttachment;
 use App\Queries\TaskDataTable;
+use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -52,8 +54,8 @@ class TaskController extends AppBaseController
                 'due_date_filter',
             ])))->editColumn('title', function (Task $task) {
                 return $task->prefix_task_number.' '.$task->title;
-            })->filterColumn('title', function ($query, $search) {
-                $query->where(function ($query) use ($search) {
+            })->filterColumn('title', function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
                         ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
                             ["%$search%"]);
@@ -146,7 +148,12 @@ class TaskController extends AppBaseController
         $task->taskAssignee;
         $task->attachments;
 
-        return $this->sendResponse($task, 'Task retrieved successfully.');
+        /** @var TagRepository $tagRepo */
+        $tagRepo = app(TagRepository::class);
+        $data['tags'] = $tagRepo->getTagList();
+        $data['task'] = $task;
+
+        return $this->sendResponse($data, 'Task retrieved successfully.');
     }
 
     /**

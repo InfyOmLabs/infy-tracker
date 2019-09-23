@@ -83,15 +83,15 @@ let tbl = $('#timeEntryTable').DataTable({
             },
             name: 'user.name',
         },
-      {
-        data: function (row) {
-          let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
-          let url = taskUrl + taskPrefix;
+        {
+            data: function (row) {
+                let taskPrefix = row.task.project.prefix + '-' + row.task.task_number;
+                let url = taskUrl + taskPrefix;
 
-          return '<a href="' + url + '">' + row.title + '</a>'
+                return '<a href="' + url + '">' + row.title + '</a>'
+            },
+            name: 'title'
         },
-        name: 'title'
-      },
         {
             data: 'activity_type.name',
             name: 'activityType.name',
@@ -154,16 +154,18 @@ $('#timeEntryTable tbody').on('click', 'tr td.details-control', function () {
     var row = tbl.row(tr);
 
     if (row.child.isShown()) {
+        $(this).children().children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
         row.child.hide();
         tr.removeClass('shown');
     } else {
+        $(this).children().children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
         row.child('<div style="padding-left:50px;">' + nl2br(row.data().note) + '</div>').show();
         tr.addClass('shown');
     }
 });
 
 if (!canManageEntries) {
-    tbl.columns([0]).visible(false);
+    tbl.columns([1]).visible(false);
 }
 
 $('#timeEntryTable').on('draw.dt', function () {
