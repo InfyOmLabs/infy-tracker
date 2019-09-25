@@ -14,6 +14,7 @@ use App\Repositories\UserRepository;
 use Crypt;
 use DataTables;
 use Exception;
+use Hash;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -92,6 +93,11 @@ class UserController extends AppBaseController
         $input = $request->all();
         $input['created_by'] = getLoggedInUserId();
         $input['activation_code'] = uniqid();
+        if (!empty($input['password']) && \Auth::user()->can('manage_users')) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
+        }
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
         /** @var User $user */
         $user = $this->userRepository->create($input);
@@ -145,6 +151,12 @@ class UserController extends AppBaseController
     {
         $projectIds = [];
         $input = $request->all();
+
+        if (!empty($input['password']) && \Auth::user()->can('manage_users')) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
+        }
 
         $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
         /** @var User $user */
