@@ -11,13 +11,9 @@
                 <div class="alert alert-danger" style="display: none" id="editValidationErrorsBox"></div>
                 {!! Form::hidden('user_id',null,['id'=>'userId']) !!}
                 <div class="row">
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-12">
                         {!! Form::label('name', 'Name') !!}<span class="required">*</span>
                         {!! Form::text('name', null, ['id'=>'edit_name','class' => 'form-control','required']) !!}
-                    </div>
-                    <div class="form-group col-sm-6">
-                        {!! Form::label('phone', 'Phone') !!}
-                        {!! Form::number('phone', null, ['id'=>'edit_phone','class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -26,32 +22,12 @@
                         {!! Form::email('email', null, ['id'=>'edit_email','class' => 'form-control','required']) !!}
                     </div>
                 </div>
-                @can('manage_users')
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
-                            <div class="input-group">
-                                <input class="form-control input-group__addon" id="edit_password" type="password" name="password">
-                                <div class="input-group-append input-group__icon">
-                                <span class="input-group-text changeType">
-                                    <i class="icon-ban icons"></i>
-                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
-                            <div class="input-group">
-                                <input class="form-control input-group__addon" id="edit_confirm_password" type="password" name="password_confirmation">
-                                <div class="input-group-append input-group__icon">
-                                <span class="input-group-text changeType">
-                                    <i class="icon-ban icons"></i>
-                                </span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('phone', 'Phone') !!}
+                        {!! Form::number('phone', null, ['id'=>'edit_phone','class' => 'form-control']) !!}
                     </div>
-                @endcan
+                </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('project_id', 'Project') !!}
