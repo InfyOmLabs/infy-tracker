@@ -14,6 +14,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TimeEntryTest.
+ */
 class TimeEntryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -53,5 +56,27 @@ class TimeEntryTest extends TestCase
         $firstTimeEntry = $timeEntries->first();
         $this->assertEquals($timeEntry2->id, $firstTimeEntry->id);
         $this->assertEquals($user2->id, $firstTimeEntry->user_id);
+    }
+
+    /** @test */
+    public function test_return_time_entry_type_in_string()
+    {
+        $timeEntry = factory(TimeEntry::class)->create();
+
+        $timeEntry = TimeEntry::first();
+
+        $this->assertNotEmpty($timeEntry->entry_type_string);
+        $this->assertEquals('Stopwatch', $timeEntry->entry_type_string);
+    }
+
+    /** @test */
+    public function test_return_time_entry_type_via_form()
+    {
+        $timeEntry = factory(TimeEntry::class)->create(['entry_type' => TimeEntry::VIA_FORM]);
+
+        $timeEntry = TimeEntry::first();
+
+        $this->assertNotEmpty($timeEntry->entry_type_string);
+        $this->assertEquals('Via Form', $timeEntry->entry_type_string);
     }
 }

@@ -113,10 +113,12 @@ window.drawTaskDetailTable = function (data) {
 
         if (row.child.isShown()) {
             // This row is already open - close it
+            $(this).children().children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
             row.child.hide();
             tr.removeClass('shown');
         } else {
             // Open this row
+            $(this).children().children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
             row.child('<div style="padding-left:50px;">' + nl2br(row.data().note) + '</div>').show();
             tr.addClass('shown');
         }
@@ -125,12 +127,3 @@ window.drawTaskDetailTable = function (data) {
     $("#taskDetailsTable_wrapper").css('width', "100%");
     $("#total-duration").html("<strong>Total duration: " + data.totalDuration + " || " + data.totalDurationMin + " Minutes</strong>");
 };
-
-$(document).on('click', '.collapse-icon', function () {
-    let isShow = $(this).parent().parent().hasClass('shown');
-    if(isShow) {
-        $(this).children().removeClass('fa-plus-circle').addClass("fa-minus-circle");
-    } else {
-        $(this).children().removeClass('fa-minus-circle').addClass("fa-plus-circle");
-    }
-});

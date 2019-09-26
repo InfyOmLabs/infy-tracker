@@ -7,6 +7,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TagControllerPermissionTest.
+ */
 class TagControllerPermissionTest extends TestCase
 {
     use DatabaseTransactions;

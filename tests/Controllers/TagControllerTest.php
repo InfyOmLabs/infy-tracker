@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class TagControllerTest.
+ */
 class TagControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;

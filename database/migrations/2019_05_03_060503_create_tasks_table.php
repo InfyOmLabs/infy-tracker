@@ -14,11 +14,13 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('priority')->nullable();
             $table->string('title');
             $table->text('description');
             $table->unsignedInteger('project_id');
-            $table->integer('status')->default(2);
+            $table->integer('status')->default(0);
             $table->date('due_date')->nullable();
+            $table->unsignedInteger('task_number')->nullable(false);
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->timestamps();
@@ -30,6 +32,8 @@ class CreateTasksTable extends Migration
             $table->foreign('project_id')->references('id')->on('projects');
 
             $table->foreign('created_by')->references('id')->on('users');
+
+            $table->unique(['task_number', 'project_id']);
         });
     }
 

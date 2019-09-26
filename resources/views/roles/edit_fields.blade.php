@@ -17,7 +17,7 @@
             {!! Form::label('permissions', 'Permissions') !!}
             <div class="row">
                 @foreach($permissions as $key=>$value)
-                    @if(in_array($key,$roles->perms->pluck('id')->toArray()))
+                    @if(in_array($key,$roles->permissions->pluck('id')->toArray()))
                         <div class="checkbox col-md-6 role-checkbox">
                             <label class="role-checkbox__label d-flex align-items-center"><input name="permissions[]" type="checkbox"
                                                                        class="permission-checkbox"

@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
+use App\Repositories\TagRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
@@ -36,7 +37,6 @@ class TaskControllerTest extends TestCase
         /** @var Task $activeTask */
         $activeTask = factory(Task::class)->create(['project_id' => $project->id]);
 
-        /** @var Task $completedTask */
         $completedTask = factory(Task::class)->create([
             'status'     => Task::STATUS_COMPLETED,
             'project_id' => $project->id,
@@ -63,7 +63,6 @@ class TaskControllerTest extends TestCase
 
         /** @var Task $firstTask */
         $firstTask = factory(Task::class)->create(['project_id' => $firstProject->id]);
-        /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $secondProject->id]);
 
         $response = $this->getJson(route('tasks.index', ['filter_project' => $firstProject->id]));
@@ -116,7 +115,6 @@ class TaskControllerTest extends TestCase
             'project_id' => $project->id,
             'due_date'   => $dueDate,
         ]);
-        /** @var Task $secondTask */
         $secondTask = factory(Task::class)->create(['project_id' => $project->id]);
 
         $response = $this->getJson(route('tasks.index', ['due_date_filter' => $dueDate]));
@@ -138,16 +136,21 @@ class TaskControllerTest extends TestCase
         $task->taskAssignee()->sync([$farhan->id]);
 
         /** @var Tag $tag */
-        $tag = factory(Tag::class)->create();
-        $task->tags()->sync([$tag->id]);
+        $tag = factory(Tag::class, 2)->create();
+        $task->tags()->sync([$tag[0]->id]);
+
+        /** @var TagRepository $tagRepo */
+        $tagRepo = app(TagRepository::class);
+        $data['tags'] = $tagRepo->getTagList()->toArray();
+        $data['task'] = $task->toArray();
 
         $response = $this->getJson(route('tasks.edit', $task->id));
 
-        $this->assertSuccessDataResponse($response, $task->toArray(), 'Task retrieved successfully.');
+        $this->assertSuccessDataResponse($response, $data, 'Task retrieved successfully.');
 
-        $data = $response->original['data'];
+        $data = $response->original['data']['task'];
         $this->assertEquals($task->project_id, $data['project']['id']);
-        $this->assertEquals($tag->id, $data['tags'][0]['id']);
+        $this->assertEquals($tag[0]->id, $data['tags'][0]['id']);
         $this->assertEquals($farhan->id, $data['taskAssignee'][0]['id']);
     }
 
@@ -225,7 +228,6 @@ class TaskControllerTest extends TestCase
 
         /** @var TimeEntry $firstEntry */
         $firstEntry = factory(TimeEntry::class)->create();
-        /** @var TimeEntry $secondEntry */
         $secondEntry = factory(TimeEntry::class)->create();
 
         $totalDuration = '00 Hours and 40 Minutes';

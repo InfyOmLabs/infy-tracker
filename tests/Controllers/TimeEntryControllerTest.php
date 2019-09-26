@@ -9,6 +9,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Traits\MockRepositories;
 
+/**
+ * Class TimeEntryControllerTest.
+ */
 class TimeEntryControllerTest extends TestCase
 {
     use DatabaseTransactions, MockRepositories;
@@ -26,7 +29,6 @@ class TimeEntryControllerTest extends TestCase
 
         /** @var TimeEntry $firstTimeEntry */
         $firstTimeEntry = factory(TimeEntry::class)->create();
-        /** @var TimeEntry $secondTimeEntry */
         $secondTimeEntry = factory(TimeEntry::class)->create();
 
         $response = $this->getJson(route('time-entries.index', [

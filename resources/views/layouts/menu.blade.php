@@ -4,78 +4,78 @@
     </a>
 </li>
 
-@permission('manage_clients')
+@can('manage_clients')
 <li class="nav-item {{ Request::is('clients*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('clients.index') !!}">
         <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Clients
     </a>
 </li>
-@endpermission
+@endcan
 
-@permission('manage_users')
-<li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
-    <a class="nav-link" href="{!! route('users.index') !!}">
-        <i class="fa fa-users nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Users
-    </a>
-</li>
-@endpermission
-
-@permission('manage_projects')
+@can('manage_projects')
 <li class="nav-item {{ Request::is('projects*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('projects.index') !!}">
         <i class="fa fa-folder-open nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Projects
     </a>
 </li>
-@endpermission
+@endcan
 
-@permission('manage_all_tasks')
+@can('manage_all_tasks')
 <li class="nav-item {{ Request::is('tasks*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('tasks.index') !!}">
         <i class="fa fa-tasks nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Tasks
     </a>
 </li>
-@endpermission
+@endcan
 
 <li class="nav-item {{ Request::is('time-entries*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('time-entries.index') !!}">
         <i class="fas fa-user-clock nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Time Entries
     </a>
 </li>
-@permission('manage_reports')
+@can('manage_reports')
 <li class="nav-item {{ Request::is('report*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('reports') !!}">
         <i class="fa fa-file nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Reports
     </a>
 </li>
-@endpermission
-@permission('manage_roles')
+@endcan
+
+@can('manage_users')
+    <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
+        <a class="nav-link" href="{!! route('users.index') !!}">
+            <i class="fa fa-users nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Users
+        </a>
+    </li>
+@endcan
+@can('manage_roles')
 <li class="nav-item {{ Request::is('roles*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('roles') !!}">
         <i class="fa fa-user nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Roles
     </a>
 </li>
-@endpermission
+@endcan
 
-@permission(['manage_activities','manage_tags',false])
+@canany(['manage_activities','manage_tags'])
 <li class="nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#">
         <i class="fa fa-cog nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Setting
     </a>
     <ul class="nav-dropdown-items">
-        @permission('manage_tags')
+        @can('manage_tags')
             <li class="nav-item {{ Request::is('tags*') ? 'active' : '' }}">
                 <a class="nav-link" href="{!! route('tags.index') !!}">
                     <i class="fa fa-tags nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Tags
                 </a>
             </li>
-        @endpermission
-        @permission('manage_activities')
+        @endcan
+        @can('manage_activities')
             <li class="nav-item {{ Request::is('activity-types*') ? 'active' : '' }}">
                 <a class="nav-link" href="{!! route('activity-types.index') !!}">
                     <i class="fas fa-clipboard-list nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Activity Types
                 </a>
             </li>
-        @endpermission
+        @endcan
     </ul>
 </li>
-@endpermission
+@endcan

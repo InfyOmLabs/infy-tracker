@@ -9,7 +9,7 @@ use Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class ClientDataTable.
+ * Class TimeEntryDataTable.
  */
 class TimeEntryDataTable
 {
@@ -21,7 +21,10 @@ class TimeEntryDataTable
     public function get($input)
     {
         /** @var TimeEntry $query */
-        $query = TimeEntry::with(['task.project', 'user', 'activityType'])->select('time_entries.*');
+        $query = TimeEntry::with(['task.project', 'user', 'activityType'])
+            ->leftJoin('tasks as t', 't.id', '=', 'time_entries.task_id')
+            ->leftJoin('projects as p', 'p.id', '=', 't.project_id')
+            ->select('time_entries.*');
 
         /** @var User $user */
         $user = Auth::user();
@@ -37,8 +40,8 @@ class TimeEntryDataTable
                     $q->whereIn('task_id', $taskIds);
                 } else {
                     $taskIds = Task::whereProjectId($input['filter_project'])
-                        ->where(function ($q) {
-                            $q->whereHas('taskAssignee', function ($q) {
+                        ->where(function (Builder $q) {
+                            $q->whereHas('taskAssignee', function (Builder $q) {
                                 $q->where('user_id', getLoggedInUserId());
                             });
                         })->get()->pluck('id')->toArray();
