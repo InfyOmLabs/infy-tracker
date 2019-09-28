@@ -450,7 +450,3 @@ function getUserLastTaskWork() {
         }
     });
 }
-
-function getItemFromLocalStorage(item) {
-    return localStorage.getItem(item+'_'+loggedInUserId);
-}
