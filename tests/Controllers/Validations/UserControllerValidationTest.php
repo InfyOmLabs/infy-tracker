@@ -64,12 +64,22 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function test_create_user_fails_when_password_and_confirm_password_not_matched()
+    {
+        $this->post(route('users.store'), ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
+            'password' => 'The password and password confirmation must match.',
+        ]);
+    }
+
+    /** @test */
     public function it_can_create_user()
     {
         $input = [
-            'name'    => 'random string',
-            'email'   => 'dummy@gmail.com',
-            'role_id' => 1,
+            'name'                  => 'random string',
+            'email'                 => 'dummy@gmail.com',
+            'role_id'               => 1,
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ];
         $this->post(route('users.store'), $input)->assertSessionHasNoErrors();
 
@@ -143,14 +153,27 @@ class UserControllerValidationTest extends TestCase
     }
 
     /** @test */
+    public function test_update_user_fails_when_password_and_confirm_password_not_matched()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $this->put(route('users.update', $user->id), ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
+            'password' => 'The password and password confirmation must match.',
+        ]);
+    }
+
+    /** @test */
     public function it_can_update_user_with_valid_input()
     {
         /** @var User $user */
         $user = factory(User::class)->create();
         $input = [
-            'name'    => 'random string',
-            'email'   => 'dummy@gmail.com',
-            'role_id' => 1,
+            'name'                  => 'random string',
+            'email'                 => 'dummy@gmail.com',
+            'role_id'               => 1,
+            'password'              => '123456',
+            'password_confirmation' => '123456',
         ];
 
         $this->put(route('users.update', $user->id), $input)->assertSessionHasNoErrors();
