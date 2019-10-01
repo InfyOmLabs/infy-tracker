@@ -34,10 +34,7 @@
         </div>
     </div>
 @endsection
-@section('page_js')
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-@endsection
+
 @section('scripts')
     <script>
         let reportUrl = "{{ url('reports') }}/";
