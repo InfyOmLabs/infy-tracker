@@ -78,6 +78,8 @@
         let taskDetailActionColumnIsVisible = true;
         let reportStartDate = '';
         let reportEndDate = '';
+        let usersOfProjects = "{{ url('users-of-projects') }}";
+        let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>

@@ -61,7 +61,7 @@ var tbl = $('#users_table').DataTable({
         {
             data: function (row) {
                 let checked = row.is_active === 0 ? '' : 'checked';
-                if (loginUserId === row.id) {
+                if (loggedInUserId === row.id) {
                     return '';
                 }
                 return ' <label class="switch switch-label switch-outline-primary-alt d-block">' +

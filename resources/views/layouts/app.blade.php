@@ -105,16 +105,10 @@
     let myTasksUrl = "{{url('my-tasks')}}";
     let myProjectsUrl = "{{url('my-projects')}}";
     let lastTaskWorkUrl = "{{url('user-last-task-work')}}";
-    let loginUserId = "{{ getLoggedInUserId() }}";
     let closeWatchImg = "{{asset('assets/img/close.png')}}";
     let stopWatchImg = "{{asset('assets/img/stopwatch.png')}}";
     let usersUrl = "{{ url('users') }}/";
-    let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
-    let reporstUrl = "{{ url('reports') }}";
-    let usersOfProjects = "{{ url('users-of-projects') }}";
-    let projectsOfClient = "{{ url('projects-of-client') }}";
-    let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     let startTimerUrl = "{{ url('start-timer') }}";
     let pusherAppKey = "{{config('broadcasting.connections.pusher.key')}}";
     let pusherAppCluster = "{{config('broadcasting.connections.pusher.options.cluster')}}";
