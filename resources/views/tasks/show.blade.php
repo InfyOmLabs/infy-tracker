@@ -198,6 +198,7 @@
         let taskId = '{{$task->id}}';
         let attachmentUrl = '{{ $attachmentUrl }}/';
         let authId = '{{Auth::id()}}';
+        let usersOfProjects = "{{ url('users-of-projects') }}";
     </script>
     <script src="{{ mix('assets/js/task/task_detail.js') }}"></script>
 @endsection

@@ -167,7 +167,7 @@ function setTimerData(activity, task, project) {
     $('#tmProjectId').attr('disabled', true);
 
     var setItems = {
-        'user_id': loginUserId,
+        'user_id': loggedInUserId,
         'activity_id': activity,
         'task_id': task,
         'project_id': project,
@@ -436,7 +436,7 @@ function getUserLastTaskWork() {
                     let lastTask = result.data;
                     if (isClockRunning == null) {
                         let setItems = {
-                            'user_id': loginUserId,
+                            'user_id': loggedInUserId,
                             'activity_id': lastTask.activity_id,
                             'task_id': lastTask.task_id,
                             'project_id': lastTask.project_id
