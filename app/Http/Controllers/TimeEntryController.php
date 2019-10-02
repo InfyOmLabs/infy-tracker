@@ -71,6 +71,7 @@ class TimeEntryController extends AppBaseController
     {
         $input = $this->validateInput($request->all());
 
+        $this->timeEntryRepository->assignTaskToAdmin($input);
         $this->timeEntryRepository->create($input);
         $this->timeEntryRepository->broadcastStopTimerEvent();
 

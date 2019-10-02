@@ -204,4 +204,18 @@ class TimeEntryRepository extends BaseRepository
     {
         broadcast(new StopWatchStop())->toOthers();
     }
+
+    /**
+     * @param $input
+     */
+    public function assignTaskToAdmin($input)
+    {
+        $task = Task::find($input['task_id']);
+        $taskAssignees = $task->taskAssignee->pluck('id')->toArray();
+
+        if (!in_array(getLoggedInUserId(), $taskAssignees)) {
+            array_push($taskAssignees, getLoggedInUserId());
+            $task->taskAssignee()->sync($taskAssignees);
+        }
+    }
 }
