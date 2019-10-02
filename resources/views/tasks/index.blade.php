@@ -3,10 +3,6 @@
     Tasks
 @endsection
 @section('page_css')
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
 @endsection
 @section('content')
@@ -57,7 +53,6 @@
     </div>
 @endsection
 @section('page_js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
     <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
 @endsection
@@ -78,6 +73,8 @@
         let taskDetailActionColumnIsVisible = true;
         let reportStartDate = '';
         let reportEndDate = '';
+        let usersOfProjects = "{{ url('users-of-projects') }}";
+        let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
