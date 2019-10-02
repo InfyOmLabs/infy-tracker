@@ -334,6 +334,10 @@ function storeTimeEntry(startTime, endTime) {
             $('#tmTaskId').attr('disabled', true);
             $('#tmProjectId').attr('disabled', true);
             $('#stopTimer').removeAttr('disabled');
+            let selectedTask = $('#timeTrackerForm').find('#tmTaskId').val();
+            if(!(selectedTask > 0)) {
+                $('#tmTaskId').prop('disabled', false);
+            }
         },
         complete: function () {
         }
