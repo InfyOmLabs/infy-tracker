@@ -220,4 +220,22 @@ class TimeEntryRepositoryTest extends TestCase
         $this->assertEquals(TimeEntry::STOPWATCH, $result);
         $this->assertIsNumeric($result);
     }
+
+    /** @test */
+    public function test_assign_task_admin_if_not_assigned()
+    {
+        /** @var TimeEntry $timeEntry */
+        $task = factory(Task::class)->create();
+
+        /** @var User $monika */
+        $monika = factory(User::class)->create();
+
+        $task->taskAssignee()->sync([$monika->id]);
+
+        $this->timeEntryRepo->assignTaskToAdmin(['task_id' => $task->id]);
+
+        $taskAssignees = $task->fresh()->taskAssignee->pluck('id')->toArray();
+
+        $this->assertContains(getLoggedInUserId(), $taskAssignees);
+    }
 }
