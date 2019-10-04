@@ -150,7 +150,7 @@ let tbl = $('#report_table').DataTable({
     serverSide: true,
     "order": [[0, "asc"]],
     ajax: {
-        url: reporstUrl,
+        url: reportUrl,
         data: function (data) {
             data.filter_created_by = $('#filterCreatedBy').find('option:selected').val();
         }

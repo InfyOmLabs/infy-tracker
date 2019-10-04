@@ -17,6 +17,8 @@ use DB;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -67,7 +69,9 @@ class TaskRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return Task
+     * @throws Exception
+     *
+     * @return Task|Collection
      */
     public function store($input)
     {
@@ -233,6 +237,8 @@ class TaskRepository extends BaseRepository
     /**
      * @param Task  $task
      * @param array $tags
+     *
+     * @return bool|void
      */
     public function attachTags($task, $tags)
     {
@@ -259,6 +265,8 @@ class TaskRepository extends BaseRepository
             ])->id;
         }
         $task->tags()->attach($tagIds);
+
+        return true;
     }
 
     /**
@@ -269,16 +277,18 @@ class TaskRepository extends BaseRepository
      */
     public function getTaskDetails($id, $input = [])
     {
-        $task = Task::with(['timeEntries' => function (HasMany $query) use ($input) {
-            if (isset($input['user_id']) && $input['user_id'] > 0) {
-                $query->where('time_entries.user_id', '=', $input['user_id']);
-            }
+        $task = Task::with([
+            'timeEntries' => function (HasMany $query) use ($input) {
+                if (isset($input['user_id']) && $input['user_id'] > 0) {
+                    $query->where('time_entries.user_id', '=', $input['user_id']);
+                }
 
-            if (!empty($input['start_time']) && !empty($input['end_time'])) {
-                $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
-            }
-            $query->with('user');
-        }, 'project'])->findOrFail($id);
+                if (!empty($input['start_time']) && !empty($input['end_time'])) {
+                    $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
+                }
+                $query->with('user');
+            }, 'project',
+        ])->findOrFail($id);
 
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
@@ -292,7 +302,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $input
+     * @param array $input
      *
      * @return array
      */
@@ -320,15 +330,16 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $projectId
+     * @param int $projectId
      *
      * @return int|string|null
      */
     public function getUniqueTaskNumber($projectId)
     {
         /** @var Task $task */
-        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=',
-            '')->orderByDesc('task_number')->first();
+        $task = Task::withTrashed()->ofProject($projectId)->where('task_number', '!=', '')->orderByDesc('task_number')
+            ->first();
+
         $uniqueNumber = (empty($task)) ? 1 : $task->task_number + 1;
         $isUnique = false;
         while (!$isUnique) {
@@ -344,8 +355,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param $id
-     * @param $file
+     * @param int          $id
+     * @param UploadedFile $file
      *
      * @throws Exception
      *
@@ -415,7 +426,7 @@ class TaskRepository extends BaseRepository
         foreach ($attachments as $attachment) {
             $obj['id'] = $attachment->id;
             $obj['name'] = $attachment->file;
-            //            $obj['size'] = filesize($attachment->file_path); //TODO  : will fix this soon
+            $obj['size'] = filesize($attachment->file_path);
             $obj['url'] = $attachment->file_url;
             $result[] = $obj;
         }

@@ -65,15 +65,15 @@ class TimeEntryRepository extends BaseRepository
         $activityTypeRepo = app(ActivityTypeRepository::class);
         $data['activityTypes'] = $activityTypeRepo->getActivityTypeList();
 
-        $data['tasks'] = Task::orderBy('title')->whereHas('taskAssignee', function (Builder $query) {
+        $data['tasks'] = Task::whereHas('taskAssignee', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
-        })->pluck('title', 'id');
+        })->orderBy('title')->pluck('title', 'id');
 
         return $data;
     }
 
     /**
-     * @return array|null
+     * @return array|null|void
      */
     public function myLastTask()
     {
@@ -142,8 +142,9 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = $this->find($id);
-        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry,
-            $input) : $timeEntry->entry_type;
+        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ?
+            $this->checkTimeUpdated($timeEntry, $input) :
+            $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
         if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {
@@ -172,14 +173,16 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param $input
-     * @param null $id
+     * @param array    $input
+     * @param int|null $id
+     *
+     * @return bool
      */
     public function checkDuplicateEntry($input, $id = null)
     {
         $timeArr = [$input['start_time'], $input['end_time']];
         $query = TimeEntry::whereUserId(getLoggedInUserId())
-            ->where(function ($q) use ($timeArr) {
+            ->where(function (Builder $q) use ($timeArr) {
                 $q->whereBetween('start_time', $timeArr)
                     ->orWhereBetween('end_time', $timeArr)
                     ->orWhereRaw("('$timeArr[0]' between start_time and end_time or '$timeArr[1]' between start_time and end_time)");
@@ -193,6 +196,8 @@ class TimeEntryRepository extends BaseRepository
         if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
+
+        return true;
     }
 
     public function broadcastStartTimerEvent($input)
@@ -203,5 +208,19 @@ class TimeEntryRepository extends BaseRepository
     public function broadcastStopTimerEvent()
     {
         broadcast(new StopWatchStop())->toOthers();
+    }
+
+    /**
+     * @param $input
+     */
+    public function assignTaskToAdmin($input)
+    {
+        $task = Task::find($input['task_id']);
+        $taskAssignees = $task->taskAssignee->pluck('id')->toArray();
+
+        if (!in_array(getLoggedInUserId(), $taskAssignees)) {
+            array_push($taskAssignees, getLoggedInUserId());
+            $task->taskAssignee()->sync($taskAssignees);
+        }
     }
 }

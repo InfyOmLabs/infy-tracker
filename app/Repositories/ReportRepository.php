@@ -160,33 +160,11 @@ class ReportRepository extends BaseRepository
     /**
      * @param int $reportId
      *
-     * @throws Exception
-     *
-     * @return bool|mixed|null
-     */
-    public function deleteFilter($reportId)
-    {
-        return ReportFilter::ofReport($reportId)->delete();
-    }
-
-    /**
-     * @param int $reportId
-     *
      * @return array
      */
     public function getProjectIds($reportId)
     {
         return ReportFilter::ofParamType(Project::class)->ofReport($reportId)->pluck('param_id')->toArray();
-    }
-
-    /**
-     * @param int $reportId
-     *
-     * @return array
-     */
-    public function getTagIds($reportId)
-    {
-        return ReportFilter::ofParamType(Tag::class)->ofReport($reportId)->pluck('param_id')->toArray();
     }
 
     /**
@@ -202,6 +180,16 @@ class ReportRepository extends BaseRepository
     /**
      * @param int $reportId
      *
+     * @return array
+     */
+    public function getTagIds($reportId)
+    {
+        return ReportFilter::ofParamType(Tag::class)->ofReport($reportId)->pluck('param_id')->toArray();
+    }
+
+    /**
+     * @param int $reportId
+     *
      * @return Collection|void
      */
     public function getClientId($reportId)
@@ -212,6 +200,18 @@ class ReportRepository extends BaseRepository
         }
 
         return $report->param_id;
+    }
+
+    /**
+     * @param int $reportId
+     *
+     * @throws Exception
+     *
+     * @return bool|mixed|null
+     */
+    public function deleteFilter($reportId)
+    {
+        return ReportFilter::ofReport($reportId)->delete();
     }
 
     /**

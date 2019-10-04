@@ -2,7 +2,11 @@
 
 namespace App\Repositories;
 
+use Exception;
 use Illuminate\Container\Container as Application;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -21,7 +25,7 @@ abstract class BaseRepository
     /**
      * @param Application $app
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(Application $app)
     {
@@ -30,11 +34,22 @@ abstract class BaseRepository
     }
 
     /**
-     * Get searchable fields array.
+     * Make Model instance.
      *
-     * @return array
+     * @throws Exception
+     *
+     * @return Model
      */
-    abstract public function getFieldsSearchable();
+    public function makeModel()
+    {
+        $model = $this->app->make($this->model());
+
+        if (!$model instanceof Model) {
+            throw new Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+        }
+
+        return $this->model = $model;
+    }
 
     /**
      * Configure the Model.
@@ -44,30 +59,12 @@ abstract class BaseRepository
     abstract public function model();
 
     /**
-     * Make Model instance.
-     *
-     * @throws \Exception
-     *
-     * @return Model
-     */
-    public function makeModel()
-    {
-        $model = $this->app->make($this->model());
-
-        if (!$model instanceof Model) {
-            throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
-        }
-
-        return $this->model = $model;
-    }
-
-    /**
      * Paginate records for scaffold.
      *
      * @param int   $perPage
      * @param array $columns
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
     public function paginate($perPage, $columns = ['*'])
     {
@@ -83,7 +80,7 @@ abstract class BaseRepository
      * @param int|null $skip
      * @param int|null $limit
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function allQuery($search = [], $skip = null, $limit = null)
     {
@@ -109,6 +106,13 @@ abstract class BaseRepository
     }
 
     /**
+     * Get searchable fields array.
+     *
+     * @return array
+     */
+    abstract public function getFieldsSearchable();
+
+    /**
      * Retrieve all records with given filter criteria.
      *
      * @param array    $search
@@ -116,7 +120,7 @@ abstract class BaseRepository
      * @param int|null $limit
      * @param array    $columns
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return LengthAwarePaginator|Builder[]|Collection
      */
     public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
     {
@@ -147,7 +151,7 @@ abstract class BaseRepository
      * @param int   $id
      * @param array $columns
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model|null
+     * @return Builder|Builder[]|Collection|Model|null
      */
     public function find($id, $columns = ['*'])
     {
@@ -162,7 +166,7 @@ abstract class BaseRepository
      * @param array $input
      * @param int   $id
      *
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Model
+     * @return Builder|Builder[]|Collection|Model
      */
     public function update($input, $id)
     {
@@ -180,7 +184,7 @@ abstract class BaseRepository
     /**
      * @param int $id
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return bool|mixed|null
      */

@@ -78,6 +78,41 @@ class DashboardRepository
     }
 
     /**
+     * @param $startDate
+     * @param $endDate
+     *
+     * @return array
+     */
+    public function getDate($startDate, $endDate)
+    {
+        $dateArr = [];
+        $subStartDate = '';
+        $subEndDate = '';
+        if ($startDate && $endDate) {
+            $end = trim(substr($endDate, 0, 10));
+            $start = Carbon::parse($startDate)->toDateString();
+            $startDate = Carbon::createFromFormat('Y-m-d', $start);
+            $endDate = Carbon::createFromFormat('Y-m-d', $end);
+
+            while ($startDate <= $endDate) {
+                $dateArr[] = $startDate->copy()->format('Y-m-d');
+                $startDate->addDay();
+            }
+            $start = current($dateArr);
+            $endDate = end($dateArr);
+            $subStartDate = Carbon::parse($start)->startOfDay()->format('Y-m-d H:i:s');
+            $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
+        }
+        $data = [
+            'dateArr'   => $dateArr,
+            'startDate' => $subStartDate,
+            'endDate'   => $subEndDate,
+        ];
+
+        return $data;
+    }
+
+    /**
      * @param $input
      *
      * @return mixed
@@ -118,41 +153,6 @@ class DashboardRepository
         $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
-
-        return $data;
-    }
-
-    /**
-     * @param $startDate
-     * @param $endDate
-     *
-     * @return array
-     */
-    public function getDate($startDate, $endDate)
-    {
-        $dateArr = [];
-        $subStartDate = '';
-        $subEndDate = '';
-        if ($startDate && $endDate) {
-            $end = trim(substr($endDate, 0, 10));
-            $start = Carbon::parse($startDate)->toDateString();
-            $startDate = Carbon::createFromFormat('Y-m-d', $start);
-            $endDate = Carbon::createFromFormat('Y-m-d', $end);
-
-            while ($startDate <= $endDate) {
-                $dateArr[] = $startDate->copy()->format('Y-m-d');
-                $startDate->addDay();
-            }
-            $start = current($dateArr);
-            $endDate = end($dateArr);
-            $subStartDate = Carbon::parse($start)->startOfDay()->format('Y-m-d H:i:s');
-            $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
-        }
-        $data = [
-            'dateArr'   => $dateArr,
-            'startDate' => $subStartDate,
-            'endDate'   => $subEndDate,
-        ];
 
         return $data;
     }

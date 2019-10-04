@@ -368,6 +368,17 @@ $(function () {
     });
 
     function updateTaskStatus(id) {
+        let stopwatchTaskId = getItemFromLocalStorage('task_id');
+        let isClockRunning = getItemFromLocalStorage('clockRunning');
+        if(id == stopwatchTaskId && isClockRunning == 'true') {
+            tbl.ajax.reload();
+            swal({
+                "title": "Warning",
+                "text": "Please stop timer before completing task.",
+                "type": "warning"
+            });
+            return false;
+        }
         $.ajax({
             url: taskUrl + id + '/update-status',
             type: 'POST',

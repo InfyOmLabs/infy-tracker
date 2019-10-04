@@ -31,10 +31,6 @@
         </div>
     </div>
 @endsection
-@section('page_js')
-    <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-@endsection
 @section('scripts')
     <script>
         $( document ).ready(function() {
@@ -57,6 +53,8 @@
         let taskDetailActionColumnIsVisible = false;
         let reportStartDate = '{{$report->start_date->startOfDay()}}';
         let reportEndDate = '{{$report->end_date->endOfDay()}}';
+        let usersOfProjects = "{{ url('users-of-projects') }}";
+        let projectsOfClient = "{{ url('projects-of-client') }}";
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>

@@ -129,6 +129,11 @@ class UserRepository extends BaseRepository
         return $user;
     }
 
+    /**
+     * @param array $input
+     *
+     * @return true
+     */
     public function profileUpdate($input)
     {
         /** @var User $user */
@@ -142,13 +147,14 @@ class UserRepository extends BaseRepository
 
         try {
             if (isset($input['photo']) && !empty($input['photo'])) {
-                $input['image_path'] = ImageTrait::makeImage($input['photo'], User::IMAGE_PATH,
-                    ['width' => 150, 'height' => 150]);
-                $imagePath = $user->image_path;
-            }
+                $input['image_path'] = ImageTrait::makeImage(
+                    $input['photo'], User::IMAGE_PATH, ['width' => 150, 'height' => 150]
+                );
 
-            if (!empty($imagePath)) {
-                $user->deleteImage();
+                $imagePath = $user->image_path;
+                if (!empty($imagePath)) {
+                    $user->deleteImage();
+                }
             }
 
             $user->update($input);
@@ -157,5 +163,7 @@ class UserRepository extends BaseRepository
                 unlink(User::IMAGE_PATH.DIRECTORY_SEPARATOR.$input['image_url']);
             }
         }
+
+        return true;
     }
 }
