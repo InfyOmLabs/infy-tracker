@@ -30,9 +30,9 @@ class ProjectController extends AppBaseController
     /**
      * ProjectController constructor.
      *
-     * @param  ProjectRepository  $projectRepo
-     * @param  ClientRepository  $clientRepo
-     * @param  UserRepository  $userRepository
+     * @param ProjectRepository $projectRepo
+     * @param ClientRepository  $clientRepo
+     * @param UserRepository    $userRepository
      */
     public function __construct(
         ProjectRepository $projectRepo,
@@ -47,7 +47,7 @@ class ProjectController extends AppBaseController
     /**
      * Display a listing of the Project.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -70,7 +70,7 @@ class ProjectController extends AppBaseController
     /**
      * Store a newly created Project in storage.
      *
-     * @param  CreateProjectRequest  $request
+     * @param CreateProjectRequest $request
      *
      * @return JsonResponse
      */
@@ -90,7 +90,7 @@ class ProjectController extends AppBaseController
     /**
      * Show the form for editing the specified Project.
      *
-     * @param  Project  $project
+     * @param Project $project
      *
      * @return JsonResponse|RedirectResponse
      */
@@ -105,8 +105,8 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param  Project  $project
-     * @param  UpdateProjectRequest  $request
+     * @param Project              $project
+     * @param UpdateProjectRequest $request
      *
      * @return JsonResponse|RedirectResponse
      */
@@ -125,7 +125,7 @@ class ProjectController extends AppBaseController
     /**
      * Remove the specified Project from storage.
      *
-     * @param  Project  $project
+     * @param Project $project
      *
      * @throws Exception
      *
@@ -149,7 +149,7 @@ class ProjectController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return JsonResponse
      */

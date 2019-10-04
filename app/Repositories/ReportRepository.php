@@ -48,8 +48,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  Report  $report
+     * @param array  $input
+     * @param Report $report
      *
      * @return array
      */
@@ -82,9 +82,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
-     * @param  int  $paramId
-     * @param  string  $type
+     * @param int    $reportId
+     * @param int    $paramId
+     * @param string $type
      *
      * @return ReportFilter
      */
@@ -98,8 +98,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  Report  $report
+     * @param array  $input
+     * @param Report $report
      *
      * @throws Exception
      *
@@ -158,7 +158,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -168,7 +168,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -178,7 +178,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -188,7 +188,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return Collection|void
      */
@@ -203,7 +203,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @throws Exception
      *
@@ -215,7 +215,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  Report  $report
+     * @param Report $report
      *
      * @return TimeEntry[]|Builder[]
      */
@@ -313,7 +313,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $minutes
+     * @param int $minutes
      *
      * @return string
      */
