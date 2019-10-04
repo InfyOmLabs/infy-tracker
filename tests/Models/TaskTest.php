@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TaskTest.
+ */
 class TaskTest extends TestCase
 {
     use DatabaseTransactions;
@@ -56,5 +59,27 @@ class TaskTest extends TestCase
         $firstTask = $tasks->first();
         $this->assertEquals($task2->id, $firstTask->id);
         $this->assertEquals($project2->id, $firstTask->project_id);
+    }
+
+    /** @test */
+    public function test_return_due_date()
+    {
+        $task = factory(Task::class)->create();
+
+        $task = Task::first();
+
+        $this->assertNotEmpty($task->due_date);
+    }
+
+    /** @test */
+    public function test_return_task_prefix_number()
+    {
+        $task = factory(Task::class)->create();
+
+        $task = Task::first();
+
+        $this->assertNotEmpty($task->prefix_task_number);
+        $taskPrefixNumber = '#'.$task->project->prefix.'-'.$task->task_number;
+        $this->assertEquals($taskPrefixNumber, $task->prefix_task_number);
     }
 }

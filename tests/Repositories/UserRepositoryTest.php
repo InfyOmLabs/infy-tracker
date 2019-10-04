@@ -5,9 +5,10 @@ namespace Tests\Repositories;
 use App\Models\Project;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Exception;
+use Hash;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class UserRepositoryTest extends TestCase
     public function it_can_get_users_of_given_projects()
     {
         /** @var Collection $users */
-        $users = factory(User::class)->times(2)->create();
+        $users = factory(User::class, 2)->create();
 
         $project1 = factory(Project::class)->create();
         $project2 = factory(Project::class)->create();
@@ -49,7 +50,7 @@ class UserRepositoryTest extends TestCase
     public function it_can_get_all_users()
     {
         /** @var Collection $users */
-        $users = factory(User::class)->times(2)->create();
+        $users = factory(User::class, 2)->create();
 
         $userList = $this->userRepo->getUserList();
 
@@ -83,7 +84,11 @@ class UserRepositoryTest extends TestCase
         $this->assertFalse($user->is_active);
     }
 
-    /** @test */
+    /**
+     * @test
+     *
+     * @throws Exception
+     */
     public function test_can_set_user_password()
     {
         /** @var User $farhan */

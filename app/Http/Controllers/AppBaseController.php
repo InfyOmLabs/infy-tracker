@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use InfyOm\Generator\Utils\ResponseUtil;
 use Response;
 use Validator;
@@ -15,7 +16,7 @@ class AppBaseController extends Controller
      * @param array|mixed $result
      * @param string      $message
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function sendResponse($result, $message)
     {
@@ -26,7 +27,7 @@ class AppBaseController extends Controller
      * @param string $error
      * @param int    $code
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function sendError($error, $code = 500)
     {
@@ -36,7 +37,7 @@ class AppBaseController extends Controller
     /**
      * @param string $message
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function sendSuccess($message)
     {
@@ -51,7 +52,7 @@ class AppBaseController extends Controller
      * @param array $rules
      * @param array $ruleMessage
      *
-     * @return null|string
+     * @return null|string|void
      */
     public function validateRules($request, $rules, $ruleMessage = [])
     {

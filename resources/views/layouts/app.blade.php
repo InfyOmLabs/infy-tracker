@@ -15,11 +15,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
-    <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.css">
     @yield('page_css')
@@ -94,7 +91,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 @yield('page_js')
@@ -105,16 +101,10 @@
     let myTasksUrl = "{{url('my-tasks')}}";
     let myProjectsUrl = "{{url('my-projects')}}";
     let lastTaskWorkUrl = "{{url('user-last-task-work')}}";
-    let loginUserId = "{{ getLoggedInUserId() }}";
     let closeWatchImg = "{{asset('assets/img/close.png')}}";
     let stopWatchImg = "{{asset('assets/img/stopwatch.png')}}";
     let usersUrl = "{{ url('users') }}/";
-    let clientsUrl = "{{ url('clients') }}/";
     let projectsUrl = "{{ url('projects') }}/";
-    let reporstUrl = "{{ url('reports') }}";
-    let usersOfProjects = "{{ url('users-of-projects') }}";
-    let projectsOfClient = "{{ url('projects-of-client') }}";
-    let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     let startTimerUrl = "{{ url('start-timer') }}";
     let pusherAppKey = "{{config('broadcasting.connections.pusher.key')}}";
     let pusherAppCluster = "{{config('broadcasting.connections.pusher.options.cluster')}}";

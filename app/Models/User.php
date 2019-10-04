@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Notifications\MailResetPasswordNotification;
 use App\Traits\ImageTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -115,10 +117,12 @@ class User extends Authenticatable
      * @var array
      */
     public static $rules = [
-        'name'    => 'required|unique:users,name',
-        'email'   => 'required|email|unique:users,email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'phone'   => 'nullable|numeric|digits:10',
-        'role_id' => 'required',
+        'name'                  => 'required|unique:users,name',
+        'email'                 => 'required|email|unique:users,email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'phone'                 => 'nullable|numeric|digits:10',
+        'role_id'               => 'required',
+        'password'              => 'nullable|min:6|required_with:password_confirmation|same:password_confirmation',
+        'password_confirmation' => 'nullable|min:6',
     ];
 
     public static $messages = [
@@ -147,21 +151,24 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function projects()
     {
-        return $this->belongsToMany('App\Models\Project');
+        return $this->belongsToMany(Project::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function createdUser()
     {
         return $this->belongsTo(self::class, 'created_by');
     }
 
+    /**
+     * @return string
+     */
     public function getImgAvatarAttribute()
     {
         return getUserImageInitial($this->id, $this->name);

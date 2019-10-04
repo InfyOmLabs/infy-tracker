@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -46,8 +47,8 @@ class TimeEntryController extends AppBaseController
                 $request->only('filter_activity', 'filter_user', 'filter_project'))
             )->editColumn('title', function (TimeEntry $timeEntry) {
                 return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
-            })->filterColumn('title', function ($query, $search) {
-                $query->where(function ($query) use ($search) {
+            })->filterColumn('title', function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
                         ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(t.task_number,'')) LIKE ?",
                             ["%$search%"]);
@@ -71,6 +72,7 @@ class TimeEntryController extends AppBaseController
     {
         $input = $this->validateInput($request->all());
 
+        $this->timeEntryRepository->assignTaskToAdmin($input);
         $this->timeEntryRepository->create($input);
         $this->timeEntryRepository->broadcastStopTimerEvent();
 
@@ -225,6 +227,6 @@ class TimeEntryController extends AppBaseController
     {
         $this->timeEntryRepository->broadcastStartTimerEvent($request->all());
 
-        return $this->sendSuccess('Start timer broadcasted successfully.');
+        return $this->sendSuccess('Start timer broadcasts successfully.');
     }
 }

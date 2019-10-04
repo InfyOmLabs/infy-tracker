@@ -52,6 +52,7 @@
         let timeEntryUrl = "{{url('time-entries')}}/";
         let projectsURL = "{{url('projects')}}/";
         let getTaskUrl = "{{url('get-tasks')}}/";
+        let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
     </script>
     <script src="{{ mix('assets/js/time_entries/time_entry.js') }}"></script>
 @endsection

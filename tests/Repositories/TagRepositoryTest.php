@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class TagRepositoryTest.
+ */
 class TagRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
@@ -25,7 +28,7 @@ class TagRepositoryTest extends TestCase
     public function it_can_retrieve_tags_list()
     {
         /** @var Collection $tags */
-        $tags = factory(Tag::class)->times(3)->create();
+        $tags = factory(Tag::class, 3)->create();
 
         $tagResult = $this->tagRepo->getTagList();
 
