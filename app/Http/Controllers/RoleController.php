@@ -33,8 +33,8 @@ class RoleController extends AppBaseController
     /**
      * RoleController constructor.
      *
-     * @param RoleRepository       $rolesRepo
-     * @param PermissionRepository $permissionRepository
+     * @param  RoleRepository  $rolesRepo
+     * @param  PermissionRepository  $permissionRepository
      */
     public function __construct(RoleRepository $rolesRepo, PermissionRepository $permissionRepository)
     {
@@ -45,7 +45,7 @@ class RoleController extends AppBaseController
     /**
      * Display a listing of the Roles.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -76,7 +76,7 @@ class RoleController extends AppBaseController
     /**
      * Store a newly created Roles in storage.
      *
-     * @param CreateRoleRequest $request
+     * @param  CreateRoleRequest  $request
      *
      * @return Response
      */
@@ -96,7 +96,7 @@ class RoleController extends AppBaseController
     /**
      * Show the form for editing the specified Roles.
      *
-     * @param Role $role
+     * @param  Role  $role
      *
      * @return Response
      */
@@ -109,8 +109,8 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role              $role
-     * @param UpdateRoleRequest $request
+     * @param  Role  $role
+     * @param  UpdateRoleRequest  $request
      *
      * @return RedirectResponse|Redirector
      */
@@ -130,7 +130,7 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role $role
+     * @param  Role  $role
      *
      * @throws Exception
      *

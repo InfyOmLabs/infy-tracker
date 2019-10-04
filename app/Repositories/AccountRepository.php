@@ -10,9 +10,9 @@ use URL;
 class AccountRepository
 {
     /**
-     * @param string $username
-     * @param string $email
-     * @param string $activateCode
+     * @param  string  $username
+     * @param  string  $email
+     * @param  string  $activateCode
      *
      * @throws Exception
      */

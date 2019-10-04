@@ -46,7 +46,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $projectIds
+     * @param  array  $projectIds
      *
      * @return Collection
      */
@@ -64,7 +64,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @throws Exception
      *
@@ -86,7 +86,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -115,7 +115,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return User
      */

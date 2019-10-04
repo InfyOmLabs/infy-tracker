@@ -54,7 +54,7 @@ class ClientRepository extends BaseRepository
     }
 
     /**
-     * @param int $clientId
+     * @param  int  $clientId
      *
      * @throws Exception
      *

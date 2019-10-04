@@ -48,8 +48,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
-     * @param Report $report
+     * @param  array  $input
+     * @param  Report  $report
      *
      * @return array
      */
@@ -82,9 +82,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int    $reportId
-     * @param int    $paramId
-     * @param string $type
+     * @param  int  $reportId
+     * @param  int  $paramId
+     * @param  string  $type
      *
      * @return ReportFilter
      */
@@ -98,8 +98,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
-     * @param Report $report
+     * @param  array  $input
+     * @param  Report  $report
      *
      * @throws Exception
      *
@@ -158,19 +158,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
-     *
-     * @throws Exception
-     *
-     * @return bool|mixed|null
-     */
-    public function deleteFilter($reportId)
-    {
-        return ReportFilter::ofReport($reportId)->delete();
-    }
-
-    /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return array
      */
@@ -180,17 +168,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
-     *
-     * @return array
-     */
-    public function getTagIds($reportId)
-    {
-        return ReportFilter::ofParamType(Tag::class)->ofReport($reportId)->pluck('param_id')->toArray();
-    }
-
-    /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return array
      */
@@ -200,7 +178,17 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
+     *
+     * @return array
+     */
+    public function getTagIds($reportId)
+    {
+        return ReportFilter::ofParamType(Tag::class)->ofReport($reportId)->pluck('param_id')->toArray();
+    }
+
+    /**
+     * @param  int  $reportId
      *
      * @return Collection|void
      */
@@ -215,7 +203,19 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param Report $report
+     * @param  int  $reportId
+     *
+     * @throws Exception
+     *
+     * @return bool|mixed|null
+     */
+    public function deleteFilter($reportId)
+    {
+        return ReportFilter::ofReport($reportId)->delete();
+    }
+
+    /**
+     * @param  Report  $report
      *
      * @return TimeEntry[]|Builder[]
      */
@@ -313,7 +313,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $minutes
+     * @param  int  $minutes
      *
      * @return string
      */

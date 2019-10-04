@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,7 +34,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Display a listing of the TimeEntry.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -46,8 +47,8 @@ class TimeEntryController extends AppBaseController
                 $request->only('filter_activity', 'filter_user', 'filter_project'))
             )->editColumn('title', function (TimeEntry $timeEntry) {
                 return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
-            })->filterColumn('title', function ($query, $search) {
-                $query->where(function ($query) use ($search) {
+            })->filterColumn('title', function (Builder $query, $search) {
+                $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
                         ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(t.task_number,'')) LIKE ?",
                             ["%$search%"]);
@@ -63,7 +64,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Store a newly created TimeEntry in storage.
      *
-     * @param CreateTimeEntryRequest $request
+     * @param  CreateTimeEntryRequest  $request
      *
      * @return JsonResponse
      */
@@ -81,7 +82,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Show the form for editing the specified TimeEntry.
      *
-     * @param TimeEntry $timeEntry
+     * @param  TimeEntry  $timeEntry
      *
      * @return JsonResponse
      */
@@ -95,8 +96,8 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param TimeEntry              $timeEntry
-     * @param UpdateTimeEntryRequest $request
+     * @param  TimeEntry  $timeEntry
+     * @param  UpdateTimeEntryRequest  $request
      *
      * @return JsonResponse
      */
@@ -133,7 +134,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param TimeEntry $timeEntry
+     * @param  TimeEntry  $timeEntry
      *
      * @throws Exception
      *
@@ -152,8 +153,8 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param array $input
-     * @param null  $id
+     * @param  array  $input
+     * @param  null  $id
      *
      * @return array|JsonResponse
      */
@@ -204,8 +205,8 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param int     $projectId
-     * @param Request $request
+     * @param  int  $projectId
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -218,7 +219,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -226,6 +227,6 @@ class TimeEntryController extends AppBaseController
     {
         $this->timeEntryRepository->broadcastStartTimerEvent($request->all());
 
-        return $this->sendSuccess('Start timer broadcasted successfully.');
+        return $this->sendSuccess('Start timer broadcasts successfully.');
     }
 }

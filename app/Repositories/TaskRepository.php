@@ -54,8 +54,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
-     * @param array $columns
+     * @param  int  $id
+     * @param  array  $columns
      *
      * @return Task
      */
@@ -65,7 +65,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return Task
      */
@@ -97,8 +97,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
-     * @param int   $id
+     * @param  array  $input
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -136,8 +136,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array     $input
-     * @param Task|null $task
+     * @param  array  $input
+     * @param  Task|null  $task
      *
      * @return bool
      */
@@ -202,7 +202,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $projectIds
+     * @param  array  $projectIds
      *
      * @return mixed
      */
@@ -217,7 +217,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return bool
      */
@@ -231,8 +231,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task  $task
-     * @param array $tags
+     * @param  Task  $task
+     * @param  array  $tags
      */
     public function attachTags($task, $tags)
     {
@@ -262,23 +262,25 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
-     * @param array $input
+     * @param  int  $id
+     * @param  array  $input
      *
      * @return Task
      */
     public function getTaskDetails($id, $input = [])
     {
-        $task = Task::with(['timeEntries' => function (HasMany $query) use ($input) {
-            if (isset($input['user_id']) && $input['user_id'] > 0) {
-                $query->where('time_entries.user_id', '=', $input['user_id']);
-            }
+        $task = Task::with([
+            'timeEntries' => function (HasMany $query) use ($input) {
+                if (isset($input['user_id']) && $input['user_id'] > 0) {
+                    $query->where('time_entries.user_id', '=', $input['user_id']);
+                }
 
-            if (!empty($input['start_time']) && !empty($input['end_time'])) {
-                $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
-            }
-            $query->with('user');
-        }, 'project'])->findOrFail($id);
+                if (!empty($input['start_time']) && !empty($input['end_time'])) {
+                    $query->whereBetween('start_time', [$input['start_time'], $input['end_time']]);
+                }
+                $query->with('user');
+            }, 'project',
+        ])->findOrFail($id);
 
         $minutes = $task->timeEntries->pluck('duration')->sum();
         $totalDuration = 0;
@@ -376,7 +378,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -400,7 +402,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return array
      */
@@ -424,7 +426,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return Comment
      */
@@ -437,7 +439,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function addCommentBroadCast($comment)
     {
@@ -445,7 +447,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function deleteCommentBroadCast($comment)
     {
@@ -453,7 +455,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function editCommentBroadCast($comment)
     {

@@ -22,7 +22,7 @@ class TagController extends AppBaseController
     /**
      * TagController constructor.
      *
-     * @param TagRepository $tagRepo
+     * @param  TagRepository  $tagRepo
      */
     public function __construct(TagRepository $tagRepo)
     {
@@ -30,7 +30,7 @@ class TagController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -48,7 +48,7 @@ class TagController extends AppBaseController
     /**
      * Store a newly created Tag in storage.
      *
-     * @param CreateTagRequest $request
+     * @param  CreateTagRequest  $request
      *
      * @return JsonResponse
      */
@@ -63,7 +63,7 @@ class TagController extends AppBaseController
     /**
      * Show the form for editing the specified Tag.
      *
-     * @param Tag $tag
+     * @param  Tag  $tag
      *
      * @return JsonResponse
      */
@@ -75,8 +75,8 @@ class TagController extends AppBaseController
     /**
      * Update the specified Tag in storage.
      *
-     * @param Tag              $tag
-     * @param UpdateTagRequest $request
+     * @param  Tag  $tag
+     * @param  UpdateTagRequest  $request
      *
      * @return JsonResponse
      */
@@ -90,7 +90,7 @@ class TagController extends AppBaseController
     /**
      * Remove the specified Tag from storage.
      *
-     * @param Tag $tag
+     * @param  Tag  $tag
      *
      * @throws Exception
      *

@@ -60,24 +60,9 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @return Project[]
-     */
-    public function getMyProjects()
-    {
-        $query = Project::whereHas('users', function (Builder $query) {
-            $query->where('user_id', getLoggedInUserId());
-        });
-
-        /** @var Project[] $projects */
-        $projects = $query->orderBy('name')->get();
-
-        return $projects;
-    }
-
-    /**
      * get clients.
      *
-     * @param int|null $clientId
+     * @param  int|null  $clientId
      *
      * @return Collection
      */
@@ -93,7 +78,22 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @return Project[]
+     */
+    public function getMyProjects()
+    {
+        $query = Project::whereHas('users', function (Builder $query) {
+            $query->where('user_id', getLoggedInUserId());
+        });
+
+        /** @var Project[] $projects */
+        $projects = $query->orderBy('name')->get();
+
+        return $projects;
+    }
+
+    /**
+     * @param  int  $id
      *
      * @throws Exception
      *

@@ -65,15 +65,15 @@ class TimeEntryRepository extends BaseRepository
         $activityTypeRepo = app(ActivityTypeRepository::class);
         $data['activityTypes'] = $activityTypeRepo->getActivityTypeList();
 
-        $data['tasks'] = Task::orderBy('title')->whereHas('taskAssignee', function (Builder $query) {
+        $data['tasks'] = Task::whereHas('taskAssignee', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
-        })->pluck('title', 'id');
+        })->orderBy('title')->pluck('title', 'id');
 
         return $data;
     }
 
     /**
-     * @return array|null
+     * @return array|null|void
      */
     public function myLastTask()
     {
@@ -91,8 +91,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param int      $projectId
-     * @param int|null $taskId
+     * @param  int  $projectId
+     * @param  int|null  $taskId
      *
      * @return Collection
      */
@@ -118,7 +118,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return mixed
      */
@@ -133,8 +133,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
-     * @param int   $id
+     * @param  array  $input
+     * @param  int  $id
      *
      * @return bool
      */
@@ -173,13 +173,13 @@ class TimeEntryRepository extends BaseRepository
 
     /**
      * @param $input
-     * @param null $id
+     * @param  null  $id
      */
     public function checkDuplicateEntry($input, $id = null)
     {
         $timeArr = [$input['start_time'], $input['end_time']];
         $query = TimeEntry::whereUserId(getLoggedInUserId())
-            ->where(function ($q) use ($timeArr) {
+            ->where(function (Builder $q) use ($timeArr) {
                 $q->whereBetween('start_time', $timeArr)
                     ->orWhereBetween('end_time', $timeArr)
                     ->orWhereRaw("('$timeArr[0]' between start_time and end_time or '$timeArr[1]' between start_time and end_time)");

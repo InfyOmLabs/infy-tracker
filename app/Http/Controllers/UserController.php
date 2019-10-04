@@ -40,10 +40,10 @@ class UserController extends AppBaseController
     /**
      * UserController constructor.
      *
-     * @param UserRepository    $userRepo
-     * @param AccountRepository $accountRepository
-     * @param ProjectRepository $projectRepository
-     * @param RoleRepository    $roleRepository
+     * @param  UserRepository  $userRepo
+     * @param  AccountRepository  $accountRepository
+     * @param  ProjectRepository  $projectRepository
+     * @param  RoleRepository  $roleRepository
      */
     public function __construct(
         UserRepository $userRepo,
@@ -60,7 +60,7 @@ class UserController extends AppBaseController
     /**
      * Display a listing of the User.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -82,7 +82,7 @@ class UserController extends AppBaseController
     /**
      * Store a newly created User in storage.
      *
-     * @param CreateUserRequest $request
+     * @param  CreateUserRequest  $request
      *
      * @throws Exception
      *
@@ -124,7 +124,7 @@ class UserController extends AppBaseController
     /**
      * Show the form for editing the specified User.
      *
-     * @param User $user
+     * @param  User  $user
      *
      * @return JsonResponse
      */
@@ -140,8 +140,8 @@ class UserController extends AppBaseController
     /**
      * Update the specified User in storage.
      *
-     * @param User              $user
-     * @param UpdateUserRequest $request
+     * @param  User  $user
+     * @param  UpdateUserRequest  $request
      *
      * @throws Exception
      *
@@ -184,7 +184,7 @@ class UserController extends AppBaseController
     /**
      * Remove the specified User from storage.
      *
-     * @param User $user
+     * @param  User  $user
      *
      * @throws Exception
      *
@@ -200,7 +200,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      *
      * @throws Exception
      *
@@ -214,7 +214,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param UpdateUserProfileRequest $request
+     * @param  UpdateUserProfileRequest  $request
      *
      * @return JsonResponse
      */
@@ -228,7 +228,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param User $user
+     * @param  User  $user
      *
      * @return JsonResponse
      */
