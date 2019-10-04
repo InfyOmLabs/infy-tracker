@@ -142,8 +142,9 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var TimeEntry $timeEntry */
         $timeEntry = $this->find($id);
-        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ? $this->checkTimeUpdated($timeEntry,
-            $input) : $timeEntry->entry_type;
+        $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ?
+            $this->checkTimeUpdated($timeEntry, $input) :
+            $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
         if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
             if ($timeEntry->duration != $input['duration']) {
@@ -172,8 +173,10 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param $input
-     * @param  null  $id
+     * @param  array  $input
+     * @param  int|null  $id
+     *
+     * @return bool
      */
     public function checkDuplicateEntry($input, $id = null)
     {
@@ -193,6 +196,8 @@ class TimeEntryRepository extends BaseRepository
         if (!empty($timeEntry)) {
             throw new BadRequestHttpException('Time entry between this duration already exist.');
         }
+
+        return true;
     }
 
     public function broadcastStartTimerEvent($input)
