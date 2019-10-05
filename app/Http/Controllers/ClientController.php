@@ -71,7 +71,7 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param $input
+     * @param  array  $input
      *
      * @return mixed
      */

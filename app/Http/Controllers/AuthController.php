@@ -30,11 +30,13 @@ class AuthController extends AppBaseController
     }
 
     /**
+     * @param  Request  $request
+     *
      * @return RedirectResponse|Redirector|View
      */
-    public function verifyAccount()
+    public function verifyAccount(Request $request)
     {
-        $token = \Request::get('token', null);
+        $token = $request->get('token', null);
 
         if (empty($token)) {
             Session::flash('error', 'token not found');

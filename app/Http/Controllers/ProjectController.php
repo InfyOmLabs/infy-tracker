@@ -77,12 +77,8 @@ class ProjectController extends AppBaseController
     public function store(CreateProjectRequest $request)
     {
         $input = $request->all();
-        $input['created_by'] = getLoggedInUserId();
-        $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
-        /** @var Project $project */
-        $project = $this->projectRepository->create($input);
-        $project->users()->sync($input['user_ids']);
+        $this->projectRepository->store($input);
 
         return $this->sendSuccess('Project created successfully.');
     }
@@ -113,11 +109,8 @@ class ProjectController extends AppBaseController
     public function update(Project $project, UpdateProjectRequest $request)
     {
         $input = $request->all();
-        $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
-        /** @var Project $project */
-        $project = $this->projectRepository->update($input, $project->id);
-        $project->users()->sync($input['user_ids']);
+        $this->projectRepository->update($input, $project->id);
 
         return $this->sendSuccess('Project updated successfully.');
     }
@@ -157,10 +150,7 @@ class ProjectController extends AppBaseController
     {
         $projectIds = $request->get('projectIds', null);
 
-        $projectIdsArr = [];
-        if (!is_null($projectIds)) {
-            $projectIdsArr = explode(',', $projectIds);
-        }
+        $projectIdsArr = (!is_null($projectIds)) ? explode(',', $projectIds) : [];
         $users = $this->userRepository->getUserList($projectIdsArr);
 
         return $this->sendResponse($users, 'Users Retrieved successfully.');

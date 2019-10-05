@@ -45,8 +45,40 @@ class ProjectRepository extends BaseRepository
         return Project::class;
     }
 
+    /**
+     * @param  array  $input
+     *
+     * @return Project
+     */
+    public function store($input)
+    {
+        $input['created_by'] = getLoggedInUserId();
+        $input['description'] = is_null($input['description']) ? '' : $input['description'];
+
+        $project = Project::create($input);
+        $project->users()->sync($input['user_ids']);
+
+        return $project->fresh();
+    }
+
+    /**
+     * @param  array  $input
+     * @param  int  $id
+     *
+     * @return Project
+     */
+    public function update($input, $id)
+    {
+        $input['description'] = is_null($input['description']) ? '' : $input['description'];
+        $project = Project::findOrFail($id);
+        $project->update($input);
+        $project->users()->sync($input['user_ids']);
+
+        return $project->fresh();
+    }
+
     /***
-     * @return mixed
+     * @return array
      */
     public function getLoginUserAssignProjectsArr()
     {
