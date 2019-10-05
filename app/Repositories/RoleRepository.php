@@ -43,4 +43,50 @@ class RoleRepository extends BaseRepository
     {
         return Role::orderBy('name')->pluck('name', 'id');
     }
+
+    /**
+     * @param  array  $input
+     *
+     * @return Role
+     */
+    public function store($input)
+    {
+        /** @var Role $roles */
+        $role = Role::create($input);
+        $this->attachPermissions($role, $input);
+
+
+        return $role->fresh();
+    }
+
+    /**
+     * @param  array  $input
+     * @param  int  $id
+     *
+     * @return Role
+     */
+    public function update($input, $id)
+    {
+        $role = Role::findOrFail($id);
+        $role->update($input);
+
+        $this->attachPermissions($role, $input);
+
+        return $role->fresh();
+    }
+
+    /**
+     * @param  Role  $role
+     * @param  array  $input
+     *
+     * @return bool
+     */
+    public function attachPermissions($role, $input)
+    {
+        if (isset($input['permissions']) && !empty($input['permissions'])) {
+            $role->syncPermissions($input['permissions']);
+        }
+
+        return true;
+    }
 }
