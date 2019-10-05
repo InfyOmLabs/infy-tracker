@@ -13,8 +13,8 @@ use Validator;
 class AppBaseController extends Controller
 {
     /**
-     * @param  array|mixed  $result
-     * @param  string  $message
+     * @param array|mixed $result
+     * @param string      $message
      *
      * @return JsonResponse
      */
@@ -24,8 +24,8 @@ class AppBaseController extends Controller
     }
 
     /**
-     * @param  string  $error
-     * @param  int  $code
+     * @param string $error
+     * @param int    $code
      *
      * @return JsonResponse
      */
@@ -35,7 +35,7 @@ class AppBaseController extends Controller
     }
 
     /**
-     * @param  string  $message
+     * @param string $message
      *
      * @return JsonResponse
      */
@@ -48,9 +48,9 @@ class AppBaseController extends Controller
     }
 
     /**
-     * @param  array  $request
-     * @param  array  $rules
-     * @param  array  $ruleMessage
+     * @param array $request
+     * @param array $rules
+     * @param array $ruleMessage
      *
      * @return null|string|void
      */

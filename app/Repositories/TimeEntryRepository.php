@@ -91,8 +91,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $projectId
-     * @param  int|null  $taskId
+     * @param int      $projectId
+     * @param int|null $taskId
      *
      * @return Collection
      */
@@ -118,7 +118,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -133,8 +133,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return bool
      */
@@ -173,8 +173,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int|null  $id
+     * @param array    $input
+     * @param int|null $id
      *
      * @return bool
      */

@@ -23,7 +23,7 @@ abstract class BaseRepository
     protected $app;
 
     /**
-     * @param  Application  $app
+     * @param Application $app
      *
      * @throws Exception
      */
@@ -61,8 +61,8 @@ abstract class BaseRepository
     /**
      * Paginate records for scaffold.
      *
-     * @param  int  $perPage
-     * @param  array  $columns
+     * @param int   $perPage
+     * @param array $columns
      *
      * @return LengthAwarePaginator
      */
@@ -76,9 +76,9 @@ abstract class BaseRepository
     /**
      * Build a query for retrieving all records.
      *
-     * @param  array  $search
-     * @param  int|null  $skip
-     * @param  int|null  $limit
+     * @param array    $search
+     * @param int|null $skip
+     * @param int|null $limit
      *
      * @return Builder
      */
@@ -115,10 +115,10 @@ abstract class BaseRepository
     /**
      * Retrieve all records with given filter criteria.
      *
-     * @param  array  $search
-     * @param  int|null  $skip
-     * @param  int|null  $limit
-     * @param  array  $columns
+     * @param array    $search
+     * @param int|null $skip
+     * @param int|null $limit
+     * @param array    $columns
      *
      * @return LengthAwarePaginator|Builder[]|Collection
      */
@@ -132,7 +132,7 @@ abstract class BaseRepository
     /**
      * Create model record.
      *
-     * @param  array  $input
+     * @param array $input
      *
      * @return Model
      */
@@ -148,8 +148,8 @@ abstract class BaseRepository
     /**
      * Find model record for given id.
      *
-     * @param  int  $id
-     * @param  array  $columns
+     * @param int   $id
+     * @param array $columns
      *
      * @return Builder|Builder[]|Collection|Model|null
      */
@@ -163,8 +163,8 @@ abstract class BaseRepository
     /**
      * Update model record for given id.
      *
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return Builder|Builder[]|Collection|Model
      */
@@ -182,7 +182,7 @@ abstract class BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -198,8 +198,8 @@ abstract class BaseRepository
     }
 
     /**
-     * @param  int  $id
-     * @param  array  $with
+     * @param int   $id
+     * @param array $with
      *
      * @return mixed
      */

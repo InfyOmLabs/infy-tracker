@@ -94,7 +94,7 @@ class ProjectRepository extends BaseRepository
     /**
      * get clients.
      *
-     * @param  int|null  $clientId
+     * @param int|null $clientId
      *
      * @return Collection
      */
@@ -125,7 +125,7 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *

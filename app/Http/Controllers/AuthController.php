@@ -85,7 +85,7 @@ class AuthController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
