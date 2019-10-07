@@ -19,8 +19,8 @@ function getLoggedInUser()
 }
 
 /**
- * @param string $str
- * @param string $delimiter
+ * @param  string  $str
+ * @param  string  $delimiter
  *
  * @return array
  */
@@ -35,7 +35,15 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
     return array_values($arr);
 }
 
-function time_elapsed_string($datetime, $full = false)
+/**
+ * @param  string  $datetime
+ * @param  bool  $full
+ *
+ * @throws Exception
+ *
+ * @return string
+ */
+function timeElapsedString($datetime, $full = false)
 {
     $now = new DateTime();
     $ago = new DateTime($datetime);
@@ -68,6 +76,9 @@ function time_elapsed_string($datetime, $full = false)
     return $string ? implode(', ', $string).' ago' : 'just now';
 }
 
+/**
+ * @param  int  $totalMinutes
+ */
 function roundToQuarterHour($totalMinutes)
 {
     $hours = intval($totalMinutes / 60);
@@ -79,6 +90,12 @@ function roundToQuarterHour($totalMinutes)
     }
 }
 
+/**
+ * @param  int  $opacity
+ * @param  string|null  $colorCode
+ *
+ * @return string
+ */
 function getColor($opacity = 1, $colorCode = null)
 {
     if (empty($colorCode)) {
@@ -88,6 +105,9 @@ function getColor($opacity = 1, $colorCode = null)
     return 'rgba('.$colorCode.', '.$opacity.')';
 }
 
+/**
+ * @return string
+ */
 function getColorCode()
 {
     return rand(0, 255).', '.rand(0, 255).', '.rand(1, 255);
@@ -96,7 +116,7 @@ function getColorCode()
 /**
  * return random color.
  *
- * @param int $userId
+ * @param  int  $userId
  *
  * @return string
  */
@@ -121,8 +141,8 @@ function getAvatarUrl()
 /**
  * return avatar full url.
  *
- * @param int    $userId
- * @param string $name
+ * @param  int  $userId
+ * @param  string  $name
  *
  * @return string
  */

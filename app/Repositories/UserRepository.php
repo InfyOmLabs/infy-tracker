@@ -55,7 +55,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $projectIds
+     * @param  array  $projectIds
      *
      * @return Collection
      */
@@ -73,7 +73,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @throws Exception
      *
@@ -95,7 +95,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -124,7 +124,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return User
      */
@@ -139,7 +139,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return true
      */
@@ -240,7 +240,6 @@ class UserRepository extends BaseRepository
     /**
      * @param  array  $input
      *
-     *
      * @return mixed
      */
     public function validateInput($input)
@@ -268,7 +267,7 @@ class UserRepository extends BaseRepository
         $user->projects()->sync($projectIds);
 
         $roles = !empty($input['role_id']) ? $input['role_id'] : [];
-        $user->roles()->sync($input['role_id']);
+        $user->roles()->sync($roles);
 
         return true;
     }

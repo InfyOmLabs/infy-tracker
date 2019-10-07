@@ -15,8 +15,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ReportRepository.
- *
- * @version July 6, 2019, 12:12 pm UTC
  */
 class ReportRepository extends BaseRepository
 {

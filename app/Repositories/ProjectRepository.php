@@ -12,8 +12,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ProjectRepository.
- *
- * @version May 3, 2019, 5:06 am UTC
  */
 class ProjectRepository extends BaseRepository
 {

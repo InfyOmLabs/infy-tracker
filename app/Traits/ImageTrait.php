@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait ImageTrait
 {
     /**
-     * @param string $file
+     * @param  string  $file
      *
      * @return bool
      */
@@ -41,9 +41,9 @@ trait ImageTrait
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string       $path
-     * @param array        $options
+     * @param  UploadedFile  $file
+     * @param  string  $path
+     * @param  array  $options
      *
      * @throws ApiOperationFailedException
      *
@@ -78,7 +78,7 @@ trait ImageTrait
     }
 
     /**
-     * @param string $path
+     * @param  string  $path
      *
      * @return string
      */
@@ -88,21 +88,26 @@ trait ImageTrait
     }
 
     /**
-     * @param string $url
+     * @param  string  $url
      *
      * @return mixed
      */
     public function urlEncoding($url)
     {
-        $entities = ['%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D', '%5C'];
-        $replacements = ['!', '*', "'", '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '%', '#', '[', ']', '/'];
+        $entities = [
+            '%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F',
+            '%25', '%23', '%5B', '%5D', '%5C',
+        ];
+        $replacements = [
+            '!', '*', "'", '(', ')', ';', ':', '@', '&', '=', '+', '$', ',', '/', '?', '%', '#', '[', ']', '/',
+        ];
 
         return str_replace($entities, $replacements, urlencode($url));
     }
 
     /**
-     * @param UploadedFile $file
-     * @param string       $path
+     * @param  UploadedFile  $file
+     * @param  string  $path
      *
      * @throws ApiOperationFailedException
      *

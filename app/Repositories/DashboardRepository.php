@@ -15,10 +15,13 @@ use Arr;
 use Auth;
 use Carbon\Carbon;
 
+/**
+ * Class DashboardRepository
+ */
 class DashboardRepository
 {
     /**
-     * @param $input
+     * @param  array  $input
      *
      * @return array
      */
@@ -78,8 +81,8 @@ class DashboardRepository
     }
 
     /**
-     * @param $startDate
-     * @param $endDate
+     * @param  string  $startDate
+     * @param  string  $endDate
      *
      * @return array
      */
@@ -91,7 +94,9 @@ class DashboardRepository
         if ($startDate && $endDate) {
             $end = trim(substr($endDate, 0, 10));
             $start = Carbon::parse($startDate)->toDateString();
+            /** @var \Illuminate\Support\Carbon $startDate */
             $startDate = Carbon::createFromFormat('Y-m-d', $start);
+            /** @var \Illuminate\Support\Carbon $endDate */
             $endDate = Carbon::createFromFormat('Y-m-d', $end);
 
             while ($startDate <= $endDate) {
@@ -113,7 +118,7 @@ class DashboardRepository
     }
 
     /**
-     * @param $input
+     * @param  array  $input
      *
      * @return mixed
      */

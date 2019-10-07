@@ -7,12 +7,15 @@ use Illuminate\Mail\Message;
 use Mail;
 use URL;
 
+/**
+ * Class AccountRepository
+ */
 class AccountRepository
 {
     /**
-     * @param string $username
-     * @param string $email
-     * @param string $activateCode
+     * @param  string  $username
+     * @param  string  $email
+     * @param  string  $activateCode
      *
      * @throws Exception
      */

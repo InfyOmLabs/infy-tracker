@@ -6,8 +6,6 @@ use App\Models\Tag;
 
 /**
  * Class TagRepository.
- *
- * @version May 3, 2019, 4:33 am UTC
  */
 class TagRepository extends BaseRepository
 {
@@ -37,7 +35,7 @@ class TagRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return bool
      */
