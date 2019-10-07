@@ -48,8 +48,55 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
-     * @param Report $report
+     * @param  array  $input
+     *
+     * @return Report|null
+     */
+    public function store($input)
+    {
+        /** @var Report $report */
+        $report = Report::create($input);;
+        $this->createReportFilter($input, $report);
+
+        return $report->fresh();
+    }
+
+    /**
+     * @param  array  $input
+     * @param  int  $id
+     *
+     * @throws Exception
+     *
+     * @return Report
+     */
+    public function update($input, $id)
+    {
+        $report = Report::findOrFail($id);
+        $report->update($input);
+        $this->updateReportFilter($input, $report);
+
+        return $report->fresh();
+    }
+
+    /**
+     * @param  int  $id
+     *
+     * @throws Exception
+     *
+     * @return bool|mixed|null
+     */
+    public function delete($id)
+    {
+        $report = Report::findOrFail($id);
+        $this->deleteFilter($report->id);
+
+        return true;
+    }
+
+
+    /**
+     * @param  array  $input
+     * @param  Report  $report
      *
      * @return array
      */
@@ -82,9 +129,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int    $reportId
-     * @param int    $paramId
-     * @param string $type
+     * @param  int  $reportId
+     * @param  int  $paramId
+     * @param  string  $type
      *
      * @return ReportFilter
      */
@@ -98,8 +145,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param array  $input
-     * @param Report $report
+     * @param  array  $input
+     * @param  Report  $report
      *
      * @throws Exception
      *
@@ -158,7 +205,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return array
      */
@@ -168,7 +215,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return array
      */
@@ -178,7 +225,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return array
      */
@@ -188,7 +235,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @return Collection|void
      */
@@ -203,7 +250,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $reportId
+     * @param  int  $reportId
      *
      * @throws Exception
      *
@@ -215,7 +262,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param Report $report
+     * @param  Report  $report
      *
      * @return TimeEntry[]|Builder[]
      */
@@ -313,7 +360,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param int $minutes
+     * @param  int  $minutes
      *
      * @return string
      */
