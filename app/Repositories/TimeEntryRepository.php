@@ -6,7 +6,9 @@ use App\Events\StartTimer;
 use App\Events\StopWatchStop;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -91,8 +93,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param int      $projectId
-     * @param int|null $taskId
+     * @param  int  $projectId
+     * @param  int|null  $taskId
      *
      * @return Collection
      */
@@ -118,7 +120,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return mixed
      */
@@ -133,20 +135,39 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
-     * @param int   $id
+     * @param  array  $input
+     *
+     * @return TimeEntry
+     */
+    public function store($input)
+    {
+        $input = $this->validateInput($input);
+
+        $this->assignTaskToAdmin($input);
+
+        $timeEntry = TimeEntry::create($input);
+
+        return $timeEntry;
+    }
+
+    /**
+     * @param  array  $input
+     * @param  int  $id
      *
      * @return bool
      */
     public function updateTimeEntry($input, $id)
     {
+        $input = $this->validateInput($input, $id);
+
         /** @var TimeEntry $timeEntry */
-        $timeEntry = $this->find($id);
+        $timeEntry = TimeEntry::findOrFail($id);
+
         $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ?
             $this->checkTimeUpdated($timeEntry, $input) :
             $timeEntry->entry_type;
         $input['entry_type'] = $timeEntryType;
-        if ((isset($input['duration']) && !empty($input['duration'])) && (!isset($input['start_time']) || empty($input['start_time']) || !isset($input['end_time']) || empty($input['end_time']))) {
+        if (!empty($input['duration']) && empty($input['start_time']) || empty($input['end_time'])) {
             if ($timeEntry->duration != $input['duration']) {
                 $input['start_time'] = '';
                 $input['end_time'] = '';
@@ -155,6 +176,48 @@ class TimeEntryRepository extends BaseRepository
         $this->update($input, $id);
 
         return true;
+    }
+
+    /**
+     * @param  array  $input
+     * @param  null  $id
+     *
+     * @return array|JsonResponse
+     */
+    public function validateInput($input, $id = null)
+    {
+        $startTime = Carbon::parse($input['start_time']);
+        $endTime = Carbon::parse($input['end_time']);
+        $input['duration'] = $endTime->diffInMinutes($startTime);
+        if ($startTime > $endTime) {
+            throw new BadRequestHttpException('Invalid start time and end time.');
+        }
+
+        $now = Carbon::now()->format('Y-m-d');
+        if ($startTime->format('Y-m-d') > $now) {
+            throw new BadRequestHttpException('Start time must be less than or equal to current time.');
+        }
+
+        if ($endTime->format('Y-m-d') > $now) {
+            throw new BadRequestHttpException('End time must be less than or equal to current time.');
+        }
+
+        if ($input['duration'] > 720) {
+            throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
+        }
+
+        if ($input['duration'] < 1) {
+            throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
+        }
+
+        $this->checkDuplicateEntry($input, $id);
+
+        $input['user_id'] = getLoggedInUserId();
+        if (!isset($input['note']) || empty($input['note'])) {
+            $input['note'] = 'N/A';
+        }
+
+        return $input;
     }
 
     /**
@@ -173,8 +236,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param array    $input
-     * @param int|null $id
+     * @param  array  $input
+     * @param  int|null  $id
      *
      * @return bool
      */
@@ -200,18 +263,29 @@ class TimeEntryRepository extends BaseRepository
         return true;
     }
 
+
+    /**
+     * Start timer broadcast event
+     *
+     * @param  array  $input
+     */
     public function broadcastStartTimerEvent($input)
     {
         broadcast(new StartTimer($input))->toOthers();
     }
 
+    /**
+     * Stop timer broadcast event
+     */
     public function broadcastStopTimerEvent()
     {
         broadcast(new StopWatchStop())->toOthers();
     }
 
     /**
-     * @param $input
+     * @param  array  $input
+     *
+     * @return bool
      */
     public function assignTaskToAdmin($input)
     {
@@ -222,5 +296,7 @@ class TimeEntryRepository extends BaseRepository
             array_push($taskAssignees, getLoggedInUserId());
             $task->taskAssignee()->sync($taskAssignees);
         }
+
+        return true;
     }
 }
