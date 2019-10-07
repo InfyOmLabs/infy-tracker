@@ -252,7 +252,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param $task
+     * @param  Task  $task
      *
      * @return JsonResponse
      */

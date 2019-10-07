@@ -1,11 +1,11 @@
 $('#editProfileForm').submit(function (event) {
-    event.preventDefault();
-    isValidate = validatePassword();
-    if(!isValidate){
-        return false;
+    event.preventDefault()
+    isValidate = validatePassword()
+    if (!isValidate) {
+        return false
     }
-    let loadingButton = jQuery(this).find("#btnPrEditSave");
-    loadingButton.button('loading');
+    let loadingButton = jQuery(this).find('#btnPrEditSave')
+    loadingButton.button('loading')
     $.ajax({
         url: usersUrl + 'profile-update',
         type: 'post',
@@ -14,37 +14,39 @@ $('#editProfileForm').submit(function (event) {
         contentType: false,
         success: function (result) {
             if (result.success) {
-                $('#EditProfileModal').modal('hide');
-                location.reload();
+                $('#EditProfileModal').modal('hide')
+                location.reload()
             }
         },
         error: function (result) {
-            manageAjaxErrors(result,'editProfileValidationErrorsBox');
+            manageAjaxErrors(result, 'editProfileValidationErrorsBox')
         },
         complete: function () {
-            loadingButton.button('reset');
-        }
-    });
-});
+            loadingButton.button('reset')
+        },
+    })
+})
 
 $('#EditProfileModal').on('hidden.bs.modal', function () {
-    resetModalForm('#editProfileForm', '#editProfileValidationErrorsBox');
-});
+    resetModalForm('#editProfileForm', '#editProfileValidationErrorsBox')
+})
 
 // open edit user profile model
 $(document).on('click', '.edit-profile', function (event) {
-    let userId = $(event.currentTarget).data('id');
-    renderProfileData(usersUrl + userId + '/edit');
-});
+    let userId = $(event.currentTarget).data('id')
+    renderProfileData(usersUrl + userId + '/edit')
+})
 $(document).on('change', '#pfImage', function () {
-    let ext = $(this).val().split('.').pop().toLowerCase();
+    let ext = $(this).val().split('.').pop().toLowerCase()
     if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
-        $(this).val('');
-        $('#editProfileValidationErrorsBox').html('The profile image must be a file of type: jpeg, jpg, png.').show();
+        $(this).val('')
+        $('#editProfileValidationErrorsBox').
+            html('The profile image must be a file of type: jpeg, jpg, png.').
+            show()
     } else {
-        displayPhoto(this, '#edit_preview_photo');
+        displayPhoto(this, '#edit_preview_photo')
     }
-});
+})
 
 window.renderProfileData = function (usersUrl) {
     $.ajax({
@@ -52,86 +54,91 @@ window.renderProfileData = function (usersUrl) {
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                let user = result.data;
-                $('#pfUserId').val(user.id);
-                $('#pfName').val(user.name);
-                $('#pfEmail').val(user.email);
-                $('#pfPhone').val(user.phone);
-                $('#edit_preview_photo').attr('src',user.image_path);
-                $('#EditProfileModal').modal('show');
+                let user = result.data
+                $('#pfUserId').val(user.id)
+                $('#pfName').val(user.name)
+                $('#pfEmail').val(user.email)
+                $('#pfPhone').val(user.phone)
+                $('#edit_preview_photo').attr('src', user.image_path)
+                $('#EditProfileModal').modal('show')
+            }
+        },
+    })
+}
+window.displayPhoto = function (input, selector) {
+    let displayPreview = true
+    if (input.files && input.files[0]) {
+        let reader = new FileReader()
+        reader.onload = function (e) {
+            let image = new Image()
+            image.src = e.target.result
+            image.onload = function () {
+                $(selector).attr('src', e.target.result)
+                displayPreview = true
             }
         }
-    });
-};
-window.displayPhoto = function (input, selector) {
-    let displayPreview = true;
-    if (input.files && input.files[0]) {
-        let reader = new FileReader();
-        reader.onload = function (e) {
-            let image = new Image();
-            image.src = e.target.result;
-            image.onload = function () {
-                $(selector).attr('src', e.target.result);
-                displayPreview = true;
-            };
-        };
         if (displayPreview) {
-            reader.readAsDataURL(input.files[0]);
-            $(selector).show();
+            reader.readAsDataURL(input.files[0])
+            $(selector).show()
         }
     }
-};
-
-$(document).on('keyup', '#name', function (e) {
-    let txtVal = $(this).val().trim();
-    if ((e.charCode === 8 || (e.charCode >= 65 && e.charCode <= 90) || (e.charCode >= 95 && e.charCode <= 122)) || (e.charCode === 0 || (e.charCode >= 48 && e.charCode <= 57))) {
-        if (txtVal.length <= 4) {
-            $('#prefix').val(txtVal.toLocaleUpperCase());
-        }
-    }
-});
-
-$(".confirm-pwd").hide();
-$(document).on('blur', '#pfNewPassword', function () {
-    let password = $("#pfNewPassword").val();
-    if(password == '' || password.trim() == ''){
-        $(".confirm-pwd").hide();
-        return false;
-    }
-
-    $(".confirm-pwd").show();
-});
-$(document).on('blur', '#pfNewConfirmPassword', function () {
-    let confirmPassword = $("#pfNewConfirmPassword").val();
-    if(confirmPassword == '' || confirmPassword.trim() == ''){
-        $(".confirm-pwd").hide();
-        return false;
-    }
-
-    $(".confirm-pwd").show();
-});
-
-function validatePassword() {
-    let password = $("#pfNewPassword").val().trim();
-    let confirmPassword = $("#pfNewConfirmPassword").val().trim();
-
-    if((confirmPassword == '' && password != '') || (confirmPassword != '' && password == '')) {
-        $('#editProfileValidationErrorsBox').show().html("Please enter password and confirm password");
-        return false;
-    }
-    return true;
 }
 
-$(".changeType").click(function () {
-    let inputField = $(this).parent().siblings();
-    let oldType = inputField.attr('type');
-    if(oldType == 'password') {
-        $(this).children().addClass('icon-eye');
-        $(this).children().removeClass('icon-ban');
-        inputField.attr('type', 'text');
-    } else {
-        $(this).children().removeClass('icon-eye');
-        $(this).children().addClass('icon-ban');
-        inputField.attr('type', 'password');
+$(document).on('keyup', '#name', function (e) {
+    let txtVal = $(this).val().trim()
+    if ((e.charCode === 8 || (e.charCode >= 65 && e.charCode <= 90) ||
+        (e.charCode >= 95 && e.charCode <= 122)) ||
+        (e.charCode === 0 || (e.charCode >= 48 && e.charCode <= 57))) {
+        if (txtVal.length <= 4) {
+            $('#prefix').val(txtVal.toLocaleUpperCase())
+        }
     }
-});
+})
+
+$('.confirm-pwd').hide()
+$(document).on('blur', '#pfNewPassword', function () {
+    let password = $('#pfNewPassword').val()
+    if (password == '' || password.trim() == '') {
+        $('.confirm-pwd').hide()
+        return false
+    }
+
+    $('.confirm-pwd').show()
+})
+$(document).on('blur', '#pfNewConfirmPassword', function () {
+    let confirmPassword = $('#pfNewConfirmPassword').val()
+    if (confirmPassword == '' || confirmPassword.trim() == '') {
+        $('.confirm-pwd').hide()
+        return false
+    }
+
+    $('.confirm-pwd').show()
+})
+
+function validatePassword () {
+    let password = $('#pfNewPassword').val().trim()
+    let confirmPassword = $('#pfNewConfirmPassword').val().trim()
+
+    if ((confirmPassword == '' && password != '') ||
+        (confirmPassword != '' && password == '')) {
+        $('#editProfileValidationErrorsBox').
+            show().
+            html('Please enter password and confirm password')
+        return false
+    }
+    return true
+}
+
+$('.changeType').click(function () {
+    let inputField = $(this).parent().siblings()
+    let oldType = inputField.attr('type')
+    if (oldType == 'password') {
+        $(this).children().addClass('icon-eye')
+        $(this).children().removeClass('icon-ban')
+        inputField.attr('type', 'text')
+    } else {
+        $(this).children().removeClass('icon-eye')
+        $(this).children().addClass('icon-ban')
+        inputField.attr('type', 'password')
+    }
+})

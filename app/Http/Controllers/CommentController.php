@@ -34,6 +34,7 @@ class CommentController extends AppBaseController
     {
         $input = $request->only(['comment']);
         $input['task_id'] = $task->id;
+
         $comment = $this->taskRepository->addComment($input);
         $this->taskRepository->addCommentBroadCast($comment);
 
