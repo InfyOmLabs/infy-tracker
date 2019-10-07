@@ -76,6 +76,8 @@ class TaskRepository extends BaseRepository
      */
     public function store($input)
     {
+        $uniqueTaskNumber = $this->getUniqueTaskNumber($input['project_id']);
+        $input['task_number'] = $uniqueTaskNumber;
         $this->validateTaskData($input);
 
         try {

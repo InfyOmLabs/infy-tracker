@@ -9,6 +9,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class HomeController
+ */
 class HomeController extends AppBaseController
 {
     /** @var DashboardRepository $dashboardRepo */
@@ -20,8 +23,8 @@ class HomeController extends AppBaseController
     /**
      * HomeController constructor.
      *
-     * @param DashboardRepository $dashboardRepository
-     * @param UserRepository      $userRepository
+     * @param  DashboardRepository  $dashboardRepository
+     * @param  UserRepository  $userRepository
      */
     public function __construct(DashboardRepository $dashboardRepository, UserRepository $userRepository)
     {
@@ -43,7 +46,7 @@ class HomeController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -58,7 +61,7 @@ class HomeController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return JsonResponse
      */

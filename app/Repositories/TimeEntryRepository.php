@@ -6,10 +6,12 @@ use App\Events\StartTimer;
 use App\Events\StopWatchStop;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Log;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -162,6 +164,26 @@ class TimeEntryRepository extends BaseRepository
 
         /** @var TimeEntry $timeEntry */
         $timeEntry = TimeEntry::findOrFail($id);
+
+        $existEntry = $timeEntry->only([
+            'id',
+            'task_id',
+            'activity_type_id',
+            'user_id',
+            'start_time',
+            'end_time',
+            'duration',
+            'note',
+        ]);
+
+        $inputDiff = array_diff($existEntry, $input);
+        if (!empty($inputDiff)) {
+            Log::info('Entry Id: '.$timeEntry->id);
+            Log::info('Task Id: '.$timeEntry->task_id);
+            Log::info('fields changed: ', $inputDiff);
+            Log::info('Entry updated by: '.Auth::user()->name);
+        }
+
 
         $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ?
             $this->checkTimeUpdated($timeEntry, $input) :

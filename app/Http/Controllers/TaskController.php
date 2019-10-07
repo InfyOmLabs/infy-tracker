@@ -9,7 +9,6 @@ use App\Models\TaskAttachment;
 use App\Queries\TaskDataTable;
 use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
-use App\Repositories\UserRepository;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -18,18 +17,17 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class TaskController
+ */
 class TaskController extends AppBaseController
 {
     /** @var TaskRepository */
     private $taskRepository;
 
-    /** @var UserRepository $userRepo */
-    private $userRepo;
-
-    public function __construct(TaskRepository $taskRepo, UserRepository $userRepository)
+    public function __construct(TaskRepository $taskRepo)
     {
         $this->taskRepository = $taskRepo;
-        $this->userRepo = $userRepository;
     }
 
     /**
@@ -78,9 +76,7 @@ class TaskController extends AppBaseController
     public function store(CreateTaskRequest $request)
     {
         $input = $request->all();
-        /** @var Task $task */
-        $uniqueTaskNumber = $this->taskRepository->getUniqueTaskNumber($input['project_id']);
-        $input['task_number'] = $uniqueTaskNumber;
+
         $this->taskRepository->store($this->fill($input));
 
         return $this->sendSuccess('Task created successfully.');

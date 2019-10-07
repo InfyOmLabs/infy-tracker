@@ -14,6 +14,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class ActivityTypeController
+ */
 class ActivityTypeController extends AppBaseController
 {
     /** @var ActivityTypeRepository */
@@ -53,6 +56,7 @@ class ActivityTypeController extends AppBaseController
     {
         $input = $request->all();
         $input['created_by'] = getLoggedInUserId();
+
         $this->activityTypeRepository->create($input);
 
         return $this->sendSuccess('Activity Type created successfully.');

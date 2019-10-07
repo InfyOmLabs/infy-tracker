@@ -14,6 +14,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class TagController
+ */
 class TagController extends AppBaseController
 {
     /** @var TagRepository */

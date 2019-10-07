@@ -23,6 +23,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Response;
 
+/**
+ * Class ReportController
+ */
 class ReportController extends AppBaseController
 {
     /** @var ReportRepository $reportRepository */

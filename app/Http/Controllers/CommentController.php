@@ -11,6 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
+/**
+ * Class CommentController
+ */
 class CommentController extends AppBaseController
 {
     /** @var TaskRepository */
@@ -22,8 +25,8 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -38,8 +41,8 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Comment $comment
+     * @param  Task  $task
+     * @param  Comment  $comment
      *
      * @throws Exception
      *
@@ -58,9 +61,9 @@ class CommentController extends AppBaseController
     }
 
     /**
-     * @param Task    $task
-     * @param Comment $comment
-     * @param Request $request
+     * @param  Task  $task
+     * @param  Comment  $comment
+     * @param  Request  $request
      *
      * @return JsonResponse
      */

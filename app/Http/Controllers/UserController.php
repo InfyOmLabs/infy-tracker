@@ -18,6 +18,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class UserController
+ */
 class UserController extends AppBaseController
 {
     /** @var UserRepository */

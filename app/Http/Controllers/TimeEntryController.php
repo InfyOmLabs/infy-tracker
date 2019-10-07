@@ -17,8 +17,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\UnauthorizedException;
 use Illuminate\View\View;
-use Log;
 
+/**
+ * Class TimeEntryController
+ */
 class TimeEntryController extends AppBaseController
 {
     /** @var TimeEntryRepository */
@@ -106,25 +108,7 @@ class TimeEntryController extends AppBaseController
             return $this->sendError('Time Entry not found.', Response::HTTP_NOT_FOUND);
         }
 
-        $existEntry = $timeEntry->only([
-            'id',
-            'task_id',
-            'activity_type_id',
-            'user_id',
-            'start_time',
-            'end_time',
-            'duration',
-            'note',
-        ]);
-
         $input = $request->all();
-        $inputDiff = array_diff($existEntry, $input);
-        if (!empty($inputDiff)) {
-            Log::info('Entry Id: '.$timeEntry->id);
-            Log::info('Task Id: '.$timeEntry->task_id);
-            Log::info('fields changed: ', $inputDiff);
-            Log::info('Entry updated by: '.Auth::user()->name);
-        }
         $this->timeEntryRepository->updateTimeEntry($input, $timeEntry->id);
 
         return $this->sendSuccess('Time Entry updated successfully.');
@@ -143,6 +127,7 @@ class TimeEntryController extends AppBaseController
         if (!$user->can('manage_time_entries') && $timeEntry->user_id != getLoggedInUserId()) {
             throw new UnauthorizedException('You are not allow to delete this entry.', 402);
         }
+
         $timeEntry->update(['deleted_by' => getLoggedInUserId()]);
         $timeEntry->delete();
 
