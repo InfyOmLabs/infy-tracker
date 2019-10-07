@@ -55,6 +55,7 @@ class TagController extends AppBaseController
     public function store(CreateTagRequest $request)
     {
         $input = $request->all();
+
         $this->tagRepository->store($input);
 
         return $this->sendSuccess('Tag created successfully.');

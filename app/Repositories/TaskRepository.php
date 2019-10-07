@@ -21,6 +21,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Class TaskRepository.
@@ -355,6 +356,37 @@ class TaskRepository extends BaseRepository
     }
 
     /**
+     * @param  string  $projectPrefix
+     * @param  string  $taskNumber
+     *
+     * @return Task|void
+     */
+    public function show($projectPrefix, $taskNumber)
+    {
+        /** @var Project $project */
+        $project = Project::wherePrefix($projectPrefix)->first();
+        if (empty($project)) {
+            return;
+        }
+
+        /** @var Task $task */
+        $task = Task::ofProject($project->id)->whereTaskNumber($taskNumber)
+            ->with([
+                'tags',
+                'project',
+                'taskAssignee',
+                'attachments',
+                'comments',
+                'comments.createdUser',
+                'timeEntries',
+            ])->first();
+
+        if (!empty($task)) {
+            return $task;
+        }
+    }
+
+    /**
      * @param int          $id
      * @param UploadedFile $file
      *
@@ -364,6 +396,11 @@ class TaskRepository extends BaseRepository
      */
     public function uploadFile($id, $file)
     {
+        $extension = $file->getClientOriginalExtension();
+        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
+            throw new UnprocessableEntityHttpException('You can not upload this file.');
+        }
+
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 
@@ -371,13 +408,10 @@ class TaskRepository extends BaseRepository
         $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
 
         try {
-            DB::beginTransaction();
             $task->attachments()->save($attachment);
-            DB::commit();
 
             return $attachment;
         } catch (Exception $e) {
-            DB::rollBack();
             if (file_exists($destinationPath.'/'.$fileName)) {
                 unlink($destinationPath.'/'.$fileName);
             }
