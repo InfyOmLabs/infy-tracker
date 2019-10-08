@@ -15,30 +15,28 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class ClientController
+ */
 class ClientController extends AppBaseController
 {
     /** @var ClientRepository */
     private $clientRepository;
 
-    /** @var ProjectRepository $projectRepo */
-    private $projectRepo;
-
     /**
      * ClientController constructor.
      *
-     * @param ClientRepository  $clientRepo
-     * @param ProjectRepository $projectRepository
+     * @param  ClientRepository  $clientRepo
      */
-    public function __construct(ClientRepository $clientRepo, ProjectRepository $projectRepository)
+    public function __construct(ClientRepository $clientRepo)
     {
         $this->clientRepository = $clientRepo;
-        $this->projectRepo = $projectRepository;
     }
 
     /**
      * Display a listing of the Client.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -56,7 +54,7 @@ class ClientController extends AppBaseController
     /**
      * Store a newly created Client in storage.
      *
-     * @param CreateClientRequest $request
+     * @param  CreateClientRequest  $request
      *
      * @return JsonResponse
      */
@@ -71,7 +69,7 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param $input
+     * @param  array  $input
      *
      * @return mixed
      */
@@ -86,7 +84,7 @@ class ClientController extends AppBaseController
     /**
      * Show the form for editing the specified Client.
      *
-     * @param Client $client
+     * @param  Client  $client
      *
      * @return JsonResponse
      */
@@ -98,8 +96,8 @@ class ClientController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param Client              $client
-     * @param UpdateClientRequest $request
+     * @param  Client  $client
+     * @param  UpdateClientRequest  $request
      *
      * @return JsonResponse
      */
@@ -113,7 +111,7 @@ class ClientController extends AppBaseController
     /**
      * Remove the specified Client from storage.
      *
-     * @param Client $client
+     * @param  Client  $client
      *
      * @throws Exception
      *
@@ -127,14 +125,14 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
+     * @param  ProjectRepository  $projectRepository
      *
      * @return JsonResponse
      */
-    public function projects(Request $request)
+    public function projects(Request $request, ProjectRepository $projectRepository)
     {
-        $clientId = $request->get('client_id', null);
-        $projects = $this->projectRepo->getProjectsList($clientId);
+        $projects = $projectRepository->getProjectsList($request->get('client_id', null));
 
         return $this->sendResponse($projects, 'Projects retrieved successfully.');
     }

@@ -21,11 +21,10 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Class TaskRepository.
- *
- * @version May 3, 2019, 5:05 am UTC
  */
 class TaskRepository extends BaseRepository
 {
@@ -56,8 +55,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
-     * @param array $columns
+     * @param  int  $id
+     * @param  array  $columns
      *
      * @return Task
      */
@@ -67,7 +66,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @throws Exception
      *
@@ -75,6 +74,8 @@ class TaskRepository extends BaseRepository
      */
     public function store($input)
     {
+        $uniqueTaskNumber = $this->getUniqueTaskNumber($input['project_id']);
+        $input['task_number'] = $uniqueTaskNumber;
         $this->validateTaskData($input);
 
         try {
@@ -101,8 +102,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
-     * @param int   $id
+     * @param  array  $input
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -140,8 +141,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array     $input
-     * @param Task|null $task
+     * @param  array  $input
+     * @param  Task|null  $task
      *
      * @return bool
      */
@@ -206,7 +207,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $projectIds
+     * @param  array  $projectIds
      *
      * @return mixed
      */
@@ -221,7 +222,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return bool
      */
@@ -235,8 +236,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Task  $task
-     * @param array $tags
+     * @param  Task  $task
+     * @param  array  $tags
      *
      * @return bool|void
      */
@@ -270,8 +271,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int   $id
-     * @param array $input
+     * @param  int  $id
+     * @param  array  $input
      *
      * @return Task
      */
@@ -302,7 +303,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return array
      */
@@ -330,7 +331,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $projectId
+     * @param  int  $projectId
      *
      * @return int|string|null
      */
@@ -355,8 +356,39 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int          $id
-     * @param UploadedFile $file
+     * @param  string  $projectPrefix
+     * @param  string  $taskNumber
+     *
+     * @return Task|void
+     */
+    public function show($projectPrefix, $taskNumber)
+    {
+        /** @var Project $project */
+        $project = Project::wherePrefix($projectPrefix)->first();
+        if (empty($project)) {
+            return;
+        }
+
+        /** @var Task $task */
+        $task = Task::ofProject($project->id)->whereTaskNumber($taskNumber)
+            ->with([
+                'tags',
+                'project',
+                'taskAssignee',
+                'attachments',
+                'comments',
+                'comments.createdUser',
+                'timeEntries',
+            ])->first();
+
+        if (!empty($task)) {
+            return $task;
+        }
+    }
+
+    /**
+     * @param  int  $id
+     * @param  UploadedFile  $file
      *
      * @throws Exception
      *
@@ -364,6 +396,11 @@ class TaskRepository extends BaseRepository
      */
     public function uploadFile($id, $file)
     {
+        $extension = $file->getClientOriginalExtension();
+        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
+            throw new UnprocessableEntityHttpException('You can not upload this file.');
+        }
+
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 
@@ -371,13 +408,10 @@ class TaskRepository extends BaseRepository
         $attachment = new TaskAttachment(['task_id' => $task->id, 'file' => $fileName]);
 
         try {
-            DB::beginTransaction();
             $task->attachments()->save($attachment);
-            DB::commit();
 
             return $attachment;
         } catch (Exception $e) {
-            DB::rollBack();
             if (file_exists($destinationPath.'/'.$fileName)) {
                 unlink($destinationPath.'/'.$fileName);
             }
@@ -387,7 +421,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -411,7 +445,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return array
      */
@@ -435,7 +469,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return Comment
      */
@@ -448,7 +482,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function addCommentBroadCast($comment)
     {
@@ -456,7 +490,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function deleteCommentBroadCast($comment)
     {
@@ -464,7 +498,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param Comment $comment
+     * @param  Comment  $comment
      */
     public function editCommentBroadCast($comment)
     {

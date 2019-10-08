@@ -23,6 +23,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Response;
 
+/**
+ * Class ReportController
+ */
 class ReportController extends AppBaseController
 {
     /** @var ReportRepository $reportRepository */
@@ -57,7 +60,7 @@ class ReportController extends AppBaseController
     /**
      * Display a listing of the Reports.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -91,7 +94,7 @@ class ReportController extends AppBaseController
     /**
      * Store a newly created Report in storage.
      *
-     * @param CreateReportRequest $request
+     * @param  CreateReportRequest  $request
      *
      * @return Response
      */
@@ -99,10 +102,8 @@ class ReportController extends AppBaseController
     {
         $input = $request->all();
         $input['owner_id'] = Auth::id();
-        /** @var Report $report */
-        $report = $this->reportRepository->create($input);
-        $this->reportRepository->createReportFilter($input, $report);
 
+        $this->reportRepository->store($input);
         Flash::success('Report saved successfully.');
 
         return redirect(route('reports.index'));
@@ -111,7 +112,7 @@ class ReportController extends AppBaseController
     /**
      * Display the specified Report.
      *
-     * @param Report $report
+     * @param  Report  $report
      *
      * @return Response
      */
@@ -133,7 +134,7 @@ class ReportController extends AppBaseController
     /**
      * Show the form for editing the specified Report.
      *
-     * @param Report $report
+     * @param  Report  $report
      *
      * @return Response
      */
@@ -156,8 +157,8 @@ class ReportController extends AppBaseController
     /**
      * Update the specified Report in storage.
      *
-     * @param Report              $report
-     * @param UpdateReportRequest $request
+     * @param  Report  $report
+     * @param  UpdateReportRequest  $request
      *
      * @throws Exception
      *
@@ -166,8 +167,8 @@ class ReportController extends AppBaseController
     public function update(Report $report, UpdateReportRequest $request)
     {
         $input = $request->all();
+
         $this->reportRepository->update($input, $report->id);
-        $this->reportRepository->updateReportFilter($input, $report);
         Flash::success('Report updated successfully.');
 
         return redirect(route('reports.show', $report));
@@ -176,19 +177,19 @@ class ReportController extends AppBaseController
     /**
      * Remove the specified Report from storage.
      *
-     * @param Report $report
+     * @param  Report  $report
+     * @param  Request  $request
      *
      * @throws Exception
      *
      * @return JsonResponse|RedirectResponse|Redirector
      */
-    public function destroy(Report $report)
+    public function destroy(Report $report, Request $request)
     {
-        $report->delete();
-        $this->reportRepository->deleteFilter($report->id);
+        $this->reportRepository->delete($report->id);
 
         Flash::success('Report deleted successfully.');
-        if (request()->ajax()) {
+        if ($request->ajax()) {
             return $this->sendSuccess('Report deleted successfully.');
         }
 

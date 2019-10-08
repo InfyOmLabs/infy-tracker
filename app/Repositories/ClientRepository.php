@@ -11,8 +11,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ClientRepository.
- *
- * @version May 2, 2019, 10:16 am UTC
  */
 class ClientRepository extends BaseRepository
 {

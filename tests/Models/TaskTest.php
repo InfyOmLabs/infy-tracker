@@ -45,11 +45,11 @@ class TaskTest extends TestCase
         $project2 = factory(Project::class)->create();
 
         factory(Task::class)->create([
-            'project_id'  => $project1->id,
+            'project_id' => $project1->id,
         ]);
 
         $task2 = factory(Task::class)->create([
-            'project_id'  => $project2->id,
+            'project_id' => $project2->id,
         ]);
 
         $tasks = Task::ofProject($project2->id)->get();

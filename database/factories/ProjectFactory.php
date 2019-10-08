@@ -1,10 +1,11 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\Models\Client;
 use App\Models\Project;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(Project::class, function (Faker $faker) {
     $client = factory(Client::class)->create();

@@ -16,13 +16,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class ProjectController
+ */
 class ProjectController extends AppBaseController
 {
     /** @var ProjectRepository */
     private $projectRepository;
-
-    /** @var ClientRepository */
-    private $clientRepository;
 
     /** @var UserRepository */
     private $userRepository;
@@ -30,30 +30,28 @@ class ProjectController extends AppBaseController
     /**
      * ProjectController constructor.
      *
-     * @param ProjectRepository $projectRepo
-     * @param ClientRepository  $clientRepo
-     * @param UserRepository    $userRepository
+     * @param  ProjectRepository  $projectRepo
+     * @param  UserRepository  $userRepository
      */
     public function __construct(
         ProjectRepository $projectRepo,
-        ClientRepository $clientRepo,
         UserRepository $userRepository
     ) {
         $this->projectRepository = $projectRepo;
-        $this->clientRepository = $clientRepo;
         $this->userRepository = $userRepository;
     }
 
     /**
      * Display a listing of the Project.
      *
-     * @param Request $request
+     * @param  Request  $request
+     * @param  ClientRepository  $clientRepository
      *
      * @throws Exception
      *
      * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request, ClientRepository $clientRepository)
     {
         if ($request->ajax()) {
             return Datatables::of((new ProjectDataTable())->get(
@@ -61,7 +59,7 @@ class ProjectController extends AppBaseController
             )->make(true);
         }
 
-        $clients = $this->clientRepository->getClientList();
+        $clients = $clientRepository->getClientList();
         $users = $this->userRepository->getUserList();
 
         return view('projects.index', compact('clients', 'users'));
@@ -70,19 +68,15 @@ class ProjectController extends AppBaseController
     /**
      * Store a newly created Project in storage.
      *
-     * @param CreateProjectRequest $request
+     * @param  CreateProjectRequest  $request
      *
      * @return JsonResponse
      */
     public function store(CreateProjectRequest $request)
     {
         $input = $request->all();
-        $input['created_by'] = getLoggedInUserId();
-        $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
-        /** @var Project $project */
-        $project = $this->projectRepository->create($input);
-        $project->users()->sync($input['user_ids']);
+        $this->projectRepository->store($input);
 
         return $this->sendSuccess('Project created successfully.');
     }
@@ -90,7 +84,7 @@ class ProjectController extends AppBaseController
     /**
      * Show the form for editing the specified Project.
      *
-     * @param Project $project
+     * @param  Project  $project
      *
      * @return JsonResponse|RedirectResponse
      */
@@ -105,19 +99,16 @@ class ProjectController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param Project              $project
-     * @param UpdateProjectRequest $request
+     * @param  Project  $project
+     * @param  UpdateProjectRequest  $request
      *
      * @return JsonResponse|RedirectResponse
      */
     public function update(Project $project, UpdateProjectRequest $request)
     {
         $input = $request->all();
-        $input['description'] = is_null($input['description']) ? '' : $input['description'];
 
-        /** @var Project $project */
-        $project = $this->projectRepository->update($input, $project->id);
-        $project->users()->sync($input['user_ids']);
+        $this->projectRepository->update($input, $project->id);
 
         return $this->sendSuccess('Project updated successfully.');
     }
@@ -125,7 +116,7 @@ class ProjectController extends AppBaseController
     /**
      * Remove the specified Project from storage.
      *
-     * @param Project $project
+     * @param  Project  $project
      *
      * @throws Exception
      *
@@ -149,7 +140,7 @@ class ProjectController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      *
      * @return JsonResponse
      */
@@ -157,10 +148,7 @@ class ProjectController extends AppBaseController
     {
         $projectIds = $request->get('projectIds', null);
 
-        $projectIdsArr = [];
-        if (!is_null($projectIds)) {
-            $projectIdsArr = explode(',', $projectIds);
-        }
+        $projectIdsArr = (!is_null($projectIds)) ? explode(',', $projectIds) : [];
         $users = $this->userRepository->getUserList($projectIdsArr);
 
         return $this->sendResponse($users, 'Users Retrieved successfully.');

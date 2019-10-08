@@ -12,6 +12,7 @@ use App\Repositories\TagRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\TimeEntryRepository;
 use App\Repositories\UserRepository;
+use Mockery;
 use Mockery\MockInterface;
 
 /**
@@ -36,8 +37,6 @@ trait MockRepositories
     public $projectRepository;
     /** @var MockInterface */
     public $roleRepository;
-    /** @var MockInterface */
-    public $permissionRepository;
     /** @var MockInterface */
     public $tagRepository;
     /** @var MockInterface */
@@ -92,7 +91,7 @@ trait MockRepositories
                     break;
             }
 
-            $this->$repoName = \Mockery::mock($repoInstance);
+            $this->$repoName = Mockery::mock($repoInstance);
             app()->instance($repoInstance, $this->$repoName);
         }
     }

@@ -8,6 +8,7 @@ use Auth;
 use Crypt;
 use Exception;
 use Hash;
+use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
@@ -18,6 +19,14 @@ use Illuminate\Support\Collection;
  */
 class UserRepository extends BaseRepository
 {
+    private $accountRepo;
+
+    public function __construct(Application $app, AccountRepository $accountRepo)
+    {
+        parent::__construct($app);
+        $this->accountRepo = $accountRepo;
+    }
+
     /**
      * @var array
      */
@@ -46,7 +55,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $projectIds
+     * @param  array  $projectIds
      *
      * @return Collection
      */
@@ -64,7 +73,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @throws Exception
      *
@@ -86,7 +95,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @throws Exception
      *
@@ -115,7 +124,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param  int  $id
      *
      * @return User
      */
@@ -130,7 +139,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param array $input
+     * @param  array  $input
      *
      * @return true
      */
@@ -163,6 +172,102 @@ class UserRepository extends BaseRepository
                 unlink(User::IMAGE_PATH.DIRECTORY_SEPARATOR.$input['image_url']);
             }
         }
+
+        return true;
+    }
+
+    /**
+     * @param  array  $input
+     *
+     * @throws Exception
+     *
+     * @return User|null
+     */
+    public function store($input)
+    {
+        $input = $this->validateInput($input);
+        $input['created_by'] = getLoggedInUserId();
+        $input['activation_code'] = uniqid();
+
+        /** @var User $user */
+        $user = User::create($input);;
+        $this->assignRolesAndProjects($user, $input);
+
+        if ($input['is_active']) {
+            $key = $user->id.'|'.$user->activation_code;
+            $code = Crypt::encrypt($key);
+            /* Send confirmation email */
+            $this->accountRepo->sendConfirmEmail(
+                $user->name,
+                $user->email,
+                $code
+            );
+        }
+
+        return $user->fresh();
+    }
+
+    /**
+     * @param  array  $input
+     * @param  int  $id
+     *
+     * @throws Exception
+     *
+     * @return User
+     */
+    public function update($input, $id)
+    {
+        $input = $this->validateInput($input);
+
+        /** @var User $user */
+        $user = User::findOrFail($id);
+        $user = $user->update($input);
+        $this->assignRolesAndProjects($user, $input);
+
+        if ($input['is_active'] && !$user->is_email_verified) {
+            $key = $user->id.'|'.$user->activation_code;
+            $code = Crypt::encrypt($key);
+            $this->accountRepo->sendConfirmEmail(
+                $user->name,
+                $user->email,
+                $code
+            );
+        }
+
+        return $user->fresh();
+    }
+
+    /**
+     * @param  array  $input
+     *
+     * @return mixed
+     */
+    public function validateInput($input)
+    {
+        if (!empty($input['password']) && Auth::user()->can('manage_users')) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            unset($input['password']);
+        }
+
+        $input['is_active'] = (!empty($input['is_active'])) ? 1 : 0;
+
+        return $input;
+    }
+
+    /**
+     * @param  User  $user
+     * @param  array  $input
+     *
+     * @return bool
+     */
+    public function assignRolesAndProjects($user, $input)
+    {
+        $projectIds = !empty($input['project_ids']) ? $input['project_ids'] : [];
+        $user->projects()->sync($projectIds);
+
+        $roles = !empty($input['role_id']) ? $input['role_id'] : [];
+        $user->roles()->sync($roles);
 
         return true;
     }

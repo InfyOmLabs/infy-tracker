@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Repositories\AccountRepository;
 use App\Repositories\UserRepository;
 use Crypt;
 use Exception;
@@ -13,28 +12,19 @@ use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
 use Session;
 
+/**
+ * Class AuthController
+ */
 class AuthController extends AppBaseController
 {
-    /** @var AccountRepository */
-    private $accountRepository;
-
     /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(AccountRepository $accountRepository, UserRepository $userRepository)
-    {
-        $this->accountRepository = $accountRepository;
-        $this->userRepository = $userRepository;
-    }
-
-    /**
+     * @param  Request  $request
+     *
      * @return RedirectResponse|Redirector|View
      */
-    public function verifyAccount()
+    public function verifyAccount(Request $request)
     {
-        $token = \Request::get('token', null);
+        $token = $request->get('token', null);
 
         if (empty($token)) {
             Session::flash('error', 'token not found');
@@ -83,13 +73,14 @@ class AuthController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
+     * @param  UserRepository  $userRepository
      *
      * @throws Exception
      *
      * @return RedirectResponse|Redirector
      */
-    public function setPassword(Request $request)
+    public function setPassword(Request $request, UserRepository $userRepository)
     {
         $input = $request->all();
 
@@ -102,7 +93,7 @@ class AuthController extends AppBaseController
             return view('auth.set_password', compact('user'));
         }
 
-        $this->userRepository->setUserPassword($input);
+        $userRepository->setUserPassword($input);
 
         return redirect('home');
     }

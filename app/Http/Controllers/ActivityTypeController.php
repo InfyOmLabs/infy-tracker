@@ -14,6 +14,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class ActivityTypeController
+ */
 class ActivityTypeController extends AppBaseController
 {
     /** @var ActivityTypeRepository */
@@ -27,7 +30,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Display a listing of the ActivityType.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -45,7 +48,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Store a newly created ActivityType in storage.
      *
-     * @param CreateActivityTypeRequest $request
+     * @param  CreateActivityTypeRequest  $request
      *
      * @return JsonResponse
      */
@@ -53,6 +56,7 @@ class ActivityTypeController extends AppBaseController
     {
         $input = $request->all();
         $input['created_by'] = getLoggedInUserId();
+
         $this->activityTypeRepository->create($input);
 
         return $this->sendSuccess('Activity Type created successfully.');
@@ -61,7 +65,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Show the form for editing the specified ActivityType.
      *
-     * @param ActivityType $activityType
+     * @param  ActivityType  $activityType
      *
      * @return JsonResponse
      */
@@ -73,8 +77,8 @@ class ActivityTypeController extends AppBaseController
     /**
      * Update the specified ActivityType in storage.
      *
-     * @param ActivityType              $activityType
-     * @param UpdateActivityTypeRequest $request
+     * @param  ActivityType  $activityType
+     * @param  UpdateActivityTypeRequest  $request
      *
      * @return JsonResponse
      */
@@ -88,7 +92,7 @@ class ActivityTypeController extends AppBaseController
     /**
      * Remove the specified ActivityType from storage.
      *
-     * @param ActivityType $activityType
+     * @param  ActivityType  $activityType
      *
      * @throws Exception
      *

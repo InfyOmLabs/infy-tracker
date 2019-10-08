@@ -137,22 +137,22 @@ class TimeEntryRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function test_can_update_duration_of_time_entry_and_make_start_and_end_time_to_empty()
+    public function test_can_update_duration_of_time_entry()
     {
         $timeEntry = factory(TimeEntry::class)->create();
 
+        $now = Carbon::now();
+        $endTime = $now->copy()->addMinutes(120);
         $result = $this->timeEntryRepo->updateTimeEntry([
+            'start_time' => $now,
+            'end_time'   => $endTime,
             'duration'   => 120,
-            'start_time' => '',
-            'end_time'   => '',
         ], $timeEntry->id);
 
         $this->assertTrue($result);
 
         $timeEntry = $timeEntry->fresh();
         $this->assertEquals(120, $timeEntry->duration);
-        $this->assertEmpty($timeEntry->start_time);
-        $this->assertEmpty($timeEntry->end_time);
     }
 
     /** @test */

@@ -33,8 +33,8 @@ class RoleController extends AppBaseController
     /**
      * RoleController constructor.
      *
-     * @param RoleRepository       $rolesRepo
-     * @param PermissionRepository $permissionRepository
+     * @param  RoleRepository  $rolesRepo
+     * @param  PermissionRepository  $permissionRepository
      */
     public function __construct(RoleRepository $rolesRepo, PermissionRepository $permissionRepository)
     {
@@ -45,7 +45,7 @@ class RoleController extends AppBaseController
     /**
      * Display a listing of the Roles.
      *
-     * @param Request $request
+     * @param  Request  $request
      *
      * @throws Exception
      *
@@ -76,18 +76,15 @@ class RoleController extends AppBaseController
     /**
      * Store a newly created Roles in storage.
      *
-     * @param CreateRoleRequest $request
+     * @param  CreateRoleRequest  $request
      *
      * @return Response
      */
     public function store(CreateRoleRequest $request)
     {
         $input = $request->all();
-        /** @var Role $roles */
-        $roles = $this->rolesRepository->create($input);
-        if (isset($input['permissions']) && !empty($input['permissions'])) {
-            $roles->syncPermissions($input['permissions']);
-        }
+
+        $this->rolesRepository->store($input);
         Flash::success('Role saved successfully.');
 
         return redirect(route('roles.index'));
@@ -96,7 +93,7 @@ class RoleController extends AppBaseController
     /**
      * Show the form for editing the specified Roles.
      *
-     * @param Role $role
+     * @param  Role  $role
      *
      * @return Response
      */
@@ -109,28 +106,24 @@ class RoleController extends AppBaseController
     }
 
     /**
-     * @param Role              $role
-     * @param UpdateRoleRequest $request
+     * @param  Role  $role
+     * @param  UpdateRoleRequest  $request
      *
      * @return RedirectResponse|Redirector
      */
     public function update(Role $role, UpdateRoleRequest $request)
     {
-        $permissions = [];
         $input = $request->all();
-        /** @var Role $roles */
-        $roles = $this->rolesRepository->update($input, $role->id);
-        if (isset($input['permissions']) && !empty($input['permissions'])) {
-            $permissions = $input['permissions'];
-        }
-        $roles->syncPermissions($permissions);
+
+        $this->rolesRepository->update($input, $role->id);
+
         Flash::success('Role updated successfully.');
 
         return redirect(route('roles.index'));
     }
 
     /**
-     * @param Role $role
+     * @param  Role  $role
      *
      * @throws Exception
      *

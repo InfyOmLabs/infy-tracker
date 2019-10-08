@@ -7,8 +7,6 @@ use Illuminate\Support\Collection;
 
 /**
  * Class ActivityTypeRepository.
- *
- * @version May 2, 2019, 10:52 am UTC
  */
 class ActivityTypeRepository extends BaseRepository
 {
