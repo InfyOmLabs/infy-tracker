@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property int $task_id
  * @property string $tag_id
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag query()

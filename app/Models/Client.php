@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client query()
@@ -30,9 +31,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereWebsite($value)
  * @mixin \Eloquent
+ *
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Client onlyTrashed()
  * @method static bool|null restore()

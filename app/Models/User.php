@@ -32,6 +32,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read \App\Models\User|null $createdUser
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User query()
@@ -49,11 +50,16 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereSetPassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
+ *
  * @property string $image_path
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereImagePath($value)
  * @mixin \Eloquent
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
+ *
  * @property-read mixed $img_avatar
  * @property int|null $salary
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -62,6 +68,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property-read int|null $permissions_count
  * @property-read int|null $projects_count
  * @property-read int|null $roles_count
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User permission($permissions)
@@ -100,7 +107,7 @@ class User extends Authenticatable
         'is_active',
         'image_path',
         'deleted_by',
-        'salary'
+        'salary',
     ];
 
     /**

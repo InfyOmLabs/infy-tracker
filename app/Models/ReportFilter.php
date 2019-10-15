@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $param_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter query()
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereReportId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter whereUpdatedAt($value)
  * @mixin \Eloquent
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofParamType($paramType)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ReportFilter ofReport($reportId)
  */

@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \App\Models\User $createdUser
  * @property-read \App\Models\Task $task
+ *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Comment newQuery()
@@ -34,6 +35,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Comment withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Comment withoutTrashed()
  * @mixin \Eloquent
+ *
  * @property-read mixed $user_avatar
  */
 class Comment extends Model
