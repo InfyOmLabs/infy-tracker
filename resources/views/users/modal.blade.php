@@ -25,6 +25,12 @@
                         {!! Form::email('email', null, ['id'=>'email','class' => 'form-control','required']) !!}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('salary', 'Salary') !!}
+                        {!! Form::number('salary', null, ['id'=>'salary','class' => 'form-control']) !!}
+                    </div>
+                </div>
                 @can('manage_users')
                     <div class="row">
                         <div class="form-group col-sm-6">

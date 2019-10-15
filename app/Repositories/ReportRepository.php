@@ -21,11 +21,7 @@ class ReportRepository extends BaseRepository
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'name',
-        'start_date',
-        'end_date',
-    ];
+    protected $fieldSearchable = ['name', 'start_date', 'end_date',];
 
     /**
      * Return searchable fields.
@@ -46,7 +42,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Report|null
      */
@@ -60,12 +56,12 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
-     *
-     * @throws Exception
+     * @param array $input
+     * @param int $id
      *
      * @return Report
+     * @throws Exception
+     *
      */
     public function update($input, $id)
     {
@@ -77,11 +73,11 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
-     *
-     * @throws Exception
+     * @param int $id
      *
      * @return bool|mixed|null
+     * @throws Exception
+     *
      */
     public function delete($id)
     {
@@ -93,8 +89,8 @@ class ReportRepository extends BaseRepository
 
 
     /**
-     * @param  array  $input
-     * @param  Report  $report
+     * @param array $input
+     * @param Report $report
      *
      * @return array
      */
@@ -127,63 +123,63 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
-     * @param  int  $paramId
-     * @param  string  $type
+     * @param int $reportId
+     * @param int $paramId
+     * @param string $type
      *
      * @return ReportFilter
      */
     private function createFilter($reportId, $paramId, $type)
     {
-        $filterInput['report_id'] = $reportId;
-        $filterInput['param_id'] = $paramId;
+        $filterInput['report_id']  = $reportId;
+        $filterInput['param_id']   = $paramId;
         $filterInput['param_type'] = $type;
 
         return ReportFilter::create($filterInput);
     }
 
     /**
-     * @param  array  $input
-     * @param  Report  $report
-     *
-     * @throws Exception
+     * @param array $input
+     * @param Report $report
      *
      * @return array
+     * @throws Exception
+     *
      */
     public function updateReportFilter($input, $report)
     {
-        $result = [];
+        $result              = [];
         $input['projectIds'] = isset($input['projectIds']) ? $input['projectIds'] : [];
-        $input['userIds'] = isset($input['userIds']) ? $input['userIds'] : [];
-        $input['tagIds'] = isset($input['tagIds']) ? $input['tagIds'] : [];
-        $input['client_id'] = isset($input['client_id']) ? $input['client_id'] : 0;
+        $input['userIds']    = isset($input['userIds']) ? $input['userIds'] : [];
+        $input['tagIds']     = isset($input['tagIds']) ? $input['tagIds'] : [];
+        $input['client_id']  = isset($input['client_id']) ? $input['client_id'] : 0;
 
         $projectIds = $this->getProjectIds($report->id);
-        $ids = array_diff($input['projectIds'], (array) $projectIds);
+        $ids        = array_diff($input['projectIds'], (array)$projectIds);
         foreach ($ids as $projectId) {
             $result[] = $this->createFilter($report->id, $projectId, Project::class);
         }
-        $deleteProjects = array_diff((array) $projectIds, $input['projectIds']);
+        $deleteProjects = array_diff((array)$projectIds, $input['projectIds']);
         if (!empty($deleteProjects)) {
             ReportFilter::ofParamType(Project::class)->whereIn('param_id', $deleteProjects)->delete();
         }
 
         $userIds = $this->getUserIds($report->id);
-        $ids = array_diff($input['userIds'], (array) $userIds);
+        $ids     = array_diff($input['userIds'], (array)$userIds);
         foreach ($ids as $userId) {
             $result[] = $this->createFilter($report->id, $userId, User::class);
         }
-        $deleteUsers = array_diff((array) $userIds, $input['userIds']);
+        $deleteUsers = array_diff((array)$userIds, $input['userIds']);
         if (!empty($deleteUsers)) {
             ReportFilter::ofParamType(User::class)->whereIn('param_id', $deleteUsers)->delete();
         }
 
         $tagIds = $this->getTagIds($report->id);
-        $ids = array_diff($input['tagIds'], (array) $tagIds);
+        $ids    = array_diff($input['tagIds'], (array)$tagIds);
         foreach ($ids as $tagId) {
             $result[] = $this->createFilter($report->id, $tagId, Tag::class);
         }
-        $deleteTags = array_diff((array) $tagIds, $input['tagIds']);
+        $deleteTags = array_diff((array)$tagIds, $input['tagIds']);
         if (!empty($deleteTags)) {
             ReportFilter::ofParamType(Tag::class)->whereIn('param_id', $deleteTags)->delete();
         }
@@ -203,7 +199,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -213,7 +209,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -223,7 +219,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -233,7 +229,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return Collection|void
      */
@@ -248,11 +244,11 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
-     *
-     * @throws Exception
+     * @param int $reportId
      *
      * @return bool|mixed|null
+     * @throws Exception
+     *
      */
     public function deleteFilter($reportId)
     {
@@ -260,23 +256,22 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  Report  $report
+     * @param Report $report
      *
      * @return TimeEntry[]|Builder[]
      */
     public function getReport($report)
     {
         $startDate = $report->start_date->startOfDay();
-        $endDate = $report->end_date->endOfDay();
-        $id = $report->id;
+        $endDate   = $report->end_date->endOfDay();
+        $id        = $report->id;
 
-        $query = TimeEntry::with(['task', 'user', 'task.project.client', 'task.tags'])
-            ->whereBetween('time_entries.start_time', [$startDate, $endDate]);
+        $query = TimeEntry::with(['task', 'user', 'task.project.client', 'task.tags'])->whereBetween('time_entries.start_time', [$startDate, $endDate]);
 
         $projectIds = $this->getProjectIds($id);
-        $tagIds = $this->getTagIds($id);
-        $userIds = $this->getUserIds($id);
-        $clientId = $this->getClientId($id);
+        $tagIds     = $this->getTagIds($id);
+        $userIds    = $this->getUserIds($id);
+        $clientId   = $this->getClientId($id);
 
         $query->when(!empty($userIds), function (Builder $q) use ($userIds) {
             $q->whereIn('user_id', $userIds);
@@ -308,57 +303,79 @@ class ReportRepository extends BaseRepository
         /** @var TimeEntry $entry */
         foreach ($entries as $entry) {
             $clientId = $entry->task->project->client_id;
-            $project = $entry->task->project;
-            $client = $project->client;
+            $project  = $entry->task->project;
+            $client   = $project->client;
             $duration = $entry->duration;
 
             // prepare client and duration
             $result[$clientId]['name'] = $client->name;
             if (!isset($result[$clientId]['duration'])) {
                 $result[$clientId]['duration'] = 0;
-                $result[$clientId]['time'] = 0;
+                $result[$clientId]['time']     = 0;
+            }
+            // prepare cost for client
+            if (!isset($result[$clientId]['cost'])) {
+                $result[$clientId]['cost'] = 0;
             }
             $result[$clientId]['duration'] = $duration + $result[$clientId]['duration'];
-            $result[$clientId]['time'] = $this->getDurationTime($result[$clientId]['duration']);
+            $result[$clientId]['time']     = $this->getDurationTime($result[$clientId]['duration']);
 
             // prepare projects and duration
             $result[$clientId]['projects'][$project->id]['name'] = $project->name;
             if (!isset($result[$clientId]['projects'][$project->id]['duration'])) {
                 $result[$clientId]['projects'][$project->id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['time'] = 0;
+                $result[$clientId]['projects'][$project->id]['time']     = 0;
             }
             $projectDuration = $result[$clientId]['projects'][$project->id]['duration'];
+
+            // set default cost for projects
+            if (!isset($result[$clientId]['projects'][$project->id]['cost'])) {
+                $result[$clientId]['projects'][$project->id]['cost'] = 0;
+            }
             $result[$clientId]['projects'][$project->id]['duration'] = $duration + $projectDuration;
-            $result[$clientId]['projects'][$project->id]['time'] = $this->getDurationTime($duration + $projectDuration);
+            $result[$clientId]['projects'][$project->id]['time']     = $this->getDurationTime($duration + $projectDuration);
 
             // prepare users and duration
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;;
             if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
                 $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = 0;
+            }
+
+            // set default cost for users
+            if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
+                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] = 0;
             }
 
             $userDuration = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
+
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time']     = $this->getDurationTime($duration + $userDuration);
+            // calculate cost of user
+            $userCost = $this->getCosting($duration + $userDuration, $entry->user);
+            // calculate cost for client and project with user
+            $result[$clientId]['cost']                                                     += $userCost;
+            $result[$clientId]['projects'][$project->id]['cost']                           += $userCost;
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] += $userCost;
 
             // prepare tasks and duration
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['name'] = $entry->task->title;
             if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'])) {
                 $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = 0;
+                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time']     = 0;
             }
+
             $time = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
+
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id'] = $entry->task->id;
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time']     = $this->getDurationTime($time);
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id']  = $entry->task->id;
         }
 
         return $result;
     }
 
     /**
-     * @param  int  $minutes
+     * @param int $minutes
      *
      * @return string
      */
@@ -369,15 +386,29 @@ class ReportRepository extends BaseRepository
         }
 
         if ($minutes < 60) {
-            return $minutes.' min';
+            return $minutes . ' min';
         }
 
         $hour = floor($minutes / 60);
-        $min = (int) ($minutes - $hour * 60);
+        $min  = (int)($minutes - $hour * 60);
         if ($min === 0) {
-            return $hour.' hr';
+            return $hour . ' hr';
         }
 
-        return $hour.' hr '.$min.' min';
+        return $hour . ' hr ' . $min . ' min';
+    }
+
+    /**
+     * @param $minutes
+     * @param User $user
+     * @return float|int
+     */
+    public function getCosting($minutes, $user)
+    {
+        if (is_null($user->salary)) {
+            return 0;
+        }
+        $costPerMin = $user->salary / 24 / 8 / 60;
+        return round($costPerMin * $minutes, 2);
     }
 }

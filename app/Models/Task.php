@@ -29,7 +29,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Tag[] $tags
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $taskAssignee
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeEntry[] $timeEntries
- *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task newQuery()
@@ -50,22 +49,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Task withoutTrashed()
  * @mixin \Eloquent
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TaskAttachment[] $attachments
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task whereTaskNumber($value)
- *
  * @property string|null $task_number
  * @property string|null $priority
  * @property int $totalDuration
  * @property int $totalDurationMin
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
- *
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
  * @property-read mixed $prefix_task_number
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task ofProject($projectId)
+ * @property-read int|null $attachments_count
+ * @property-read int|null $comments_count
+ * @property-read int|null $tags_count
+ * @property-read int|null $task_assignee_count
+ * @property-read int|null $time_entries_count
  */
 class Task extends Model
 {

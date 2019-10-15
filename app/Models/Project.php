@@ -22,7 +22,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\User|null $createdUser
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property int $deleted_by
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project query()
@@ -34,10 +33,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereUpdatedAt($value)
  * @mixin \Eloquent
- *
  * @property string $prefix
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project wherePrefix($value)
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $tasks
+ * @property-read int|null $tasks_count
+ * @property-read int|null $users_count
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDeletedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
  */
 class Project extends Model
 {

@@ -16,7 +16,6 @@ use Storage;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $file_path
  * @property-read mixed $file_url
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskAttachment query()

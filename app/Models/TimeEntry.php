@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read \App\Models\ActivityType $activityType
  * @property-read \App\Models\Task $task
  * @property-read \App\Models\User $user
- *
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry newQuery()
@@ -47,13 +46,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\TimeEntry withoutTrashed()
  * @mixin \Eloquent
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofUser($userId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry ofCurrentUser()
- *
  * @property int $entry_type
  * @property-read string $entry_type_string
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TimeEntry whereEntryType($value)
  */
 class TimeEntry extends Model

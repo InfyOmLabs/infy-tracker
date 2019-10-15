@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
- *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType query()
@@ -27,6 +26,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TimeEntry[] $timeEntries
+ * @property-read int|null $time_entries_count
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ActivityType onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\ActivityType whereDeletedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ActivityType withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\ActivityType withoutTrashed()
  */
 class ActivityType extends Model
 {
