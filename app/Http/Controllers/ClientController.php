@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Class ClientController
+ * Class ClientController.
  */
 class ClientController extends AppBaseController
 {
@@ -26,7 +26,7 @@ class ClientController extends AppBaseController
     /**
      * ClientController constructor.
      *
-     * @param  ClientRepository  $clientRepo
+     * @param ClientRepository $clientRepo
      */
     public function __construct(ClientRepository $clientRepo)
     {
@@ -36,7 +36,7 @@ class ClientController extends AppBaseController
     /**
      * Display a listing of the Client.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -54,7 +54,7 @@ class ClientController extends AppBaseController
     /**
      * Store a newly created Client in storage.
      *
-     * @param  CreateClientRequest  $request
+     * @param CreateClientRequest $request
      *
      * @return JsonResponse
      */
@@ -69,7 +69,7 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return mixed
      */
@@ -84,7 +84,7 @@ class ClientController extends AppBaseController
     /**
      * Show the form for editing the specified Client.
      *
-     * @param  Client  $client
+     * @param Client $client
      *
      * @return JsonResponse
      */
@@ -96,8 +96,8 @@ class ClientController extends AppBaseController
     /**
      * Update the specified Client in storage.
      *
-     * @param  Client  $client
-     * @param  UpdateClientRequest  $request
+     * @param Client              $client
+     * @param UpdateClientRequest $request
      *
      * @return JsonResponse
      */
@@ -111,7 +111,7 @@ class ClientController extends AppBaseController
     /**
      * Remove the specified Client from storage.
      *
-     * @param  Client  $client
+     * @param Client $client
      *
      * @throws Exception
      *
@@ -125,8 +125,8 @@ class ClientController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
-     * @param  ProjectRepository  $projectRepository
+     * @param Request           $request
+     * @param ProjectRepository $projectRepository
      *
      * @return JsonResponse
      */
