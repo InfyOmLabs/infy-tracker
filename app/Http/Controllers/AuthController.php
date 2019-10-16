@@ -13,12 +13,12 @@ use Illuminate\View\View;
 use Session;
 
 /**
- * Class AuthController
+ * Class AuthController.
  */
 class AuthController extends AppBaseController
 {
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return RedirectResponse|Redirector|View
      */
@@ -73,8 +73,8 @@ class AuthController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
-     * @param  UserRepository  $userRepository
+     * @param Request        $request
+     * @param UserRepository $userRepository
      *
      * @throws Exception
      *

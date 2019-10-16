@@ -19,7 +19,7 @@ use Illuminate\Validation\UnauthorizedException;
 use Illuminate\View\View;
 
 /**
- * Class TimeEntryController
+ * Class TimeEntryController.
  */
 class TimeEntryController extends AppBaseController
 {
@@ -34,7 +34,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Display a listing of the TimeEntry.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -64,7 +64,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Store a newly created TimeEntry in storage.
      *
-     * @param  CreateTimeEntryRequest  $request
+     * @param CreateTimeEntryRequest $request
      *
      * @return JsonResponse
      */
@@ -79,7 +79,7 @@ class TimeEntryController extends AppBaseController
     /**
      * Show the form for editing the specified TimeEntry.
      *
-     * @param  TimeEntry  $timeEntry
+     * @param TimeEntry $timeEntry
      *
      * @return JsonResponse
      */
@@ -93,8 +93,8 @@ class TimeEntryController extends AppBaseController
     /**
      * Update the specified TimeEntry in storage.
      *
-     * @param  TimeEntry  $timeEntry
-     * @param  UpdateTimeEntryRequest  $request
+     * @param TimeEntry              $timeEntry
+     * @param UpdateTimeEntryRequest $request
      *
      * @return JsonResponse
      */
@@ -115,7 +115,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  TimeEntry  $timeEntry
+     * @param TimeEntry $timeEntry
      *
      * @throws Exception
      *
@@ -145,8 +145,8 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  int  $projectId
-     * @param  Request  $request
+     * @param int     $projectId
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -159,7 +159,7 @@ class TimeEntryController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return JsonResponse
      */

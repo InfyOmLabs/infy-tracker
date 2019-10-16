@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Class TaskController
+ * Class TaskController.
  */
 class TaskController extends AppBaseController
 {
@@ -33,7 +33,7 @@ class TaskController extends AppBaseController
     /**
      * Display a listing of the Task.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -67,7 +67,7 @@ class TaskController extends AppBaseController
     /**
      * Store a newly created Task in storage.
      *
-     * @param  CreateTaskRequest  $request
+     * @param CreateTaskRequest $request
      *
      * @throws Exception
      *
@@ -91,7 +91,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  string  $slug
+     * @param string $slug
      *
      * @return Factory|JsonResponse|View
      */
@@ -118,7 +118,7 @@ class TaskController extends AppBaseController
     /**
      * Show the form for editing the specified Task.
      *
-     * @param  Task  $task
+     * @param Task $task
      *
      * @return JsonResponse
      */
@@ -140,8 +140,8 @@ class TaskController extends AppBaseController
     /**
      * Update the specified Task in storage.
      *
-     * @param  Task  $task
-     * @param  UpdateTaskRequest  $request
+     * @param Task              $task
+     * @param UpdateTaskRequest $request
      *
      * @throws Exception
      *
@@ -159,7 +159,7 @@ class TaskController extends AppBaseController
     /**
      * Remove the specified Task from storage.
      *
-     * @param  Task  $task
+     * @param Task $task
      *
      * @throws Exception
      *
@@ -178,7 +178,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
+     * @param Task $task
      *
      * @return JsonResponse
      */
@@ -190,8 +190,8 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
-     * @param  Request  $request
+     * @param Task    $task
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -203,7 +203,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -217,7 +217,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  TaskAttachment  $taskAttachment
+     * @param TaskAttachment $taskAttachment
      *
      * @throws Exception
      *
@@ -231,8 +231,8 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
-     * @param  Request  $request
+     * @param Task    $task
+     * @param Request $request
      *
      * @throws Exception
      *
@@ -252,7 +252,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
+     * @param Task $task
      *
      * @return JsonResponse
      */
@@ -264,7 +264,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
+     * @param Task $task
      *
      * @return JsonResponse
      */
@@ -274,7 +274,7 @@ class TaskController extends AppBaseController
     }
 
     /**
-     * @param  Task  $task
+     * @param Task $task
      *
      * @return array
      */
