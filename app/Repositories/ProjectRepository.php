@@ -44,7 +44,7 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Project
      */
@@ -60,8 +60,8 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return Project
      */

@@ -55,7 +55,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $projectIds
+     * @param array $projectIds
      *
      * @return Collection
      */
@@ -73,7 +73,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @throws Exception
      *
@@ -95,7 +95,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -124,7 +124,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return User
      */
@@ -139,7 +139,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return true
      */
@@ -177,7 +177,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @throws Exception
      *
@@ -190,7 +190,7 @@ class UserRepository extends BaseRepository
         $input['activation_code'] = uniqid();
 
         /** @var User $user */
-        $user = User::create($input);;
+        $user = User::create($input);
         $this->assignRolesAndProjects($user, $input);
 
         if ($input['is_active']) {
@@ -208,8 +208,8 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @throws Exception
      *
@@ -238,7 +238,7 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return mixed
      */
@@ -256,8 +256,8 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param  User  $user
-     * @param  array  $input
+     * @param User  $user
+     * @param array $input
      *
      * @return bool
      */

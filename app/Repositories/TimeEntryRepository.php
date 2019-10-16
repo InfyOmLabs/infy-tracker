@@ -95,8 +95,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $projectId
-     * @param  int|null  $taskId
+     * @param int      $projectId
+     * @param int|null $taskId
      *
      * @return Collection
      */
@@ -122,7 +122,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return mixed
      */
@@ -137,7 +137,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return TimeEntry
      */
@@ -153,8 +153,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return bool
      */
@@ -184,7 +184,6 @@ class TimeEntryRepository extends BaseRepository
             Log::info('Entry updated by: '.Auth::user()->name);
         }
 
-
         $timeEntryType = ($timeEntry->entry_type == TimeEntry::STOPWATCH) ?
             $this->checkTimeUpdated($timeEntry, $input) :
             $timeEntry->entry_type;
@@ -201,8 +200,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  null  $id
+     * @param array $input
+     * @param null  $id
      *
      * @return array|JsonResponse
      */
@@ -258,8 +257,8 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int|null  $id
+     * @param array    $input
+     * @param int|null $id
      *
      * @return bool
      */
@@ -285,11 +284,10 @@ class TimeEntryRepository extends BaseRepository
         return true;
     }
 
-
     /**
-     * Start timer broadcast event
+     * Start timer broadcast event.
      *
-     * @param  array  $input
+     * @param array $input
      */
     public function broadcastStartTimerEvent($input)
     {
@@ -297,7 +295,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * Stop timer broadcast event
+     * Stop timer broadcast event.
      */
     public function broadcastStopTimerEvent()
     {
@@ -305,7 +303,7 @@ class TimeEntryRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return bool
      */
