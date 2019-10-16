@@ -45,7 +45,7 @@ class RoleRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Role
      */
@@ -55,13 +55,12 @@ class RoleRepository extends BaseRepository
         $role = Role::create($input);
         $this->attachPermissions($role, $input);
 
-
         return $role->fresh();
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @return Role
      */
@@ -76,8 +75,8 @@ class RoleRepository extends BaseRepository
     }
 
     /**
-     * @param  Role  $role
-     * @param  array  $input
+     * @param Role  $role
+     * @param array $input
      *
      * @return bool
      */
