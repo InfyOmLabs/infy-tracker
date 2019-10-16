@@ -52,7 +52,7 @@ class TimeEntryControllerValidationTest extends TestCase
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return array
      */

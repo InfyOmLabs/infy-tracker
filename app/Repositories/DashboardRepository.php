@@ -16,12 +16,12 @@ use Auth;
 use Carbon\Carbon;
 
 /**
- * Class DashboardRepository
+ * Class DashboardRepository.
  */
 class DashboardRepository
 {
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return array
      */
@@ -81,8 +81,8 @@ class DashboardRepository
     }
 
     /**
-     * @param  string  $startDate
-     * @param  string  $endDate
+     * @param string $startDate
+     * @param string $endDate
      *
      * @return array
      */
@@ -118,7 +118,7 @@ class DashboardRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return mixed
      */

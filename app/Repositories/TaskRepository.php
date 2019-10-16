@@ -55,8 +55,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
-     * @param  array  $columns
+     * @param int   $id
+     * @param array $columns
      *
      * @return Task
      */
@@ -66,7 +66,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @throws Exception
      *
@@ -102,8 +102,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @throws Exception
      *
@@ -141,8 +141,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  Task|null  $task
+     * @param array     $input
+     * @param Task|null $task
      *
      * @return bool
      */
@@ -207,7 +207,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $projectIds
+     * @param array $projectIds
      *
      * @return mixed
      */
@@ -222,7 +222,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return bool
      */
@@ -236,8 +236,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  Task  $task
-     * @param  array  $tags
+     * @param Task  $task
+     * @param array $tags
      *
      * @return bool|void
      */
@@ -271,8 +271,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
-     * @param  array  $input
+     * @param int   $id
+     * @param array $input
      *
      * @return Task
      */
@@ -303,7 +303,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return array
      */
@@ -331,7 +331,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $projectId
+     * @param int $projectId
      *
      * @return int|string|null
      */
@@ -356,8 +356,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  string  $projectPrefix
-     * @param  string  $taskNumber
+     * @param string $projectPrefix
+     * @param string $taskNumber
      *
      * @return Task|void
      */
@@ -387,8 +387,8 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
-     * @param  UploadedFile  $file
+     * @param int          $id
+     * @param UploadedFile $file
      *
      * @throws Exception
      *
@@ -421,7 +421,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -445,7 +445,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @return array
      */
@@ -469,7 +469,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Comment
      */
@@ -482,7 +482,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  Comment  $comment
+     * @param Comment $comment
      */
     public function addCommentBroadCast($comment)
     {
@@ -490,7 +490,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  Comment  $comment
+     * @param Comment $comment
      */
     public function deleteCommentBroadCast($comment)
     {
@@ -498,7 +498,7 @@ class TaskRepository extends BaseRepository
     }
 
     /**
-     * @param  Comment  $comment
+     * @param Comment $comment
      */
     public function editCommentBroadCast($comment)
     {
