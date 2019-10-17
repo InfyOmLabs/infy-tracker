@@ -31,6 +31,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereWebsite($value)
  * @mixin \Eloquent
+ *
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ * @property-read int|null $projects_count
+ *
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client onlyTrashed()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDeletedBy($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withoutTrashed()
  */
 class Client extends Model
 {

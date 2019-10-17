@@ -7,7 +7,7 @@ $(function () {
         placeholder: 'Select Role',
         minimumResultsForSearch: -1,
     })
-})
+});
 
 var tbl = $('#users_table').DataTable({
     processing: true,
@@ -59,6 +59,10 @@ var tbl = $('#users_table').DataTable({
             'searchable': false,
         },
         {
+            data: 'salary',
+            name: 'salary',
+        },
+        {
             data: function (row) {
                 let checked = row.is_active === 0 ? '' : 'checked'
                 if (loggedInUserId === row.id) {
@@ -99,11 +103,11 @@ var tbl = $('#users_table').DataTable({
             }, name: 'id',
         },
     ],
-})
+});
 
 $('#users_table').on('draw.dt', function () {
     $('[data-toggle="tooltip"]').tooltip()
-})
+});
 
 window.renderData = function (url) {
     $.ajax({
@@ -116,6 +120,7 @@ window.renderData = function (url) {
                 $('#edit_name').val(user.name)
                 $('#edit_email').val(user.email)
                 $('#edit_phone').val(user.phone)
+                $('#edit_salary').val(user.salary)
                 $('#editProjectId').val(user.project_ids).trigger('change')
                 if (user.is_active) {
                     $('#edit_is_active').val(1).prop('checked', true)
@@ -128,7 +133,7 @@ window.renderData = function (url) {
             manageAjaxErrors(error)
         },
     })
-}
+};
 
 window.sendVerificationEmail = function (url) {
     var loadingButton = $('#email-btn')
@@ -148,7 +153,7 @@ window.sendVerificationEmail = function (url) {
             loadingButton.button('reset')
         },
     })
-}
+};
 
 $(function () {
     // create new user
@@ -174,7 +179,7 @@ $(function () {
                 loadingButton.button('reset')
             },
         })
-    })
+    });
 
     // update user
     $('#editForm').submit(function (event) {
@@ -200,16 +205,16 @@ $(function () {
                 loadingButton.button('reset')
             },
         })
-    })
+    });
 
     $('#AddModal').on('hidden.bs.modal', function () {
         $('#projectId').val(null).trigger('change')
         resetModalForm('#addNewForm', '#validationErrorsBox')
-    })
+    });
 
     $('#EditModal').on('hidden.bs.modal', function () {
         resetModalForm('#editForm', '#editValidationErrorsBox')
-    })
+    });
 
     // open edit user model
     $(document).on('click', '.edit-btn', function (event) {
@@ -221,19 +226,19 @@ $(function () {
     $(document).on('click', '.delete-btn', function (event) {
         let userId = $(event.currentTarget).data('id')
         deleteItem(usersUrl + userId, '#users_table', 'User')
-    })
+    });
 
     $(document).on('click', '.email-btn', function (event) {
         let userId = $(event.currentTarget).data('id')
         sendVerificationEmail(usersUrl + userId + '/send-email')
     })
-})
+});
 
 // listen user activation deactivation change event
 $(document).on('change', '.is-active', function (event) {
     const userId = $(event.currentTarget).data('id')
     activeDeActiveUser(userId)
-})
+});
 
 // activate de-activate user
 window.activeDeActiveUser = function (id) {
@@ -247,4 +252,4 @@ window.activeDeActiveUser = function (id) {
             }
         },
     })
-}
+};

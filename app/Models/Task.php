@@ -66,6 +66,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read mixed $prefix_task_number
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task ofProject($projectId)
+ *
+ * @property-read int|null $attachments_count
+ * @property-read int|null $comments_count
+ * @property-read int|null $tags_count
+ * @property-read int|null $task_assignee_count
+ * @property-read int|null $time_entries_count
  */
 class Task extends Model
 {
