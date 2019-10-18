@@ -148,7 +148,7 @@ class DashboardRepository
                 'total_hours' => round($totalDuration / 60, 2),
             ];
             $color = getColorCode();
-            $data['data']['backgroundColor'][] = getColor(0.2, $color);
+            $data['data']['backgroundColor'][] = getColor(0.3, $color);
             $data['data']['borderColor'][] = getColor(1, $color);
         }
         $data['totalRecords'] = 0;
