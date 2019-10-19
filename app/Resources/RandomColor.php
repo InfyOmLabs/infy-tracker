@@ -1,6 +1,6 @@
 <?php
 /**
- * RandomColor 1.0.4
+ * RandomColor 1.0.4.
  *
  * PHP port of David Merfield JavaScript randomColor
  * https://github.com/davidmerfield/randomColor
@@ -33,17 +33,17 @@ namespace App\Resources;
 
 class RandomColor
 {
-    static public $dictionary = null;
+    public static $dictionary = null;
 
-    static public $h;
-    static public $s;
-    static public $v;
+    public static $h;
+    public static $s;
+    public static $v;
 
     private function __construct()
     {
     }
 
-    static public function one($options = [])
+    public static function one($options = [])
     {
         $h = self::$h = self::_pickHue($options);
         $s = self::$s = self::_pickSaturation($h, $options);
@@ -53,7 +53,7 @@ class RandomColor
         return self::format(compact('h', 's', 'v'), @$options['format'], $options['opacity']);
     }
 
-    static public function many($count, $options = [])
+    public static function many($count, $options = [])
     {
         $colors = [];
 
@@ -64,7 +64,7 @@ class RandomColor
         return $colors;
     }
 
-    static public function format($hsv, $format = 'hex', $opacity = '')
+    public static function format($hsv, $format = 'hex', $opacity = '')
     {
         switch ($format) {
             case 'hsv':
@@ -107,7 +107,7 @@ class RandomColor
         return $text;
     }
 
-    static private function _pickHue($options)
+    private static function _pickHue($options)
     {
         $range = self::_getHueRange($options);
 
@@ -126,13 +126,13 @@ class RandomColor
         return $hue;
     }
 
-    static private function _pickSaturation($h, $options)
+    private static function _pickSaturation($h, $options)
     {
         if (@$options['hue'] === 'monochrome') {
             return 0;
         }
         if (@$options['luminosity'] === 'random') {
-            return self::_rand(array(0, 100), $options);
+            return self::_rand([0, 100], $options);
         }
 
         $colorInfo = self::_getColorInfo($h);
@@ -155,15 +155,15 @@ class RandomColor
         return self::_rand($range, $options);
     }
 
-    static private function _pickBrightness($h, $s, $options)
+    private static function _pickBrightness($h, $s, $options)
     {
         if (@$options['luminosity'] === 'random') {
-            $range = array(0, 100);
+            $range = [0, 100];
         } else {
-            $range = array(
+            $range = [
                 self::_getMinimumBrightness($h, $s),
                 100,
-            );
+            ];
 
             switch (@$options['luminosity']) {
                 case 'dark':
@@ -179,18 +179,18 @@ class RandomColor
         return self::_rand($range, $options);
     }
 
-    static private function _getHueRange($options)
+    private static function _getHueRange($options)
     {
         $ranges = [];
 
         if (isset($options['hue'])) {
             if (!is_array($options['hue'])) {
-                $options['hue'] = array($options['hue']);
+                $options['hue'] = [$options['hue']];
             }
 
             foreach ($options['hue'] as $hue) {
                 if ($hue === 'random') {
-                    $ranges[] = array(0, 360);
+                    $ranges[] = [0, 360];
                 } else {
                     if (isset(self::$dictionary[$hue])) {
                         $ranges[] = self::$dictionary[$hue]['h'];
@@ -199,7 +199,7 @@ class RandomColor
                             $hue = intval($hue);
 
                             if ($hue <= 360 && $hue >= 0) {
-                                $ranges[] = array($hue, $hue);
+                                $ranges[] = [$hue, $hue];
                             }
                         }
                     }
@@ -208,17 +208,17 @@ class RandomColor
         }
 
         if (($l = count($ranges)) === 0) {
-            return array(0, 360);
+            return [0, 360];
         } else {
             if ($l === 1) {
                 return $ranges[0];
             } else {
-                return $ranges[self::_rand(array(0, $l - 1), $options)];
+                return $ranges[self::_rand([0, $l - 1], $options)];
             }
         }
     }
 
-    static private function _getMinimumBrightness($h, $s)
+    private static function _getMinimumBrightness($h, $s)
     {
         $colorInfo = self::_getColorInfo($h);
         $bounds = $colorInfo['bounds'];
@@ -240,7 +240,7 @@ class RandomColor
         return 0;
     }
 
-    static private function _getColorInfo($h)
+    private static function _getColorInfo($h)
     {
         // Maps red colors to make picking hue easier
         if ($h >= 334 && $h <= 360) {
@@ -254,7 +254,7 @@ class RandomColor
         }
     }
 
-    static private function _rand($bounds, $options)
+    private static function _rand($bounds, $options)
     {
         if (isset($options['prng'])) {
             return $options['prng']($bounds[0], $bounds[1]);
@@ -263,7 +263,7 @@ class RandomColor
         }
     }
 
-    static public function hsv2hex($hsv)
+    public static function hsv2hex($hsv)
     {
         $rgb = self::hsv2rgb($hsv);
         $hex = '#';
@@ -275,7 +275,7 @@ class RandomColor
         return $hex;
     }
 
-    static public function hsv2hsl($hsv)
+    public static function hsv2hsl($hsv)
     {
         extract($hsv);
 
@@ -294,7 +294,7 @@ class RandomColor
         ];
     }
 
-    static public function hsv2rgb($hsv)
+    public static function hsv2rgb($hsv)
     {
         extract($hsv);
 

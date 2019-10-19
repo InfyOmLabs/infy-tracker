@@ -20,8 +20,8 @@ function getLoggedInUser()
 }
 
 /**
- * @param  string  $str
- * @param  string  $delimiter
+ * @param string $str
+ * @param string $delimiter
  *
  * @return array
  */
@@ -37,8 +37,8 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
 }
 
 /**
- * @param  string  $datetime
- * @param  bool  $full
+ * @param string $datetime
+ * @param bool   $full
  *
  * @throws Exception
  *
@@ -78,7 +78,7 @@ function timeElapsedString($datetime, $full = false)
 }
 
 /**
- * @param  int  $totalMinutes
+ * @param int $totalMinutes
  */
 function roundToQuarterHour($totalMinutes)
 {
@@ -92,8 +92,8 @@ function roundToQuarterHour($totalMinutes)
 }
 
 /**
- * @param  int  $opacity
- * @param  string|null  $colorCode
+ * @param int         $opacity
+ * @param string|null $colorCode
  *
  * @return string
  */
@@ -110,23 +110,23 @@ function getColor($opacity = 1, $colorCode = null)
 }
 
 /**
- * @param  string  $colorType
- * @param  string  $colorFormat
+ * @param string $colorType
+ * @param string $colorFormat
  *
  * @return array|string
  */
 function getColorCode($colorType = 'bright', $colorFormat = 'rgbaCss')
 {
-    return RandomColor::one(array(
+    return RandomColor::one([
         'luminosity' => $colorType,
         'format'     => $colorFormat,
-    ));
+    ]);
 }
 
 /**
  * return random color.
  *
- * @param  int  $userId
+ * @param int $userId
  *
  * @return string
  */
@@ -151,8 +151,8 @@ function getAvatarUrl()
 /**
  * return avatar full url.
  *
- * @param  int  $userId
- * @param  string  $name
+ * @param int    $userId
+ * @param string $name
  *
  * @return string
  */
