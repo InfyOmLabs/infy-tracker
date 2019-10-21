@@ -222,7 +222,6 @@ class UserRepository extends BaseRepository
         /** @var User $user */
         $user = User::findOrFail($id);
         $user->update($input);
-        $user->refresh();
         $this->assignRolesAndProjects($user, $input);
 
         if ($input['is_active'] && !$user->is_email_verified) {
