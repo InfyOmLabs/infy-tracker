@@ -149,9 +149,9 @@ var tbl = $('#task_table').DataTable({
         {
             data: function (row) {
                 return row.status == 1
-                    ? '<div class="active_btn"><input name="yes" id="enabled" class="enabled" type="checkbox" checked data-check="' +
+                    ? '<div class="active_btn" title="Mark as pending"><input name="yes" id="enabled" class="enabled" type="checkbox" checked data-check="' +
                     row.id + '"></div>'
-                    : '<div class="active_btn"><input name="no" id="disabled" type="checkbox" class="enabled" data-check="' +
+                    : '<div class="active_btn" title="Mark as complete"><input name="no" id="disabled" type="checkbox" class="enabled" data-check="' +
                     row.id + '"></div>'
             }, name: 'status',
         },
@@ -228,7 +228,7 @@ var tbl = $('#task_table').DataTable({
                     '<i class="cui-trash action-icon"></i></a>'
 
                 if ($.inArray(loggedInUserId, taskAssignee) > -1) {
-                    actionString += '<a title="Add Timer Entry" class="btn btn-success action-btn btn-sm entry-model ml-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' +
+                    actionString += '<a title="Add Time Entry" class="btn btn-success action-btn btn-sm entry-model ml-1" data-toggle="modal" data-target="#timeEntryAddModal" data-id="' +
                         row.id + '" data-project-id="' + row.project.id + '">' +
                         '<i class="fa fa-user-clock action-icon"></i></a>'
                 }

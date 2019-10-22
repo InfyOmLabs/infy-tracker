@@ -16,12 +16,12 @@ use Auth;
 use Carbon\Carbon;
 
 /**
- * Class DashboardRepository
+ * Class DashboardRepository.
  */
 class DashboardRepository
 {
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return array
      */
@@ -81,8 +81,8 @@ class DashboardRepository
     }
 
     /**
-     * @param  string  $startDate
-     * @param  string  $endDate
+     * @param string $startDate
+     * @param string $endDate
      *
      * @return array
      */
@@ -118,7 +118,7 @@ class DashboardRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return mixed
      */
@@ -148,7 +148,7 @@ class DashboardRepository
                 'total_hours' => round($totalDuration / 60, 2),
             ];
             $color = getColorCode();
-            $data['data']['backgroundColor'][] = getColor(0.2, $color);
+            $data['data']['backgroundColor'][] = getColor(0.3, $color);
             $data['data']['borderColor'][] = getColor(1, $color);
         }
         $data['totalRecords'] = 0;

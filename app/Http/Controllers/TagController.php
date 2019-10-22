@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
- * Class TagController
+ * Class TagController.
  */
 class TagController extends AppBaseController
 {

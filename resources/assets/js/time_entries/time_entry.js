@@ -72,7 +72,7 @@ let tbl = $('#timeEntryTable').DataTable({
     columns: [
         {
             className: 'details-control',
-            defaultContent: '<a title=\'Expand\' class=\'btn btn-success collapse-icon action-btn btn-sm\'><span class=\'fa fa-plus-circle action-icon\'></span></a>',
+            defaultContent: '<a class=\'btn btn-success collapse-icon action-btn btn-sm\'><span class=\'fa fa-plus-circle action-icon\'></span></a>',
             data: null,
             orderable: false,
             searchable: false,
@@ -299,7 +299,6 @@ $('#startTime,#endTime').on('dp.change', function (selected) {
     $('#startTime').data('DateTimePicker').maxDate(moment().endOf('now'))
     $('#endTime').data('DateTimePicker').maxDate(moment().endOf('now'))
 })
-$('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'))
 
 $('#editTimeEntryForm').submit(function (event) {
     event.preventDefault()
@@ -437,4 +436,5 @@ $('#new_entry').click(function () {
     $('#timeProjectId').val(tracketProjectId)
     $('#timeProjectId').trigger('change')
     getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox')
+    $('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'))
 })

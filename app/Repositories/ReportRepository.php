@@ -21,11 +21,7 @@ class ReportRepository extends BaseRepository
     /**
      * @var array
      */
-    protected $fieldSearchable = [
-        'name',
-        'start_date',
-        'end_date',
-    ];
+    protected $fieldSearchable = ['name', 'start_date', 'end_date'];
 
     /**
      * Return searchable fields.
@@ -46,22 +42,22 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
+     * @param array $input
      *
      * @return Report|null
      */
     public function store($input)
     {
         /** @var Report $report */
-        $report = Report::create($input);;
+        $report = Report::create($input);
         $this->createReportFilter($input, $report);
 
         return $report->fresh();
     }
 
     /**
-     * @param  array  $input
-     * @param  int  $id
+     * @param array $input
+     * @param int   $id
      *
      * @throws Exception
      *
@@ -77,7 +73,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $id
+     * @param int $id
      *
      * @throws Exception
      *
@@ -91,10 +87,9 @@ class ReportRepository extends BaseRepository
         return true;
     }
 
-
     /**
-     * @param  array  $input
-     * @param  Report  $report
+     * @param array  $input
+     * @param Report $report
      *
      * @return array
      */
@@ -127,9 +122,9 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
-     * @param  int  $paramId
-     * @param  string  $type
+     * @param int    $reportId
+     * @param int    $paramId
+     * @param string $type
      *
      * @return ReportFilter
      */
@@ -143,8 +138,8 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  array  $input
-     * @param  Report  $report
+     * @param array  $input
+     * @param Report $report
      *
      * @throws Exception
      *
@@ -203,7 +198,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -213,7 +208,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -223,7 +218,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return array
      */
@@ -233,7 +228,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @return Collection|void
      */
@@ -248,7 +243,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $reportId
+     * @param int $reportId
      *
      * @throws Exception
      *
@@ -260,7 +255,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  Report  $report
+     * @param Report $report
      *
      * @return TimeEntry[]|Builder[]
      */
@@ -270,8 +265,7 @@ class ReportRepository extends BaseRepository
         $endDate = $report->end_date->endOfDay();
         $id = $report->id;
 
-        $query = TimeEntry::with(['task', 'user', 'task.project.client', 'task.tags'])
-            ->whereBetween('time_entries.start_time', [$startDate, $endDate]);
+        $query = TimeEntry::with(['task', 'user', 'task.project.client', 'task.tags'])->whereBetween('time_entries.start_time', [$startDate, $endDate]);
 
         $projectIds = $this->getProjectIds($id);
         $tagIds = $this->getTagIds($id);
@@ -318,6 +312,10 @@ class ReportRepository extends BaseRepository
                 $result[$clientId]['duration'] = 0;
                 $result[$clientId]['time'] = 0;
             }
+            // prepare cost for client
+            if (!isset($result[$clientId]['cost'])) {
+                $result[$clientId]['cost'] = 0;
+            }
             $result[$clientId]['duration'] = $duration + $result[$clientId]['duration'];
             $result[$clientId]['time'] = $this->getDurationTime($result[$clientId]['duration']);
 
@@ -328,6 +326,11 @@ class ReportRepository extends BaseRepository
                 $result[$clientId]['projects'][$project->id]['time'] = 0;
             }
             $projectDuration = $result[$clientId]['projects'][$project->id]['duration'];
+
+            // set default cost for projects
+            if (!isset($result[$clientId]['projects'][$project->id]['cost'])) {
+                $result[$clientId]['projects'][$project->id]['cost'] = 0;
+            }
             $result[$clientId]['projects'][$project->id]['duration'] = $duration + $projectDuration;
             $result[$clientId]['projects'][$project->id]['time'] = $this->getDurationTime($duration + $projectDuration);
 
@@ -335,12 +338,23 @@ class ReportRepository extends BaseRepository
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;
             if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
                 $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = 0;
+            }
+
+            // set default cost for users
+            if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
+                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] = 0;
             }
 
             $userDuration = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
+
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
+            // calculate cost of user
+            $userCost = $this->getCosting($duration + $userDuration, $entry->user);
+            // calculate cost for client and project with user
+            $result[$clientId]['cost'] += $userCost;
+            $result[$clientId]['projects'][$project->id]['cost'] += $userCost;
+            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] += $userCost;
 
             // prepare tasks and duration
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['name'] = $entry->task->title;
@@ -348,7 +362,9 @@ class ReportRepository extends BaseRepository
                 $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = 0;
                 $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = 0;
             }
+
             $time = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
+
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id'] = $entry->task->id;
@@ -358,7 +374,7 @@ class ReportRepository extends BaseRepository
     }
 
     /**
-     * @param  int  $minutes
+     * @param int $minutes
      *
      * @return string
      */
@@ -379,5 +395,21 @@ class ReportRepository extends BaseRepository
         }
 
         return $hour.' hr '.$min.' min';
+    }
+
+    /**
+     * @param $minutes
+     * @param User $user
+     *
+     * @return float|int
+     */
+    public function getCosting($minutes, $user)
+    {
+        if (is_null($user->salary)) {
+            return 0;
+        }
+        $costPerMin = $user->salary / 24 / 8 / 60;
+
+        return round($costPerMin * $minutes, 2);
     }
 }

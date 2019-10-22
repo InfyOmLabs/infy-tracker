@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait ImageTrait
 {
     /**
-     * @param  string  $file
+     * @param string $file
      *
      * @return bool
      */
@@ -41,9 +41,9 @@ trait ImageTrait
     }
 
     /**
-     * @param  UploadedFile  $file
-     * @param  string  $path
-     * @param  array  $options
+     * @param UploadedFile $file
+     * @param string       $path
+     * @param array        $options
      *
      * @throws ApiOperationFailedException
      *
@@ -78,7 +78,7 @@ trait ImageTrait
     }
 
     /**
-     * @param  string  $path
+     * @param string $path
      *
      * @return string
      */
@@ -88,7 +88,7 @@ trait ImageTrait
     }
 
     /**
-     * @param  string  $url
+     * @param string $url
      *
      * @return mixed
      */
@@ -106,8 +106,8 @@ trait ImageTrait
     }
 
     /**
-     * @param  UploadedFile  $file
-     * @param  string  $path
+     * @param UploadedFile $file
+     * @param string       $path
      *
      * @throws ApiOperationFailedException
      *
