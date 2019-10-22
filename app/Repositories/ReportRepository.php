@@ -410,7 +410,7 @@ class ReportRepository extends BaseRepository
         }
 
         $perDaySalary = $user->salary / 24;
-        $perHRSalary  = $perDaySalary / 8;
+        $perHRSalary = $perDaySalary / 8;
         $perMinSalary = $perHRSalary / 60;
 
         return round($perMinSalary * $minutes, 2);
