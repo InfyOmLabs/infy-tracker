@@ -22,7 +22,7 @@
                     <h5 class="mb-0">
                         {{$client['time']}} ({{round($client['duration'] * 100 / $totalMinutes, 2)}} %)
                         @can('manage_users')
-                            - [Cost: {{$client['cost']}}]
+                           <span class="font-weight-bold"> - [Cost: {{ number_format($client['cost']) }}]</span>
                         @endcan
                     </h5>
                 </div>
@@ -38,7 +38,7 @@
                             <span>
                               {{$project['time']}} ({{round($project['duration'] * 100 / $client['duration'], 2)}} %)
                               @can('manage_users')
-                                    - [Cost: {{$project['cost']}}]
+                                    <span class="font-weight-bold">  - [Cost: {{number_format($project['cost'])}}] </span>
                               @endcan
                             </span>
                         </div>
@@ -54,7 +54,7 @@
                                         <span>
                                             {{$user['time']}} ({{round($user['duration'] * 100 / $project['duration'], 2)}} %)
                                              @can('manage_users')
-                                                - [Cost: {{$user['cost']}}]
+                                                <span class="font-weight-bold">  - [Cost: {{ number_format($user['cost'])}}]</span>
                                              @endcan
                                         </span>
                                     </div>
