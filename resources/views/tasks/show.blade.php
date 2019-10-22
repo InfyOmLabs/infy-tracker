@@ -146,7 +146,7 @@
                                                         <a class="user__icons cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                     @endif
                                                 </span>
-                                                <span class="user__description">{{time_elapsed_string($comment->created_at)}}</span>
+                                                <span class="user__description">{{timeElapsedString($comment->created_at)}}</span>
                                             </div>
                                             <div class="user__comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
                                                 {!! html_entity_decode($comment->comment) !!}

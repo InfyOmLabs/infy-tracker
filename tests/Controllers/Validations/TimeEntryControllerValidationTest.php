@@ -51,6 +51,27 @@ class TimeEntryControllerValidationTest extends TestCase
         $this->assertEquals('Invalid start time and end time.', $response->exception->getMessage());
     }
 
+    /**
+     * @param array $input
+     *
+     * @return array
+     */
+    public function timeEntryInputs($input = [])
+    {
+        $activityType = factory(ActivityType::class)->create();
+        $task = factory(Task::class)->create();
+
+        $startTime = date('Y-m-d H:i:s', strtotime('+2 hours'));
+        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+30 minutes'));
+
+        return array_merge([
+            'start_time'       => $startTime,
+            'end_time'         => $endTime,
+            'task_id'          => $task->id,
+            'activity_type_id' => $activityType->id,
+        ], $input);
+    }
+
     /** @test */
     public function test_add_time_entry_fails_when_start_time_is_greater_than_current_time()
     {
@@ -243,26 +264,5 @@ class TimeEntryControllerValidationTest extends TestCase
         $this->assertEquals($this->defaultUserId, $timeEntry->user_id);
         $this->assertEquals($inputs['start_time'], $timeEntry->start_time);
         $this->assertEquals($inputs['end_time'], $timeEntry->end_time);
-    }
-
-    /**
-     * @param array $input
-     *
-     * @return array
-     */
-    public function timeEntryInputs($input = [])
-    {
-        $activityType = factory(ActivityType::class)->create();
-        $task = factory(Task::class)->create();
-
-        $startTime = date('Y-m-d H:i:s', strtotime('+2 hours'));
-        $endTime = date('Y-m-d H:i:s', strtotime($startTime.'+30 minutes'));
-
-        return array_merge([
-            'start_time'       => $startTime,
-            'end_time'         => $endTime,
-            'task_id'          => $task->id,
-            'activity_type_id' => $activityType->id,
-        ], $input);
     }
 }

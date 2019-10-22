@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Resources\RandomColor;
 
 /**
  * @return int
@@ -35,7 +36,15 @@ function explode_trim_remove_empty_values_from_array($str, $delimiter = ',')
     return array_values($arr);
 }
 
-function time_elapsed_string($datetime, $full = false)
+/**
+ * @param string $datetime
+ * @param bool   $full
+ *
+ * @throws Exception
+ *
+ * @return string
+ */
+function timeElapsedString($datetime, $full = false)
 {
     $now = new DateTime();
     $ago = new DateTime($datetime);
@@ -68,6 +77,9 @@ function time_elapsed_string($datetime, $full = false)
     return $string ? implode(', ', $string).' ago' : 'just now';
 }
 
+/**
+ * @param int $totalMinutes
+ */
 function roundToQuarterHour($totalMinutes)
 {
     $hours = intval($totalMinutes / 60);
@@ -79,18 +91,36 @@ function roundToQuarterHour($totalMinutes)
     }
 }
 
+/**
+ * @param int         $opacity
+ * @param string|null $colorCode
+ *
+ * @return string
+ */
 function getColor($opacity = 1, $colorCode = null)
 {
     if (empty($colorCode)) {
         $colorCode = getColorCode();
     }
 
-    return 'rgba('.$colorCode.', '.$opacity.')';
+    $color = substr($colorCode, 0, -1);
+    $color .= ', '.$opacity.')';
+
+    return $color;
 }
 
-function getColorCode()
+/**
+ * @param string $colorType
+ * @param string $colorFormat
+ *
+ * @return array|string
+ */
+function getColorCode($colorType = 'bright', $colorFormat = 'rgbaCss')
 {
-    return rand(0, 255).', '.rand(0, 255).', '.rand(1, 255);
+    return RandomColor::one([
+        'luminosity' => $colorType,
+        'format'     => $colorFormat,
+    ]);
 }
 
 /**

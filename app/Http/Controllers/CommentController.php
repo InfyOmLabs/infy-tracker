@@ -11,6 +11,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
+/**
+ * Class CommentController.
+ */
 class CommentController extends AppBaseController
 {
     /** @var TaskRepository */
@@ -31,6 +34,7 @@ class CommentController extends AppBaseController
     {
         $input = $request->only(['comment']);
         $input['task_id'] = $task->id;
+
         $comment = $this->taskRepository->addComment($input);
         $this->taskRepository->addCommentBroadCast($comment);
 

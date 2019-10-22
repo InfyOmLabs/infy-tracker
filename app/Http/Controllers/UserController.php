@@ -7,74 +7,56 @@ use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Queries\UserDataTable;
-use App\Repositories\AccountRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use Crypt;
 use DataTables;
 use Exception;
-use Hash;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class UserController.
+ */
 class UserController extends AppBaseController
 {
     /** @var UserRepository */
     private $userRepository;
 
-    /** @var ProjectRepository */
-    private $projectRepository;
-
-    /**
-     * @var AccountRepository
-     */
-    private $accountRepository;
-
-    /** @var RoleRepository */
-    private $roleRepository;
-
     /**
      * UserController constructor.
      *
-     * @param UserRepository    $userRepo
-     * @param AccountRepository $accountRepository
-     * @param ProjectRepository $projectRepository
-     * @param RoleRepository    $roleRepository
+     * @param UserRepository $userRepo
      */
-    public function __construct(
-        UserRepository $userRepo,
-        AccountRepository $accountRepository,
-        ProjectRepository $projectRepository,
-        RoleRepository $roleRepository
-    ) {
+    public function __construct(UserRepository $userRepo)
+    {
         $this->userRepository = $userRepo;
-        $this->accountRepository = $accountRepository;
-        $this->projectRepository = $projectRepository;
-        $this->roleRepository = $roleRepository;
     }
 
     /**
      * Display a listing of the User.
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param RoleRepository    $roleRepository
+     * @param ProjectRepository $projectRepository
      *
      * @throws Exception
      *
      * @return Factory|View
      */
-    public function index(Request $request)
+    public function index(Request $request, RoleRepository $roleRepository, ProjectRepository $projectRepository)
     {
         if ($request->ajax()) {
             return Datatables::of((new UserDataTable())->get())->addColumn('role_name', function (User $user) {
                 return implode(',', $user->roles()->pluck('name')->toArray());
             })->make(true);
         }
-        $projects = $this->projectRepository->getProjectsList();
-        $roles = $this->roleRepository->getRolesList();
+
+        $projects = $projectRepository->getProjectsList();
+        $roles = $roleRepository->getRolesList();
 
         return view('users.index')->with(['projects' => $projects, 'roles' => $roles]);
     }
@@ -91,32 +73,8 @@ class UserController extends AppBaseController
     public function store(CreateUserRequest $request)
     {
         $input = $request->all();
-        $input['created_by'] = getLoggedInUserId();
-        $input['activation_code'] = uniqid();
-        if (!empty($input['password']) && \Auth::user()->can('manage_users')) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            unset($input['password']);
-        }
-        $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
-        /** @var User $user */
-        $user = $this->userRepository->create($input);
-        if (isset($input['project_ids']) && !empty($input['project_ids'])) {
-            $user->projects()->sync($input['project_ids']);
-        }
-        if (isset($input['role_id']) && !empty($input['role_id'])) {
-            $user->roles()->sync($input['role_id']);
-        }
-        if ($input['is_active']) {
-            $key = $user->id.'|'.$user->activation_code;
-            $code = Crypt::encrypt($key);
-            /* Send confirmation email */
-            $this->accountRepository->sendConfirmEmail(
-                $user->name,
-                $user->email,
-                $code
-            );
-        }
+
+        $this->userRepository->store($input);
 
         return $this->sendSuccess('User created successfully.');
     }
@@ -149,34 +107,9 @@ class UserController extends AppBaseController
      */
     public function update(User $user, UpdateUserRequest $request)
     {
-        $projectIds = [];
         $input = $request->all();
 
-        if (!empty($input['password']) && \Auth::user()->can('manage_users')) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            unset($input['password']);
-        }
-
-        $input['is_active'] = (isset($input['is_active']) && !empty($input['is_active'])) ? 1 : 0;
-        /** @var User $user */
-        $user = $this->userRepository->update($input, $user->id);
-        if (isset($input['project_ids']) && !empty($input['project_ids'])) {
-            $projectIds = $input['project_ids'];
-        }
-        $user->projects()->sync($projectIds);
-        if (isset($input['role_id']) && !empty($input['role_id'])) {
-            $user->roles()->sync($input['role_id']);
-        }
-        if ($input['is_active'] && !$user->is_email_verified) {
-            $key = $user->id.'|'.$user->activation_code;
-            $code = Crypt::encrypt($key);
-            $this->accountRepository->sendConfirmEmail(
-                $user->name,
-                $user->email,
-                $code
-            );
-        }
+        $this->userRepository->update($input, $user->id);
 
         return $this->sendSuccess('User updated successfully.');
     }

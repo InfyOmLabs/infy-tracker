@@ -1,11 +1,13 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\Models\Task;
+use App\Models\TaskAttachment;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
-$factory->define(\App\Models\TaskAttachment::class, function (Faker $faker) {
+$factory->define(TaskAttachment::class, function (Faker $faker) {
     $task = factory(Task::class)->create();
 
     return [

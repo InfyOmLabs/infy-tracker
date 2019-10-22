@@ -1,12 +1,13 @@
 <?php
 
-/* @var $factory \Illuminate\Database\Eloquent\Factory */
+/* @var $factory Factory */
 
 use App\Models\ActivityType;
 use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factory;
 
 $factory->define(TimeEntry::class, function (Faker $faker) {
     $user = factory(User::class)->create();

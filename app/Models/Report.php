@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read mixed $formatted_date
  * @property-read \App\Models\User $user
+ * @property-read int|null $projects_count
  */
 class Report extends Model
 {

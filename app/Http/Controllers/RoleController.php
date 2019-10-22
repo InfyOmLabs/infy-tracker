@@ -83,11 +83,8 @@ class RoleController extends AppBaseController
     public function store(CreateRoleRequest $request)
     {
         $input = $request->all();
-        /** @var Role $roles */
-        $roles = $this->rolesRepository->create($input);
-        if (isset($input['permissions']) && !empty($input['permissions'])) {
-            $roles->syncPermissions($input['permissions']);
-        }
+
+        $this->rolesRepository->store($input);
         Flash::success('Role saved successfully.');
 
         return redirect(route('roles.index'));
@@ -116,14 +113,10 @@ class RoleController extends AppBaseController
      */
     public function update(Role $role, UpdateRoleRequest $request)
     {
-        $permissions = [];
         $input = $request->all();
-        /** @var Role $roles */
-        $roles = $this->rolesRepository->update($input, $role->id);
-        if (isset($input['permissions']) && !empty($input['permissions'])) {
-            $permissions = $input['permissions'];
-        }
-        $roles->syncPermissions($permissions);
+
+        $this->rolesRepository->update($input, $role->id);
+
         Flash::success('Role updated successfully.');
 
         return redirect(route('roles.index'));

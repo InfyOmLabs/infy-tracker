@@ -14,6 +14,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Class TagController.
+ */
 class TagController extends AppBaseController
 {
     /** @var TagRepository */
@@ -55,6 +58,7 @@ class TagController extends AppBaseController
     public function store(CreateTagRequest $request)
     {
         $input = $request->all();
+
         $this->tagRepository->store($input);
 
         return $this->sendSuccess('Tag created successfully.');

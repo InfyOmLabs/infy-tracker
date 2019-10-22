@@ -7,6 +7,9 @@ use Illuminate\Mail\Message;
 use Mail;
 use URL;
 
+/**
+ * Class AccountRepository.
+ */
 class AccountRepository
 {
     /**

@@ -50,6 +50,22 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals($projects[1]->id, $projectIds[1]);
     }
 
+    /**
+     * @param int    $reportId
+     * @param int    $paramId
+     * @param string $type
+     *
+     * @return array
+     */
+    public function generateReportFilter($reportId, $paramId, $type)
+    {
+        return factory(ReportFilter::class)->create([
+            'report_id'  => $reportId,
+            'param_id'   => $paramId,
+            'param_type' => $type,
+        ]);
+    }
+
     /** @test */
     public function it_can_retrieve_tag_ids_of_report()
     {
@@ -292,21 +308,5 @@ class ReportRepositoryTest extends TestCase
         $this->assertEquals(User::class, $userReportFilter[0]->param_type);
         $this->assertEquals(Tag::class, $tagReportFilter[0]->param_type);
         $this->assertEquals(Client::class, $clientReportFilter[0]->param_type);
-    }
-
-    /**
-     * @param int    $reportId
-     * @param int    $paramId
-     * @param string $type
-     *
-     * @return array
-     */
-    public function generateReportFilter($reportId, $paramId, $type)
-    {
-        return factory(ReportFilter::class)->create([
-            'report_id'  => $reportId,
-            'param_id'   => $paramId,
-            'param_type' => $type,
-        ]);
     }
 }

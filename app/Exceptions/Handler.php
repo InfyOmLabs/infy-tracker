@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Response;
 
@@ -32,7 +34,7 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param \Exception $exception
+     * @param Exception $exception
      *
      * @throws Exception
      *
@@ -46,10 +48,10 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Exception               $exception
+     * @param Request   $request
+     * @param Exception $exception
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|\Illuminate\Http\Response|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
@@ -63,7 +65,7 @@ class Handler extends ExceptionHandler
             $message = $exception->getMessage();
             $code = \Illuminate\Http\Response::HTTP_NOT_FOUND;
 
-            if (preg_match('@\\\\(\w+)\]@', $message, $matches)) {
+            if (preg_match('@\\\\(\w+)]@', $message, $matches)) {
                 $model = $matches[1];
                 $model = preg_replace('/Table/i', '', $model);
                 $message = "{$model} not found.";

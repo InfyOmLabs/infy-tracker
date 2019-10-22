@@ -26,12 +26,19 @@
                         {!! Form::email('email', null, ['id'=>'edit_email','class' => 'form-control','required']) !!}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        {!! Form::label('salary', 'Salary') !!}
+                        {!! Form::number('salary', null, ['id'=>'edit_salary','class' => 'form-control','min'=>'0']) !!}
+                    </div>
+                </div>
                 @can('manage_users')
                     <div class="row">
                         <div class="form-group col-sm-6">
                             {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
                             <div class="input-group">
-                                <input class="form-control input-group__addon" id="edit_password" type="password" name="password">
+                                <input class="form-control input-group__addon" id="edit_password" type="password"
+                                       name="password">
                                 <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
                                     <i class="icon-ban icons"></i>
@@ -40,9 +47,11 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-6">
-                            {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
+                            {!! Form::label('password_confirmation', 'Confirm Password') !!}<span
+                                class="required confirm-pwd">*</span>
                             <div class="input-group">
-                                <input class="form-control input-group__addon" id="edit_confirm_password" type="password" name="password_confirmation">
+                                <input class="form-control input-group__addon" id="edit_confirm_password"
+                                       type="password" name="password_confirmation">
                                 <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
                                     <i class="icon-ban icons"></i>

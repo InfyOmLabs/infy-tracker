@@ -6,8 +6,6 @@ use App\Models\Tag;
 
 /**
  * Class TagRepository.
- *
- * @version May 3, 2019, 4:33 am UTC
  */
 class TagRepository extends BaseRepository
 {
