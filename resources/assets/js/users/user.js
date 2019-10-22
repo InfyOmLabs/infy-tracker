@@ -27,17 +27,18 @@ var tbl = $('#users_table').DataTable({
             'targets': [5],
             'orderable': false,
             'className': 'text-center',
-            'width': '9%',
+            'width': '5%',
         },
         {
             'targets': [4],
-            'orderable': false,
             'className': 'text-center',
             'width': '4%',
         },
         {
-            'targets': [3],
+            'targets': [3,7],
             'orderable': false,
+            'className': 'text-center',
+            'width': '6%',
         },
     ],
     columns: [
@@ -68,7 +69,7 @@ var tbl = $('#users_table').DataTable({
                 if (loggedInUserId === row.id) {
                     return ''
                 }
-                return ' <label class="switch switch-label switch-outline-primary-alt d-block">' +
+                return ' <label class="switch switch-label switch-outline-primary-alt">' +
                     '<input name="is_active" data-id="' + row.id +
                     '" class="switch-input is-active" type="checkbox" value="1" ' +
                     checked + '>' +

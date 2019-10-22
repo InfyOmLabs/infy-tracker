@@ -186,7 +186,7 @@ let tbl = $('#report_table').DataTable({
         },
         {
             data: function (row) {
-                return format(row.start_date, 'YYYY-MMM-DD')
+                return format(row.end_date, 'YYYY-MMM-DD')
             },
             name: 'end_date',
         },
