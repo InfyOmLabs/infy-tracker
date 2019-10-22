@@ -350,7 +350,7 @@ class ReportRepository extends BaseRepository
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
             $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
             // calculate cost of user
-            $userCost = $this->getCosting($duration + $userDuration, $entry->user);
+            $userCost = $this->getCosting($duration, $entry->user);
             // calculate cost for client and project with user
             $result[$clientId]['cost'] += $userCost;
             $result[$clientId]['projects'][$project->id]['cost'] += $userCost;
@@ -408,8 +408,11 @@ class ReportRepository extends BaseRepository
         if (is_null($user->salary)) {
             return 0;
         }
-        $costPerMin = $user->salary / 24 / 8 / 60;
 
-        return round($costPerMin * $minutes, 2);
+        $perDaySalary = $user->salary / 24;
+        $perHRSalary = $perDaySalary / 8;
+        $perMinSalary = $perHRSalary / 60;
+
+        return round($perMinSalary * $minutes, 2);
     }
 }
