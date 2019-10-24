@@ -190,6 +190,10 @@ class User extends Authenticatable
      */
     public function getImgAvatarAttribute()
     {
+        $userAvtar = $this->getOriginal('image_path');
+        if(isset($userAvtar) && !empty($userAvtar)) {
+            return $this->imageUrl(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$userAvtar);
+        }
         return getUserImageInitial($this->id, $this->name);
     }
 
