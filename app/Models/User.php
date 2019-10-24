@@ -194,6 +194,7 @@ class User extends Authenticatable
         if (isset($userAvtar) && !empty($userAvtar)) {
             return $this->imageUrl(self::IMAGE_PATH.DIRECTORY_SEPARATOR.$userAvtar);
         }
+
         return getUserImageInitial($this->id, $this->name);
     }
 
