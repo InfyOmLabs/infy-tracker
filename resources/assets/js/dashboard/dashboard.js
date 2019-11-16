@@ -153,3 +153,15 @@ window.roundToQuarterHour = function (duration) {
     }
     return hours + 'hr'
 }
+
+$(document).ready(function () {
+    let applyBtn = $('.range_inputs > button.applyBtn');
+    $(document).on('click','.ranges li', function () {
+        if($(this).data('range-key') === 'Custom Range') {
+            applyBtn.css('display','initial')
+        } else {
+            applyBtn.css('display','none')
+        }
+    });
+    applyBtn.css('display','none')
+})
