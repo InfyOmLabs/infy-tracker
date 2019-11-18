@@ -39,8 +39,10 @@ class DashboardRepository
         foreach ($timeEntry as $entry) {
             $date = Carbon::parse($entry->start_time)->startOfDay()->format('Y-m-d');
             $name = $entry->task->project->name;
+            $id = $entry->task->project->id;
             if (!isset($projects[$name])) {
                 $projects[$name]['name'] = $name;
+                $projects[$name]['id'] = $id;
             }
             if (!isset($projects[$name][$date])) {
                 $projects[$name][$date] = 0;
@@ -60,7 +62,7 @@ class DashboardRepository
                 $duration = isset($entry[$date]) ? $entry[$date] : 0;
                 $item['data'][] = round($duration / 60, 2);
                 $totalRecords = $totalRecords + $duration;
-                $item['backgroundColor'] = getColor(0.7);
+                $item['backgroundColor'] = getColor(0.7, getColorRGBCode($entry['id']));
             }
             $data[] = (object) $item;
             $index++;
@@ -147,7 +149,7 @@ class DashboardRepository
                 'name'        => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
-            $color = getColorCode();
+            $color = getColorRGBCode();
             $data['data']['backgroundColor'][] = getColor(0.3, $color);
             $data['data']['borderColor'][] = getColor(1, $color);
         }
