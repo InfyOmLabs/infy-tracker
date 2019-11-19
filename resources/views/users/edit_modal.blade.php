@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         {!! Form::label('email', 'Email') !!}<span class="required">*</span>
-                        {!! Form::email('email', null, ['id'=>'edit_email','class' => 'form-control','required']) !!}
+                        {!! Form::email('email', null, ['id'=>'edit_email','class' => 'form-control','required',"autocomplete"=>"new-password"]) !!}
                     </div>
                 </div>
                 <div class="row">
@@ -38,7 +38,7 @@
                             {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
                             <div class="input-group">
                                 <input class="form-control input-group__addon" id="edit_password" type="password"
-                                       name="password">
+                                       name="password" autocomplete="new-password">
                                 <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
                                     <i class="icon-ban icons"></i>
@@ -51,7 +51,7 @@
                                 class="required confirm-pwd">*</span>
                             <div class="input-group">
                                 <input class="form-control input-group__addon" id="edit_confirm_password"
-                                       type="password" name="password_confirmation">
+                                       type="password" name="password_confirmation" autocomplete="password_confirmation">
                                 <div class="input-group-append input-group__icon">
                                 <span class="input-group-text changeType">
                                     <i class="icon-ban icons"></i>
