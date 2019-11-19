@@ -9,6 +9,10 @@ $(function () {
     })
 });
 
+$(document).ready(function () {
+    $('input').attr('autocomplete', 'false');
+});
+
 var tbl = $('#users_table').DataTable({
     processing: true,
     serverSide: true,
