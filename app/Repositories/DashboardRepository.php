@@ -149,7 +149,7 @@ class DashboardRepository
                 'name'        => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
-            $color = getColorRGBCode();
+            $color = getColorRGBCode($user->id);
             $data['data']['backgroundColor'][] = getColor(0.3, $color);
             $data['data']['borderColor'][] = getColor(1, $color);
         }
