@@ -164,7 +164,7 @@ class UserController extends AppBaseController
     }
 
     /**
-     * @param  ChangePasswordRequest  $request
+     * @param ChangePasswordRequest $request
      *
      * @return JsonResponse
      */
@@ -175,8 +175,8 @@ class UserController extends AppBaseController
         /** @var User $user */
         $user = Auth::user();
 
-        if (! Hash::check($input['password_current'], $user->password)) {
-            return $this->sendError("Current password is invalid.");
+        if (!Hash::check($input['password_current'], $user->password)) {
+            return $this->sendError('Current password is invalid.');
         }
 
         $input['password'] = Hash::make($input['password']);
