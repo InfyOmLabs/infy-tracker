@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::get('users/{user}/edit', 'UserController@edit')->name('users.edit');
     Route::post('users/profile-update', 'UserController@profileUpdate')->name('update-profile');
+    Route::post('users/change-password', 'UserController@changePassword')->name('change-password');
 
     Route::group(['middleware' => ['permission:manage_tags']], function () {
         Route::resource('tags', 'TagController');

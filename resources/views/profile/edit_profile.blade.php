@@ -40,30 +40,6 @@
                         {!! Form::text('phone', null, ['id'=>'pfPhone','class' => 'form-control']) !!}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        {!! Form::label('password', 'New Password') !!}<span class="required confirm-pwd">*</span>
-                        <div class="input-group">
-                            <input class="form-control input-group__addon" id="pfNewPassword" type="password" name="password">
-                            <div class="input-group-append input-group__icon">
-                                <span class="input-group-text changeType">
-                                    <i class="icon-ban icons"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        {!! Form::label('password_confirmation', 'Confirm Password') !!}<span class="required confirm-pwd">*</span>
-                        <div class="input-group">
-                            <input class="form-control input-group__addon" id="pfNewConfirmPassword" type="password" name="password_confirmation">
-                            <div class="input-group-append input-group__icon">
-                                <span class="input-group-text changeType">
-                                    <i class="icon-ban icons"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="text-right">
                     {!! Form::button('Save', ['type'=>'submit','class' => 'btn btn-primary','id'=>'btnPrEditSave','data-loading-text'=>"<span class='spinner-border spinner-border-sm'></span> Processing..."]) !!}
                     <button type="button" class="btn btn-light" data-dismiss="modal"

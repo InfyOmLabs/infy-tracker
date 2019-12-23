@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -16,6 +17,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 /**
@@ -158,6 +161,28 @@ class UserController extends AppBaseController
         $this->userRepository->profileUpdate($input);
 
         return $this->sendSuccess('Profile updated successfully.');
+    }
+
+    /**
+     * @param  ChangePasswordRequest  $request
+     *
+     * @return JsonResponse
+     */
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        $input = $request->all();
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (! Hash::check($input['password_current'], $user->password)) {
+            return $this->sendError("Current password is invalid.");
+        }
+
+        $input['password'] = Hash::make($input['password']);
+        $user->update($input);
+
+        return $this->sendSuccess('Password updated successfully.');
     }
 
     /**

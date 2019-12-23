@@ -50,6 +50,10 @@
                    data-toggle="modal" data-id="{{ getLoggedInUserId() }}">
                     <i class="fa fa-user"></i>Profile
                 </a>
+                <a href="#" class="dropdown-item btn btn-primary btn btn-default btn-flat"
+                   data-toggle="modal" data-id="{{ getLoggedInUserId() }}" data-target="#ChangePasswordModal">
+                    <i class="fa fa-key"></i>Change Password
+                </a>
                 <a class="dropdown-item" href="{!! url('/logout') !!}" class="btn btn-default btn-flat"
                    onclick="event.preventDefault(); localStorage.clear(); document.getElementById('logout-form').submit();">
                     <i class="fa fa-lock"></i>Logout
@@ -67,6 +71,7 @@
     <main class="main">
         @yield('content')
         @include('profile.edit_profile')
+        @include('profile.change_password')
     </main>
 </div>
 
