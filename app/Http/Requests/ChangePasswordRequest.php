@@ -40,7 +40,7 @@ class ChangePasswordRequest extends FormRequest
     {
         return [
             'password.min'  => 'Password must contains 6 characters.',
-            'password.same' => 'Password and Confirm password must be same.',
+            'password.same' => 'Password and Confirm Password must be the same.',
         ];
     }
 }
