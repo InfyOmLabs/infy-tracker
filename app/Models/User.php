@@ -171,7 +171,7 @@ class User extends Authenticatable
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
