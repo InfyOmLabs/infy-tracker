@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class UpdateUserPasswordRequest.
+ * Class UpdateUserPasswordRequest
  */
 class ChangePasswordRequest extends FormRequest
 {
