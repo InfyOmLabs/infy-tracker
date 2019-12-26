@@ -148,12 +148,6 @@ class UserRepository extends BaseRepository
         /** @var User $user */
         $user = $this->findOrFail(Auth::id());
 
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            unset($input['password']);
-        }
-
         try {
             if (isset($input['photo']) && !empty($input['photo'])) {
                 $input['image_path'] = ImageTrait::makeImage(
