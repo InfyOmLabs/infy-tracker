@@ -1,9 +1,5 @@
 $('#editProfileForm').submit(function (event) {
     event.preventDefault()
-    isValidate = validatePassword()
-    if (!isValidate) {
-        return false
-    }
     let loadingButton = jQuery(this).find('#btnPrEditSave')
     loadingButton.button('loading')
     $.ajax({
@@ -27,8 +23,41 @@ $('#editProfileForm').submit(function (event) {
     })
 })
 
+$('#changePasswordForm').submit(function (event) {
+    event.preventDefault()
+    isValidate = validatePassword()
+    if (!isValidate) {
+        return false
+    }
+    let loadingButton = jQuery(this).find('#btnPrPasswordEditSave')
+    loadingButton.button('loading')
+    $.ajax({
+        url: usersUrl + 'change-password',
+        type: 'post',
+        data: new FormData($(this)[0]),
+        processData: false,
+        contentType: false,
+        success: function (result) {
+            if (result.success) {
+                $('#ChangePasswordModal').modal('hide')
+                location.reload()
+            }
+        },
+        error: function (result) {
+            manageAjaxErrors(result, 'editPasswordValidationErrorsBox')
+        },
+        complete: function () {
+            loadingButton.button('reset')
+        },
+    })
+})
+
 $('#EditProfileModal').on('hidden.bs.modal', function () {
     resetModalForm('#editProfileForm', '#editProfileValidationErrorsBox')
+})
+
+$('#ChangePasswordModal').on('hidden.bs.modal', function () {
+    resetModalForm('#changePasswordForm', '#editPasswordValidationErrorsBox')
 })
 
 // open edit user profile model
@@ -96,6 +125,16 @@ $(document).on('keyup', '#name', function (e) {
 })
 
 $('.confirm-pwd').hide()
+$(document).on('blur', '#pfCurrentPassword', function () {
+    let currentPassword = $('#pfCurrentPassword').val()
+    if (currentPassword == '' || currentPassword.trim() == '') {
+        $('.confirm-pwd').hide()
+        return false
+    }
+
+    $('.confirm-pwd').show()
+})
+$('.confirm-pwd').hide()
 $(document).on('blur', '#pfNewPassword', function () {
     let password = $('#pfNewPassword').val()
     if (password == '' || password.trim() == '') {
@@ -116,14 +155,14 @@ $(document).on('blur', '#pfNewConfirmPassword', function () {
 })
 
 function validatePassword () {
+    let currentPassword = $('#pfCurrentPassword').val().trim()
     let password = $('#pfNewPassword').val().trim()
     let confirmPassword = $('#pfNewConfirmPassword').val().trim()
 
-    if ((confirmPassword == '' && password != '') ||
-        (confirmPassword != '' && password == '')) {
-        $('#editProfileValidationErrorsBox').
+    if (currentPassword == '' || password == '' || confirmPassword == '') {
+        $('#editPasswordValidationErrorsBox').
             show().
-            html('Please enter password and confirm password')
+            html('Please fill all the required fields.')
         return false
     }
     return true
