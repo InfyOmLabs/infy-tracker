@@ -132,7 +132,7 @@ class DashboardRepository
         if (!authUserHasPermission('manage_users')) {
             $users = User::whereId(Auth::id())->get();
         } else {
-            $users = User::all();
+            $users = User::active()->get();
         }
         $data['result'] = [];
         foreach ($users as $user) {
