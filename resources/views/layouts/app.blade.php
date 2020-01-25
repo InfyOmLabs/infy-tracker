@@ -81,7 +81,7 @@
 <footer class="app-footer justify-content-between">
     <div>
         <a href="https://infyom.com">InfyOm </a>
-        <span>&copy; 2019 InfyOmLabs.</span>
+        <span>&copy; 2019 - {{date('Y')}} InfyOmLabs.</span>
     </div>
     <div>
         <span>Powered by</span>
