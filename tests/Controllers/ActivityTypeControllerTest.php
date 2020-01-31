@@ -13,8 +13,8 @@ use Tests\Traits\MockRepositories;
  */
 class ActivityTypeControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
-
+    use DatabaseTransactions;
+    use MockRepositories;
     public function setUp(): void
     {
         parent::setUp();

@@ -11,7 +11,9 @@ use Illuminate\Queue\SerializesModels;
 
 class StartTimer implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
     public $timerData;
 
     /**

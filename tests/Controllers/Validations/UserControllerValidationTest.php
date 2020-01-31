@@ -68,8 +68,8 @@ class UserControllerValidationTest extends TestCase
     {
         $this->post(route('users.store'),
             ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
-            'password' => 'The password and password confirmation must match.',
-        ]);
+                'password' => 'The password and password confirmation must match.',
+            ]);
     }
 
     /** @test */
@@ -138,8 +138,8 @@ class UserControllerValidationTest extends TestCase
 
         $this->put(route('users.update', $user->id),
             ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
-            'phone' => 'The phone must be a number.',
-        ]);
+                'phone' => 'The phone must be a number.',
+            ]);
     }
 
     /** @test */
@@ -161,8 +161,8 @@ class UserControllerValidationTest extends TestCase
 
         $this->put(route('users.update', $user->id),
             ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
-            'password' => 'The password and password confirmation must match.',
-        ]);
+                'password' => 'The password and password confirmation must match.',
+            ]);
     }
 
     /** @test */

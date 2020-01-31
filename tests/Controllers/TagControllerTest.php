@@ -12,8 +12,8 @@ use Tests\Traits\MockRepositories;
  */
 class TagControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
-
+    use DatabaseTransactions;
+    use MockRepositories;
     public function setUp(): void
     {
         parent::setUp();
