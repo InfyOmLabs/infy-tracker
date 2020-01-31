@@ -22,7 +22,7 @@
                         <tr>
                             <td>{!! nl2br($entry->note) !!}</td>
                             <td>{{$entry->activityType->name}}</td>
-                            <td class="text-nowrap text-center"><img src="{{$entry->user->img_avatar}}"></td>
+                            <td class="text-nowrap text-center"><img src="{{$entry->user->img_avatar}}" width="40px"> </td>
                             <td class="text-nowrap text-center">{{roundToQuarterHour($entry->duration)}}</td>
                         </tr>
                     @endforeach
