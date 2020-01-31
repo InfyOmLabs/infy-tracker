@@ -14,6 +14,7 @@ class CommentControllerTest extends TestCase
 {
     use DatabaseTransactions;
     use MockRepositories;
+
     public function setUp(): void
     {
         parent::setUp();
