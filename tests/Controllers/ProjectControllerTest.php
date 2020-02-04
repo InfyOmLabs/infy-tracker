@@ -15,7 +15,8 @@ use Tests\Traits\MockRepositories;
  */
 class ProjectControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
+    use DatabaseTransactions;
+    use MockRepositories;
 
     public function setUp(): void
     {
