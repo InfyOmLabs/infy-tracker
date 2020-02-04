@@ -14,7 +14,8 @@ use Tests\Traits\MockRepositories;
  */
 class UserControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
+    use DatabaseTransactions;
+    use MockRepositories;
 
     public function setUp(): void
     {

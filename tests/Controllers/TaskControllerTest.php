@@ -18,7 +18,8 @@ use Tests\Traits\MockRepositories;
  */
 class TaskControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
+    use DatabaseTransactions;
+    use MockRepositories;
 
     public function setUp(): void
     {

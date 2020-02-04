@@ -83,7 +83,10 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable
 {
-    use Notifiable, ImageTrait, softDeletes, HasRoles;
+    use Notifiable;
+    use ImageTrait;
+    use softDeletes;
+    use HasRoles;
     use ImageTrait {
         deleteImage as traitDeleteImage;
     }

@@ -22,7 +22,8 @@ use Tests\Traits\MockRepositories;
  */
 class ClientControllerTest extends TestCase
 {
-    use DatabaseTransactions, MockRepositories;
+    use DatabaseTransactions;
+    use MockRepositories;
 
     public function setUp(): void
     {
