@@ -1,5 +1,5 @@
 <div class="modal fade" id="timeTrackingModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Time Tracking</h5>
@@ -13,6 +13,8 @@
                     <tr>
                         <th scope="col">Note</th>
                         <th scope="col">Activity</th>
+                        <th scope="col">Start Time</th>
+                        <th scope="col">End Time</th>
                         <th scope="col" class="text-nowrap text-center">Tracked By</th>
                         <th scope="col" class="text-nowrap text-center">Time</th>
                     </tr>
@@ -22,6 +24,8 @@
                         <tr>
                             <td>{!! nl2br($entry->note) !!}</td>
                             <td>{{$entry->activityType->name}}</td>
+                            <td>{{\Carbon\Carbon::parse($entry->start_time)->format('Y-m-d h:ma')}}</td>
+                            <td>{{\Carbon\Carbon::parse($entry->end_time)->format('Y-m-d h:ma')}}</td>
                             <td class="text-nowrap text-center"><img src="{{$entry->user->img_avatar}}" width="40px"> </td>
                             <td class="text-nowrap text-center">{{roundToQuarterHour($entry->duration)}}</td>
                         </tr>
