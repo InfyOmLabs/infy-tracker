@@ -56,8 +56,8 @@ class ProjectController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of(
                 (new ProjectDataTable())->get(
-                $request->only('filter_client')
-            )
+                    $request->only('filter_client')
+                )
             )->make(true);
         }
 
