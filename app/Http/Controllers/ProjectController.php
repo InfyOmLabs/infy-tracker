@@ -54,8 +54,10 @@ class ProjectController extends AppBaseController
     public function index(Request $request, ClientRepository $clientRepository)
     {
         if ($request->ajax()) {
-            return Datatables::of((new ProjectDataTable())->get(
-                $request->only('filter_client'))
+            return Datatables::of(
+                (new ProjectDataTable())->get(
+                $request->only('filter_client')
+            )
             )->make(true);
         }
 
