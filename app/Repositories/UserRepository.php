@@ -151,7 +151,9 @@ class UserRepository extends BaseRepository
         try {
             if (isset($input['photo']) && !empty($input['photo'])) {
                 $input['image_path'] = ImageTrait::makeImage(
-                    $input['photo'], User::IMAGE_PATH, ['width' => 150, 'height' => 150]
+                    $input['photo'],
+                    User::IMAGE_PATH,
+                    ['width' => 150, 'height' => 150]
                 );
 
                 $imagePath = $user->image_path;

@@ -82,10 +82,12 @@ class ProjectControllerPermissionTest extends TestCase
         $project = factory(Project::class)->create();
         $updateProject = factory(Project::class)->raw(['id' => $project->id]);
 
-        $response = $this->putJson(route('projects.update', $project->id),
+        $response = $this->putJson(
+            route('projects.update', $project->id),
             array_merge($updateProject, [
                 'user_ids' => [],
-            ]));
+            ])
+        );
 
         $this->assertSuccessMessageResponse($response, 'Project updated successfully.');
     }

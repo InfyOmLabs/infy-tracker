@@ -28,19 +28,19 @@ use Response;
  */
 class ReportController extends AppBaseController
 {
-    /** @var ReportRepository $reportRepository */
+    /** @var ReportRepository */
     private $reportRepository;
 
-    /** @var UserRepository $userRepo */
+    /** @var UserRepository */
     private $userRepo;
 
-    /** @var TagRepository $tagRepo */
+    /** @var TagRepository */
     private $tagRepo;
 
-    /** @var ClientRepository $clientRepo */
+    /** @var ClientRepository */
     private $clientRepo;
 
-    /** @var ProjectRepository $projectRepository */
+    /** @var ProjectRepository */
     private $projectRepo;
 
     public function __construct(
