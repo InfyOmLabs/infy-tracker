@@ -83,8 +83,10 @@ class TimeEntryControllerValidationTest extends TestCase
             $this->timeEntryInputs(['start_time' => $startTime, 'end_time' => $endTime])
         );
 
-        $this->assertEquals('Start time must be less than or equal to current time.',
-            $response->exception->getMessage());
+        $this->assertEquals(
+            'Start time must be less than or equal to current time.',
+            $response->exception->getMessage()
+        );
     }
 
     /** @test */

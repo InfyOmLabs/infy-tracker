@@ -14,10 +14,10 @@ use Illuminate\Http\Response;
  */
 class HomeController extends AppBaseController
 {
-    /** @var DashboardRepository $dashboardRepo */
+    /** @var DashboardRepository */
     private $dashboardRepo;
 
-    /** @var UserRepository $userRepository */
+    /** @var UserRepository */
     private $userRepository;
 
     /**
