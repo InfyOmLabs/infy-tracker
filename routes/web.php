@@ -70,10 +70,14 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
             ->name('task.delete-attachment');
         Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment')->name('task.attachments');
         Route::post('tasks/{task}/comments', 'CommentController@addComment')->name('task.comments');
-        Route::post('tasks/{task}/comments/{comment}/update',
-            'CommentController@editComment')->name('task.update-comment');
-        Route::delete('tasks/{task}/comments/{comment}',
-            'CommentController@deleteComment')->name('task.delete-comment');
+        Route::post(
+            'tasks/{task}/comments/{comment}/update',
+            'CommentController@editComment'
+        )->name('task.update-comment');
+        Route::delete(
+            'tasks/{task}/comments/{comment}',
+            'CommentController@deleteComment'
+        )->name('task.delete-comment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails')->name('task.get-details');
         Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount')->name('task.comments-count');
         Route::get('tasks/{task}/users', 'TaskController@getTaskUsers')->name('task.users');

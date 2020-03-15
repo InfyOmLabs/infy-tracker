@@ -25,11 +25,14 @@ class AccountRepository
         $data['username'] = $username;
 
         try {
-            Mail::send('auth.emails.account_verification', ['data' => $data],
+            Mail::send(
+                'auth.emails.account_verification',
+                ['data' => $data],
                 function (Message $message) use ($email) {
                     $message->subject('Activate your account');
                     $message->to($email);
-                });
+                }
+            );
         } catch (Exception $e) {
             throw new Exception('Account created, but unable to send email');
         }

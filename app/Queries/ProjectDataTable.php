@@ -20,15 +20,19 @@ class ProjectDataTable
         /** @var Project $query */
         $query = Project::with(['client'])->select('projects.*');
 
-        $query->when(isset($input['filter_client']) && !empty($input['filter_client']),
+        $query->when(
+            isset($input['filter_client']) && !empty($input['filter_client']),
             function (Builder $q) use ($input) {
                 $q->where('client_id', $input['filter_client']);
-            });
+            }
+        );
 
-        $query->when(isset($input['filter_team']) && !empty($input['filter_team']),
+        $query->when(
+            isset($input['filter_team']) && !empty($input['filter_team']),
             function (Builder $q) use ($input) {
                 $q->where('team', $input['filter_team']);
-            });
+            }
+        );
 
         return $query;
     }
