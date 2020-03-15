@@ -45,8 +45,8 @@ class TimeEntryController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of(
                 (new TimeEntryDataTable())->get(
-                $request->only('filter_activity', 'filter_user', 'filter_project')
-            )
+                    $request->only('filter_activity', 'filter_user', 'filter_project')
+                )
             )->editColumn('title', function (TimeEntry $timeEntry) {
                 return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
             })->filterColumn('title', function (Builder $query, $search) {
