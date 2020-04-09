@@ -10,6 +10,7 @@
 namespace Tests\Controllers;
 
 use App\Models\Client;
+use App\Models\Department;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
@@ -48,6 +49,8 @@ class ClientControllerTest extends TestCase
         $this->mockRepo(self::$client);
 
         $client = factory(Client::class)->raw();
+        $department = factory(Department::class)->create();
+        $client = array_merge($client, ['department_id' => $department->id]);
 
         $this->clientRepository->expects('create')
             ->with(array_merge($client, ['created_by' => $this->loggedInUserId]));
@@ -75,6 +78,8 @@ class ClientControllerTest extends TestCase
 
         $client = factory(Client::class)->create();
         $fakeClient = factory(Client::class)->raw();
+        $department = factory(Department::class)->create();
+        $fakeClient = array_merge($fakeClient, ['department_id' => $department->id]);
 
         $this->clientRepository->expects('update')->withArgs([$fakeClient, $client->id]);
 
