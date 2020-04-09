@@ -16,7 +16,7 @@ use Illuminate\View\View;
 
 class DepartmentController extends AppBaseController
 {
-    /** @var DepartmentRepository $departmentRepository*/
+    /** @var DepartmentRepository */
     private $departmentRepository;
 
     public function __construct(DepartmentRepository $departmentRepo)
