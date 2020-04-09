@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder as BuilderAlias;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Client.
@@ -16,33 +21,33 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $website
  * @property int $deleted_by
  * @property int|null $created_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $createdUser
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null $createdUser
  *
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereWebsite($value)
- * @mixin \Eloquent
+ * @method static BuilderAlias|Client newModelQuery()
+ * @method static BuilderAlias|Client newQuery()
+ * @method static BuilderAlias|Client query()
+ * @method static BuilderAlias|Client whereCreatedAt($value)
+ * @method static BuilderAlias|Client whereCreatedBy($value)
+ * @method static BuilderAlias|Client whereEmail($value)
+ * @method static BuilderAlias|Client whereId($value)
+ * @method static BuilderAlias|Client whereName($value)
+ * @method static BuilderAlias|Client whereUpdatedAt($value)
+ * @method static BuilderAlias|Client whereWebsite($value)
+ * @mixin Eloquent
  *
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
+ * @property Carbon|null $deleted_at
+ * @property-read Collection|Project[] $projects
  * @property-read int|null $projects_count
  *
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Client onlyTrashed()
+ * @method static Builder|Client onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDeletedBy($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Client withoutTrashed()
+ * @method static BuilderAlias|Client whereDeletedAt($value)
+ * @method static BuilderAlias|Client whereDeletedBy($value)
+ * @method static Builder|Client withTrashed()
+ * @method static Builder|Client withoutTrashed()
  */
 class Client extends Model
 {
@@ -53,6 +58,7 @@ class Client extends Model
         'name',
         'email',
         'website',
+        'department_id',
         'created_by',
         'deleted_by',
     ];
@@ -63,11 +69,12 @@ class Client extends Model
      * @var array
      */
     protected $casts = [
-        'id'         => 'integer',
-        'name'       => 'string',
-        'email'      => 'string',
-        'website'    => 'string',
-        'deleted_by' => 'integer',
+        'id'            => 'integer',
+        'name'          => 'string',
+        'email'         => 'string',
+        'website'       => 'string',
+        'deleted_by'    => 'integer',
+        'department_id' => 'integer',
     ];
 
     /**
@@ -76,19 +83,22 @@ class Client extends Model
      * @var array
      */
     public static $rules = [
-        'name'    => 'required|unique:clients,name',
-        'email'   => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'website' => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'name'          => 'required|unique:clients,name',
+        'email'         => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'website'       => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'department_id' => 'required|integer',
     ];
 
     public static $editRules = [
-        'email'   => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
-        'website' => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'email'         => 'nullable|email|regex:/^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/',
+        'website'       => 'nullable|regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/',
+        'department_id' => 'required|integer',
     ];
 
     public static $messages = [
-        'website.regex' => 'Please enter valid url.',
-        'email.regex'   => 'Please enter valid email.',
+        'website.regex'          => 'Please enter valid url.',
+        'email.regex'            => 'Please enter valid email.',
+        'department_id.required' => 'Please select valid department.',
     ];
 
     /**

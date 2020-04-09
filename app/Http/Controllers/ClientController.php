@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use App\Models\Department;
 use App\Queries\ClientDataTable;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
@@ -47,8 +48,9 @@ class ClientController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new ClientDataTable())->get())->make(true);
         }
+        $departments = Department::all()->pluck('name', 'id')->toArray();
 
-        return view('clients.index');
+        return view('clients.index', ['departments' => $departments]);
     }
 
     /**
