@@ -101,6 +101,11 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::group(['middleware' => ['permission:manage_roles']], function () {
         Route::resource('roles', 'RoleController');
     });
+
+    Route::group(['middleware' => ['permission:manage_department']], function () {
+        Route::resource('departments', 'DepartmentController');
+        Route::post('departments/{department}/update', 'DepartmentController@update');
+    });
 });
 
 Route::fallback(function () {
