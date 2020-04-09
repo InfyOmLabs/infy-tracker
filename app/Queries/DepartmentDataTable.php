@@ -1,11 +1,12 @@
-<?php namespace App\Queries;
+<?php
+
+namespace App\Queries;
 
 use App\Models\Department;
 use Illuminate\Database\Query\Builder;
 
 /**
- * Class DepartmentDataTable
- * @package App\Queries
+ * Class DepartmentDataTable.
  */
 class DepartmentDataTable
 {

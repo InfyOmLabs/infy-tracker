@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 /**
- * Class Department
+ * Class Department.
  *
- * @package App\Models
  * @version April 8, 2020, 10:51 am UTC
+ *
  * @property int $id
  * @property string $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
+ *
  * @method static Builder|Department newModelQuery()
  * @method static Builder|Department newQuery()
  * @method static Builder|Department query()
@@ -29,7 +30,7 @@ use Illuminate\Support\Carbon;
 class Department extends Model
 {
     /**
-     * Validation rules
+     * Validation rules.
      *
      * @var array
      */
