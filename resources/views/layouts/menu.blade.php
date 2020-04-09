@@ -14,8 +14,8 @@
 
 @can('manage_clients')
     <li class="nav-item {{ Request::is('clients*') ? 'active' : '' }}">
-        <a class="nav-link" href="{!! route('clients.index') !!}"> 
-            <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Clients 
+        <a class="nav-link" href="{!! route('clients.index') !!}">
+            <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Clients
         </a>
     </li>
 @endcan
