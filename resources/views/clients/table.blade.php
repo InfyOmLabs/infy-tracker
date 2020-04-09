@@ -2,11 +2,11 @@
     <thead>
     <tr>
         <th>Name</th>
+        <th>Department</th>
         <th>Email</th>
         <th>Website</th>
         <th>Action</th>
     </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody></tbody>
 </table>

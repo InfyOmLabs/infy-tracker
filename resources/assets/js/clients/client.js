@@ -12,7 +12,7 @@ $('#clients_table').DataTable({
     },
     columnDefs: [
         {
-            'targets': [3],
+            'targets': [4],
             'orderable': false,
             'className': 'text-center',
             'width': '5%',
@@ -22,6 +22,10 @@ $('#clients_table').DataTable({
         {
             data: 'name',
             name: 'name',
+        },
+        {
+            data: 'department.name',
+            name: 'department.name',
         },
         {
             data: 'email',

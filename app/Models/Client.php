@@ -116,4 +116,12 @@ class Client extends Model
     {
         return $this->hasMany(Project::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }
