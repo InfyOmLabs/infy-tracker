@@ -10,8 +10,7 @@
             <div class="page-header">
                 <h3>Departments</h3>
                 <div>
-                    <a href="#" class="btn btn-primary" data-toggle="modal"
-                            data-target="#AddModal"></i>New Department</a>
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"></i>New Department</a>
                 </div>
             </div>
             <div class="row">

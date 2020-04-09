@@ -3,7 +3,6 @@
 use App\Models\Department;
 use Illuminate\Database\Query\Builder;
 
-
 /**
  * Class DepartmentDataTable
  * @package App\Queries

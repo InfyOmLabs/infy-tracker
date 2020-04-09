@@ -1,19 +1,22 @@
 <li class="nav-item {{ Request::is('home*') ? 'active' : '' }}">
-    <a class="nav-link" href="{!! route('home') !!}"> <i class="fas fa-tachometer-alt nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Dashboard
+    <a class="nav-link" href="{!! route('home') !!}"> 
+        <i class="fas fa-tachometer-alt nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Dashboard
     </a>
 </li>
 
 @can('manage_department')
     <li class="nav-item {{ Request::is('departments*') ? 'active' : '' }}">
-        <a class="nav-link" href="{!! route('departments.index') !!}"> <i
-                    class="nav-icon fa fa-building"></i> Departments </a>
+        <a class="nav-link" href="{!! route('departments.index') !!}"> 
+            <i class="nav-icon fa fa-building"></i> Departments 
+        </a>
     </li>
 @endcan
 
 @can('manage_clients')
     <li class="nav-item {{ Request::is('clients*') ? 'active' : '' }}">
-        <a class="nav-link" href="{!! route('clients.index') !!}"> <i class="fas fa-user-tie nav-icon"
-                    aria-hidden="true"></i>&nbsp;&nbsp;Clients </a>
+        <a class="nav-link" href="{!! route('clients.index') !!}"> 
+            <i class="fas fa-user-tie nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Clients 
+        </a>
     </li>
 @endcan
 
