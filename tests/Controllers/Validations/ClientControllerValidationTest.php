@@ -3,6 +3,7 @@
 namespace Tests\Controllers\Validations;
 
 use App\Models\Client;
+use App\Models\Department;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -67,11 +68,13 @@ class ClientControllerValidationTest extends TestCase
     {
         /** @var Client $client */
         $client = factory(Client::class)->create();
+        $department = factory(Department::class)->create();
 
         $this->put(route('clients.update', $client->id), [
-            'name'    => $client->name,
-            'email'   => 'valid.email@abc.com',
-            'website' => 'http://valid-website.com',
+            'name'          => $client->name,
+            'email'         => 'valid.email@abc.com',
+            'website'       => 'http://valid-website.com',
+            'department_id' => $department->id,
         ]);
 
         $this->assertEquals('valid.email@abc.com', $client->fresh()->email);
@@ -81,7 +84,9 @@ class ClientControllerValidationTest extends TestCase
     /** @test */
     public function it_can_create_client_with_created_by_details()
     {
-        $this->post(route('clients.store'), ['name' => 'Dummy Client', 'email' => '', 'website' => ''])
+        $department = factory(Department::class)->create();
+        $this->post(route('clients.store'),
+            ['name' => 'Dummy Client', 'email' => '', 'website' => '', 'department_id' => $department->id])
             ->assertSessionHasNoErrors();
 
         $client = Client::whereName('Dummy Client')->first();
