@@ -1,18 +1,13 @@
-$('#department_id,#edit_department_id').select2({
-    width: '100%',
-    placeholder: 'Select Department',
-});
-
-$('#clients_table').DataTable({
+$('#departments-table').DataTable({
     processing: true,
     serverSide: true,
     'order': [[0, 'asc']],
     ajax: {
-        url: clientUrl,
+        url: departmentUrl,
     },
     columnDefs: [
         {
-            'targets': [3],
+            'targets': [1],
             'orderable': false,
             'className': 'text-center',
             'width': '5%',
@@ -22,20 +17,6 @@ $('#clients_table').DataTable({
         {
             data: 'name',
             name: 'name',
-        },
-        {
-            data: 'email',
-            name: 'email',
-        },
-        {
-            data: function (row) {
-                if (row.website != null) {
-                    return '<a href="http://' + row.website +
-                        '" target="_blank" >' + row.website + '</a>';
-                } else {
-                    return null;
-                }
-            }, name: 'website',
         },
         {
             data: function (row) {
@@ -55,14 +36,13 @@ $('#addNewForm').submit(function (event) {
     var loadingButton = jQuery(this).find('#btnSave');
     loadingButton.button('loading');
     $.ajax({
-        url: clientCreateUrl,
+        url: departmentCreateUrl,
         type: 'POST',
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
-                displaySuccessMessage(result.message);
                 $('#AddModal').modal('hide');
-                $('#clients_table').DataTable().ajax.reload(null, false);
+                $('#departments-table').DataTable().ajax.reload(null, false);
             }
         },
         error: function (result) {
@@ -78,16 +58,15 @@ $('#editForm').submit(function (event) {
     event.preventDefault();
     var loadingButton = jQuery(this).find('#btnEditSave');
     loadingButton.button('loading');
-    var id = $('#clientId').val();
+    var id = $('#departmentId').val();
     $.ajax({
-        url: clientUrl + id,
-        type: 'put',
+        url: departmentUrl + id + '/update',
+        type: 'post',
         data: $(this).serialize(),
         success: function (result) {
             if (result.success) {
-                displaySuccessMessage(result.message);
                 $('#EditModal').modal('hide');
-                $('#clients_table').DataTable().ajax.reload(null, false);
+                $('#departments-table').DataTable().ajax.reload(null, false);
             }
         },
         error: function (result) {
@@ -109,18 +88,15 @@ $('#EditModal').on('hidden.bs.modal', function () {
 
 window.renderData = function (id) {
     $.ajax({
-        url: clientUrl + id + '/edit',
+        url: departmentUrl + id + '/edit',
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                let client = result.data;
-                $('#clientId').val(client.id);
-                $('#edit_name').val(client.name);
-                $('#edit_email').val(client.email);
-                $('#edit_department_id').
-                    val(client.department_id).
-                    trigger('change.select2');
-                $('#edit_website').val(client.website);
+                let department = result.data;
+                $('#departmentId').val(department.id);
+                $('#edit_name').val(department.name);
+                $('#edit_email').val(department.email);
+                $('#edit_website').val(department.website);
                 $('#EditModal').modal('show');
             }
         },
@@ -129,16 +105,14 @@ window.renderData = function (id) {
         },
     });
 };
+
 $(document).on('click', '.edit-btn', function (event) {
-    let clientId = $(event.currentTarget).data('id');
-    renderData(clientId);
+    let departmentId = $(event.currentTarget).data('id');
+    renderData(departmentId);
 });
 
 $(document).on('click', '.delete-btn', function (event) {
-    let clientId = $(event.currentTarget).data('id');
-    let alertMessage = '<div class="alert alert-warning swal__alert">\n' +
-        '<strong class="swal__text-warning">Are you sure want to delete this client?</strong><div class="swal__text-message">By deleting this client all its project, task and time entries will be deleted.</div></div>';
-
-    deleteItemInputConfirmation(clientUrl + clientId, '#clients_table',
-        'Client', alertMessage);
+    let departmentId = $(event.currentTarget).data('id');
+    deleteItem(departmentUrl + departmentId, '#departments-table',
+        'Department');
 });

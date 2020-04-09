@@ -30,7 +30,7 @@ class PermissionRepositoryTest extends TestCase
 
         $permissions = $this->permissionRepo->permissionList();
 
-        $this->assertCount(10, $permissions, ' 9 default permission');
+        $this->assertCount(11, $permissions, ' 11 default permission');
 
         $allPermissions = Permission::all();
         $allPermissions->map(function (Permission $allPermissions) use ($permissions) {
