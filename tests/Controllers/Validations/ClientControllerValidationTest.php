@@ -85,8 +85,10 @@ class ClientControllerValidationTest extends TestCase
     public function it_can_create_client_with_created_by_details()
     {
         $department = factory(Department::class)->create();
-        $this->post(route('clients.store'),
-            ['name' => 'Dummy Client', 'email' => '', 'website' => '', 'department_id' => $department->id])
+        $this->post(
+            route('clients.store'),
+            ['name' => 'Dummy Client', 'email' => '', 'website' => '', 'department_id' => $department->id]
+        )
             ->assertSessionHasNoErrors();
 
         $client = Client::whereName('Dummy Client')->first();
