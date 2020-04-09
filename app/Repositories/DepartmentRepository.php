@@ -5,8 +5,8 @@ namespace App\Repositories;
 use App\Models\Department;
 
 /**
- * Class DepartmentRepository
- * @package App\Repositories
+ * Class DepartmentRepository.
+ *
  * @version April 8, 2020, 10:51 am UTC
  */
 class DepartmentRepository extends BaseRepository
@@ -19,7 +19,7 @@ class DepartmentRepository extends BaseRepository
     ];
 
     /**
-     * Return searchable fields
+     * Return searchable fields.
      *
      * @return array
      */
@@ -29,7 +29,7 @@ class DepartmentRepository extends BaseRepository
     }
 
     /**
-     * Configure the Model
+     * Configure the Model.
      **/
     public function model()
     {
