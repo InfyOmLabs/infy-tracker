@@ -73,7 +73,7 @@ class DepartmentController extends AppBaseController
     /**
      * Update the specified Department in storage.
      *
-     * @param Department $department
+     * @param Department              $department
      * @param UpdateDepartmentRequest $request
      *
      * @return JsonResponse

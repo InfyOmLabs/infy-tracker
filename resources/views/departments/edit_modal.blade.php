@@ -6,7 +6,7 @@
                 <h5 class="modal-title">Edit Department</h5>
                 <button type="button" aria-label="Close" class="close" data-dismiss="modal">×</button>
             </div>
-            {!! Form::open(['id' => 'editForm', 'files'=>true]) !!}
+            {!! Form::open(['id' => 'editForm', 'files' => true]) !!}
             <div class="modal-body">
                 <div class="alert alert-danger" style="display: none" id="editValidationErrorsBox"></div>
                 {!! Form::hidden('department_id', null, ['id' => 'departmentId']) !!}
