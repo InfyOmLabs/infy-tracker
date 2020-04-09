@@ -35,7 +35,7 @@ class Department extends Model
      * @var array
      */
     public static $rules = [
-        'name' => 'string|required',
+        'name' => 'string|required|unique:departments,name',
     ];
     public $table = 'departments';
     public $fillable = [

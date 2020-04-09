@@ -21,13 +21,9 @@ class AddDepartmentPermissionSeeder extends Seeder
             'display_name' => 'Manage Department',
         ]);
 
-        /** @var Role $adminRole */
-        $adminRole = Role::whereName('Admin')->first();
-
         /** @var Role $developerRole */
         $developerRole = Role::whereName('Developer')->first();
 
-        $adminRole->givePermissionTo($permission);
         $developerRole->givePermissionTo($permission);
     }
 }
