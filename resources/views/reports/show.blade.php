@@ -34,9 +34,13 @@
 @section('scripts')
     <script>
         $( document ).ready(function() {
-            $(".reports__client-row-title").click(function(){
+            $(".reports__department-row-title").click(function(){
                 $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
                 $(this).parent().parent().find('.collapse-row').slideToggle();
+            });
+            $(".reports__client-row-title").click(function(){
+                $(this).find("i.fa-caret-up").toggleClass("fa-rotate");
+                $(this).parent().next('.reports__client-container').slideToggle();
             });
             $(".reports__project-header").click(function(){
                 $(this).find("i.fa-caret-up").toggleClass("fa-rotate");

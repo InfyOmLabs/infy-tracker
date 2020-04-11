@@ -33,6 +33,7 @@
         let reportUrl = "{{ url('reports') }}";
         let usersOfProjects = "{{ url('users-of-projects') }}";
         let projectsOfClient = "{{ url('projects-of-client') }}";
+        let clientsOfDepartment = "{{ url('clients-of-department') }}";
     </script>
     <script src="{{ mix('assets/js/report/report.js') }}"></script>
 @endsection

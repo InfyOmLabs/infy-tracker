@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
         Route::resource('reports', 'ReportController');
         Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
         Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
+        Route::get('clients-of-department', 'DepartmentController@clients')->name('clients-of-department');
     });
 
     Route::get('my-tasks', 'TaskController@myTasks')->name('my-tasks');
