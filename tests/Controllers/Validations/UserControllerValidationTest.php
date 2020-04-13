@@ -66,10 +66,12 @@ class UserControllerValidationTest extends TestCase
     /** @test */
     public function test_create_user_fails_when_password_and_confirm_password_not_matched()
     {
-        $this->post(route('users.store'),
-            ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
-                'password' => 'The password and password confirmation must match.',
-            ]);
+        $this->post(
+            route('users.store'),
+            ['password' => '123456', 'password_confirmation' => '1234567']
+        )->assertSessionHasErrors([
+            'password' => 'The password and password confirmation must match.',
+        ]);
     }
 
     /** @test */
@@ -136,10 +138,12 @@ class UserControllerValidationTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->put(route('users.update', $user->id),
-            ['phone' => 'abcdefghijklmnopqrstuvwxyz'])->assertSessionHasErrors([
-                'phone' => 'The phone must be a number.',
-            ]);
+        $this->put(
+            route('users.update', $user->id),
+            ['phone' => 'abcdefghijklmnopqrstuvwxyz']
+        )->assertSessionHasErrors([
+            'phone' => 'The phone must be a number.',
+        ]);
     }
 
     /** @test */
@@ -159,10 +163,12 @@ class UserControllerValidationTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
 
-        $this->put(route('users.update', $user->id),
-            ['password' => '123456', 'password_confirmation' => '1234567'])->assertSessionHasErrors([
-                'password' => 'The password and password confirmation must match.',
-            ]);
+        $this->put(
+            route('users.update', $user->id),
+            ['password' => '123456', 'password_confirmation' => '1234567']
+        )->assertSessionHasErrors([
+            'password' => 'The password and password confirmation must match.',
+        ]);
     }
 
     /** @test */

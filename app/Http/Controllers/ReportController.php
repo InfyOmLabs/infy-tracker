@@ -8,6 +8,7 @@ use App\Models\Report;
 use App\Models\User;
 use App\Queries\ReportDataTable;
 use App\Repositories\ClientRepository;
+use App\Repositories\DepartmentRepository;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ReportRepository;
 use App\Repositories\TagRepository;
@@ -17,44 +18,50 @@ use Auth;
 use DataTables;
 use Exception;
 use Flash;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
-use Response;
+use Illuminate\View\View;
 
 /**
  * Class ReportController.
  */
 class ReportController extends AppBaseController
 {
-    /** @var ReportRepository $reportRepository */
+    /** @var ReportRepository */
     private $reportRepository;
 
-    /** @var UserRepository $userRepo */
+    /** @var UserRepository */
     private $userRepo;
 
-    /** @var TagRepository $tagRepo */
+    /** @var TagRepository */
     private $tagRepo;
 
-    /** @var ClientRepository $clientRepo */
+    /** @var ClientRepository */
     private $clientRepo;
 
-    /** @var ProjectRepository $projectRepository */
+    /** @var ProjectRepository */
     private $projectRepo;
+
+    /** @var DepartmentRepository */
+    private $departmentRepo;
 
     public function __construct(
         ReportRepository $reportRepo,
         UserRepository $userRepository,
         ProjectRepository $projectRepository,
         ClientRepository $clientRepository,
-        TagRepository $tagRepository
+        TagRepository $tagRepository,
+        DepartmentRepository $departmentRepository
     ) {
         $this->reportRepository = $reportRepo;
         $this->userRepo = $userRepository;
         $this->clientRepo = $clientRepository;
         $this->tagRepo = $tagRepository;
         $this->projectRepo = $projectRepository;
+        $this->departmentRepo = $departmentRepository;
     }
 
     /**
@@ -64,7 +71,7 @@ class ReportController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return Response
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -79,7 +86,7 @@ class ReportController extends AppBaseController
     /**
      * Show the form for creating a new Report.
      *
-     * @return Response
+     * @return Factory|View
      */
     public function create()
     {
@@ -87,6 +94,7 @@ class ReportController extends AppBaseController
         $data['users'] = $this->userRepo->getUserList();
         $data['clients'] = $this->clientRepo->getClientList();
         $data['projects'] = $this->projectRepo->getProjectsList();
+        $data['departments'] = $this->departmentRepo->getDepartmentList();
 
         return view('reports.create', $data);
     }
@@ -96,7 +104,7 @@ class ReportController extends AppBaseController
      *
      * @param CreateReportRequest $request
      *
-     * @return Response
+     * @return RedirectResponse|Redirector
      */
     public function store(CreateReportRequest $request)
     {
@@ -114,7 +122,7 @@ class ReportController extends AppBaseController
      *
      * @param Report $report
      *
-     * @return Response
+     * @return Factory|View
      */
     public function show(Report $report)
     {
@@ -136,7 +144,7 @@ class ReportController extends AppBaseController
      *
      * @param Report $report
      *
-     * @return Response
+     * @return Factory|View
      */
     public function edit(Report $report)
     {
@@ -146,10 +154,12 @@ class ReportController extends AppBaseController
         $data['tagIds'] = $this->reportRepository->getTagIds($id);
         $data['userIds'] = $this->reportRepository->getUserIds($id);
         $data['clientId'] = $this->reportRepository->getClientId($id);
+        $data['departmentId'] = $this->reportRepository->getDepartmentId($id);
         $data['projects'] = $this->projectRepo->getProjectsList($data['clientId']);
         $data['users'] = $this->userRepo->getUserList($data['projectIds']);
         $data['clients'] = $this->clientRepo->getClientList();
         $data['tags'] = $this->tagRepo->getTagList();
+        $data['departments'] = $this->departmentRepo->getDepartmentList();
 
         return view('reports.edit')->with($data);
     }
@@ -162,7 +172,7 @@ class ReportController extends AppBaseController
      *
      * @throws Exception
      *
-     * @return Response
+     * @return RedirectResponse|Redirector
      */
     public function update(Report $report, UpdateReportRequest $request)
     {

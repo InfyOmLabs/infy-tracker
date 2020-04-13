@@ -43,15 +43,19 @@ class TimeEntryController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of((new TimeEntryDataTable())->get(
-                $request->only('filter_activity', 'filter_user', 'filter_project'))
+            return Datatables::of(
+                (new TimeEntryDataTable())->get(
+                    $request->only('filter_activity', 'filter_user', 'filter_project')
+                )
             )->editColumn('title', function (TimeEntry $timeEntry) {
                 return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
             })->filterColumn('title', function (Builder $query, $search) {
                 $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
-                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(t.task_number,'')) LIKE ?",
-                            ["%$search%"]);
+                        ->orWhereRaw(
+                            "concat(ifnull(p.prefix,''),'-',ifnull(t.task_number,'')) LIKE ?",
+                            ["%$search%"]
+                        );
                 });
             })->make(true);
         }

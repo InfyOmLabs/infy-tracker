@@ -70,10 +70,14 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
             ->name('task.delete-attachment');
         Route::get('tasks/{task}/get-attachments', 'TaskController@getAttachment')->name('task.attachments');
         Route::post('tasks/{task}/comments', 'CommentController@addComment')->name('task.comments');
-        Route::post('tasks/{task}/comments/{comment}/update',
-            'CommentController@editComment')->name('task.update-comment');
-        Route::delete('tasks/{task}/comments/{comment}',
-            'CommentController@deleteComment')->name('task.delete-comment');
+        Route::post(
+            'tasks/{task}/comments/{comment}/update',
+            'CommentController@editComment'
+        )->name('task.update-comment');
+        Route::delete(
+            'tasks/{task}/comments/{comment}',
+            'CommentController@deleteComment'
+        )->name('task.delete-comment');
         Route::get('task-details/{task}', 'TaskController@getTaskDetails')->name('task.get-details');
         Route::get('tasks/{task}/comments-count', 'TaskController@getCommentsCount')->name('task.comments-count');
         Route::get('tasks/{task}/users', 'TaskController@getTaskUsers')->name('task.users');
@@ -87,6 +91,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
         Route::resource('reports', 'ReportController');
         Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
         Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
+        Route::get('clients-of-department', 'DepartmentController@clients')->name('clients-of-department');
     });
 
     Route::get('my-tasks', 'TaskController@myTasks')->name('my-tasks');
@@ -96,6 +101,11 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::group(['middleware' => ['permission:manage_roles']], function () {
         Route::resource('roles', 'RoleController');
+    });
+
+    Route::group(['middleware' => ['permission:manage_department']], function () {
+        Route::resource('departments', 'DepartmentController');
+        Route::post('departments/{department}/update', 'DepartmentController@update');
     });
 });
 

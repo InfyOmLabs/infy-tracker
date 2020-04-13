@@ -53,8 +53,10 @@ class TaskController extends AppBaseController
             })->filterColumn('title', function (Builder $query, $search) {
                 $query->where(function (Builder $query) use ($search) {
                     $query->where('title', 'like', "%$search%")
-                        ->orWhereRaw("concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
-                            ["%$search%"]);
+                        ->orWhereRaw(
+                            "concat(ifnull(p.prefix,''),'-',ifnull(tasks.task_number,'')) LIKE ?",
+                            ["%$search%"]
+                        );
                 });
             })
                 ->make(true);
