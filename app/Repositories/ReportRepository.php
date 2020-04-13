@@ -358,7 +358,7 @@ class ReportRepository extends BaseRepository
 
             // prepare client and duration
             $result[$deptId]['clients'][$clientId]['name'] = $client->name;
-            if (!isset( $result[$deptId]['clients'][$clientId]['duration'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['duration'])) {
                 $result[$deptId]['clients'][$clientId]['duration'] = 0;
                 $result[$deptId]['clients'][$clientId]['time'] = 0;
             }
@@ -366,19 +366,19 @@ class ReportRepository extends BaseRepository
             if (!isset($result[$deptId]['clients'][$clientId]['cost'])) {
                 $result[$deptId]['clients'][$clientId]['cost'] = 0;
             }
-            $result[$deptId]['clients'][$clientId]['duration'] = $duration +   $result[$deptId]['clients'][$clientId]['duration'];
-            $result[$deptId]['clients'][$clientId]['time'] = $this->getDurationTime(  $result[$deptId]['clients'][$clientId]['duration']);
+            $result[$deptId]['clients'][$clientId]['duration'] = $duration + $result[$deptId]['clients'][$clientId]['duration'];
+            $result[$deptId]['clients'][$clientId]['time'] = $this->getDurationTime($result[$deptId]['clients'][$clientId]['duration']);
 
             // prepare projects and duration
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['name'] = $project->name;
-            if (!isset( $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'])) {
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'] = 0;
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['time'] = 0;
             }
-            $projectDuration =  $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'];
+            $projectDuration = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'];
 
             // set default cost for projects
-            if (!isset( $result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'])) {
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'] = 0;
             }
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'] = $duration + $projectDuration;
@@ -386,16 +386,16 @@ class ReportRepository extends BaseRepository
 
             // prepare users and duration
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;
-            if (!isset( $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = 0;
             }
 
             // set default cost for users
-            if (!isset( $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] = 0;
             }
 
-            $userDuration =  $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
+            $userDuration = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
 
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
@@ -409,12 +409,12 @@ class ReportRepository extends BaseRepository
 
             // prepare tasks and duration
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['name'] = $entry->task->title;
-            if (!isset( $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'])) {
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'])) {
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = 0;
                 $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = 0;
             }
 
-            $time =  $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
+            $time = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
 
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
             $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);

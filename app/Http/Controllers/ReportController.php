@@ -24,7 +24,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
-use Response;
 
 /**
  * Class ReportController.
@@ -70,10 +69,9 @@ class ReportController extends AppBaseController
      *
      * @param Request $request
      *
-     * @return Factory|View
-     *
      * @throws Exception
      *
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -172,9 +170,9 @@ class ReportController extends AppBaseController
      * @param Report              $report
      * @param UpdateReportRequest $request
      *
-     * @return RedirectResponse|Redirector
      * @throws Exception
      *
+     * @return RedirectResponse|Redirector
      */
     public function update(Report $report, UpdateReportRequest $request)
     {

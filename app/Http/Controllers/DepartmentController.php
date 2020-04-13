@@ -103,7 +103,7 @@ class DepartmentController extends AppBaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request          $request
      * @param ClientRepository $clientRepository
      *
      * @return JsonResponse
