@@ -24,7 +24,9 @@ $('#clients_table').DataTable({
             name: 'name',
         },
         {
-            data: 'department.name',
+            data: function (row) {
+                return (row.department !== null) ? row.department.name : '';
+            },
             name: 'department.name',
         },
         {
