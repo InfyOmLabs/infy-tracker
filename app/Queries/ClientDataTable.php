@@ -22,7 +22,7 @@ class ClientDataTable
         $query = Client::with('department')->select('clients.*');
 
         $query->when(
-            isset($input['filter_department']) && ! empty($input['filter_department']),
+            isset($input['filter_department']) && !empty($input['filter_department']),
             function (BuilderAlias $q) use ($input) {
                 $q->where('department_id', '=', $input['filter_department']);
             }
