@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Client;
+use App\Models\Department;
 use App\Models\Project;
 use App\Models\Report;
 use App\Models\ReportFilter;
@@ -118,6 +119,10 @@ class ReportRepository extends BaseRepository
             $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
         }
 
+        if (isset($input['department_id'])) {
+            $result[] = $this->createFilter($report->id, $input['department_id'], Department::class);
+        }
+
         return $result;
     }
 
@@ -151,6 +156,7 @@ class ReportRepository extends BaseRepository
         $input['projectIds'] = isset($input['projectIds']) ? $input['projectIds'] : [];
         $input['userIds'] = isset($input['userIds']) ? $input['userIds'] : [];
         $input['tagIds'] = isset($input['tagIds']) ? $input['tagIds'] : [];
+        $input['department_id'] = isset($input['department_id']) ? $input['department_id'] : 0;
         $input['client_id'] = isset($input['client_id']) ? $input['client_id'] : 0;
 
         $projectIds = $this->getProjectIds($report->id);
@@ -187,6 +193,13 @@ class ReportRepository extends BaseRepository
         if ($input['client_id'] != 0) {
             if ($input['client_id'] != $clientId) {
                 $result[] = $this->createFilter($report->id, $input['client_id'], Client::class);
+            }
+        }
+
+        $departmentId = $this->getDepartmentId($report->id);
+        if ($input['department_id'] != 0) {
+            if ($input['department_id'] != $departmentId) {
+                $result[] = $this->createFilter($report->id, $input['department_id'], Department::class);
             }
         }
 
@@ -245,6 +258,21 @@ class ReportRepository extends BaseRepository
     /**
      * @param int $reportId
      *
+     * @return Collection|void
+     */
+    public function getDepartmentId($reportId)
+    {
+        $report = ReportFilter::ofParamType(Department::class)->ofReport($reportId)->first();
+        if (empty($report)) {
+            return;
+        }
+
+        return $report->param_id;
+    }
+
+    /**
+     * @param int $reportId
+     *
      * @throws Exception
      *
      * @return bool|mixed|null
@@ -271,6 +299,7 @@ class ReportRepository extends BaseRepository
         $tagIds = $this->getTagIds($id);
         $userIds = $this->getUserIds($id);
         $clientId = $this->getClientId($id);
+        $departmentId = $this->getDepartmentId($id);
 
         $query->when(!empty($userIds), function (Builder $q) use ($userIds) {
             $q->whereIn('user_id', $userIds);
@@ -294,6 +323,12 @@ class ReportRepository extends BaseRepository
             });
         });
 
+        $query->when(!empty($departmentId), function (Builder $q) use ($departmentId) {
+            $q->whereHas('task.project.client', function (Builder $query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            });
+        });
+
         $entries = $query->get();
 
         // TODO : NEED TO REFACTOR/OPTIMIZE THIS CODE
@@ -302,72 +337,88 @@ class ReportRepository extends BaseRepository
         /** @var TimeEntry $entry */
         foreach ($entries as $entry) {
             $clientId = $entry->task->project->client_id;
+            $deptId = $entry->task->project->client->department_id;
             $project = $entry->task->project;
             $client = $project->client;
             $duration = $entry->duration;
+            $department = $project->client->department;
 
-            // prepare client and duration
-            $result[$clientId]['name'] = $client->name;
-            if (!isset($result[$clientId]['duration'])) {
-                $result[$clientId]['duration'] = 0;
-                $result[$clientId]['time'] = 0;
+            // prepare department and duration
+            $result[$deptId]['name'] = $department->name;
+            if (!isset($result[$deptId]['duration'])) {
+                $result[$deptId]['duration'] = 0;
+                $result[$deptId]['time'] = 0;
             }
             // prepare cost for client
-            if (!isset($result[$clientId]['cost'])) {
-                $result[$clientId]['cost'] = 0;
+            if (!isset($result[$deptId]['cost'])) {
+                $result[$deptId]['cost'] = 0;
             }
-            $result[$clientId]['duration'] = $duration + $result[$clientId]['duration'];
-            $result[$clientId]['time'] = $this->getDurationTime($result[$clientId]['duration']);
+            $result[$deptId]['duration'] = $duration + $result[$deptId]['duration'];
+            $result[$deptId]['time'] = $this->getDurationTime($result[$deptId]['duration']);
+
+            // prepare client and duration
+            $result[$deptId]['clients'][$clientId]['name'] = $client->name;
+            if (!isset($result[$deptId]['clients'][$clientId]['duration'])) {
+                $result[$deptId]['clients'][$clientId]['duration'] = 0;
+                $result[$deptId]['clients'][$clientId]['time'] = 0;
+            }
+            // prepare cost for client
+            if (!isset($result[$deptId]['clients'][$clientId]['cost'])) {
+                $result[$deptId]['clients'][$clientId]['cost'] = 0;
+            }
+            $result[$deptId]['clients'][$clientId]['duration'] = $duration + $result[$deptId]['clients'][$clientId]['duration'];
+            $result[$deptId]['clients'][$clientId]['time'] = $this->getDurationTime($result[$deptId]['clients'][$clientId]['duration']);
 
             // prepare projects and duration
-            $result[$clientId]['projects'][$project->id]['name'] = $project->name;
-            if (!isset($result[$clientId]['projects'][$project->id]['duration'])) {
-                $result[$clientId]['projects'][$project->id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['time'] = 0;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['name'] = $project->name;
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'])) {
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'] = 0;
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['time'] = 0;
             }
-            $projectDuration = $result[$clientId]['projects'][$project->id]['duration'];
+            $projectDuration = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'];
 
             // set default cost for projects
-            if (!isset($result[$clientId]['projects'][$project->id]['cost'])) {
-                $result[$clientId]['projects'][$project->id]['cost'] = 0;
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'])) {
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'] = 0;
             }
-            $result[$clientId]['projects'][$project->id]['duration'] = $duration + $projectDuration;
-            $result[$clientId]['projects'][$project->id]['time'] = $this->getDurationTime($duration + $projectDuration);
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['duration'] = $duration + $projectDuration;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['time'] = $this->getDurationTime($duration + $projectDuration);
 
             // prepare users and duration
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;
-            if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = 0;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['name'] = $entry->user->name;
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'])) {
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = 0;
             }
 
             // set default cost for users
-            if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] = 0;
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'])) {
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] = 0;
             }
 
-            $userDuration = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
+            $userDuration = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'];
 
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['duration'] = $duration + $userDuration;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['time'] = $this->getDurationTime($duration + $userDuration);
             // calculate cost of user
             $userCost = $this->getCosting($duration, $entry->user);
             // calculate cost for client and project with user
-            $result[$clientId]['cost'] += $userCost;
-            $result[$clientId]['projects'][$project->id]['cost'] += $userCost;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] += $userCost;
+            $result[$deptId]['cost'] += $userCost;
+            $result[$deptId]['clients'][$clientId]['cost'] += $userCost;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['cost'] += $userCost;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['cost'] += $userCost;
 
             // prepare tasks and duration
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['name'] = $entry->task->title;
-            if (!isset($result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'])) {
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = 0;
-                $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = 0;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['name'] = $entry->task->title;
+            if (!isset($result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'])) {
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = 0;
+                $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = 0;
             }
 
-            $time = $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
+            $time = $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] + $entry->duration;
 
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
-            $result[$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id'] = $entry->task->id;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['duration'] = $time;
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['time'] = $this->getDurationTime($time);
+            $result[$deptId]['clients'][$clientId]['projects'][$project->id]['users'][$entry->user_id]['tasks'][$entry->task_id]['task_id'] = $entry->task->id;
         }
 
         return $result;

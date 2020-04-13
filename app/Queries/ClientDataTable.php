@@ -16,7 +16,7 @@ class ClientDataTable
     public function get()
     {
         /** @var Client $query */
-        $query = Client::query();
+        $query = Client::with('department');
 
         return $query;
     }

@@ -44,11 +44,19 @@ class ClientRepository extends BaseRepository
     /**
      * get clients.
      *
+     * @param null $departmentId
+     *
      * @return Collection
      */
-    public function getClientList()
+    public function getClientList($departmentId = null)
     {
-        return Client::orderBy('name')->pluck('name', 'id');
+        $query = Client::orderBy('name');
+
+        if (!empty($departmentId)) {
+            $query->where('department_id', '=', $departmentId);
+        }
+
+        return $query->pluck('name', 'id');
     }
 
     /**

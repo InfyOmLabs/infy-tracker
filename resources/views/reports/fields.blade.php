@@ -20,10 +20,17 @@
     </div>
 </div>
 <div class="row">
+    <!-- Department Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('department_id', 'Department') !!}
+        {!! Form::select('department_id', $departments, isset($departmentId)?$departmentId:null, ['class' => 'form-control','id' => 'department','placeholder'=>'Select Department']) !!}
+    </div>
+</div>
+<div class="row">
     <!-- Client Field -->
     <div class="form-group col-sm-6">
-        {!! Form::label('client_id', 'Client') !!}
-        {!! Form::select('client_id', $clients, isset($clientId)?$clientId:null, ['class' => 'form-control','id' => 'client','placeholder'=>'Select Client']) !!}
+        {!! Form::label('clientId', 'Client') !!}
+        {!! Form::select('client_id', $clients, isset($clientId)?$clientId:null, ['class' => 'form-control','id' => 'clientId']) !!}
     </div>
 </div>
 <div class="row">

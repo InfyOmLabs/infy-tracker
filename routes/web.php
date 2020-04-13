@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
         Route::resource('reports', 'ReportController');
         Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
         Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
+        Route::get('clients-of-department', 'DepartmentController@clients')->name('clients-of-department');
     });
 
     Route::get('my-tasks', 'TaskController@myTasks')->name('my-tasks');
@@ -100,6 +101,11 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
 
     Route::group(['middleware' => ['permission:manage_roles']], function () {
         Route::resource('roles', 'RoleController');
+    });
+
+    Route::group(['middleware' => ['permission:manage_department']], function () {
+        Route::resource('departments', 'DepartmentController');
+        Route::post('departments/{department}/update', 'DepartmentController@update');
     });
 });
 

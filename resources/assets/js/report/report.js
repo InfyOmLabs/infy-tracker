@@ -1,26 +1,33 @@
-const clientDropDown = $('#client')
-clientDropDown.select2({
+const departmentDropDown = $('#department');
+
+$('#clientId').select2({
     width: '100%',
     placeholder: 'Select Client',
+}).prepend($('<option>', { value: 0, text: 'None' }));
+
+departmentDropDown.select2({
+    width: '100%',
+    placeholder: 'Select Department',
 }).prepend($('<option>', { value: 0, text: 'None' }))
 
 $('#projectIds').select2({
     width: '100%',
     placeholder: 'Select Projects',
-})
+});
 
 $('#userIds').select2({
     width: '100%',
     placeholder: 'Select Users',
-})
+});
 
 $('#tagIds').select2({
     width: '100%',
     placeholder: 'Select Tags',
-})
-$('#filterCreatedBy').select2()
+});
 
-$('.select2-search__field').css('width', '100%')
+$('#filterCreatedBy').select2();
+
+$('.select2-search__field').css('width', '100%');
 
 $('#start_date').datetimepicker({
     format: 'YYYY-MM-DD',
@@ -31,7 +38,7 @@ $('#start_date').datetimepicker({
     },
     sideBySide: true,
     maxDate: moment(),
-})
+});
 
 $('#end_date').datetimepicker({
     format: 'YYYY-MM-DD',
@@ -42,23 +49,50 @@ $('#end_date').datetimepicker({
     },
     sideBySide: true,
     maxDate: moment(),
-})
+});
 
 $(function () {
     $('form').find('input:text').filter(':input:visible:first').first().focus()
-})
+});
 
 $('#start_date').on('dp.change', function (e) {
     $('#end_date').data('DateTimePicker').minDate(e.date)
-})
+});
 
-clientDropDown.on('change', function () {
+departmentDropDown.on('change', function () {
+    if (+$(this).val() !== 0) {
+        $('#clientId').val(null).trigger('change');
+    }
+
+    $('#clientId').html('<option value="0">None</option>');
+
+    loadClient(parseInt($(this).val()));
+});
+
+function loadClient(departmentId) {
+    departmentId = (departmentId === 0) ? '' : departmentId;
+    let url = clientsOfDepartment + '?department_id=' + departmentId;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (result) {
+            const clients = result.data;
+            let options = '<option value="0">None</option>';
+            $.each(clients, function (key, value) {
+                options += '<option value="' + key + '">' + value + '</option>'
+            });
+            $('#clientId').html(options);
+        },
+    })
+}
+
+$('#clientId').on('change', function () {
     $('#projectIds').empty()
     if ($(this).val() != 0) {
         $('#projectIds').val(null).trigger('change')
     }
     loadProjects($(this).val())
-})
+});
 
 function loadProjects (clientId) {
     clientId = (clientId == 0) ? '' : clientId
@@ -83,7 +117,7 @@ $('#projectIds').on('change', function () {
     $('#userIds').empty()
     $('#userIds').val(null).trigger('change')
     loadUsers($(this).val().toString())
-})
+});
 
 function loadUsers (projectIds) {
     let url = usersOfProjects + '?projectIds=' + projectIds
@@ -104,9 +138,10 @@ function loadUsers (projectIds) {
 
 // open delete confirmation model
 $(document).on('click', '.delete-btn', function (event) {
-    let reportId = $(event.currentTarget).data('id')
+    let reportId = $(event.currentTarget).data('id');
     deleteReport(reportUrl + reportId)
-})
+});
+
 window.deleteReport = function (url) {
     swal({
         title: 'Delete !',
@@ -146,7 +181,7 @@ window.deleteReport = function (url) {
             },
         })
     })
-}
+};
 
 let tbl = $('#report_table').DataTable({
     processing: true,
@@ -214,4 +249,4 @@ let tbl = $('#report_table').DataTable({
             tbl.ajax.reload()
         })
     },
-})
+});

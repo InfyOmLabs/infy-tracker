@@ -30,15 +30,24 @@ mix
     .js('resources/assets/js/users/user.js', 'public/assets/js/users/user.js')
     .js('resources/assets/js/time_entries/time_entry.js', 'public/assets/js/time_entries/time_entry.js')
     .js('resources/assets/js/clients/client.js', 'public/assets/js/clients/client.js')
-    .js('resources/assets/js/projects/project.js', 'public/assets/js/projects/project.js')
-    .js('resources/assets/js/task/task.js', 'public/assets/js/task/task.js')
-    .js('resources/assets/js/activity_types/activity.js', 'public/assets/js/activity_types/activity.js')
-    .js('resources/assets/js/tags/tag.js', 'public/assets/js/tags/tag.js')
-    .js('resources/assets/js/report/report.js', 'public/assets/js/report/report.js')
-    .js('resources/assets/js/dashboard/dashboard.js', 'public/assets/js/dashboard/dashboard.js')
-    .js('resources/assets/js/dashboard/developers-daily-report.js', 'public/assets/js/dashboard/developers-daily-report.js')
-    .js('resources/assets/js/task/task_detail.js', 'public/assets/js/task/task_detail.js')
-    .js('resources/assets/js/profile/profile.js', 'public/assets/js/profile/profile.js')
-    .js('resources/assets/js/roles/role.js', 'public/assets/js/roles/role.js')
-    .js('resources/assets/js/task/task_time_entry.js', 'public/assets/js/task/task_time_entry.js')
-    .version();
+    .js('resources/assets/js/projects/project.js', 'public/assets/js/projects/project.js').
+    js('resources/assets/js/task/task.js', 'public/assets/js/task/task.js').
+    js('resources/assets/js/activity_types/activity.js',
+        'public/assets/js/activity_types/activity.js').
+    js('resources/assets/js/tags/tag.js', 'public/assets/js/tags/tag.js').
+    js('resources/assets/js/report/report.js',
+        'public/assets/js/report/report.js').
+    js('resources/assets/js/dashboard/dashboard.js',
+        'public/assets/js/dashboard/dashboard.js').
+    js('resources/assets/js/dashboard/developers-daily-report.js',
+        'public/assets/js/dashboard/developers-daily-report.js').
+    js('resources/assets/js/task/task_detail.js',
+        'public/assets/js/task/task_detail.js').
+    js('resources/assets/js/profile/profile.js',
+        'public/assets/js/profile/profile.js').
+    js('resources/assets/js/roles/role.js', 'public/assets/js/roles/role.js').
+    js('resources/assets/js/task/task_time_entry.js',
+        'public/assets/js/task/task_time_entry.js').
+    js('resources/assets/js/department/department.js',
+        'public/assets/js/department/department.js').
+    version();
