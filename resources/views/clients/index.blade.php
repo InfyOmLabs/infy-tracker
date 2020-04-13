@@ -12,10 +12,9 @@
                 <div class="filter-container">
                     <div class="mr-2">
                         <label class="lbl-block"><b>Department</b></label>
-                        {!!Form::select('department_id', $departments, Auth::id(), ['id' => 'filter_department', 'class'=>'form-control', 'style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        {!!Form::select('department_id', $departments, Auth::id(), ['id' => 'filter_department', 'class'=>'form-control', 'placeholder' => 'All'])  !!}
                     </div>
-                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal"
-                            data-target="#AddModal"></i>New Client</a>
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New Client</a>
                 </div>
             </div>
             <div class="row">

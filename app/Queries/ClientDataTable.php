@@ -3,6 +3,7 @@
 namespace App\Queries;
 
 use App\Models\Client;
+use Illuminate\Database\Eloquent\Builder as BuilderAlias;
 use Illuminate\Database\Query\Builder;
 
 /**
@@ -22,7 +23,7 @@ class ClientDataTable
 
         $query->when(
             isset($input['filter_department']) && ! empty($input['filter_department']),
-            function (\Illuminate\Database\Eloquent\Builder $q) use ($input) {
+            function (BuilderAlias $q) use ($input) {
                 $q->where('department_id', '=', $input['filter_department']);
             }
         );
