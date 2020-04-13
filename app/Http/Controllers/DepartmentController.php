@@ -6,6 +6,7 @@ use App\Http\Requests\CreateDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
 use App\Queries\DepartmentDataTable;
+use App\Repositories\ClientRepository;
 use App\Repositories\DepartmentRepository;
 use DataTables;
 use Exception;
@@ -99,5 +100,18 @@ class DepartmentController extends AppBaseController
         $this->departmentRepository->delete($department->id);
 
         return $this->sendSuccess('Department deleted successfully.');
+    }
+
+    /**
+     * @param Request          $request
+     * @param ClientRepository $clientRepository
+     *
+     * @return JsonResponse
+     */
+    public function clients(Request $request, ClientRepository $clientRepository)
+    {
+        $projects = $clientRepository->getClientList($request->get('department_id', null));
+
+        return $this->sendResponse($projects, 'Clients retrieved successfully.');
     }
 }

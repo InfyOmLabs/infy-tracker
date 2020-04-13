@@ -48,6 +48,11 @@ use Illuminate\Support\Carbon;
  * @method static BuilderAlias|Client whereDeletedBy($value)
  * @method static Builder|Client withTrashed()
  * @method static Builder|Client withoutTrashed()
+ *
+ * @property int|null $department_id
+ * @property-read \App\Models\Department|null $department
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDepartmentId($value)
  */
 class Client extends Model
 {

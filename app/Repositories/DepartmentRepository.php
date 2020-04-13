@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Department;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Collection;
 
 /**
  * Class DepartmentRepository.
@@ -34,5 +36,18 @@ class DepartmentRepository extends BaseRepository
     public function model()
     {
         return Department::class;
+    }
+
+    /**
+     * get Departments.
+     *
+     * @return Collection
+     */
+    public function getDepartmentList()
+    {
+        /** @var Builder|Department $query */
+        $query = Department::orderBy('name');
+
+        return $query->pluck('name', 'id');
     }
 }
