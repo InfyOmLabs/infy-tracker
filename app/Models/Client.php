@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $createdUser
+ *
  * @method static BuilderAlias|Client newModelQuery()
  * @method static BuilderAlias|Client newQuery()
  * @method static BuilderAlias|Client query()
@@ -35,9 +36,11 @@ use Illuminate\Support\Carbon;
  * @method static BuilderAlias|Client whereUpdatedAt($value)
  * @method static BuilderAlias|Client whereWebsite($value)
  * @mixin Eloquent
+ *
  * @property Carbon|null $deleted_at
  * @property-read Collection|Project[] $projects
  * @property-read int|null $projects_count
+ *
  * @method static bool|null forceDelete()
  * @method static Builder|Client onlyTrashed()
  * @method static bool|null restore()
@@ -45,8 +48,10 @@ use Illuminate\Support\Carbon;
  * @method static BuilderAlias|Client whereDeletedBy($value)
  * @method static Builder|Client withTrashed()
  * @method static Builder|Client withoutTrashed()
+ *
  * @property int|null $department_id
  * @property-read \App\Models\Department|null $department
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Client whereDepartmentId($value)
  */
 class Client extends Model

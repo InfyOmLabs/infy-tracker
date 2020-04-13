@@ -47,6 +47,7 @@ class DepartmentRepository extends BaseRepository
     {
         /** @var Builder|Department $query */
         $query = Department::orderBy('name');
+
         return $query->pluck('name', 'id');
     }
 }
