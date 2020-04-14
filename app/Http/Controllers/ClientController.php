@@ -46,7 +46,7 @@ class ClientController extends AppBaseController
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of((new ClientDataTable())->get())->make(true);
+            return Datatables::of((new ClientDataTable())->get($request->only(['filter_department'])))->make(true);
         }
         $departments = Department::all()->pluck('name', 'id')->toArray();
 
