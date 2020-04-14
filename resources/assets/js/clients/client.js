@@ -3,12 +3,19 @@ $('#department_id,#edit_department_id').select2({
     placeholder: 'Select Department',
 });
 
-$('#clients_table').DataTable({
+$('#filter_department').select2();
+
+let tbl = $('#clients_table').DataTable({
     processing: true,
     serverSide: true,
     'order': [[0, 'asc']],
     ajax: {
         url: clientUrl,
+        data: function (data) {
+            data.filter_department = $('#filter_department').
+                find('option:selected').
+                val();
+        },
     },
     columnDefs: [
         {
@@ -24,7 +31,9 @@ $('#clients_table').DataTable({
             name: 'name',
         },
         {
-            data: 'department.name',
+            data: function (row) {
+                return (row.department !== null) ? row.department.name : '';
+            },
             name: 'department.name',
         },
         {
@@ -52,6 +61,11 @@ $('#clients_table').DataTable({
             }, name: 'id',
         },
     ],
+    'fnInitComplete': function () {
+        $('#filter_department').change(function () {
+            tbl.ajax.reload();
+        });
+    },
 });
 
 $('#addNewForm').submit(function (event) {

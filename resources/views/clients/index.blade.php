@@ -9,9 +9,12 @@
             @include('flash::message')
             <div class="page-header">
                 <h3 class="page__heading">Clients</h3>
-                <div style="display: flex;align-items: center">
-                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"></i>New
-                        Client</a>
+                <div class="filter-container">
+                    <div class="mr-2">
+                        <label class="lbl-block"><b>Department</b></label>
+                        {!!Form::select('department_id', $departments, Auth::id(), ['id' => 'filter_department', 'class'=>'form-control', 'placeholder' => 'All'])  !!}
+                    </div>
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New Client</a>
                 </div>
             </div>
             <div class="row">
