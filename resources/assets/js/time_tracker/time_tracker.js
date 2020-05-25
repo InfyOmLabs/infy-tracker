@@ -443,7 +443,7 @@ function loadTimerData (projectId) {
 
             let drpTaskId = getItemFromLocalStorage('task_id')
             let drpActivityId = getItemFromLocalStorage('activity_id')
-            let taskNotes = getItemFromLocalStorage('notes')
+            const taskNotes = getItemFromLocalStorage('notes')
             let isTaskEmpty = true
             $(result.data.tasks).each(function (i, e) {
                 $('#tmTaskId').
