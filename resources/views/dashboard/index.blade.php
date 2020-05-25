@@ -21,6 +21,20 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
+                            <div class="page-header">
+                                <h5>Open Task</h5>
+                            </div>
+                            <div id="users-open-tasks-container" class="pt-2">
+                                <canvas id="users-open-tasks"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
                                     <h5>Custom Report</h5>
@@ -83,7 +97,9 @@
     <script>
         let userReportUrl = "{{route('users-work-report')}}";
         let userDeveloperReportUrl = "{{route('developers-work-report')}}";
+        let usersOpenTasksUrl = "{{route('users-open-tasks')}}";
     </script>
     <script src="{{ mix('assets/js/dashboard/dashboard.js') }}"></script>
     <script src="{{ mix('assets/js/dashboard/developers-daily-report.js') }}"></script>
+    <script src="{{ mix('assets/js/dashboard/users-open-tasks.js') }}"></script>
 @endsection

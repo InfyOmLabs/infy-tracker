@@ -9,6 +9,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Project;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
@@ -160,6 +161,42 @@ class DashboardRepository
         $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
+
+        return $data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOpenTasks()
+    {
+        /** @var User $users */
+        $users = User::with('projects.openTasks')->get();
+        $data['result'] = [];
+        foreach ($users as $user) {
+            $totalOpenTasks = 0;
+
+            $projectArr = [];
+            foreach ($user->projects as $project) {
+                $count = $project->openTasks->count();
+                $totalOpenTasks = $totalOpenTasks + $count;
+                $projectArr[] = $project->name.':'.$count;
+            }
+
+            $data['result'][] = (object) [
+                'name'             => ucfirst($user->name),
+                'total_open_tasks' => $totalOpenTasks,
+                'projects'         => $projectArr,
+            ];
+            $color = getColorRGBCode($user->id);
+            $data['data']['backgroundColor'][] = getColor(0.3, $color);
+            $data['data']['borderColor'][] = getColor(1, $color);
+        }
+
+        $data['totalRecords'] = count($data['result']);
+        $data['label'] = 'Total Open Tasks';
+        $data['data']['labels'] = Arr::pluck($data['result'], 'name');
+        $data['data']['data'] = Arr::pluck($data['result'], 'total_open_tasks');
 
         return $data;
     }
