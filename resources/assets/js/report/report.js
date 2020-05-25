@@ -3,7 +3,7 @@ const departmentDropDown = $('#department');
 $('#clientId').select2({
     width: '100%',
     placeholder: 'Select Client',
-}).prepend($('<option>', { value: 0, text: 'None' }));
+});
 
 departmentDropDown.select2({
     width: '100%',
