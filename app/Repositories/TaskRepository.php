@@ -88,7 +88,7 @@ class TaskRepository extends BaseRepository
                 $this->attachTags($task, $input['tags']);
             }
 
-            if (isset($input['assignees']) && ! empty($input['assignees'])) {
+            if (isset($input['assignees']) && !empty($input['assignees'])) {
                 array_push($input['assignees'], getLoggedInUserId());
                 $task->taskAssignee()->sync($input['assignees']);
             } else {
@@ -130,7 +130,7 @@ class TaskRepository extends BaseRepository
             $tags = !empty($input['tags']) ? $input['tags'] : [];
             $this->attachTags($task, $tags);
 
-            $assignees = ! empty($input['assignees']) ? $input['assignees'] : $input['assignees'] = getLoggedInUserId();
+            $assignees = !empty($input['assignees']) ? $input['assignees'] : $input['assignees'] = getLoggedInUserId();
             $task->taskAssignee()->sync($assignees);
 
             DB::commit();
