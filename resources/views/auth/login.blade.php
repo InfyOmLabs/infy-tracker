@@ -19,7 +19,7 @@
           rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
 </head>
-<body class="app flex-row align-items-center">
+<body class="c-app flex-row align-items-center">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-5">
