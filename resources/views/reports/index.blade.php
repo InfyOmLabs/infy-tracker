@@ -16,7 +16,7 @@
                     @can('manage_reports')
                         <div class="mr-2">
                             <label class="lbl-block"><b>Created By</b></label>
-                            {!!Form::select('created_by',$users,null,['id'=>'filterCreatedBy','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                            {!!Form::select('created_by', $users, null,['id'=>'filterCreatedBy','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
                         </div>
                     @endcan
                     <a href="{!! route('reports.create') !!}" class="btn btn-primary filter-container__btn">
