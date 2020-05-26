@@ -114,7 +114,7 @@ class ReportController extends AppBaseController
         $report = $this->reportRepository->store($input);
         Flash::success('Report saved successfully.');
 
-        return redirect(route('reports.show',$report->id));
+        return redirect(route('reports.show', $report->id));
     }
 
     /**
