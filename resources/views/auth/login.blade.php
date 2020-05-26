@@ -35,11 +35,11 @@
                         <form method="post" action="{{ url('/login') }}">
                             {!! csrf_field() !!}
                             <h1>Login</h1>
-                            <p class="text-muted">Sign In to your account</p>
+                            <p class="text-primary">Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                      <i class="icon-user"></i>
+                                      <i class="icon-user text-black-50"></i>
                                     </span>
                                 </div>
                                 <input type="email" class="form-control {{ $errors->has('email')?'is-invalid':'' }}" name="email" value="{{ old('email') }}"
@@ -53,7 +53,7 @@
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
-                                      <i class="icon-lock"></i>
+                                      <i class="icon-lock text-black-50"></i>
                                     </span>
                                 </div>
                                 <input type="password" class="form-control {{ $errors->has('password')?'is-invalid':'' }}" placeholder="Password" name="password">
