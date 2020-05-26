@@ -180,11 +180,11 @@ class DashboardRepository
             foreach ($user->projects as $project) {
                 $count = $project->openTasks->count();
                 $totalOpenTasks = $totalOpenTasks + $count;
-                $projectArr[] = $project->name.':'.$count;
+                $projectArr[] = $project->name.': '.$count;
             }
 
             $data['result'][] = (object) [
-                'name'             => ucfirst($user->name),
+                'name'             => ucfirst($user->name).' - '.'(Total '.$totalOpenTasks.')',
                 'total_open_tasks' => $totalOpenTasks,
                 'projects'         => $projectArr,
             ];
@@ -194,7 +194,7 @@ class DashboardRepository
         }
 
         $data['totalRecords'] = count($data['result']);
-        $data['label'] = 'Total Open Tasks';
+        $data['label'] = Arr::pluck($data['result'], 'projects');
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_open_tasks');
 

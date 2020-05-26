@@ -10,24 +10,9 @@ window.loadUsersOpenTasks = function () {
     }).done(prepareUsersOpenTasksChart);
 };
 
-window.getLabel = function (data) {
-    let label = [];
-    $.each(data, function (index, value) {
-        let string = '';
-        $.each(value.projects, function (index, value) {
-            string = string + value;
-            label.push(string);
-        });
-    });
-
-    return label;
-};
-
 window.prepareUsersOpenTasksChart = function (result) {
     $('#users-open-tasks-container').html('');
     let data = result.data;
-    let string = getLabel(data.result);
-    console.log(string);
     if (data.totalRecords === 0) {
         $('#users-open-tasks-container').empty();
         $('#users-open-tasks-container').
@@ -61,18 +46,13 @@ window.prepareUsersOpenTasksChart = function (result) {
                 mode: 'index',
                 callbacks: {
                     label: function (tooltipItem, data) {
-                        let label = data.datasets[tooltipItem.datasetIndex].label ||
-                            '';
-
-                        if (label) {
-                            label += ': ';
+                        let label = '';
+                        let index = tooltipItem.index;
+                        for(i = 0; i<data.datasets.length; i++){
+                            label = data.datasets[i].label[index] || '';
                         }
-                        result = tooltipItem.yLabel;
-                        return label + result;
+                        return label;
                     },
-                    // afterBody:{
-                    //     return string
-                    // }
                 },
             },
             scales: {
