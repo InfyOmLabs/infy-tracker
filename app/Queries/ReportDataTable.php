@@ -17,9 +17,14 @@ class ReportDataTable
      */
     public function get($input = [])
     {
+        $user = getLoggedInUser();
         $query = Report::with('user')->select('reports.*');
 
-        $query->when(!empty($input['filter_created_by']), function (Builder $query) use ($input) {
+        if ($user->hasPermissionTo('manage_reports') === false) {
+            return $query->where('owner_id', $user->id);
+        }
+
+        $query->when(! empty($input['filter_created_by']), function (Builder $query) use ($input) {
             $query->where('owner_id', $input['filter_created_by']);
         });
 
