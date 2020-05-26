@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTimeEntryRequest;
 use App\Http\Requests\UpdateTimeEntryRequest;
+use App\Models\Project;
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
 use Auth;
+use Carbon\Carbon;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -172,5 +175,30 @@ class TimeEntryController extends AppBaseController
         $this->timeEntryRepository->broadcastStartTimerEvent($request->all());
 
         return $this->sendSuccess('Start timer broadcasts successfully.');
+    }
+
+    /**
+     * @return string
+     */
+    public function copyTodayActivity()
+    {
+        $todayTasksTimeEntries = Task::whereDueDate(Carbon::now()->format('Y-m-d'))->get()->groupBy('project_id');
+        $timeEntries = "End Of the day - ".Carbon::now()->format('jS M Y')."\n\n";
+        $indexCount = 1;
+        foreach($todayTasksTimeEntries as $projectTask => $projectTaskData) {
+            $projectName = Project::whereId($projectTask)->first()->name;
+            $timeEntries .= $indexCount++.") ".$projectName."\n\n";
+
+            foreach($projectTaskData as $task) {
+                $timeEntries .= "\t- ".$task->title."\n";
+                foreach($task->timeEntries as $taskTimeEntry) {
+                    $timeEntries .= "\t\t- ".$taskTimeEntry->note."\n";
+                }
+            }
+            if(count($todayTasksTimeEntries) === $indexCount)
+                $timeEntries .= "\n\n";
+        }
+
+        return $timeEntries;
     }
 }
