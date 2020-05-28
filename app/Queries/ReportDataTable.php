@@ -20,7 +20,7 @@ class ReportDataTable
         $user = getLoggedInUser();
         $query = Report::with('user')->select('reports.*');
 
-        if ($user->hasPermissionTo('manage_reports') === false) {
+        if (! $user->hasPermissionTo('manage_reports')) {
             return $query->where('owner_id', $user->id);
         }
 
