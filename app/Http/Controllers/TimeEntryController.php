@@ -190,7 +190,7 @@ class TimeEntryController extends AppBaseController
             $timeEntries .= ($indexCount == 1) ? $projectName."\n" : "\n".$projectName."\n";
 
             foreach ($projectTaskData as $task) {
-                if (! $task->timeEntries->isEmpty()) {
+                if (!$task->timeEntries->isEmpty()) {
                     $timeEntries .= "\t* ".$task->title."\n";
                     foreach ($task->timeEntries as $taskTimeEntry) {
                         $timeEntries .= "\t  ".$taskTimeEntry->note."\n";
