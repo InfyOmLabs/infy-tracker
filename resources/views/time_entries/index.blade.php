@@ -24,18 +24,23 @@
                         <label for="projects" class="lbl-block"><b>Activity Type</b></label>
                         {!!Form::select('drp_activity',$activityTypes,null,['id'=>'filterActivity','class'=>'form-control','style'=>'min-width:150px;hight:35', 'placeholder' => 'All'])  !!}
                     </div>
-                    <div class="mr-2" style="margin-top: 20px;">
-                        <div class="btn-group" role="group">
-                            <button id="timeEntriesActions" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                More
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="timeEntriesActions" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                <a href="#" class="dropdown-item filter-container__btn" id="new_entry" data-toggle="modal"
-                                   data-target="#timeEntryAddModal">New Time Entry</a>
-                                <a href="javascript:void(0)" class="dropdown-item filter-container__btn" id="copyTodayEntry">Copy Today Activity</a>
+                        <div class="mr-2" style="margin-top: 20px;">
+                            <div class="btn-group" role="group">
+                                <button id="timeEntriesActions" type="button" class="btn btn-primary dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="timeEntriesActions"
+                                     x-placement="bottom-start"
+                                     style="position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    <a href="#" class="dropdown-item filter-container__btn" id="new_entry"
+                                       data-toggle="modal"
+                                       data-target="#timeEntryAddModal">New Time Entry</a>
+                                    <a href="javascript:void(0)" class="dropdown-item filter-container__btn"
+                                       id="copyTodayEntry">Copy Today Activity</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="row">

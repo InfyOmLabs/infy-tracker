@@ -183,21 +183,21 @@ class TimeEntryController extends AppBaseController
     public function copyTodayActivity()
     {
         $todayTasksTimeEntries = Task::whereDueDate(Carbon::now()->format('Y-m-d'))->get()->groupBy('project_id');
-        $timeEntries = 'End Of the day - '.Carbon::now()->format('jS M Y')."\n\n";
+        $timeEntries = 'End of the Day - '.Carbon::now()->format('jS M Y')."\n\n";
         $indexCount = 1;
         foreach ($todayTasksTimeEntries as $projectTask => $projectTaskData) {
             $projectName = Project::whereId($projectTask)->first()->name;
-            $timeEntries .= $indexCount++.') '.$projectName."\n\n";
+            $timeEntries .= ($indexCount == 1) ? $projectName."\n" : "\n".$projectName."\n";
 
             foreach ($projectTaskData as $task) {
-                $timeEntries .= "\t- ".$task->title."\n";
-                foreach ($task->timeEntries as $taskTimeEntry) {
-                    $timeEntries .= "\t\t- ".$taskTimeEntry->note."\n";
+                if (! $task->timeEntries->isEmpty()) {
+                    $timeEntries .= "\t* ".$task->title."\n";
+                    foreach ($task->timeEntries as $taskTimeEntry) {
+                        $timeEntries .= "\t  ".$taskTimeEntry->note."\n";
+                    }
                 }
             }
-            if (count($todayTasksTimeEntries) === $indexCount) {
-                $timeEntries .= "\n\n";
-            }
+            $indexCount++;
         }
 
         return $timeEntries;

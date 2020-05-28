@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::resource('time-entries', 'TimeEntryController');
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
     Route::post('start-timer', 'TimeEntryController@getStartTimer');
-    Route::get('copy-today-activity', 'TimeEntryController@copyTodayActivity')->name('copy.today.activity');
+    Route::get('copy-today-activity', 'TimeEntryController@copyTodayActivity')->name('copy-today-activity');
 
     Route::group(['middleware' => ['permission:manage_reports']], function () {
         Route::resource('reports', 'ReportController');
