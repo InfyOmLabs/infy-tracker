@@ -9,6 +9,7 @@ use App\Models\TimeEntry;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as BuilderAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Log;
@@ -318,5 +319,13 @@ class TimeEntryRepository extends BaseRepository
         }
 
         return true;
+    }
+    
+    /**
+     * @return TimeEntry[]|Builder[]|BuilderAlias[]|Collection
+     */
+    public function getTodayEntries()
+    {
+        return TimeEntry::with('task.project')->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->get();
     }
 }

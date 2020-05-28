@@ -182,24 +182,26 @@ class TimeEntryController extends AppBaseController
      */
     public function copyTodayActivity()
     {
-        $todayTasksTimeEntries = Task::whereDueDate(Carbon::now()->format('Y-m-d'))->get()->groupBy('project_id');
-        $timeEntries = 'End of the Day - '.Carbon::now()->format('jS M Y')."\n\n";
-        $indexCount = 1;
-        foreach ($todayTasksTimeEntries as $projectTask => $projectTaskData) {
-            $projectName = Project::whereId($projectTask)->first()->name;
-            $timeEntries .= ($indexCount == 1) ? $projectName."\n" : "\n".$projectName."\n";
+        $timeEntries = $this->timeEntryRepository->getTodayEntries();
 
-            foreach ($projectTaskData as $task) {
-                if (!$task->timeEntries->isEmpty()) {
-                    $timeEntries .= "\t* ".$task->title."\n";
-                    foreach ($task->timeEntries as $taskTimeEntry) {
-                        $timeEntries .= "\t  ".$taskTimeEntry->note."\n";
-                    }
-                }
-            }
-            $indexCount++;
+        $note = '**End of the Day - ' . Carbon::now()->format('jS M Y') . "**\n";
+
+        $projects = [];
+        /** @var TimeEntry $entry */
+        foreach ($timeEntries as $entry) {
+            $projects[$entry->task->project->name][$entry->task_id]['name'] = $entry->task->title;
+            $projects[$entry->task->project->name][$entry->task_id]['note'] = $entry->note;
         }
 
-        return $timeEntries;
+        foreach ($projects as $name => $project) {
+            $note .= "\n*" . $name . "*\n";
+
+            foreach ($project as $task) {
+                $note .= "\t- " . $task['name'];
+                $note .= "\t- " . $task['note'];
+            }
+        }
+
+        return $note;
     }
 }
