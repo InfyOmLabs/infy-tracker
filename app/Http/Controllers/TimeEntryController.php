@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTimeEntryRequest;
 use App\Http\Requests\UpdateTimeEntryRequest;
-use App\Models\Project;
-use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
@@ -184,7 +182,7 @@ class TimeEntryController extends AppBaseController
     {
         $timeEntries = $this->timeEntryRepository->getTodayEntries();
 
-        $note = '**End of the Day - ' . Carbon::now()->format('jS M Y') . "**\n";
+        $note = '**End of the Day - '.Carbon::now()->format('jS M Y')."**\n";
 
         $projects = [];
         /** @var TimeEntry $entry */
@@ -194,11 +192,11 @@ class TimeEntryController extends AppBaseController
         }
 
         foreach ($projects as $name => $project) {
-            $note .= "\n*" . $name . "*\n";
+            $note .= "\n*".$name."*\n";
 
             foreach ($project as $task) {
-                $note .= "\t- " . $task['name'];
-                $note .= "\t- " . $task['note'];
+                $note .= "\t- ".$task['name'];
+                $note .= "\t- ".$task['note'];
             }
         }
 

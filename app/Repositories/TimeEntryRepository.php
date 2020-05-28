@@ -320,7 +320,7 @@ class TimeEntryRepository extends BaseRepository
 
         return true;
     }
-    
+
     /**
      * @return TimeEntry[]|Builder[]|BuilderAlias[]|Collection
      */
