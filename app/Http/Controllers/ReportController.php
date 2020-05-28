@@ -78,7 +78,10 @@ class ReportController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new ReportDataTable())->get($request->only(['filter_created_by'])))->make(true);
         }
-        $users = User::whereIsEmailVerified(true)->orderBy('name')->pluck('name', 'id');
+
+        if (Auth::user()->hasPermissionTo('manage_reports')) {
+            $users = User::whereIsActive(true)->whereIsEmailVerified(true)->orderBy('name')->pluck('name', 'id');
+        }
 
         return view('reports.index', compact('users'));
     }
