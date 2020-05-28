@@ -35,7 +35,7 @@
                         <form method="post" action="{{ url('/login') }}">
                             {!! csrf_field() !!}
                             <h1>Login</h1>
-                            <p class="text-primary">Sign In to your account</p>
+                            <p style="color: #768192;">Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
@@ -72,10 +72,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <button class="btn btn-primary px-4" type="submit">Login</button>
+                                    <button class="btn btn-info px-4" type="submit">Login</button>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <a class="btn btn-link px-0" href="{{route('password.request')}}">Forgot password?</a>
+                                    <a class="btn btn-link text-info px-0" href="{{route('password.request')}}">Forgot
+                                        password?</a>
                                 </div>
                             </div>
                         </form>
