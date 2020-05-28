@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css">
+    <link href="{{mix('assets/style/css/style.css')}}" rel="stylesheet" type="text/css"/>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/coreui-icons.min.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -38,8 +39,8 @@
                             <p style="color: #768192;">Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <i class="icon-user text-black-50"></i>
+                                    <span class="input-group-text input-grp-text">
+                                      <i class="icon-user"></i>
                                     </span>
                                 </div>
                                 <input type="email" class="form-control {{ $errors->has('email')?'is-invalid':'' }}" name="email" value="{{ old('email') }}"
@@ -52,8 +53,8 @@
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                      <i class="icon-lock text-black-50"></i>
+                                    <span class="input-group-text input-grp-text">
+                                      <i class="icon-lock"></i>
                                     </span>
                                 </div>
                                 <input type="password" class="form-control {{ $errors->has('password')?'is-invalid':'' }}" placeholder="Password" name="password">
@@ -72,10 +73,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-6">
-                                    <button class="btn btn-info px-4" type="submit">Login</button>
+                                    <button class="btn btn-primary px-4" type="submit">Login</button>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <a class="btn btn-link text-info px-0" href="{{route('password.request')}}">Forgot
+                                    <a class="btn btn-link text-primary px-0" href="{{route('password.request')}}">Forgot
                                         password?</a>
                                 </div>
                             </div>
