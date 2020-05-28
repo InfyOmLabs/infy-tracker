@@ -21,20 +21,6 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="page-header">
-                                <h5>Open Task</h5>
-                            </div>
-                            <div id="users-open-tasks-container" class="pt-2">
-                                <canvas id="users-open-tasks"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
                                     <h5>Custom Report</h5>
@@ -78,6 +64,20 @@
                             </div>
                             <div id="developers-daily-work-report-container" class="pt-2">
                                 <canvas id="developers-daily-work-report"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="page-header">
+                                <h5>Open Task</h5>
+                            </div>
+                            <div id="users-open-tasks-container" class="pt-2">
+                                <canvas id="users-open-tasks"></canvas>
                             </div>
                         </div>
                     </div>

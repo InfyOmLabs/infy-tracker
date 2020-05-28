@@ -183,8 +183,9 @@ class DashboardRepository
                 $projectArr[] = $project->name.': '.$count;
             }
 
+            array_push($projectArr,'Total Open Task : '.$totalOpenTasks);
             $data['result'][] = (object) [
-                'name'             => ucfirst($user->name).' - '.'(Total '.$totalOpenTasks.')',
+                'name'             => ucfirst($user->name),
                 'total_open_tasks' => $totalOpenTasks,
                 'projects'         => $projectArr,
             ];
