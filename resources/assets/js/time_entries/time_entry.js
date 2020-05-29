@@ -438,3 +438,33 @@ $('#new_entry').click(function () {
     getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox')
     $('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'))
 })
+
+// event to copy today time entries
+$('#copyTodayEntry').on('click', function () {
+    $.ajax({
+        url: copyTodayActivity,
+        type: 'get',
+        success: function (result) {
+            copyTextToClipBoard(result);
+            swal({
+                title: 'Copied',
+                text: 'Time Entries copied to clipboard.',
+                type: 'success',
+                timer: 3000,
+            });
+        },
+        error: function (result) {
+            printErrorMessage('#tmValidationErrorsBox', result);
+        },
+    })
+});
+
+// function to copy text to clipboard
+window.copyTextToClipBoard = function(resultData) {
+    let copyFrom = document.createElement("textarea");
+    document.body.appendChild(copyFrom);
+    copyFrom.textContent = resultData;
+    copyFrom.select();
+    document.execCommand("copy");
+    copyFrom.remove();
+};

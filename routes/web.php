@@ -86,6 +86,8 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::resource('time-entries', 'TimeEntryController');
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
     Route::post('start-timer', 'TimeEntryController@getStartTimer');
+    Route::get('copy-today-activity', 'TimeEntryController@copyTodayActivity')->name('copy-today-activity');
+
     Route::resource('reports', 'ReportController');
     Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
     Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
