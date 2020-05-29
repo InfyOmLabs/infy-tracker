@@ -75,7 +75,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="page-header">
-                                    <h5>Open Task</h5>
+                                    <h5>Open Tasks</h5>
                                 </div>
                                 <div id="users-open-tasks-container" class="pt-2">
                                     <canvas id="users-open-tasks"></canvas>
