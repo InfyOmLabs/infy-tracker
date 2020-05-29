@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="https://unpkg.com/@coreui/coreui/dist/css/coreui.min.css">
+    <link href="{{mix('assets/style/css/style.css')}}" rel="stylesheet" type="text/css"/>
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://unpkg.com/@coreui/icons/css/coreui-icons.min.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -19,7 +20,7 @@
           rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
 </head>
-<body class="app flex-row align-items-center">
+<body class="c-app flex-row align-items-center">
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-5">
@@ -35,10 +36,10 @@
                         <form method="post" action="{{ url('/login') }}">
                             {!! csrf_field() !!}
                             <h1>Login</h1>
-                            <p class="text-muted">Sign In to your account</p>
+                            <p>Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
+                                    <span class="input-group-text input-grp-text">
                                       <i class="icon-user"></i>
                                     </span>
                                 </div>
@@ -52,7 +53,7 @@
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text">
+                                    <span class="input-group-text input-grp-text">
                                       <i class="icon-lock"></i>
                                     </span>
                                 </div>
@@ -75,7 +76,9 @@
                                     <button class="btn btn-primary px-4" type="submit">Login</button>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <a class="btn btn-link px-0" href="{{route('password.request')}}">Forgot password?</a>
+                                    <a class="btn btn-link text-primary px-0" href="{{route('password.request')}}">
+                                        Forgot password?
+                                    </a>
                                 </div>
                             </div>
                         </form>
