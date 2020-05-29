@@ -71,4 +71,14 @@ class HomeController extends AppBaseController
 
         return $this->sendResponse($data, 'Daily Work Report retrieved successfully.');
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function userOpenTasks()
+    {
+        $data = $this->dashboardRepo->getUserOpenTasks();
+
+        return $this->sendResponse($data, 'Open Task retrieved successfully.');
+    }
 }

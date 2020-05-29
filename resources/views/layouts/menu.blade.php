@@ -6,8 +6,8 @@
 
 @can('manage_department')
     <li class="nav-item {{ Request::is('departments*') ? 'active' : '' }}">
-        <a class="nav-link" href="{!! route('departments.index') !!}"> 
-            <i class="nav-icon fa fa-building"></i> Departments 
+        <a class="nav-link" href="{!! route('departments.index') !!}">
+            <i class="nav-icon fa fa-building"></i> Departments
         </a>
     </li>
 @endcan
@@ -41,14 +41,11 @@
         <i class="fas fa-user-clock nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Time Entries
     </a>
 </li>
-@can('manage_reports')
 <li class="nav-item {{ Request::is('report*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! url('reports') !!}">
         <i class="fa fa-file nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Reports
     </a>
 </li>
-@endcan
-
 @can('manage_users')
     <li class="nav-item {{ Request::is('users*') ? 'active' : '' }}">
         <a class="nav-link" href="{!! route('users.index') !!}">

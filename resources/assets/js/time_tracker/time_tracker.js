@@ -218,12 +218,13 @@ $('#stopTimer').click(function (e) {
 })
 
 function enableTimerData () {
-    $('#tmActivityId').removeAttr('disabled')
-    $('#tmTaskId').removeAttr('disabled')
-    $('#tmProjectId').removeAttr('disabled')
-    $('#tmNotesErr').html('')
+    $('#tmActivityId').removeAttr('disabled');
+    $('#tmTaskId').removeAttr('disabled');
+    $('#tmProjectId').removeAttr('disabled');
+    $('#tmNotes').html('');
+    $('#tmNotesErr').html('');
 
-    stopTime()
+    stopTime();
 }
 
 //create a function to start the stop watch
@@ -385,7 +386,8 @@ function stopTimerData () {
         'start_time',
         'seconds',
         'minutes',
-        'hours']
+        'hours',
+        'notes'];
     removeItemsFromLocalStorage(removeItems)
 }
 
@@ -441,6 +443,7 @@ function loadTimerData (projectId) {
 
             let drpTaskId = getItemFromLocalStorage('task_id')
             let drpActivityId = getItemFromLocalStorage('activity_id')
+            const taskNotes = getItemFromLocalStorage('notes')
             let isTaskEmpty = true
             $(result.data.tasks).each(function (i, e) {
                 $('#tmTaskId').
@@ -470,6 +473,7 @@ function loadTimerData (projectId) {
             if (getItemFromLocalStorage('clockRunning') !== null) {
                 $('#tmActivityId').val(drpActivityId).trigger('change')
                 $('#tmTaskId').val(drpTaskId).trigger('change')
+                $('#tmNotes').val(taskNotes);
 
                 $('#tmTaskId').attr('disabled', true)
                 $('#tmActivityId').attr('disabled', true)
@@ -513,3 +517,7 @@ function getUserLastTaskWork () {
         },
     })
 }
+
+$('#tmNotes').on('keyup', function () {
+    setItemToLocalStorage({ 'notes': $(this).val() });
+});

@@ -78,7 +78,12 @@ class ReportController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of((new ReportDataTable())->get($request->only(['filter_created_by'])))->make(true);
         }
-        $users = User::orderBy('name')->pluck('name', 'id');
+
+        $users = [];
+
+        if (Auth::user()->hasPermissionTo('manage_reports')) {
+            $users = User::whereIsActive(true)->whereIsEmailVerified(true)->orderBy('name')->pluck('name', 'id');
+        }
 
         return view('reports.index', compact('users'));
     }
@@ -111,10 +116,10 @@ class ReportController extends AppBaseController
         $input = $request->all();
         $input['owner_id'] = Auth::id();
 
-        $this->reportRepository->store($input);
+        $report = $this->reportRepository->store($input);
         Flash::success('Report saved successfully.');
 
-        return redirect(route('reports.index'));
+        return redirect(route('reports.show', $report->id));
     }
 
     /**
