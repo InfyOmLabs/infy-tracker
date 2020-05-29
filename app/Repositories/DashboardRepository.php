@@ -9,7 +9,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Project;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
@@ -183,7 +182,7 @@ class DashboardRepository
                 $projectArr[] = $project->name.': '.$count;
             }
 
-            array_push($projectArr,'Total Open Task : '.$totalOpenTasks);
+            array_push($projectArr, 'Total Open Task : '.$totalOpenTasks);
             $data['result'][] = (object) [
                 'name'             => ucfirst($user->name),
                 'total_open_tasks' => $totalOpenTasks,
