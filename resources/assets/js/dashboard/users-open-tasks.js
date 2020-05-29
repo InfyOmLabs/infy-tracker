@@ -15,60 +15,72 @@ window.prepareUsersOpenTasksChart = function (result) {
     let data = result.data;
     if (data.totalRecords === 0) {
         $('#users-open-tasks-container').empty();
-        $('#users-open-tasks-container').
-            append(
-                '<div align="center" class="no-record">No Records Found</div>');
+        $('#users-open-tasks-container').append(
+            '<div align="center" class="no-record">No Records Found</div>');
         return true;
     } else {
         $('#users-open-tasks-container').html('');
-        $('#users-open-tasks-container').
-            append('<canvas id="users-open-tasks"></canvas>');
+        $('#users-open-tasks-container').append('<canvas id="users-open-tasks"></canvas>');
     }
-    let ctx = document.getElementById('users-open-tasks').
-        getContext('2d');
-    ctx.canvas.style.height = '400px';
+    let ctx = document.getElementById('users-open-tasks').getContext('2d');
+    ctx.canvas.style.height = '550px';
     ctx.canvas.style.width = '100%';
-    let usersOpenTasksChart = new Chart(ctx, {
+
+    let barChartData = {
+        labels: data.name,
+        datasets: data.data,
+    };
+
+    window.myBar = new Chart(ctx, {
         type: 'bar',
-        data: {
-            labels: data.data.labels,
-            datasets: [
-                {
-                    label: data.label,
-                    data: data.data.data,
-                    backgroundColor: data.data.backgroundColor,
-                    borderColor: data.data.borderColor,
-                    borderWidth: 1,
-                }],
-        },
+        data: barChartData,
         options: {
+            legend: {
+                display: false
+            },
             tooltips: {
                 mode: 'index',
                 callbacks: {
+                    title: function (tooltipItem, data) {
+                        let tasks = 0;
+                        tooltipItem.forEach(item => {
+                            tasks = tasks + item.yLabel;
+                        });
+                        return tooltipItem[0].label + ' - ' + tasks;
+                    },
                     label: function (tooltipItem, data) {
-                        let label = '';
-                        let index = tooltipItem.index;
-                        for(i = 0; i<data.datasets.length; i++){
-                            label = data.datasets[i].label[index] || '';
+                        if (tooltipItem.yLabel == '0') {
+                            return ''
                         }
-                        return label;
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
+
+                        if (label) {
+                            label += ': '
+                        }
+                        return label + tooltipItem.yLabel
                     },
                 },
             },
+            responsive: false,
+            maintainAspectRatio: false,
+            ticks: {
+                beginAtZero: true,
+                stepSize: 2,
+            },
             scales: {
+                xAxes: [
+                    {
+                        stacked: true,
+                    } ],
                 yAxes: [
                     {
+                        stacked: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Number Of Tasks',
+                            labelString: 'Tasks',
                         },
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1,
-                        }
-                    }],
+                    } ],
             },
-            legend: { display: false },
         },
-    });
+    })
 };

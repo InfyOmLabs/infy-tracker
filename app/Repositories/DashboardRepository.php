@@ -9,6 +9,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
@@ -64,7 +65,7 @@ class DashboardRepository
                 $totalRecords = $totalRecords + $duration;
                 $item['backgroundColor'] = getColor(0.7, getColorRGBCode($entry['id']));
             }
-            $data[] = (object) $item;
+            $data[] = (object)$item;
             $index++;
         }
 
@@ -77,7 +78,7 @@ class DashboardRepository
         $result['projects'] = array_keys($projects);
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
-        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '.Carbon::parse($input['end_date'])->format('d M, Y');
+        $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y') . ' - ' . Carbon::parse($input['end_date'])->format('d M, Y');
 
         return $result;
     }
@@ -111,9 +112,9 @@ class DashboardRepository
             $subEndDate = Carbon::parse($endDate)->endOfDay()->format('Y-m-d H:i:s');
         }
         $data = [
-            'dateArr'   => $dateArr,
+            'dateArr' => $dateArr,
             'startDate' => $subStartDate,
-            'endDate'   => $subEndDate,
+            'endDate' => $subEndDate,
         ];
 
         return $data;
@@ -145,8 +146,8 @@ class DashboardRepository
                 }
             }
 
-            $data['result'][] = (object) [
-                'name'        => ucfirst($user->name),
+            $data['result'][] = (object)[
+                'name' => ucfirst($user->name),
                 'total_hours' => round($totalDuration / 60, 2),
             ];
             $color = getColorRGBCode($user->id);
@@ -157,7 +158,7 @@ class DashboardRepository
         foreach ($data['result'] as $item) {
             $data['totalRecords'] = $data['totalRecords'] + $item->total_hours;
         }
-        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y').' Report';
+        $data['label'] = Carbon::parse($input['start_date'])->startOfDay()->format('dS M, Y') . ' Report';
         $data['data']['labels'] = Arr::pluck($data['result'], 'name');
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
 
@@ -169,35 +170,58 @@ class DashboardRepository
      */
     public function getUserOpenTasks()
     {
-        /** @var User $users */
-        $users = User::with('projects.openTasks')->get();
-        $data['result'] = [];
-        foreach ($users as $user) {
-            $totalOpenTasks = 0;
+        $tasks = Task::with(['project', 'taskAssignee'])->whereStatus(Task::STATUS_ACTIVE)->get();
+        $result['name'] = [];
+        $projects = [];
+        /** @var TimeEntry $entry */
+        foreach ($tasks as $task) {
+            $name = $task->project->name;
+            $id = $task->project->id;
 
-            $projectArr = [];
-            foreach ($user->projects as $project) {
-                $count = $project->openTasks->count();
-                $totalOpenTasks = $totalOpenTasks + $count;
-                $projectArr[] = $project->name.': '.$count;
+            if (!isset($projects[$name])) {
+                $projects[$name]['name'] = $name;
+                $projects[$name]['id'] = $id;
             }
+            $taskAssignees = $task->taskAssignee;
+            /** @var User $taskAssignee */
+            foreach ($taskAssignees as $taskAssignee) {
+                $userName = $taskAssignee->name;
+                if (!in_array($userName, $result['name'])) {
+                    $result['name'][] = $userName;
+                }
 
-            array_push($projectArr, 'Total Open Task : '.$totalOpenTasks);
-            $data['result'][] = (object) [
-                'name'             => ucfirst($user->name),
-                'total_open_tasks' => $totalOpenTasks,
-                'projects'         => $projectArr,
-            ];
-            $color = getColorRGBCode($user->id);
-            $data['data']['backgroundColor'][] = getColor(0.3, $color);
-            $data['data']['borderColor'][] = getColor(1, $color);
+                if (!isset($projects[$name][$userName])) {
+                    $projects[$name][$userName] = 0;
+                }
+                $projects[$name][$userName] = $projects[$name][$userName] + 1;
+            }
         }
 
-        $data['totalRecords'] = count($data['result']);
-        $data['label'] = Arr::pluck($data['result'], 'projects');
-        $data['data']['labels'] = Arr::pluck($data['result'], 'name');
-        $data['data']['data'] = Arr::pluck($data['result'], 'total_open_tasks');
+        $data = [];
+        $totalRecords = 0;
+        $nameWithTotalTask = [];
+        foreach ($projects as $key => $project) {
+            $item['label'] = $project['name'];
+            $item['data'] = [];
+            foreach ($result['name'] as $userName) {
+                if (!isset($nameWithTotalTask[$userName])) {
+                    $nameWithTotalTask[$userName] = 0;
+                }
+                $nameWithTotalTask[$userName] += isset($project[$userName]) ? $project[$userName] : 0;
+                $item['data'][] = isset($project[$userName]) ? $project[$userName] : 0;
+                $totalRecords = $totalRecords + 1;
+                $item['backgroundColor'] = getColor(0.7, getColorRGBCode($project['id']));
+            }
 
-        return $data;
+            $data[] = (object)$item;
+        }
+//        $result['name'] = [];
+//        foreach ($nameWithTotalTask as $key => $value) {
+//            $result['name'][] = $key . ' - ' . $value;
+//        }
+        $result['data'] = $data;
+        $result['totalRecords'] = $totalRecords;
+
+        return $result;
     }
 }

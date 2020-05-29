@@ -49,40 +49,42 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="page-header">
-                                <h5>Daily Work Report</h5>
-                                <div id="rightData">
-                                    <div id="developers-report-date-picker" class="time_range">
-                                        <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;
-                                        <span></span> <b class="caret"></b>
+            @can('manage_users')
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="page-header">
+                                    <h5>Daily Work Report</h5>
+                                    <div id="rightData">
+                                        <div id="developers-report-date-picker" class="time_range">
+                                            <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;&nbsp;
+                                            <span></span> <b class="caret"></b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="developers-daily-work-report-container" class="pt-2">
-                                <canvas id="developers-daily-work-report"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="page-header">
-                                <h5>Open Task</h5>
-                            </div>
-                            <div id="users-open-tasks-container" class="pt-2">
-                                <canvas id="users-open-tasks"></canvas>
+                                <div id="developers-daily-work-report-container" class="pt-2">
+                                    <canvas id="developers-daily-work-report"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="page-header">
+                                    <h5>Open Task</h5>
+                                </div>
+                                <div id="users-open-tasks-container" class="pt-2">
+                                    <canvas id="users-open-tasks"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endcan
         </div>
     </div>
 @endsection
@@ -100,6 +102,8 @@
         let usersOpenTasksUrl = "{{route('users-open-tasks')}}";
     </script>
     <script src="{{ mix('assets/js/dashboard/dashboard.js') }}"></script>
-    <script src="{{ mix('assets/js/dashboard/developers-daily-report.js') }}"></script>
-    <script src="{{ mix('assets/js/dashboard/users-open-tasks.js') }}"></script>
+    @can('manage_users')
+        <script src="{{ mix('assets/js/dashboard/developers-daily-report.js') }}"></script>
+        <script src="{{ mix('assets/js/dashboard/users-open-tasks.js') }}"></script>
+    @endcan
 @endsection
