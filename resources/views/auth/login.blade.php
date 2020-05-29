@@ -36,7 +36,7 @@
                         <form method="post" action="{{ url('/login') }}">
                             {!! csrf_field() !!}
                             <h1>Login</h1>
-                            <p style="color: #768192;">Sign In to your account</p>
+                            <p>Sign In to your account</p>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text input-grp-text">
