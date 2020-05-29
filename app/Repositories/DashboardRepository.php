@@ -199,15 +199,10 @@ class DashboardRepository
 
         $data = [];
         $totalRecords = 0;
-        $nameWithTotalTask = [];
         foreach ($projects as $key => $project) {
             $item['label'] = $project['name'];
             $item['data'] = [];
             foreach ($result['name'] as $userName) {
-                if (!isset($nameWithTotalTask[$userName])) {
-                    $nameWithTotalTask[$userName] = 0;
-                }
-                $nameWithTotalTask[$userName] += isset($project[$userName]) ? $project[$userName] : 0;
                 $item['data'][] = isset($project[$userName]) ? $project[$userName] : 0;
                 $totalRecords = $totalRecords + 1;
                 $item['backgroundColor'] = getColor(0.7, getColorRGBCode($project['id']));
@@ -215,10 +210,6 @@ class DashboardRepository
 
             $data[] = (object) $item;
         }
-//        $result['name'] = [];
-//        foreach ($nameWithTotalTask as $key => $value) {
-//            $result['name'][] = $key . ' - ' . $value;
-//        }
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
 
