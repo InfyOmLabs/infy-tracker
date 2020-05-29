@@ -8,6 +8,7 @@ use App\Models\TimeEntry;
 use App\Queries\TimeEntryDataTable;
 use App\Repositories\TimeEntryRepository;
 use Auth;
+use Carbon\Carbon;
 use DataTables;
 use Exception;
 use Illuminate\Contracts\View\Factory;
@@ -172,5 +173,33 @@ class TimeEntryController extends AppBaseController
         $this->timeEntryRepository->broadcastStartTimerEvent($request->all());
 
         return $this->sendSuccess('Start timer broadcasts successfully.');
+    }
+
+    /**
+     * @return string
+     */
+    public function copyTodayActivity()
+    {
+        $timeEntries = $this->timeEntryRepository->getTodayEntries();
+
+        $note = '**End of the Day - '.Carbon::now()->format('jS M Y')."**\n";
+
+        $projects = [];
+        /** @var TimeEntry $entry */
+        foreach ($timeEntries as $entry) {
+            $projects[$entry->task->project->name][$entry->task_id]['name'] = $entry->task->title;
+            $projects[$entry->task->project->name][$entry->task_id]['note'] = $entry->note;
+        }
+
+        foreach ($projects as $name => $project) {
+            $note .= "\n*".$name."*\n";
+
+            foreach ($project as $task) {
+                $note .= "\t- ".$task['name'];
+                $note .= "\t- ".$task['note'];
+            }
+        }
+
+        return $note;
     }
 }
