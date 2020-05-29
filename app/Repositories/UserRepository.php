@@ -62,7 +62,7 @@ class UserRepository extends BaseRepository
     public function getUserList($projectIds = [])
     {
         /** @var Builder $query */
-        $query = User::whereIsActive(true)->orderBy('name');
+        $query = User::whereIsActive(true)->whereIsEmailVerified(true)->orderBy('name');
         if (!empty($projectIds)) {
             $query = $query->whereHas('projects', function (Builder $query) use ($projectIds) {
                 $query->whereIn('projects.id', $projectIds);

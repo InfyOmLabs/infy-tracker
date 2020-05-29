@@ -51,6 +51,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project whereDeletedBy($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Project withoutTrashed()
+ *
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $openTasks
+ * @property-read int|null $open_tasks_count
  */
 class Project extends Model
 {
@@ -139,5 +142,13 @@ class Project extends Model
     public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function openTasks()
+    {
+        return $this->tasks()->where('status', '=', Task::STATUS_ACTIVE);
     }
 }

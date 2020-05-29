@@ -50,4 +50,6 @@ mix
         'public/assets/js/task/task_time_entry.js').
     js('resources/assets/js/department/department.js',
         'public/assets/js/department/department.js').
+    js('resources/assets/js/dashboard/users-open-tasks.js',
+        'public/assets/js/dashboard/users-open-tasks.js').
     version();

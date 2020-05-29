@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/users-work-report', 'HomeController@workReport')->name('users-work-report');
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
+    Route::get('/users-open-tasks', 'HomeController@userOpenTasks')->name('users-open-tasks');
 
     Route::post('logout', 'Auth\LoginController@logout');
     Route::group(['middleware' => ['permission:manage_activities']], function () {
@@ -86,13 +87,12 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::resource('time-entries', 'TimeEntryController');
     Route::post('time-entries/{time_entry}/update', 'TimeEntryController@update');
     Route::post('start-timer', 'TimeEntryController@getStartTimer');
+    Route::get('copy-today-activity', 'TimeEntryController@copyTodayActivity')->name('copy-today-activity');
 
-    Route::group(['middleware' => ['permission:manage_reports']], function () {
-        Route::resource('reports', 'ReportController');
-        Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
-        Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
-        Route::get('clients-of-department', 'DepartmentController@clients')->name('clients-of-department');
-    });
+    Route::resource('reports', 'ReportController');
+    Route::get('users-of-projects', 'ProjectController@users')->name('users-of-projects');
+    Route::get('projects-of-client', 'ClientController@projects')->name('projects-of-client');
+    Route::get('clients-of-department', 'DepartmentController@clients')->name('clients-of-department');
 
     Route::get('my-tasks', 'TaskController@myTasks')->name('my-tasks');
     Route::get('user-last-task-work', 'TimeEntryController@getUserLastTask')->name('user-last-task-work');
