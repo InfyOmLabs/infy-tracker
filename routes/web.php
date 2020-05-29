@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     Route::get('/home', 'HomeController@index')->name('home');
     Route::get('/users-work-report', 'HomeController@workReport')->name('users-work-report');
     Route::get('/developer-work-report', 'HomeController@developerWorkReport')->name('developers-work-report');
+    Route::get('/users-open-tasks', 'HomeController@userOpenTasks')->name('users-open-tasks');
 
     Route::post('logout', 'Auth\LoginController@logout');
     Route::group(['middleware' => ['permission:manage_activities']], function () {

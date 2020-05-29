@@ -9,6 +9,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Task;
 use App\Models\TimeEntry;
 use App\Models\User;
 use Arr;
@@ -162,5 +163,56 @@ class DashboardRepository
         $data['data']['data'] = Arr::pluck($data['result'], 'total_hours');
 
         return $data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOpenTasks()
+    {
+        $tasks = Task::with(['project', 'taskAssignee'])->whereStatus(Task::STATUS_ACTIVE)->get();
+        $result['name'] = [];
+        $projects = [];
+        /** @var TimeEntry $entry */
+        foreach ($tasks as $task) {
+            $name = $task->project->name;
+            $id = $task->project->id;
+
+            if (!isset($projects[$name])) {
+                $projects[$name]['name'] = $name;
+                $projects[$name]['id'] = $id;
+            }
+            $taskAssignees = $task->taskAssignee;
+            /** @var User $taskAssignee */
+            foreach ($taskAssignees as $taskAssignee) {
+                $userName = $taskAssignee->name;
+                if (!in_array($userName, $result['name'])) {
+                    $result['name'][] = $userName;
+                }
+
+                if (!isset($projects[$name][$userName])) {
+                    $projects[$name][$userName] = 0;
+                }
+                $projects[$name][$userName] = $projects[$name][$userName] + 1;
+            }
+        }
+
+        $data = [];
+        $totalRecords = 0;
+        foreach ($projects as $key => $project) {
+            $item['label'] = $project['name'];
+            $item['data'] = [];
+            foreach ($result['name'] as $userName) {
+                $item['data'][] = isset($project[$userName]) ? $project[$userName] : 0;
+                $totalRecords = $totalRecords + 1;
+                $item['backgroundColor'] = getColor(0.7, getColorRGBCode($project['id']));
+            }
+
+            $data[] = (object) $item;
+        }
+        $result['data'] = $data;
+        $result['totalRecords'] = $totalRecords;
+
+        return $result;
     }
 }
