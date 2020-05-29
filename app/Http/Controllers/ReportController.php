@@ -116,10 +116,10 @@ class ReportController extends AppBaseController
         $input = $request->all();
         $input['owner_id'] = Auth::id();
 
-        $this->reportRepository->store($input);
+        $report = $this->reportRepository->store($input);
         Flash::success('Report saved successfully.');
 
-        return redirect(route('reports.index'));
+        return redirect(route('reports.show', $report->id));
     }
 
     /**
