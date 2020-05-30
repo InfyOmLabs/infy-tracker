@@ -328,7 +328,7 @@ class TimeEntryRepository extends BaseRepository
     {
         return TimeEntry::with('task.project')
             ->whereDate('start_time', '=', Carbon::now()->format('Y-m-d'))
-            ->where('user_id','=',Auth::id())
+            ->where('user_id', '=', Auth::id())
             ->get();
     }
 }
