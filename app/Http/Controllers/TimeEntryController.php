@@ -188,7 +188,10 @@ class TimeEntryController extends AppBaseController
         /** @var TimeEntry $entry */
         foreach ($timeEntries as $entry) {
             $projects[$entry->task->project->name][$entry->task_id]['name'] = $entry->task->title;
-            $projects[$entry->task->project->name][$entry->task_id]['note'] .= $entry->note."\n";
+            if (!isset($projects[$entry->task->project->name][$entry->task_id]['note'])) {
+                $projects[$entry->task->project->name][$entry->task_id]['note'] = '';
+            }
+            $projects[$entry->task->project->name][$entry->task_id]['note'] .= "\t\t * ".$entry->note."\n";
         }
 
         foreach ($projects as $name => $project) {
@@ -196,7 +199,7 @@ class TimeEntryController extends AppBaseController
 
             foreach ($project as $task) {
                 $note .= "\t- ".$task['name'];
-                $note .= "\t- ".$task['note'];
+                $note .= $task['note'];
             }
         }
 
