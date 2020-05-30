@@ -187,8 +187,8 @@ class TimeEntryController extends AppBaseController
         $projects = [];
         /** @var TimeEntry $entry */
         foreach ($timeEntries as $entry) {
-            $projects[$entry->task->project->name][$entry->task_id]['name'] = $entry->task->title;
-            $projects[$entry->task->project->name][$entry->task_id]['note'] = $entry->note;
+            $projects[$entry->task->project->name][$entry->id]['name'] = $entry->task->title;
+            $projects[$entry->task->project->name][$entry->id]['note'] = $entry->note;
         }
 
         foreach ($projects as $name => $project) {

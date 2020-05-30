@@ -326,6 +326,9 @@ class TimeEntryRepository extends BaseRepository
      */
     public function getTodayEntries()
     {
-        return TimeEntry::with('task.project')->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->get();
+        return TimeEntry::with('task.project')
+            ->whereDate('start_time', '=', Carbon::now()->format('Y-m-d'))
+            ->where('user_id','=',Auth::id())
+            ->get();
     }
 }
