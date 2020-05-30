@@ -22,7 +22,7 @@
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Due Date</b></label>
-                        {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;']) !!}
+                        {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;','placeholder' => 'Enter Date']) !!}
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Status</b></label>
