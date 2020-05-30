@@ -61,7 +61,6 @@ $(function () {
             clear: 'icon-trash icons',
         },
         sideBySide: true,
-        date: new Date(),
         showClear: true,
     })
     tbl.ajax.reload()
