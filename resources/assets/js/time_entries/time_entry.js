@@ -22,7 +22,7 @@ let editTaskId, editProjectId = null
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
-    'order': [[9, 'desc']],
+    'order': [[10, 'desc']],
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
@@ -37,31 +37,31 @@ let tbl = $('#timeEntryTable').DataTable({
     },
     columnDefs: [
         {
-            'targets': [9],
+            'targets': [10],
             'width': '7%',
             'className': 'text-center',
             'visible': false,
         },
         {
-            'targets': [6],
+            'targets': [7],
             'width': '9%',
         },
         {
-            'targets': [7],
+            'targets': [8],
             'width': '4%',
         },
         {
-            'targets': [4, 5],
+            'targets': [5, 6],
             'width': '10%',
         },
         {
-            'targets': [8],
+            'targets': [9],
             'orderable': false,
             'className': 'text-center',
             'width': '5%',
         },
         {
-            'targets': [3],
+            'targets': [4],
             'width': '8%',
         },
         {
@@ -89,6 +89,10 @@ let tbl = $('#timeEntryTable').DataTable({
                 }
             },
             name: 'user.name',
+        },
+        {
+            data:'task.project.name',
+            name:'task.project.name',
         },
         {
             data: function (row) {
