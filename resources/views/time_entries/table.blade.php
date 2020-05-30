@@ -3,6 +3,7 @@
     <tr>
         <th></th>
         <th>User</th>
+        <th>Project</th>
         <th>Task</th>
         <th>Activity</th>
         <th>Start Time</th>
