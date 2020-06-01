@@ -180,9 +180,13 @@ var tbl = $('#task_table').DataTable({
             render: function (row) {
                 if (row.due_date != null && row.due_date != '' &&
                     typeof row.due_date != 'undefined') {
-                    return '<span>' + format(row.due_date) + '</span>'
+                    let todayDate = (new Date()).toISOString().split('T')[0];
+                    if (todayDate > row.due_date) {
+                        return '<span class="text-danger">' +
+                            format(row.due_date) + '</span>';
+                    }
                 }
-                return row.due_date
+                return format(row.due_date);
             },
             name: 'due_date',
         },
