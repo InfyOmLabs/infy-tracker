@@ -12,14 +12,16 @@
             <div class="page-header">
                 <h3 class="page__heading">Tasks</h3>
                 <div class="filter-container">
-                    <div class="mr-2">
-                        <label class="lbl-block"><b>Assign To</b></label>
-                        {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
-                    </div>
-                    <div class="mr-2">
-                        <label class="lbl-block"><b>Project</b></label>
-                        {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
-                    </div>
+                    @can('manage_all_tasks')
+                        <div class="mr-2">
+                            <label class="lbl-block"><b>Assign To</b></label>
+                            {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        </div>
+                        <div class="mr-2">
+                            <label class="lbl-block"><b>Project</b></label>
+                            {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        </div>
+                    @endcan
                     <div class="mr-2">
                         <label class="lbl-block"><b>Due Date</b></label>
                         {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;','placeholder' => 'Enter Date']) !!}
@@ -28,7 +30,8 @@
                         <label class="lbl-block"><b>Status</b></label>
                         {!!Form::select('drp_status',$status,0,['id'=>'filter_status','class'=>'form-control','style'=>'min-width:150px;'])  !!}
                     </div>
-                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal"
+                       data-target="#AddModal"></i>New
                         Task</a>
                 </div>
             </div>
