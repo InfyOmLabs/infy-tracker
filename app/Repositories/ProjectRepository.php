@@ -90,6 +90,26 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
+     * @return Collection
+     */
+    public function getLoginUserAssignTasksProjects()
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name')
+            ->whereHas('users', function (Builder $query) {
+                $query->where('user_id', getLoggedInUserId());
+            })
+            ->whereHas('tasks', function (Builder $query) {
+                $query->where('status', '=', 0)
+                    ->whereHas('taskAssignee', function (Builder $query) {
+                        $query->where('user_id', getLoggedInUserId());
+                    });
+            });
+
+        return $query->pluck('name', 'id');
+    }
+    
+    /**
      * get clients.
      *
      * @param int|null $clientId
@@ -114,6 +134,12 @@ class ProjectRepository extends BaseRepository
     {
         $query = Project::whereHas('users', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
+        })
+        ->whereHas('tasks', function (Builder $query) {
+            $query->where('status', '=', 0)
+                ->whereHas('taskAssignee', function (Builder $query) {
+                    $query->where('user_id', getLoggedInUserId());
+                });
         });
 
         /** @var Project[] $projects */

@@ -59,7 +59,7 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var ProjectRepository $projectRepo */
         $projectRepo = app(ProjectRepository::class);
-        $data['projects'] = $projectRepo->getLoginUserAssignProjectsArr();
+        $data['projects'] = $projectRepo->getLoginUserAssignTasksProjects();
 
         /** @var UserRepository $userRepo */
         $userRepo = app(UserRepository::class);
