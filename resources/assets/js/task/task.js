@@ -533,12 +533,17 @@ function loadProjectAssignees (projectId, selector) {
         url: url,
         type: 'GET',
         success: function (result) {
-            const users = result.data
+            const users = result.data;
             for (const key in users) {
                 if (users.hasOwnProperty(key)) {
                     $('#' + selector).
-                        append($('<option>', { value: key, text: users[key] }))
+                        append($('<option>', { value: key, text: users[key] }));
                 }
+            }
+            // condition applied only when new task modal is opened
+            if ($('#projectId').val() != '') {
+                $('#' + selector).val(currentLoggedInUserId);
+                $('#' + selector).trigger('change.select2');
             }
         },
     })
