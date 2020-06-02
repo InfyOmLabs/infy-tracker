@@ -108,7 +108,7 @@ class ProjectRepository extends BaseRepository
 
         return $query->pluck('name', 'id');
     }
-    
+
     /**
      * get clients.
      *
