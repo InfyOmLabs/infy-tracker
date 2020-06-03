@@ -12,16 +12,14 @@
             <div class="page-header">
                 <h3 class="page__heading">Tasks</h3>
                 <div class="filter-container">
-                    @can('manage_all_tasks')
-                        <div class="mr-2">
-                            <label class="lbl-block"><b>Assign To</b></label>
-                            {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
-                        </div>
-                        <div class="mr-2">
-                            <label class="lbl-block"><b>Project</b></label>
-                            {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
-                        </div>
-                    @endcan
+                    <div class="mr-2">
+                        <label class="lbl-block"><b>Assign To</b></label>
+                        {!!Form::select('drp_users',$assignees,Auth::id(),['id'=>'filter_user','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                    </div>
+                    <div class="mr-2">
+                        <label class="lbl-block"><b>Project</b></label>
+                        {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                    </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Due Date</b></label>
                         {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;','placeholder' => 'Enter Date']) !!}

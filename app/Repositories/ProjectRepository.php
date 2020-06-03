@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -100,8 +101,11 @@ class ProjectRepository extends BaseRepository
     {
         /** @var Builder|Project $query */
         $query = Project::orderBy('name');
-        if (!is_null($clientId)) {
+        if (! is_null($clientId)) {
             $query = $query->whereClientId($clientId);
+        }
+        if (! getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
+            $query = getLoggedInUser()->projects; // get assigned projects list for particular user
         }
 
         return $query->pluck('name', 'id');
