@@ -101,10 +101,10 @@ class ProjectRepository extends BaseRepository
     {
         /** @var Builder|Project $query */
         $query = Project::orderBy('name');
-        if (! is_null($clientId)) {
+        if (!is_null($clientId)) {
             $query = $query->whereClientId($clientId);
         }
-        if (! getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
+        if (!getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
             $query = getLoggedInUser()->projects; // get assigned projects list for particular user
         }
 
