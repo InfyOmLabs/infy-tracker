@@ -22,7 +22,7 @@ let editTaskId, editProjectId = null
 let tbl = $('#timeEntryTable').DataTable({
     processing: true,
     serverSide: true,
-    'order': [[9, 'desc']],
+    'order': [[10, 'desc']],
     ajax: {
         url: timeEntryUrl,
         data: function (data) {
@@ -37,31 +37,31 @@ let tbl = $('#timeEntryTable').DataTable({
     },
     columnDefs: [
         {
-            'targets': [9],
+            'targets': [10],
             'width': '7%',
             'className': 'text-center',
             'visible': false,
         },
         {
-            'targets': [6],
+            'targets': [7],
             'width': '9%',
         },
         {
-            'targets': [7],
+            'targets': [8],
             'width': '4%',
         },
         {
-            'targets': [4, 5],
+            'targets': [5, 6],
             'width': '10%',
         },
         {
-            'targets': [8],
+            'targets': [9],
             'orderable': false,
             'className': 'text-center',
             'width': '5%',
         },
         {
-            'targets': [3],
+            'targets': [4],
             'width': '8%',
         },
         {
@@ -89,6 +89,10 @@ let tbl = $('#timeEntryTable').DataTable({
                 }
             },
             name: 'user.name',
+        },
+        {
+            data:'task.project.name',
+            name:'task.project.name',
         },
         {
             data: function (row) {
@@ -438,3 +442,33 @@ $('#new_entry').click(function () {
     getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox')
     $('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'))
 })
+
+// event to copy today time entries
+$('#copyTodayEntry').on('click', function () {
+    $.ajax({
+        url: copyTodayActivity,
+        type: 'get',
+        success: function (result) {
+            copyTextToClipBoard(result);
+            swal({
+                title: 'Copied',
+                text: 'Time Entries copied to clipboard.',
+                type: 'success',
+                timer: 3000,
+            });
+        },
+        error: function (result) {
+            printErrorMessage('#tmValidationErrorsBox', result);
+        },
+    })
+});
+
+// function to copy text to clipboard
+window.copyTextToClipBoard = function(resultData) {
+    let copyFrom = document.createElement("textarea");
+    document.body.appendChild(copyFrom);
+    copyFrom.textContent = resultData;
+    copyFrom.select();
+    document.execCommand("copy");
+    copyFrom.remove();
+};

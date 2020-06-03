@@ -30,7 +30,7 @@
     <!-- Client Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('clientId', 'Client') !!}
-        {!! Form::select('client_id', $clients, isset($clientId)?$clientId:null, ['class' => 'form-control','id' => 'clientId']) !!}
+        {!! Form::select('client_id', $clients, isset($clientId)?$clientId:null, ['class' => 'form-control','id' => 'clientId','placeholder'=>'Select client']) !!}
     </div>
 </div>
 <div class="row">

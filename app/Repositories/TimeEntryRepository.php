@@ -9,6 +9,7 @@ use App\Models\TimeEntry;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as BuilderAlias;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Log;
@@ -139,7 +140,7 @@ class TimeEntryRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return TimeEntry
+     * @return bool
      */
     public function store($input)
     {
@@ -147,9 +148,11 @@ class TimeEntryRepository extends BaseRepository
 
         $this->assignTaskToAdmin($input);
 
-        $timeEntry = TimeEntry::create($input);
+        if ($input['duration'] > 0) {
+            $timeEntry = TimeEntry::create($input);
+        }
 
-        return $timeEntry;
+        return true;
     }
 
     /**
@@ -194,7 +197,9 @@ class TimeEntryRepository extends BaseRepository
                 $input['end_time'] = '';
             }
         }
-        $this->update($input, $id);
+        if ($input['duration'] > 0) {
+            $this->update($input, $id);
+        }
 
         return true;
     }
@@ -225,10 +230,6 @@ class TimeEntryRepository extends BaseRepository
 
         if ($input['duration'] > 720) {
             throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
-        }
-
-        if ($input['duration'] < 1) {
-            throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
         }
 
         $this->checkDuplicateEntry($input, $id);
@@ -318,5 +319,16 @@ class TimeEntryRepository extends BaseRepository
         }
 
         return true;
+    }
+
+    /**
+     * @return TimeEntry[]|Builder[]|BuilderAlias[]|Collection
+     */
+    public function getTodayEntries()
+    {
+        return TimeEntry::with('task.project')
+            ->whereDate('start_time', '=', Carbon::now()->format('Y-m-d'))
+            ->where('user_id', '=', Auth::id())
+            ->get();
     }
 }
