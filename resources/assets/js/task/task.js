@@ -198,8 +198,8 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                if (row.due_date != null && row.due_date != '' &&
-                    typeof row.due_date != 'undefined') {
+                if (row.due_date !== null && row.due_date !== '' &&
+                    typeof row.due_date !== 'undefined') {
                     let todayDate = (new Date()).toISOString().split('T')[0];
                     if (todayDate > row.due_date) {
                         return '<span class="text-danger">' +
@@ -430,14 +430,14 @@ $(function () {
     function updateTaskStatus (id) {
         let stopwatchTaskId = getItemFromLocalStorage('task_id')
         let isClockRunning = getItemFromLocalStorage('clockRunning')
-        if (id == stopwatchTaskId && isClockRunning == 'true') {
-            tbl.ajax.reload()
+        if (id === stopwatchTaskId && isClockRunning === 'true') {
+            tbl.ajax.reload();
             swal({
                 'title': 'Warning',
                 'text': 'Please stop timer before completing task.',
                 'type': 'warning',
-            })
-            return false
+            });
+            return false;
         }
         $.ajax({
             url: taskUrl + id + '/update-status',
@@ -455,12 +455,12 @@ $(function () {
 
 window.manageCollapseIcon = function (id) {
     var isExpanded = $('#tdCollapse' + id).attr('aria-expanded')
-    if (isExpanded == 'true') {
-        $('#tdCollapse' + id).find('a span').removeClass('fa-minus-circle')
-        $('#tdCollapse' + id).find('a span').addClass('fa-plus-circle')
+    if (isExpanded === 'true') {
+        $('#tdCollapse' + id).find('a span').removeClass('fa-minus-circle');
+        $('#tdCollapse' + id).find('a span').addClass('fa-plus-circle');
     } else {
-        $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle')
-        $('#tdCollapse' + id).find('a span').addClass('fa-minus-circle')
+        $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle');
+        $('#tdCollapse' + id).find('a span').addClass('fa-minus-circle');
     }
 }
 
@@ -553,12 +553,17 @@ function loadProjectAssignees (projectId, selector) {
         url: url,
         type: 'GET',
         success: function (result) {
-            const users = result.data
+            const users = result.data;
             for (const key in users) {
                 if (users.hasOwnProperty(key)) {
                     $('#' + selector).
-                        append($('<option>', { value: key, text: users[key] }))
+                        append($('<option>', { value: key, text: users[key] }));
                 }
+            }
+            // condition applied only when new task modal is opened
+            if ($('#projectId').val() !== '') {
+                $('#' + selector).val(currentLoggedInUserId);
+                $('#' + selector).trigger('change.select2');
             }
         },
     })

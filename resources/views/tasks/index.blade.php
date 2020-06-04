@@ -68,7 +68,7 @@
         let getTaskUrl = "{{url('get-tasks')}}/";
         let projectsURL = "{{url('projects')}}/";
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
-        let taskStatus = $.parseJSON(taskStatusJson)
+        let taskStatus = $.parseJSON(taskStatusJson);
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
         let taskBadges = $.parseJSON(taskBadgesJson);
         let taskDetailActionColumnIsVisible = true;
@@ -76,6 +76,7 @@
         let reportEndDate = '';
         let usersOfProjects = "{{ url('users-of-projects') }}";
         let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
+        let currentLoggedInUserId = "{{ getLoggedInUserId() }}";
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
