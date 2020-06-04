@@ -28,7 +28,8 @@
                         <label class="lbl-block"><b>Status</b></label>
                         {!!Form::select('drp_status',$status,0,['id'=>'filter_status','class'=>'form-control','style'=>'min-width:150px;'])  !!}
                     </div>
-                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal"
+                       data-target="#AddModal"></i>New
                         Task</a>
                 </div>
             </div>
