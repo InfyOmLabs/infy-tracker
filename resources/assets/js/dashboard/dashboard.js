@@ -108,9 +108,7 @@ window.prepareUserWorkReport = function (result) {
                     title: function (tooltipItem, data) {
                         let labelDate = tooltipItem[0]['label'];
                         let result = roundToQuarterHour(data.total_hrs[labelDate]);
-                        let label = labelDate + ' - ' + result;
-                        
-                        return label;
+                        return  labelDate + ' - ' + result;
                     },
                     label: function (tooltipItem, data) {
                         result = roundToQuarterHour(tooltipItem.yLabel)
