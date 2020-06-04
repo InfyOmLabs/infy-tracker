@@ -89,6 +89,7 @@ window.prepareUserWorkReport = function (result) {
     let barChartData = {
         labels: data.date,
         datasets: data.data,
+        total_hrs: data.totalHrs,
     }
     let ctx = document.getElementById('daily-work-report').getContext('2d')
     ctx.canvas.style.height = '400px'
@@ -104,6 +105,13 @@ window.prepareUserWorkReport = function (result) {
             tooltips: {
                 mode: 'index',
                 callbacks: {
+                    title: function (tooltipItem, data) {
+                        let labelDate = tooltipItem[0]['label'];
+                        let result = roundToQuarterHour(data.total_hrs[labelDate]);
+                        let label = labelDate + ' - ' + result;
+                        
+                        return label;
+                    },
                     label: function (tooltipItem, data) {
                         result = roundToQuarterHour(tooltipItem.yLabel)
                         if (result == '0min') {
