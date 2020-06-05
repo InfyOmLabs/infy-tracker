@@ -90,6 +90,14 @@ class ProjectRepository extends BaseRepository
         return Auth::user()->projects()->orderBy('name')->get()->pluck('name', 'id')->toArray();
     }
 
+    /***
+     * @return array
+     */
+    public function getLoginUserAssignedProjectsArr()
+    {
+        return Auth::user()->projects()->orderBy('name')->get()->pluck('name', 'id')->toArray();
+    }
+
     /**
      * @return Collection
      */

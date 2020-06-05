@@ -171,7 +171,7 @@ class TaskRepository extends BaseRepository
     {
         /** @var ProjectRepository $projectRepo */
         $projectRepo = app(ProjectRepository::class);
-        $loginUserProjects = $projectRepo->getLoginUserAssignProjectsArr();
+        $loginUserProjects = $projectRepo->getLoginUserAssignedProjectsArr();
         $data['projects'] = $loginUserProjects;
 
         /** @var TagRepository $tagRepo */
