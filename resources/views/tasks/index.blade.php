@@ -28,7 +28,8 @@
                         <label class="lbl-block"><b>Status</b></label>
                         {!!Form::select('drp_status',$status,0,['id'=>'filter_status','class'=>'form-control','style'=>'min-width:150px;'])  !!}
                     </div>
-                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal"
+                       data-target="#AddModal"></i>New
                         Task</a>
                 </div>
             </div>
@@ -67,7 +68,7 @@
         let getTaskUrl = "{{url('get-tasks')}}/";
         let projectsURL = "{{url('projects')}}/";
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
-        let taskStatus = $.parseJSON(taskStatusJson)
+        let taskStatus = $.parseJSON(taskStatusJson);
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
         let taskBadges = $.parseJSON(taskBadgesJson);
         let taskDetailActionColumnIsVisible = true;
@@ -75,6 +76,7 @@
         let reportEndDate = '';
         let usersOfProjects = "{{ url('users-of-projects') }}";
         let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
+        let currentLoggedInUserId = "{{ getLoggedInUserId() }}";
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>
