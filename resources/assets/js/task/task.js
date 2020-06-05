@@ -179,8 +179,8 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                let priority = row.priority;
-                let priorityColors = {
+                const priority = row.priority;
+                const priorityColors = {
                     'highest': '#FF0000',
                     'high': '#FF3333',
                     'medium': '#FF8000',
@@ -198,14 +198,15 @@ var tbl = $('#task_table').DataTable({
                 return row;
             },
             render: function (row) {
-                if (row.due_date != null && row.due_date != '' &&
-                    typeof row.due_date != 'undefined') {
-                    let todayDate = (new Date()).toISOString().split('T')[0];
-                    if (todayDate > row.due_date) {
-                        return '<span class="text-danger">' +
-                            format(row.due_date) + '</span>';
-                    }
+                if (row.due_date == null || row.due_date === '') {
+                  return '';
                 }
+
+                let todayDate = (new Date()).toISOString().split('T')[0];
+                if (row.status === 0 && todayDate > row.due_date) {
+                    return '<span class="text-danger">' + format(row.due_date) + '</span>';
+                }
+
                 return format(row.due_date);
             },
             name: 'due_date',
