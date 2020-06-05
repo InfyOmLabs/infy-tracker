@@ -24,7 +24,7 @@ class UserDataTable
     public function get()
     {
         /** @var User $query */
-        $query = User::query();
+        $query = User::query()->orderBy('is_active', 'desc');
 
         return $query;
     }
