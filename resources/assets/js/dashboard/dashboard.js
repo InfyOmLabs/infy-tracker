@@ -90,10 +90,10 @@ window.prepareUserWorkReport = function (result) {
         labels: data.date,
         datasets: data.data,
         total_hrs: data.totalHrs,
-    }
-    let ctx = document.getElementById('daily-work-report').getContext('2d')
-    ctx.canvas.style.height = '400px'
-    ctx.canvas.style.width = '100%'
+    };
+    let ctx = document.getElementById('daily-work-report').getContext('2d');
+    ctx.canvas.style.height = '400px';
+    ctx.canvas.style.width = '100%';
     window.myBar = new Chart(ctx, {
         type: 'bar',
         data: barChartData,
@@ -106,21 +106,21 @@ window.prepareUserWorkReport = function (result) {
                 mode: 'index',
                 callbacks: {
                     title: function (tooltipItem, data) {
-                        let labelDate = tooltipItem[0]['label'];
-                        let result = roundToQuarterHour(data.total_hrs[labelDate]);
-                        return  labelDate + ' - ' + result;
+                        const labelDate = tooltipItem[0]['label'];
+
+                        return labelDate + ' - ' + roundToQuarterHour(data.total_hrs[labelDate]);
                     },
                     label: function (tooltipItem, data) {
-                        result = roundToQuarterHour(tooltipItem.yLabel)
-                        if (result == '0min') {
+                     const result = roundToQuarterHour(tooltipItem.yLabel);
+                        if (result === '0min') {
                             return ''
                         }
-                        let label = data.datasets[tooltipItem.datasetIndex].label ||
-                            ''
+                        let label = data.datasets[tooltipItem.datasetIndex].label || '';
 
                         if (label) {
                             label += ': '
                         }
+
                         return label + result
                     },
                 },
@@ -144,7 +144,7 @@ window.prepareUserWorkReport = function (result) {
             },
         },
     })
-}
+};
 
 window.roundToQuarterHour = function (duration) {
     const totalTime = duration.toString().split('.')
