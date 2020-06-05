@@ -103,23 +103,23 @@ function getRandomColor () {
 var tbl = $('#task_table').DataTable({
     processing: true,
     serverSide: true,
-    'order': [[4, 'desc']],
+    'order': [[5, 'desc']],
     ajax: {
         url: taskIndexUrl,
         data: function (data) {
             data.filter_project = $('#filter_project').
                 find('option:selected').
-                val()
-            data.filter_user = $('#filter_user').find('option:selected').val()
+                val();
+            data.filter_user = $('#filter_user').find('option:selected').val();
             data.filter_status = $('#filter_status').
                 find('option:selected').
-                val()
+                val();
             data.due_date_filter = $('#dueDateFilter').val()
         },
     },
     columnDefs: [
         {
-            'targets': [6],
+            'targets': [7],
             'orderable': false,
             'width': '9%',
         },
@@ -134,12 +134,16 @@ var tbl = $('#task_table').DataTable({
             'orderable': false,
         },
         {
-            'targets': [3, 4],
+            'targets': [3],
+            'width': '6%',
+        },
+        {
+            'targets': [4, 5],
             'width': '10%',
             'className': 'text-center',
         },
         {
-            'targets': [5],
+            'targets': [6],
             'width': '6%',
             'className': 'text-center',
         },
@@ -163,26 +167,47 @@ var tbl = $('#task_table').DataTable({
         },
         {
             data: function (row) {
-                let imgStr = ''
+                let imgStr = '';
                 $(row.task_assignee).each(function (i, e) {
                     imgStr += '<img class="assignee__avatar" src="' +
                         e.img_avatar + '" data-toggle="tooltip" title="' +
-                        e.name + '">'
-                })
+                        e.name + '">';
+                });
 
-                return imgStr
+                return imgStr;
             }, name: 'taskAssignee.name',
         },
         {
             data: function (row) {
-                return row
+                const priority = row.priority;
+                const priorityColors = {
+                    'highest': '#FF0000',
+                    'high': '#FF3333',
+                    'medium': '#FF8000',
+                    'low': '#336600',
+                    'lowest': '#4C9900',
+                };
+
+                return '<i class="fa fa-arrow-up" style="color: ' +
+                    priorityColors[priority] + '"></i> ' +
+                    priority.charAt(0).toUpperCase() + priority.slice(1);
+            }, name: 'priority',
+        },
+        {
+            data: function (row) {
+                return row;
             },
             render: function (row) {
-                if (row.due_date != null && row.due_date != '' &&
-                    typeof row.due_date != 'undefined') {
-                    return '<span>' + format(row.due_date) + '</span>'
+                if (row.due_date == null || row.due_date === '') {
+                    return '';
                 }
-                return row.due_date
+
+                let todayDate = (new Date()).toISOString().split('T')[0];
+                if (row.status === 0 && todayDate > row.due_date) {
+                    return '<span class="text-danger">' + format(row.due_date) + '</span>';
+                }
+
+                return format(row.due_date);
             },
             name: 'due_date',
         },
@@ -406,14 +431,14 @@ $(function () {
     function updateTaskStatus (id) {
         let stopwatchTaskId = getItemFromLocalStorage('task_id')
         let isClockRunning = getItemFromLocalStorage('clockRunning')
-        if (id == stopwatchTaskId && isClockRunning == 'true') {
-            tbl.ajax.reload()
+        if (id === stopwatchTaskId && isClockRunning === 'true') {
+            tbl.ajax.reload();
             swal({
                 'title': 'Warning',
                 'text': 'Please stop timer before completing task.',
                 'type': 'warning',
-            })
-            return false
+            });
+            return false;
         }
         $.ajax({
             url: taskUrl + id + '/update-status',
@@ -431,12 +456,12 @@ $(function () {
 
 window.manageCollapseIcon = function (id) {
     var isExpanded = $('#tdCollapse' + id).attr('aria-expanded')
-    if (isExpanded == 'true') {
-        $('#tdCollapse' + id).find('a span').removeClass('fa-minus-circle')
-        $('#tdCollapse' + id).find('a span').addClass('fa-plus-circle')
+    if (isExpanded === 'true') {
+        $('#tdCollapse' + id).find('a span').removeClass('fa-minus-circle');
+        $('#tdCollapse' + id).find('a span').addClass('fa-plus-circle');
     } else {
-        $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle')
-        $('#tdCollapse' + id).find('a span').addClass('fa-minus-circle')
+        $('#tdCollapse' + id).find('a span').removeClass('fa-plus-circle');
+        $('#tdCollapse' + id).find('a span').addClass('fa-minus-circle');
     }
 }
 
@@ -529,12 +554,17 @@ function loadProjectAssignees (projectId, selector) {
         url: url,
         type: 'GET',
         success: function (result) {
-            const users = result.data
+            const users = result.data;
             for (const key in users) {
                 if (users.hasOwnProperty(key)) {
                     $('#' + selector).
-                        append($('<option>', { value: key, text: users[key] }))
+                        append($('<option>', { value: key, text: users[key] }));
                 }
+            }
+            // condition applied only when new task modal is opened
+            if ($('#projectId').val() !== '') {
+                $('#' + selector).val(currentLoggedInUserId);
+                $('#' + selector).trigger('change.select2');
             }
         },
     })

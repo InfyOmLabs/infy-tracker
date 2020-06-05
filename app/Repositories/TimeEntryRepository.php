@@ -60,7 +60,7 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var ProjectRepository $projectRepo */
         $projectRepo = app(ProjectRepository::class);
-        $data['projects'] = $projectRepo->getLoginUserAssignProjectsArr();
+        $data['projects'] = $projectRepo->getLoginUserAssignTasksProjects();
 
         /** @var UserRepository $userRepo */
         $userRepo = app(UserRepository::class);
@@ -140,7 +140,7 @@ class TimeEntryRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return TimeEntry
+     * @return bool
      */
     public function store($input)
     {
@@ -148,9 +148,11 @@ class TimeEntryRepository extends BaseRepository
 
         $this->assignTaskToAdmin($input);
 
-        $timeEntry = TimeEntry::create($input);
+        if ($input['duration'] > 0) {
+            $timeEntry = TimeEntry::create($input);
+        }
 
-        return $timeEntry;
+        return true;
     }
 
     /**
@@ -195,7 +197,9 @@ class TimeEntryRepository extends BaseRepository
                 $input['end_time'] = '';
             }
         }
-        $this->update($input, $id);
+        if ($input['duration'] > 0) {
+            $this->update($input, $id);
+        }
 
         return true;
     }
@@ -226,10 +230,6 @@ class TimeEntryRepository extends BaseRepository
 
         if ($input['duration'] > 720) {
             throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
-        }
-
-        if ($input['duration'] < 1) {
-            throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
         }
 
         $this->checkDuplicateEntry($input, $id);

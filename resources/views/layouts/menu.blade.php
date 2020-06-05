@@ -28,13 +28,11 @@
 </li>
 @endcan
 
-@can('manage_all_tasks')
 <li class="nav-item {{ Request::is('tasks*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('tasks.index') !!}">
         <i class="fa fa-tasks nav-icon" aria-hidden="true"></i>&nbsp;&nbsp;Tasks
     </a>
 </li>
-@endcan
 
 <li class="nav-item {{ Request::is('time-entries*') ? 'active' : '' }}">
     <a class="nav-link" href="{!! route('time-entries.index') !!}">
