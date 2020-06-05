@@ -26,7 +26,13 @@
                             {!! Form::text('start_time', null, ['class' => 'form-control','id'=>'startTime', 'autocomplete' => 'off','required']) !!}
                         </div>
                     </div>
-                    <div class="col-sm-8">
+                    @can('manage_time_entries')
+                        <div class="col-sm-4">
+                            {!! Form::label('User', 'User') !!}<span class="required">*</span>
+                            {!! Form::select('user_id', $users, Auth::id(), ['id' => 'timeUserId', 'class' => 'form-control', 'required', 'placeholder' => 'Select User']) !!}
+                        </div>
+                    @endcan
+                    <div class="@if(Auth::user()->can('manage_time_entries')) col-sm-4 @else col-sm-8 @endif">
                         {!! Form::label('Activity Type', 'Activity Type') !!}<span class="required">*</span>
                         {!! Form::select('activity_type_id', $activityTypes, null, ['id'=>'activityTypeId','class' => 'form-control','required', 'placeholder'=>'Select Activity']) !!}
                     </div>

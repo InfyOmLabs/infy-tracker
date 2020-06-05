@@ -17,6 +17,11 @@ $('#activityTypeId,#editActivityTypeId').select2({
     placeholder: 'Select Activity Type',
 })
 
+$('#timeUserId,#editTimeUserId').select2({
+    width: '100%',
+    placeholder: 'Select User',
+})
+
 let isEdit = false
 let editTaskId, editProjectId = null
 let tbl = $('#timeEntryTable').DataTable({
@@ -229,6 +234,7 @@ $('#timeEntryAddModal').on('hidden.bs.modal', function () {
     $('#startTime').data('DateTimePicker').date(null)
     $('#endTime').data('DateTimePicker').date(null)
     $('#taskId').val(null).trigger('change')
+    $('#timeUserId').val(null).trigger('change')
     $('#activityTypeId').val(null).trigger('change')
     $('#duration').prop('disabled', false)
     $('#startTime').prop('disabled', false)
@@ -347,9 +353,7 @@ window.renderTimeEntry = function (id) {
                 let timeEntry = result.data
                 editTaskId = timeEntry.task_id
                 editProjectId = timeEntry.project_id
-                $('#editTimeProjectId').
-                    val(timeEntry.project_id).
-                    trigger('change')
+                $('#editTimeUserId').val(timeEntry.user_id).trigger('change')
                 $('#entryId').val(timeEntry.id)
                 $('#editTaskId').val(timeEntry.task_id).trigger('change')
                 $('#editActivityTypeId').
@@ -362,8 +366,13 @@ window.renderTimeEntry = function (id) {
                 $('#editTimeEntryModal').modal('show')
                 //add it cause of project_id change, when it change it sets tasks dynamically and selected task_id vanished
                 setTimeout(function () {
-                    $('#editTaskId').val(timeEntry.task_id).trigger('change')
+                    $('#editTimeProjectId').
+                        val(timeEntry.project_id).
+                        trigger('change')
                 }, 1500)
+                setTimeout(function () {
+                    $('#editTaskId').val(timeEntry.task_id).trigger('change')
+                }, 2500)
             }
         },
         error: function (error) {
@@ -472,3 +481,54 @@ window.copyTextToClipBoard = function(resultData) {
     document.execCommand("copy");
     copyFrom.remove();
 };
+
+window.getProjectsByUser = function (
+    userId, projectId, selectedId, errorBoxId) {
+    if (!(userId > 0)) {
+        return false
+    }
+    const usersProjectsURL = projectsURL + userId + '/users'
+
+    $.ajax({
+        url: usersProjectsURL,
+        type: 'get',
+        success: function (result) {
+            const projects = result.data
+            if (selectedId > 0) {
+                let options = '<option value="0" disabled>Select Project</option>'
+            } else {
+                let options = '<option value="0" disabled selected>Select Project</option>'
+            }
+            $.each(projects, function (key, value) {
+                if (selectedId > 0 && selectedId == key) {
+                    options += '<option value="' + key + '" selected>' + value +
+                        '</option>'
+                } else {
+                    options += '<option value="' + key + '">' + value +
+                        '</option>'
+                }
+            })
+            $(projectId).html(options)
+            if (selectedId > 0) {
+                $(projectId).val(selectedId).trigger('change')
+            }
+        },
+        error: function (result) {
+            printErrorMessage(errorBoxId, result)
+        },
+    })
+}
+
+$('#timeUserId').on('change', function () {
+    $('#taskId').select2('val', '')
+    $('#timeProjectId').select2('val', '')
+    const userId = $(this).val()
+    getProjectsByUser(userId, '#timeProjectId', 0, '#tmValidationErrorsBox')
+})
+
+$('#editTimeUserId').on('change', function () {
+    $('#editTaskId').select2('val', '')
+    $('#editTimeProjectId').select2('val', '')
+    const userId = $(this).val()
+    getProjectsByUser(userId, '#timeProjectId', 0, '#tmValidationErrorsBox')
+})

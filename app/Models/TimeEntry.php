@@ -102,6 +102,7 @@ class TimeEntry extends Model
      * @var array
      */
     public static $rules = [
+        'user_id'          => 'integer',
         'task_id'          => 'required',
         'activity_type_id' => 'required',
         'start_time'       => 'date|date_format:Y-m-d H:i:s',

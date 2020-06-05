@@ -234,7 +234,11 @@ class TimeEntryRepository extends BaseRepository
 
         $this->checkDuplicateEntry($input, $id);
 
-        $input['user_id'] = getLoggedInUserId();
+        $loggedInUser = getLoggedInUser();
+
+        if (!$loggedInUser->can('manage_time_entries')) {
+            $input['user_id'] = getLoggedInUserId();
+        }
         if (!isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
