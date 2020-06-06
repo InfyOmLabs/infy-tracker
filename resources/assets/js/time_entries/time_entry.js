@@ -1,9 +1,16 @@
+let timeRange = $('#time_range');
+const today = moment();
+let start = today.clone().startOf('month');
+let end = today.clone().endOf('month');
+let userId = $('#filterUser').val();
+const lastMonth = moment().startOf('month').subtract(1, 'days');
+
 $('#taskId,#editTaskId').select2({
     width: '100%',
     placeholder: 'Select Task',
-})
+});
 
-$('#duration').prop('disabled', true)
+$('#duration').prop('disabled', true);
 
 $('#timeProjectId,#editTimeProjectId').select2({
     width: '100%',
@@ -28,11 +35,12 @@ let tbl = $('#timeEntryTable').DataTable({
         data: function (data) {
             data.filter_project = $('#filter_project').
                 find('option:selected').
-                val()
+                val();
             data.filter_activity = $('#filterActivity').
                 find('option:selected').
-                val()
-            data.filter_user = $('#filterUser').find('option:selected').val()
+                val();
+            data.filter_user = $('#filterUser').find('option:selected').val();
+            data.filter_date = timeRange.val();  // this will take the value directly from the daterangepicker plugin instance
         },
     },
     columnDefs: [
@@ -464,11 +472,48 @@ $('#copyTodayEntry').on('click', function () {
 });
 
 // function to copy text to clipboard
-window.copyTextToClipBoard = function(resultData) {
-    let copyFrom = document.createElement("textarea");
+window.copyTextToClipBoard = function (resultData) {
+    let copyFrom = document.createElement('textarea');
     document.body.appendChild(copyFrom);
     copyFrom.textContent = resultData;
     copyFrom.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     copyFrom.remove();
 };
+
+// Time Entries filter script
+window.cb = function (start, end) {
+    timeRange.find('span').
+        html(start.format('MMM D, YYYY') + ' - ' + end.format('MMM D, YYYY'));
+};
+
+// setting the date into the element
+cb(start, end);
+
+// instantiate the plugin
+timeRange.daterangepicker({
+    startDate: start,
+    endDate: end,
+    opens: 'left',
+    showDropdowns: true,
+    autoUpdateInput: false,
+    ranges: {
+        'Today': [moment(), moment()],
+        'This Week': [moment().startOf('week'), moment().endOf('week')],
+        'Last Week': [
+            moment().startOf('week').subtract(7, 'days'),
+            moment().startOf('week').subtract(1, 'days')],
+        'This Month': [start, end],
+        'Last Month': [
+            lastMonth.clone().startOf('month'),
+            lastMonth.clone().endOf('month')],
+    },
+}, cb);
+
+// this will fire the daterangepicker plugin change when the date has been changed
+timeRange.on('apply.daterangepicker', function (ev, picker) {
+    $(this).
+        val(picker.startDate.format('YYYY-MM-DD') + ' - ' +
+            picker.endDate.format('YYYY-MM-DD'));
+    tbl.ajax.reload();
+});
