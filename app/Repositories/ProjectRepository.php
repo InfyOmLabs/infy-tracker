@@ -177,18 +177,19 @@ class ProjectRepository extends BaseRepository
 
     /**
      * @param $userId
+     *
      * @return Collection
      */
     public function getAnyUserAssignTasksProjects($userId)
     {
         /** @var Builder|Project $query */
         $query = Project::orderBy('name')
-            ->whereHas('users', function (Builder $query) use($userId) {
+            ->whereHas('users', function (Builder $query) use ($userId) {
                 $query->where('user_id', $userId);
             })
-            ->whereHas('tasks', function (Builder $query) use($userId) {
+            ->whereHas('tasks', function (Builder $query) use ($userId) {
                 $query->where('status', '=', 0)
-                    ->whereHas('taskAssignee', function (Builder $query) use($userId) {
+                    ->whereHas('taskAssignee', function (Builder $query) use ($userId) {
                         $query->where('user_id', $userId);
                     });
             });
