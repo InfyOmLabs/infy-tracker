@@ -10,6 +10,14 @@
             <div class="modal-body">
                 <div class="alert alert-danger" style="display: none" id="teEditValidationErrorsBox"></div>
                 {!! Form::hidden('entry_id',null,['id'=>'entryId']) !!}
+                @can('manage_time_entries')
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {!! Form::label('User', 'User') !!}<span class="required">*</span>
+                            {!! Form::select('user_id', $users, null, ['id' => 'editTimeUserId', 'class' => 'form-control', 'required', 'placeholder' => 'Select User']) !!}
+                        </div>
+                    </div>
+                @endcan
                 <div class="form-group row">
                     <div class="col-sm-4">
                         {!! Form::label('project', 'Project') !!}<span class="required">*</span>
@@ -27,13 +35,7 @@
                             {!! Form::text('start_time', null, ['class' => 'form-control','id'=>'editStartTime', 'autocomplete' => 'off', 'required']) !!}
                         </div>
                     </div>
-                    @can('manage_time_entries')
-                        <div class="col-sm-4">
-                            {!! Form::label('User', 'User') !!}<span class="required">*</span>
-                            {!! Form::select('user_id', $users, null, ['id' => 'editTimeUserId', 'class' => 'form-control', 'required', 'placeholder' => 'Select User']) !!}
-                        </div>
-                    @endcan
-                    <div class="@if(Auth::user()->can('manage_time_entries')) col-sm-4 @else col-sm-8 @endif">
+                    <div class="col-sm-8">
                         {!! Form::label('Activity Type', 'Activity Type') !!}<span class="required">*</span>
                         {!! Form::select('activity_type_id', $activityTypes, null, ['id'=>'editActivityTypeId','class' => 'form-control','required','placeholder'=>'Select Task']) !!}
                     </div>

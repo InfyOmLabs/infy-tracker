@@ -221,12 +221,16 @@ $('#timeEntryAddForm').submit(function (event) {
             }
         },
         error: function (result) {
-            printErrorMessage('#tmValidationErrorsBox', result)
+            printErrorMessage('#tmAddValidationErrorsBox', result)
         },
         complete: function () {
             loadingButton.button('reset')
         },
     })
+})
+
+$('#timeEntryAddModal').on('show.bs.modal', function () {
+    $('#timeUserId').val(loggedInUserId).trigger('change.select2')
 })
 
 $('#timeEntryAddModal').on('hidden.bs.modal', function () {
@@ -239,7 +243,7 @@ $('#timeEntryAddModal').on('hidden.bs.modal', function () {
     $('#duration').prop('disabled', false)
     $('#startTime').prop('disabled', false)
     $('#endTime').prop('disabled', false)
-    resetModalForm('#timeEntryAddForm', '#tmValidationErrorsBox')
+    resetModalForm('#timeEntryAddForm', '#tmAddValidationErrorsBox')
 })
 
 $('#startTime,#endTime').on('dp.change', function () {
@@ -372,7 +376,7 @@ window.renderTimeEntry = function (id) {
                 }, 1500)
                 setTimeout(function () {
                     $('#editTaskId').val(timeEntry.task_id).trigger('change')
-                }, 2500)
+                }, 3000)
             }
         },
         error: function (error) {
@@ -432,7 +436,7 @@ window.getTasksByProject = function (
 $('#timeProjectId').on('change', function () {
     $('#taskId').select2('val', '')
     const projectId = $(this).val()
-    getTasksByProject(projectId, '#taskId', 0, '#tmValidationErrorsBox')
+    getTasksByProject(projectId, '#taskId', 0, '#tmAddValidationErrorsBox')
 })
 
 $('#editTimeProjectId').on('change', function () {
@@ -448,7 +452,7 @@ $('#new_entry').click(function () {
     var tracketProjectId = localStorage.getItem('project_id')
     $('#timeProjectId').val(tracketProjectId)
     $('#timeProjectId').trigger('change')
-    getTasksByProject(tracketProjectId, '#taskId', 0, '#tmValidationErrorsBox')
+    getTasksByProject(tracketProjectId, '#taskId', 0, '#tmAddValidationErrorsBox')
     $('#endTime').val(moment().format('YYYY-MM-DD HH:mm:ss'))
 })
 
@@ -483,7 +487,7 @@ window.copyTextToClipBoard = function(resultData) {
 };
 
 window.getProjectsByUser = function (
-    userId, projectId, selectedId, errorBoxId) {
+    userId, projectId, taskId, selectedId, errorBoxId) {
     if (!(userId > 0)) {
         return false
     }
@@ -494,10 +498,9 @@ window.getProjectsByUser = function (
         type: 'get',
         success: function (result) {
             const projects = result.data
+            let options = '<option value="0" disabled selected>Select Project</option>'
             if (selectedId > 0) {
-                let options = '<option value="0" disabled>Select Project</option>'
-            } else {
-                let options = '<option value="0" disabled selected>Select Project</option>'
+                options = '<option value="0" disabled>Select Project</option>'
             }
             $.each(projects, function (key, value) {
                 if (selectedId > 0 && selectedId == key) {
@@ -509,6 +512,7 @@ window.getProjectsByUser = function (
                 }
             })
             $(projectId).html(options)
+            $(taskId).html('')
             if (selectedId > 0) {
                 $(projectId).val(selectedId).trigger('change')
             }
@@ -523,12 +527,12 @@ $('#timeUserId').on('change', function () {
     $('#taskId').select2('val', '')
     $('#timeProjectId').select2('val', '')
     const userId = $(this).val()
-    getProjectsByUser(userId, '#timeProjectId', 0, '#tmValidationErrorsBox')
+    getProjectsByUser(userId, '#timeProjectId', '#taskId', 0, '#tmAddValidationErrorsBox')
 })
 
 $('#editTimeUserId').on('change', function () {
     $('#editTaskId').select2('val', '')
     $('#editTimeProjectId').select2('val', '')
     const userId = $(this).val()
-    getProjectsByUser(userId, '#timeProjectId', 0, '#tmValidationErrorsBox')
+    getProjectsByUser(userId, '#editTimeProjectId', '#editTaskId', 0, '#teEditValidationErrorsBox')
 })
