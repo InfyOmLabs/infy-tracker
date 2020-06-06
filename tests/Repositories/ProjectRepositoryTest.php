@@ -79,10 +79,12 @@ class ProjectRepositoryTest extends TestCase
         foreach ($projects as $project) {
             $project->users()->sync([$this->defaultUserId]);
             $projectIds[] = $project->id;
+            $task = factory(Task::class)->create(['project_id' => $project->id]);
+            $task->taskAssignee()->sync([$this->loggedInUserId]);
         }
 
         $totalProjects = $this->projectRepo->getProjectsList();
-        $this->assertCount(4, $totalProjects);
+        $this->assertCount(7, $totalProjects);
 
         /** @var Collection $myProjects */
         $myProjects = $this->projectRepo->getMyProjects();

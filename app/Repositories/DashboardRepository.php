@@ -36,6 +36,7 @@ class DashboardRepository
             ->get();
 
         $projects = [];
+        $totalHrs = [];
         /** @var TimeEntry $entry */
         foreach ($timeEntry as $entry) {
             $date = Carbon::parse($entry->start_time)->startOfDay()->format('Y-m-d');
@@ -50,6 +51,11 @@ class DashboardRepository
             }
             $oldDuration = $projects[$name][$date];
             $projects[$name][$date] = $oldDuration + $entry->duration;
+            if (!isset($totalHrs[$date])) {
+                $totalHrs[$date] = 0;
+            }
+
+            $totalHrs[$date] += $entry->duration;
         }
 
         $data = [];
@@ -72,12 +78,19 @@ class DashboardRepository
         $result = [];
         // preparing a date array for displaying a labels
         foreach ($dates['dateArr'] as $date) {
-            $date = date('jS M', strtotime($date));
-            $result['date'][] = $date;
+            $formattedDate = date('jS M', strtotime($date));
+            if (isset($totalHrs[$date])) {
+                $totalHrs[$formattedDate] = round($totalHrs[$date] / 60, 2);
+                unset($totalHrs[$date]);
+            } else {
+                $totalHrs[$formattedDate] = 0;
+            }
+            $result['date'][] = $formattedDate;
         }
         $result['projects'] = array_keys($projects);
         $result['data'] = $data;
         $result['totalRecords'] = $totalRecords;
+        $result['totalHrs'] = $totalHrs;
         $result['label'] = Carbon::parse($input['start_date'])->format('d M, Y').' - '.Carbon::parse($input['end_date'])->format('d M, Y');
 
         return $result;

@@ -180,7 +180,12 @@ class TaskRepository extends BaseRepository
 
         /** @var UserRepository $userRepo */
         $userRepo = app(UserRepository::class);
-        $data['assignees'] = $userRepo->getUserList();
+        // return all users who has manage task permission otherwise return only logged in user
+        if (getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
+            $data['assignees'] = $userRepo->getUserList();
+        } else {
+            $data['assignees'] = $userRepo->getUserList()->only(getLoggedInUserId());
+        }
 
         /** @var ActivityTypeRepository $activityTypeRepo */
         $activityTypeRepo = app(ActivityTypeRepository::class);
