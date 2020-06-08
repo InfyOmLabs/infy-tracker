@@ -108,7 +108,7 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
     });
 
     Route::group(['middleware' => ['permission:manage_time_entries']], function () {
-        Route::get('projects/{user}/users', 'ProjectController@getAnyUsersProjects');
+        Route::get('projects/{user}/users', 'ProjectController@getProjectsByUser');
     });
 });
 

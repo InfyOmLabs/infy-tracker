@@ -180,7 +180,7 @@ class ProjectRepository extends BaseRepository
      *
      * @return Collection
      */
-    public function getAnyUserAssignTasksProjects($userId)
+    public function getProjectsByUserId($userId)
     {
         /** @var Builder|Project $query */
         $query = Project::orderBy('name')

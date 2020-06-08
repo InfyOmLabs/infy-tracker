@@ -162,9 +162,9 @@ class ProjectController extends AppBaseController
      *
      * @return JsonResponse
      */
-    public function getAnyUsersProjects(User $user)
+    public function getProjectsByUser(User $user)
     {
-        $projectList = $this->projectRepository->getAnyUserAssignTasksProjects($user->id);
+        $projectList = $this->projectRepository->getProjectsByUserId($user->id);
 
         return $this->sendResponse($projectList, 'Projects Retrieved successfully.');
     }
