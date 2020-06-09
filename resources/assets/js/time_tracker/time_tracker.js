@@ -303,13 +303,13 @@ $('#adjustStartTime,#adjustEndTime').on('dp.change', function () {
             minutes = minutes.toFixed(2)
         }
     }
-    $('#adjustDuration').val(minutes).prop('disabled', true)
-    $('#adjustStartTime').data('DateTimePicker').maxDate(moment().endOf('now'))
-    $('#adjustEndTime').data('DateTimePicker').maxDate(moment().endOf('now'))
-    if (minutes < 720) {
-        $('#tmAdjustValidationErrorsBox').hide()
+    $('#adjustDuration').val(minutes).prop('disabled', true);
+    $('#adjustStartTime').data('DateTimePicker').maxDate(moment().endOf('now'));
+    $('#adjustEndTime').data('DateTimePicker').maxDate(moment().endOf('now'));
+    if (minutes < 720.00) {
+        $('#tmAdjustValidationErrorsBox').hide();
     }
-})
+});
 
 $('#adjustBtnSave').click(function () {
     let startTime = $('#adjustStartTime').val()
