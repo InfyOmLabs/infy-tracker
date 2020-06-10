@@ -182,7 +182,7 @@ class ProjectRepository extends BaseRepository
     {
         /** @var Builder|Project $query */
         $query = Project::orderBy('name');
-        if (! getLoggedInUser()->hasPermissionTo('manage_time_entries')) {
+        if (!getLoggedInUser()->hasPermissionTo('manage_time_entries')) {
             $query = getLoggedInUser()->projects; // get assigned projects list for particular user
         }
 
