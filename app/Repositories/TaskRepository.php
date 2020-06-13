@@ -405,10 +405,6 @@ class TaskRepository extends BaseRepository
     public function uploadFile($id, $file)
     {
         $extension = $file->getClientOriginalExtension();
-        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'JPG', 'jpeg', 'png', 'PNG'])) {
-            throw new UnprocessableEntityHttpException('You can not upload this file.');
-        }
-
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 
