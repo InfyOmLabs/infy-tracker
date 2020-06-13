@@ -106,6 +106,10 @@ Route::group(['middleware' => ['auth', 'validate.user', 'user.activated']], func
         Route::resource('departments', 'DepartmentController');
         Route::post('departments/{department}/update', 'DepartmentController@update');
     });
+
+    Route::group(['middleware' => ['permission:manage_time_entries']], function () {
+        Route::get('projects/{user}/users', 'ProjectController@getProjectsByUser');
+    });
 });
 
 Route::fallback(function () {

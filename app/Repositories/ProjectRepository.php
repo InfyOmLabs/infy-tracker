@@ -174,4 +174,26 @@ class ProjectRepository extends BaseRepository
         $project->update(['deleted_by' => getLoggedInUserId()]);
         $project->delete();
     }
+
+    /**
+     * @param $userId
+     *
+     * @return Collection
+     */
+    public function getProjectsByUserId($userId)
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name')
+            ->whereHas('users', function (Builder $query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->whereHas('tasks', function (Builder $query) use ($userId) {
+                $query->where('status', '=', 0)
+                    ->whereHas('taskAssignee', function (Builder $query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    });
+            });
+
+        return $query->pluck('name', 'id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\User;
 use App\Queries\ProjectDataTable;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProjectRepository;
@@ -154,5 +155,17 @@ class ProjectController extends AppBaseController
         $users = $this->userRepository->getUserList($projectIdsArr);
 
         return $this->sendResponse($users, 'Users Retrieved successfully.');
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return JsonResponse
+     */
+    public function getProjectsByUser(User $user)
+    {
+        $projectList = $this->projectRepository->getProjectsByUserId($user->id);
+
+        return $this->sendResponse($projectList, 'Projects Retrieved successfully.');
     }
 }

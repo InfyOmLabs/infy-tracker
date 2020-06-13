@@ -136,6 +136,7 @@ class TimeEntryControllerValidationTest extends TestCase
     public function it_can_add_time_entry_of_logged_in_user()
     {
         $inputs = $this->timeEntryInputs();
+        $inputs['user_id'] = $this->loggedInUserId;
         $this->post(route('time-entries.store'), $inputs)->assertSessionHasNoErrors();
 
         $timeEntry = TimeEntry::latest()->first();
