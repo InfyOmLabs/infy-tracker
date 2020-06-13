@@ -68,25 +68,25 @@ $(document).on('click', '.edit-btn', function (event) {
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                let task = result.data.task
-                let allTags = result.data.tags
-                $('#editTagIds').empty()
+                let task = result.data.task;
+                let allTags = result.data.tags;
+                $('#editTagIds').empty();
                 $.each(allTags, function (i, e) {
                     $('#editTagIds').
-                        append($('<option>', { value: i, text: e }))
-                })
+                        append($('<option>', { value: i, text: e }));
+                });
 
-                let desc = $('<div/>').html(task.description).text()
-                CKEDITOR.instances.editDesc.setData(desc)
-                $('#tagId').val(task.id)
-                $('#editTitle').val(task.title)
-                $('#editDesc').val(task.description)
-                $('#editDueDate').val(task.due_date)
-                $('#editProjectId').val(task.project.id).trigger('change')
-                $('#editStatus').val(task.status)
-                var tagsIds = []
-                var userIds = []
-                taskAssignees = []
+                let desc = task.description;
+                quillTask.clipboard.dangerouslyPasteHTML(0, desc);  // to set the HTML content to Quill Editor instance/container
+                $('#tagId').val(task.id);
+                $('#editTitle').val(task.title);
+                $('#taskEditDescription').val(task.description);
+                $('#editDueDate').val(task.due_date);
+                $('#editProjectId').val(task.project.id).trigger('change');
+                $('#editStatus').val(task.status);
+                var tagsIds = [];
+                var userIds = [];
+                taskAssignees = [];
                 $(task.tags).each(function (i, e) {
                     tagsIds.push(e.id)
                 })
@@ -145,17 +145,18 @@ function loadProjectAssignees (projectId, selector) {
 }
 
 $('#editForm').submit(function (event) {
-    event.preventDefault()
-    var loadingButton = jQuery(this).find('#btnTaskEditSave')
-    loadingButton.button('loading')
-    var id = $('#tagId').val()
-    let formdata = $(this).serializeArray()
-    let desc = CKEDITOR.instances.editDesc.getData()
+    event.preventDefault();
+    var loadingButton = jQuery(this).find('#btnTaskEditSave');
+    loadingButton.button('loading');
+    var id = $('#tagId').val();
+    let formdata = $(this).serializeArray();
+    let desc = quillTask.root.innerHTML;  // retrieve the HTML content from the Quill container
     $.each(formdata, function (i, val) {
-        if (val.name == 'description') {
-            formdata[i].value = desc
+        // getText() for Quill Editor will get the text of the specific editor instance
+        if (val.name == 'description' && quillTask.getText() !== '') {
+            formdata[i].value = desc;
         }
-    })
+    });
     $.ajax({
         url: taskUrl + id,
         type: 'put',
@@ -173,8 +174,9 @@ $('#editForm').submit(function (event) {
 })
 
 $('#EditModal').on('hidden.bs.modal', function () {
-    CKEDITOR.instances.editDesc.setData('')
-    resetModalForm('#editForm', '#editValidationErrorsBox')
+    // to empty content of the Quill Editor instance/container
+    quillTask.setContents([{ insert: '\n' }]);
+    resetModalForm('#editForm', '#editValidationErrorsBox');
 })
 
 // light box image galary
@@ -363,32 +365,34 @@ function addCommentSection (comment) {
         '        </div>\n' +
         '        <div class="user__comment d-none comment-edit comment-edit-' +
         id + '">\n' +
-        '           <textarea class="form-control" id="comment-edit-' + id +
-        '" rows="4" name="comment">' + comment.comment + '</textarea>\n' +
+        '           <div id="commentEditContainer' + id +
+        '" class="quill-editor-container"></div>\n' +
         '        </div>\n' +
         '    </div>'
 }
 
 $('#btnComment').click(function (event) {
-    let comment = CKEDITOR.instances.comment.getData()
-    if (comment == '' || comment.trim() == '') {
-        return false
+    let comment = quillComment.root.innerHTML;  // retrieve the HTML content from the Quill container
+
+    // this will check whether the Quill Editor has empty and doesn't have any content entered in it
+    if (quillComment.getText().trim().length === 0) {
+        return false;
     }
-    let loadingButton = $(this)
-    loadingButton.button('loading')
+    let loadingButton = $(this);
+    loadingButton.button('loading');
     $.ajax({
         url: baseUrl + 'tasks/' + taskId + '/comments',
         type: 'post',
-        data: { 'comment': comment },
+        data: { 'comment': comment.trim() },
         success: function (result) {
             if (result.success) {
-                processAddCommentResponce(result.data.comment)
+                processAddCommentResponce(result.data.comment);
             }
-            loadingButton.button('reset')
+            loadingButton.button('reset');
         },
         error: function (result) {
-            loadingButton.button('reset')
-            printErrorMessage('#taskValidationErrorsBox', result)
+            loadingButton.button('reset');
+            printErrorMessage('#taskValidationErrorsBox', result);
         },
     })
 })
@@ -435,10 +439,10 @@ $(document).on('click', '.del-comment', function (event) {
 })
 
 function processAddCommentResponce (result) {
-    let commentDiv = addCommentSection(result)
-    $('.comments').append(commentDiv)
-    CKEDITOR.instances.comment.setData('')
-    $('.no_comments').hide()
+    let commentDiv = addCommentSection(result);
+    $('.comments').append(commentDiv);
+    quillComment.setContents([{ insert: '\n' }]);  // to empty content of the Quill Editor instance/container
+    $('.no_comments').hide();
 }
 
 function processDeleteCommentResponce (commentId, taskId) {
@@ -464,37 +468,62 @@ function processUpdateCommentResponce (commentId, comment) {
     $('.comment-cancel-icon-' + commentId).addClass('d-none')
 }
 
+let quillCommentEdit = [];
 $(document).on('click', '.comment-display,.edit-comment', function () {
-    let commentId = $(this).data('id')
-    let commentClass = 'comment-edit-' + commentId
-    $('.comment-display-' + commentId).addClass('d-none')
+    let commentId = $(this).data('id');
 
-    if (!CKEDITOR.instances[commentClass]) {
-        CKEDITOR.replace(commentClass, {
-            language: 'en',
-            height: '100px',
-        })
+    $(document).find('[class*=\'comment-display-\']').removeClass('d-none');
+    $(document).find('[class*=\'comment-edit-\']').addClass('d-none');
+    $(document).find('[class*=\'comment-save-icon-\']').addClass('d-none');
+    $(document).find('[class*=\'comment-cancel-icon-\']').addClass('d-none');
+
+    $('.comment-display-' + commentId).addClass('d-none');
+    if ($('#commentEditContainer' + commentId).html() === '') {
+        setCommentEditData(commentId);
+    } else {
+        let commentData = $.trim($('.comment-display-' + commentId).html());
+        quillCommentEdit[commentId].setContents([{ insert: '\n' }]);  // to empty content of the Quill Editor instance/container
+        quillCommentEdit[commentId].clipboard.dangerouslyPasteHTML(0,
+            commentData);  // to set the HTML content to Quill Editor instance/container
     }
 
-    $('.comment-edit-' + commentId).removeClass('d-none')
-    $('.comment-save-icon-' + commentId).removeClass('d-none')
-    $('.comment-cancel-icon-' + commentId).removeClass('d-none')
+    $('.comment-edit-' + commentId).removeClass('d-none');
+    $('.comment-save-icon-' + commentId).removeClass('d-none');
+    $('.comment-cancel-icon-' + commentId).removeClass('d-none');
 })
+
+/*
+   - This method will create separate Quill Editor instance (but only once, then after it will use the existing created one) when some
+   one will edit the comment.
+
+   - After creating the instance, it will set the data back to the editor in order to edit the comment.
+ */
+window.setCommentEditData = function (commentId) {
+    // create new Quill Editor instance
+    quillCommentEdit[commentId] = new Quill('#commentEditContainer' + commentId,
+        {
+            theme: 'snow',
+            placeholder: 'Add task description...',
+        });
+    let commentData = $.trim($('.comment-display-' + commentId).html());
+    quillCommentEdit[commentId].clipboard.dangerouslyPasteHTML(0, commentData);  // to set the HTML content to Quill Editor instance/container
+};
 
 $(document).on('click', '.cancel-comment', function (event) {
-    let commentId = $(this).data('id')
-    $(this).addClass('d-none')
-    $('.comment-display-' + commentId).removeClass('d-none')
-    $('.comment-edit-' + commentId).addClass('d-none')
-    $('.comment-save-icon-' + commentId).addClass('d-none')
-})
+    let commentId = $(this).data('id');
+    $(this).addClass('d-none');
+    $('.comment-display-' + commentId).removeClass('d-none');
+    $('.comment-edit-' + commentId).addClass('d-none');
+    $('.comment-save-icon-' + commentId).addClass('d-none');
+});
 
 $(document).on('click', '.save-comment', function (event) {
-    let commentId = $(this).data('id')
-    let commentClass = 'comment-edit-' + commentId
-    let comment = CKEDITOR.instances[commentClass].getData()
-    if (comment == '' || comment.trim() == '') {
-        return false
+    let commentId = $(this).data('id');
+    let comment = quillCommentEdit[commentId].root.innerHTML;  // retrieve the HTML content from the Quill container
+
+    // this will check whether the Quill Editor has empty and doesn't have any content entered in it
+    if (quillCommentEdit[commentId].getText().trim().length === 0) {
+        return false;
     }
     $.ajax({
         url: baseUrl + 'tasks/' + taskId + '/comments/' + commentId + '/update',
@@ -502,7 +531,7 @@ $(document).on('click', '.save-comment', function (event) {
         data: { 'comment': comment.trim() },
         success: function (result) {
             if (result.success) {
-                processUpdateCommentResponce(commentId, comment)
+                processUpdateCommentResponce(commentId, comment);
             }
         },
         error: function (result) {
@@ -512,28 +541,29 @@ $(document).on('click', '.save-comment', function (event) {
 })
 
 $(document).on('mouseenter', '.comments__information', function () {
-    $(this).find('.del-comment').removeClass('d-none')
-    $(this).find('.edit-comment').removeClass('d-none')
-})
+    $(this).find('.del-comment').removeClass('d-none');
+    $(this).find('.edit-comment').removeClass('d-none');
+});
 
 $(document).on('mouseleave', '.comments__information', function () {
-    $(this).find('.del-comment').addClass('d-none')
-    $(this).find('.edit-comment').addClass('d-none')
-})
+    $(this).find('.del-comment').addClass('d-none');
+    $(this).find('.edit-comment').addClass('d-none');
+});
 
-CKEDITOR.replace('comment', {
-    language: 'en',
-    height: '150px',
-})
+// quill editor initialization scripts
+let quillComment = new Quill('#commentContainer', {
+    theme: 'snow',
+    placeholder: 'Add comment...',
+});
 
-CKEDITOR.replace('editDesc', {
-    language: 'en',
-    height: '150px',
-})
+let quillTask = new Quill('#taskEditDescriptionContainer', {
+    theme: 'snow',
+    placeholder: 'Add task description...',
+});
 
 $(document).on('click', '#btnCancel', function () {
-    CKEDITOR.instances.comment.setData('')
-})
+    quillComment.setContents([{ insert: '\n' }]);
+});
 
 //modal not closed on click outside
 $('.modal').modal({ show: false, backdrop: 'static' })
