@@ -227,22 +227,23 @@ Dropzone.options.dropzone = {
             let ext = file.name.split('.').pop()
             let previewEle = ''
 
-            if ($.inArray(ext, ['jpg', 'jpeg', 'png']) > -1) {
+            if ($.inArray(ext, ['jpg', 'JPG', 'jpeg', 'png', 'PNG']) > -1) {
                 previewEle = '<a class="' + fileName +
                     '" data-fancybox="gallery" href="' + dataUrl +
-                    '" data-toggle="lightbox" data-gallery="example-gallery"></a>'
-                $('.previewEle').append(previewEle)
+                    '" data-toggle="lightbox" data-gallery="example-gallery"></a>';
+                $('.previewEle').append(previewEle);
             }
 
             file.previewElement.addEventListener('click', function () {
                 let fileName = file.previewElement.querySelector(
                     '[data-dz-name]').innerHTML
                 let fileExt = fileName.split('.').pop()
-                if ($.inArray(fileExt, ['jpg', 'jpeg', 'png']) > -1) {
-                    let onlyFileName = fileName.split('.')[0]
-                    $('.' + onlyFileName).trigger('click')
+                if ($.inArray(fileExt, ['jpg', 'JPG', 'jpeg', 'png', 'PNG']) >
+                    -1) {
+                    let onlyFileName = fileName.split('.')[0];
+                    $('.' + onlyFileName).trigger('click');
                 } else {
-                    window.open(dataUrl, '_blank')
+                    window.open(dataUrl, '_blank');
                 }
             })
         })
@@ -310,17 +311,17 @@ Dropzone.options.dropzone = {
         $(file.previewTemplate).
             find('.dz-remove').
             attr('data-file-url', attachment.file_url)
-        if ($.inArray(newFileExt, ['jpg', 'jpge', 'png']) > -1) {
+        if ($.inArray(newFileExt, ['jpg', 'JPG', 'jpeg', 'png', 'PNG']) > -1) {
             $('.previewEle').
                 find('.' + prevFileName).
-                attr('href', attachment.file_url)
+                attr('href', attachment.file_url);
             $('.previewEle').
                 find('.' + prevFileName).
-                attr('class', newFileName)
+                attr('class', newFileName);
         } else {
             file.previewElement.addEventListener('click', function () {
-                window.open(attachment.file_url, '_blank')
-            })
+                window.open(attachment.file_url, '_blank');
+            });
         }
     },
     error: function (file, response) {
