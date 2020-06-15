@@ -191,14 +191,14 @@ class TimeEntryController extends AppBaseController
             if (!isset($projects[$entry->task->project->name][$entry->task_id]['note'])) {
                 $projects[$entry->task->project->name][$entry->task_id]['note'] = '';
             }
-            $projects[$entry->task->project->name][$entry->task_id]['note'] .= "\t\t * ".$entry->note."\n";
+            $projects[$entry->task->project->name][$entry->task_id]['note'] .= "\n".$entry->note."\n";
         }
 
         foreach ($projects as $name => $project) {
-            $note .= "\n*".$name."*\n";
+            $note .= "\n".$name."\n";
 
             foreach ($project as $task) {
-                $note .= "\t- ".$task['name'];
+                $note .= "\n* ".$task['name'];
                 $note .= $task['note'];
             }
         }
