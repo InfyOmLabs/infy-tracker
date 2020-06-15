@@ -24,7 +24,7 @@
                     @endcan
                     <div class="mr-2">
                         <label class="lbl-block"><b>Project</b></label>
-                        {!!Form::select('drp_project',$projects,null,['id'=>'filter_project','class'=>'form-control','style'=>'min-width:150px;', 'placeholder' => 'All'])  !!}
+                        {!!Form::select('drp_project', $projectsForFilter, null, ['id' => 'filter_project', 'class'=>'form-control', 'placeholder' => 'All'])  !!}
                     </div>
                     <div class="mr-2">
                         <label for="projects" class="lbl-block"><b>Activity Type</b></label>

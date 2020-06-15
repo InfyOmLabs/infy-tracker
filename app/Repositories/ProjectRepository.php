@@ -176,6 +176,20 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
+     * @return Collection
+     */
+    public function getProjectsHavingPermission()
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name');
+        if (!getLoggedInUser()->hasPermissionTo('manage_time_entries')) {
+            $query = getLoggedInUser()->projects; // get assigned projects list for particular user
+        }
+
+        return $query->pluck('name', 'id');
+    }
+
+    /*
      * @param $userId
      *
      * @return Collection
