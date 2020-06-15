@@ -287,25 +287,26 @@ $(document).on('click', '.edit-btn', function (event) {
         type: 'GET',
         success: function (result) {
             if (result.success) {
-                let task = result.data.task
-                let allTags = result.data.tags
-                $('#editTagIds').empty()
+                let task = result.data.task;
+                let allTags = result.data.tags;
+                $('#editTagIds').empty();
                 $.each(allTags, function (i, e) {
                     $('#editTagIds').
-                        append($('<option>', { value: i, text: e }))
-                })
+                        append($('<option>', { value: i, text: e }));
+                });
 
-                let desc = $('<div/>').html(task.description).text()
-                CKEDITOR.instances.editDesc.setData(desc)
-                $('#tagId').val(task.id)
-                $('#editTitle').val(task.title)
-                $('#editDesc').val(task.description)
-                $('#editDueDate').val(task.due_date)
-                $('#editProjectId').val(task.project.id).trigger('change')
-                $('#editStatus').val(task.status)
+                let desc = task.description;
+                quillEdit.clipboard.dangerouslyPasteHTML(0, desc);  // to set the HTML content to Quill Editor instance/container
 
-                var tagsIds = []
-                var userIds = []
+                $('#tagId').val(task.id);
+                $('#editTitle').val(task.title);
+                $('#taskEditDescription').val(task.description);
+                $('#editDueDate').val(task.due_date);
+                $('#editProjectId').val(task.project.id).trigger('change');
+                $('#editStatus').val(task.status);
+
+                var tagsIds = [];
+                var userIds = [];
                 taskAssignees = []
                 $(task.tags).each(function (i, e) {
                     tagsIds.push(e.id)
@@ -343,22 +344,22 @@ $(document).on('click', '.delete-btn', function (event) {
 })
 
 $('#addNewForm').submit(function (event) {
-    event.preventDefault()
-    let loadingButton = jQuery(this).find('#btnTaskSave')
-    loadingButton.button('loading')
+    event.preventDefault();
+    let loadingButton = jQuery(this).find('#btnTaskSave');
+    loadingButton.button('loading');
 
-    let formdata = $(this).serialize()
-    let desc = CKEDITOR.instances.description.getData()
-    formdata = formdata.replace('description=', 'description=' + desc)
+    let formdata = $(this).serialize();
+    let desc = quill.root.innerHTML;  // retrieve the HTML content from the Quill container
+    formdata = formdata.replace('description=', 'description=' + desc);
     $.ajax({
         url: createTaskUrl,
         type: 'POST',
         data: formdata,
         success: function (result) {
             if (result.success) {
-                displaySuccessMessage(result.message)
-                $('#AddModal').modal('hide')
-                $('#task_table').DataTable().ajax.reload()
+                displaySuccessMessage(result.message);
+                $('#AddModal').modal('hide');
+                $('#task_table').DataTable().ajax.reload();
                 revokerTracker()
             }
         },
@@ -377,10 +378,10 @@ $('#editForm').submit(function (event) {
     loadingButton.button('loading')
     let id = $('#tagId').val()
     let formdata = $(this).serializeArray()
-    let desc = CKEDITOR.instances.editDesc.getData()
     $.each(formdata, function (i, val) {
-        if (val.name == 'description') {
-            formdata[i].value = desc
+        // getText() for Quill Editor will get the text of the specific editor instance
+        if (val.name == 'description' && quillEdit.getText() !== '') {
+            formdata[i].value = quillEdit.root.innerHTML;
         }
     })
     $.ajax({
@@ -405,17 +406,17 @@ $('#editForm').submit(function (event) {
 })
 
 $('#AddModal').on('hidden.bs.modal', function () {
-    CKEDITOR.instances.description.setData('')
-    $('#projectId').val(null).trigger('change')
-    $('#assignee').val(null).trigger('change')
-    $('#tagIds').val(null).trigger('change')
-    $('#priority').val(null).trigger('change')
-    resetModalForm('#addNewForm', '#validationErrorsBox')
+    quill.setContents([{ insert: '\n' }]);  // to empty content of the Quill Editor instance/container
+    $('#projectId').val(null).trigger('change');
+    $('#assignee').val(null).trigger('change');
+    $('#tagIds').val(null).trigger('change');
+    $('#priority').val(null).trigger('change');
+    resetModalForm('#addNewForm', '#validationErrorsBox');
 })
 
 $('#EditModal').on('hidden.bs.modal', function () {
-    CKEDITOR.instances.editDesc.setData('')
-    resetModalForm('#editForm', '#editValidationErrorsBox')
+    quillEdit.setContents([{ insert: '\n' }]);
+    resetModalForm('#editForm', '#editValidationErrorsBox');
 })
 
 $(function () {
@@ -513,30 +514,31 @@ function setTaskDrp (id) {
 }
 
 $(document).on('click', '.entry-model', function (event) {
-    let taskId = $(event.currentTarget).data('id')
-    let projectId = $(event.currentTarget).data('project-id')
-    $('#timeProjectId').val(projectId).trigger('change')
-    getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox')
+    let taskId = $(event.currentTarget).data('id');
+    let projectId = $(event.currentTarget).data('project-id');
+    $('#timeProjectId').val(projectId).trigger('change');
+    getTasksByProject(projectId, '#taskId', taskId, '#tmValidationErrorsBox');
 
     setTimeout(function () {
-        $('#taskId').val(taskId).trigger('change')
-    }, 1500)
+        $('#taskId').val(taskId).trigger('change');
+    }, 1500);
 })
 
-CKEDITOR.replace('description', {
-    language: 'en',
-    height: '150px',
-})
+// quill editor initialization scripts
+let quill = new Quill('#taskDescriptionContainer', {
+    theme: 'snow',
+    placeholder: 'Add task description...',
+});
 
-CKEDITOR.replace('editDesc', {
-    language: 'en',
-    height: '150px',
-})
+let quillEdit = new Quill('#taskEditDescriptionContainer', {
+    theme: 'snow',
+    placeholder: 'Add task description...',
+});
 
 $(document).on('change', '#projectId', function (event) {
-    let projectId = $(this).val()
-    loadProjectAssignees(projectId, 'assignee')
-})
+    let projectId = $(this).val();
+    loadProjectAssignees(projectId, 'assignee');
+});
 
 $(document).on('change', '#editProjectId', function (event) {
     let projectId = $(this).val()

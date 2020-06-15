@@ -585,9 +585,14 @@ table.dataTable {
 }
 
 .input-group__icon {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .input-grp-text {
   background-color: #e4e7ea !important;
+}
+
+/* quill editor container height css */
+.quill-editor-container {
+  height: 200px;
 }

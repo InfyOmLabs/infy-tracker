@@ -233,9 +233,13 @@ class TimeEntryRepository extends BaseRepository
             throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
         }
 
+        $loggedInUser = getLoggedInUser();
+
+        if (!$loggedInUser->can('manage_time_entries') || !isset($input['user_id'])) {
+            $input['user_id'] = getLoggedInUserId();
+        }
         $this->checkDuplicateEntry($input, $id);
 
-        $input['user_id'] = getLoggedInUserId();
         if (!isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
@@ -267,7 +271,8 @@ class TimeEntryRepository extends BaseRepository
     public function checkDuplicateEntry($input, $id = null)
     {
         $timeArr = [$input['start_time'], $input['end_time']];
-        $query = TimeEntry::whereUserId(getLoggedInUserId())
+        $userId = $input['user_id'] ?? getLoggedInUserId();
+        $query = TimeEntry::whereUserId($userId)
             ->where(function (Builder $q) use ($timeArr) {
                 $q->whereBetween('start_time', $timeArr)
                     ->orWhereBetween('end_time', $timeArr)

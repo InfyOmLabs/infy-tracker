@@ -41,8 +41,8 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-sm-12">
-                        {!! Form::label('description', 'Description') !!}
-                        {!! Form::textarea('description', null, ['class' => 'form-control', 'id' => 'description', 'rows' => 5]) !!}
+                        <div id="taskDescriptionContainer" class="quill-editor-container"></div>
+                        <input type="hidden" name="description" id="taskDescription">
                     </div>
                 </div>
                 <div class="text-right">
