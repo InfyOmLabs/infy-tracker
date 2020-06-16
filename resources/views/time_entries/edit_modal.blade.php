@@ -10,6 +10,14 @@
             <div class="modal-body">
                 <div class="alert alert-danger" style="display: none" id="teEditValidationErrorsBox"></div>
                 {!! Form::hidden('entry_id',null,['id'=>'entryId']) !!}
+                @can('manage_time_entries')
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {!! Form::label('User', 'User') !!}<span class="required">*</span>
+                            {!! Form::select('user_id', $users, null, ['id' => 'editTimeUserId', 'class' => 'form-control', 'required', 'placeholder' => 'Select User']) !!}
+                        </div>
+                    </div>
+                @endcan
                 <div class="form-group row">
                     <div class="col-sm-4">
                         {!! Form::label('project', 'Project') !!}<span class="required">*</span>

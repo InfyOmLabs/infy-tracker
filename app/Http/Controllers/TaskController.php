@@ -135,6 +135,7 @@ class TaskController extends AppBaseController
         $tagRepo = app(TagRepository::class);
         $data['tags'] = $tagRepo->getTagList();
         $data['task'] = $task;
+        $task->description = htmlspecialchars_decode($task->description);
 
         return $this->sendResponse($data, 'Task retrieved successfully.');
     }
