@@ -3,6 +3,8 @@
     Tasks
 @endsection
 @section('page_css')
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.css">
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
     <link rel="stylesheet" href="{{ asset('assets/style/css/quill.snow.css') }}">
 @endsection
@@ -57,6 +59,7 @@
 @section('page_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
     <script src="{{ asset('assets/js/quill.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.js"></script>
 @endsection
 
 @section('scripts')
