@@ -5,6 +5,12 @@ let end = today.clone().endOf('month');
 let userId = $('#filterUser').val();
 const lastMonth = moment().startOf('month').subtract(1, 'days');
 
+$(document).ready(function () {
+    timeRange.val(start.format('YYYY-MM-DD') + ' - ' +
+            end.format('YYYY-MM-DD'));
+    tbl.ajax.reload();
+});
+
 $('#taskId,#editTaskId').select2({
     width: '100%',
     placeholder: 'Select Task',

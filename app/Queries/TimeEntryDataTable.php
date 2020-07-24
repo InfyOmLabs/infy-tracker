@@ -52,6 +52,14 @@ class TimeEntryDataTable
                 }
             }
         );
+        $query->when(
+            isset($input['filter_date']) && !empty($input['filter_date']),
+            function (Builder $q) use ($input) {
+                $timeEntryDate = explode(' - ', $input['filter_date']);
+                $q->whereDate('start_time', '>=', $timeEntryDate[0])
+                    ->whereDate('end_time', '<=', $timeEntryDate[1]);
+            }
+        );
         if (!$user->can('manage_time_entries')) {
             return $query->OfCurrentUser();
         }
@@ -59,15 +67,6 @@ class TimeEntryDataTable
             isset($input['filter_user']) && !empty($input['filter_user']),
             function (Builder $q) use ($input) {
                 $q->where('user_id', $input['filter_user']);
-            }
-        );
-
-        $query->when(
-            isset($input['filter_date']) && !empty($input['filter_date']),
-            function (Builder $q) use ($input) {
-                $timeEntryDate = explode(' - ', $input['filter_date']);
-                $q->whereDate('start_time', '>=', $timeEntryDate[0])
-                    ->whereDate('end_time', '<=', $timeEntryDate[1]);
             }
         );
 
