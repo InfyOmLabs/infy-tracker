@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Comment.
  *
- * @property int $id
- * @property string $comment
- * @property int $task_id
- * @property int $created_by
+ * @property int                             $id
+ * @property string                          $comment
+ * @property int                             $task_id
+ * @property int                             $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at

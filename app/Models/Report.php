@@ -10,11 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * App\Models\Report.
  *
- * @property int $id
- * @property string $name
- * @property int $owner_id
- * @property \Illuminate\Support\Carbon $start_date
- * @property \Illuminate\Support\Carbon $end_date
+ * @property int                             $id
+ * @property string                          $name
+ * @property int                             $owner_id
+ * @property \Illuminate\Support\Carbon      $start_date
+ * @property \Illuminate\Support\Carbon      $end_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *

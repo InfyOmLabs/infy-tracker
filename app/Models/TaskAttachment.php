@@ -9,9 +9,9 @@ use Storage;
 /**
  * App\Models\TaskAttachment.
  *
- * @property int $id
- * @property int $task_id
- * @property string|null $file
+ * @property int                             $id
+ * @property int                             $task_id
+ * @property string|null                     $file
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read mixed $file_path

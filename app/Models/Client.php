@@ -15,12 +15,12 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Client.
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string $website
- * @property int $deleted_by
- * @property int|null $created_by
+ * @property int         $id
+ * @property string      $name
+ * @property string      $email
+ * @property string      $website
+ * @property int         $deleted_by
+ * @property int|null    $created_by
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User|null $createdUser
