@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Tag.
  *
- * @property int $id
- * @property string $name
- * @property int|null $created_by
- * @property int $deleted_by
+ * @property int                             $id
+ * @property string                          $name
+ * @property int|null                        $created_by
+ * @property int                             $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser

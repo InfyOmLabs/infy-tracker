@@ -14,11 +14,11 @@ use Spatie\Permission\Traits\HasPermissions;
 /**
  * App\Models\Role.
  *
- * @property int $id
- * @property string $name
- * @property string|null $display_name
- * @property string|null $description
- * @property string $guard_name
+ * @property int                             $id
+ * @property string                          $name
+ * @property string|null                     $display_name
+ * @property string|null                     $description
+ * @property string                          $guard_name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions

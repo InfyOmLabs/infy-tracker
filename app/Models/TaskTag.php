@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\TaskTag.
  *
- * @property int $id
- * @property int $task_id
+ * @property int    $id
+ * @property int    $task_id
  * @property string $tag_id
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\TaskTag newModelQuery()
