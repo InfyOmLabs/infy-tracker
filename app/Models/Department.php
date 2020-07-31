@@ -11,8 +11,8 @@ use Illuminate\Support\Carbon;
  *
  * @version April 8, 2020, 10:51 am UTC
  *
- * @property int $id
- * @property string $name
+ * @property int         $id
+ * @property string      $name
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property string|null $deleted_at
