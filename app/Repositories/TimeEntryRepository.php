@@ -60,7 +60,8 @@ class TimeEntryRepository extends BaseRepository
     {
         /** @var ProjectRepository $projectRepo */
         $projectRepo = app(ProjectRepository::class);
-        $data['projects'] = $projectRepo->getLoginUserAssignProjectsArr();
+        $data['projects'] = $projectRepo->getLoginUserAssignTasksProjects();
+        $data['projectsForFilter'] = $projectRepo->getProjectsHavingPermission();
 
         /** @var UserRepository $userRepo */
         $userRepo = app(UserRepository::class);
@@ -140,7 +141,7 @@ class TimeEntryRepository extends BaseRepository
     /**
      * @param array $input
      *
-     * @return TimeEntry
+     * @return bool
      */
     public function store($input)
     {
@@ -148,9 +149,11 @@ class TimeEntryRepository extends BaseRepository
 
         $this->assignTaskToAdmin($input);
 
-        $timeEntry = TimeEntry::create($input);
+        if ($input['duration'] > 0) {
+            $timeEntry = TimeEntry::create($input);
+        }
 
-        return $timeEntry;
+        return true;
     }
 
     /**
@@ -195,7 +198,9 @@ class TimeEntryRepository extends BaseRepository
                 $input['end_time'] = '';
             }
         }
-        $this->update($input, $id);
+        if ($input['duration'] > 0) {
+            $this->update($input, $id);
+        }
 
         return true;
     }
@@ -228,13 +233,13 @@ class TimeEntryRepository extends BaseRepository
             throw new BadRequestHttpException('Time Entry must be less than 12 hours.');
         }
 
-        if ($input['duration'] < 1) {
-            throw new BadRequestHttpException('Minimum Entry time should be 1 minute.');
-        }
+        $loggedInUser = getLoggedInUser();
 
+        if (!$loggedInUser->can('manage_time_entries') || !isset($input['user_id'])) {
+            $input['user_id'] = getLoggedInUserId();
+        }
         $this->checkDuplicateEntry($input, $id);
 
-        $input['user_id'] = getLoggedInUserId();
         if (!isset($input['note']) || empty($input['note'])) {
             $input['note'] = 'N/A';
         }
@@ -266,7 +271,8 @@ class TimeEntryRepository extends BaseRepository
     public function checkDuplicateEntry($input, $id = null)
     {
         $timeArr = [$input['start_time'], $input['end_time']];
-        $query = TimeEntry::whereUserId(getLoggedInUserId())
+        $userId = $input['user_id'] ?? getLoggedInUserId();
+        $query = TimeEntry::whereUserId($userId)
             ->where(function (Builder $q) use ($timeArr) {
                 $q->whereBetween('start_time', $timeArr)
                     ->orWhereBetween('end_time', $timeArr)
@@ -326,6 +332,9 @@ class TimeEntryRepository extends BaseRepository
      */
     public function getTodayEntries()
     {
-        return TimeEntry::with('task.project')->whereDate('created_at', '=', Carbon::now()->format('Y-m-d'))->get();
+        return TimeEntry::with('task.project')
+            ->whereDate('start_time', '=', Carbon::now()->format('Y-m-d'))
+            ->where('user_id', '=', Auth::id())
+            ->get();
     }
 }

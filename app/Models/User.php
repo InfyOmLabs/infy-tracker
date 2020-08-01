@@ -15,19 +15,19 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * App\Models\User.
  *
- * @property int $id
- * @property string $name
- * @property string $email
- * @property string|null $phone
+ * @property int                             $id
+ * @property string                          $name
+ * @property string                          $email
+ * @property string|null                     $phone
  * @property \Illuminate\Support\Carbon|null $email_verified_at
- * @property string|null $password
- * @property bool $set_password
- * @property int $is_email_verified
- * @property int $is_active
- * @property string|null $activation_code
- * @property int|null $created_by
- * @property string|null $remember_token
- * @property int $deleted_by
+ * @property string|null                     $password
+ * @property bool                            $set_password
+ * @property int                             $is_email_verified
+ * @property int                             $is_active
+ * @property string|null                     $activation_code
+ * @property int|null                        $created_by
+ * @property string|null                     $remember_token
+ * @property int                             $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $createdUser
@@ -62,7 +62,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User withRole($role)
  *
  * @property-read mixed $img_avatar
- * @property int|null $salary
+ * @property int|null                        $salary
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Permission[] $permissions

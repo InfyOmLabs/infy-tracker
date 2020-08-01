@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"/>
     <link href="{{mix('assets/style/css/task-detail.css')}}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{{ asset('assets/style/css/quill.snow.css') }}">
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -151,17 +152,21 @@
                                                             <a class="user__icons del-comment d-none" data-id="{{$comment->id}}"><i class="cui-trash hand-cursor"></i></a>
                                                             <a class="user__icons edit-comment d-none" data-id="{{$comment->id}}"><i class="cui-pencil hand-cursor"></i>&nbsp;</a>
                                                             <a class="user__icons save-comment {{'comment-save-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="cui-circle-check text-success font-weight-bold hand-cursor"></i>&nbsp;&nbsp;</a>
-                                                            <a class="user__icons cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none" data-id="{{$comment->id}}"><i class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
+                                                            <a class="user__icons cancel-comment {{'comment-cancel-icon-'.$comment->id}} d-none"
+                                                               data-id="{{$comment->id}}"><i
+                                                                        class="fa fa-times hand-cursor"></i>&nbsp;&nbsp;</a>
                                                         @endif
                                                     </span>
                                                     <span class="user__description">{{timeElapsedString($comment->created_at)}}</span>
                                                 </div>
-                                                <div class="user__comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}" data-id="{{$comment->id}}">
+                                                <div class="user__comment @if($comment->created_by == Auth::id()) comment-display @endif {{'comment-display-'.$comment->id}}"
+                                                     data-id="{{$comment->id}}">
                                                     {!! html_entity_decode($comment->comment) !!}
                                                 </div>
                                                 @if($comment->created_by == Auth::id())
                                                     <div class="user__comment d-none comment-edit {{'comment-edit-'.$comment->id}}">
-                                                        {!! Form::textarea('comment', $comment->comment, ['class' => 'form-control  comment-editor', 'id'=>'comment-edit-'.$comment->id, 'rows' => 4]) !!}
+                                                        <div id="commentEditContainer{{$comment->id}}"
+                                                             class="quill-editor-container"></div>
                                                     </div>
                                                 @endif
                                             </div>
@@ -171,7 +176,7 @@
                                         <div class="row">
                                             <div class="form-group col-sm-12">
                                                 <strong>{!! Form::label('add_comment', 'Add comment') !!}</strong>
-                                                {!! Form::textarea('comment', null, ['class' => 'form-control comment-editor', 'id'=>'comment', 'rows' => 5, 'placeholder' => 'Add a comment...']) !!}
+                                                <div id="commentContainer" class="quill-editor-container"></div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -199,7 +204,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js.map"></script>
-    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="{{ asset('assets/js/quill.min.js') }}"></script>
 @endsection
 @section('scripts')
     <script>

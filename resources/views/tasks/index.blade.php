@@ -3,7 +3,10 @@
     Tasks
 @endsection
 @section('page_css')
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.css">
     <link rel="stylesheet" href="https://rawgit.com/fronteed/iCheck/1.x/skins/all.css">
+    <link rel="stylesheet" href="{{ asset('assets/style/css/quill.snow.css') }}">
 @endsection
 @section('content')
     <div class="container-fluid">
@@ -22,13 +25,14 @@
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Due Date</b></label>
-                        {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;']) !!}
+                        {!! Form::text('due_date_filter', null, ['id'=>'dueDateFilter','class' => 'form-control', 'autocomplete' => 'off','style'=>'min-width:150px;','placeholder' => 'Enter Date']) !!}
                     </div>
                     <div class="mr-2">
                         <label class="lbl-block"><b>Status</b></label>
                         {!!Form::select('drp_status',$status,0,['id'=>'filter_status','class'=>'form-control','style'=>'min-width:150px;'])  !!}
                     </div>
-                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal" data-target="#AddModal"></i>New
+                    <a href="#" class="btn btn-primary filter-container__btn" data-toggle="modal"
+                       data-target="#AddModal"></i>New
                         Task</a>
                 </div>
             </div>
@@ -54,7 +58,8 @@
 @endsection
 @section('page_js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/icheck.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="{{ asset('assets/js/quill.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.24/daterangepicker.js"></script>
 @endsection
 
 @section('scripts')
@@ -67,7 +72,7 @@
         let getTaskUrl = "{{url('get-tasks')}}/";
         let projectsURL = "{{url('projects')}}/";
         let taskStatusJson = '{!! json_encode($taskStatus) !!}';
-        let taskStatus = $.parseJSON(taskStatusJson)
+        let taskStatus = $.parseJSON(taskStatusJson);
         let taskBadgesJson = '{!! json_encode($taskBadges) !!}';
         let taskBadges = $.parseJSON(taskBadgesJson);
         let taskDetailActionColumnIsVisible = true;
@@ -75,6 +80,7 @@
         let reportEndDate = '';
         let usersOfProjects = "{{ url('users-of-projects') }}";
         let canManageEntries = "{{ (Auth::user()->can('manage_time_entries')) ? true : false }}";
+        let currentLoggedInUserId = "{{ getLoggedInUserId() }}";
     </script>
     <script src="{{ mix('assets/js/task/task.js') }}"></script>
     <script src="{{ mix('assets/js/task/task_time_entry.js') }}"></script>

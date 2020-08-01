@@ -46,7 +46,7 @@ class TimeEntryController extends AppBaseController
         if ($request->ajax()) {
             return Datatables::of(
                 (new TimeEntryDataTable())->get(
-                    $request->only('filter_activity', 'filter_user', 'filter_project')
+                    $request->only('filter_activity', 'filter_user', 'filter_project', 'filter_date')
                 )
             )->editColumn('title', function (TimeEntry $timeEntry) {
                 return $timeEntry->task->prefix_task_number.' '.$timeEntry->task->title;
@@ -188,15 +188,18 @@ class TimeEntryController extends AppBaseController
         /** @var TimeEntry $entry */
         foreach ($timeEntries as $entry) {
             $projects[$entry->task->project->name][$entry->task_id]['name'] = $entry->task->title;
-            $projects[$entry->task->project->name][$entry->task_id]['note'] = $entry->note;
+            if (!isset($projects[$entry->task->project->name][$entry->task_id]['note'])) {
+                $projects[$entry->task->project->name][$entry->task_id]['note'] = '';
+            }
+            $projects[$entry->task->project->name][$entry->task_id]['note'] .= "\n".$entry->note."\n";
         }
 
         foreach ($projects as $name => $project) {
-            $note .= "\n*".$name."*\n";
+            $note .= "\n".$name."\n";
 
             foreach ($project as $task) {
-                $note .= "\t- ".$task['name'];
-                $note .= "\t- ".$task['note'];
+                $note .= "\n* ".$task['name'];
+                $note .= $task['note'];
             }
         }
 

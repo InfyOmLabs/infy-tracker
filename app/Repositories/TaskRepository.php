@@ -21,7 +21,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
  * Class TaskRepository.
@@ -180,7 +179,16 @@ class TaskRepository extends BaseRepository
 
         /** @var UserRepository $userRepo */
         $userRepo = app(UserRepository::class);
-        $data['assignees'] = $userRepo->getUserList();
+        $data['users'] = $userRepo->getUserList();
+
+        /** @var UserRepository $userRepo */
+        $userRepo = app(UserRepository::class);
+        // return all users who has manage task permission otherwise return only logged in user
+        if (getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
+            $data['assignees'] = $userRepo->getUserList();
+        } else {
+            $data['assignees'] = $userRepo->getUserList()->only(getLoggedInUserId());
+        }
 
         /** @var ActivityTypeRepository $activityTypeRepo */
         $activityTypeRepo = app(ActivityTypeRepository::class);
@@ -400,10 +408,6 @@ class TaskRepository extends BaseRepository
     public function uploadFile($id, $file)
     {
         $extension = $file->getClientOriginalExtension();
-        if (!in_array($extension, ['xls', 'pdf', 'doc', 'docx', 'xlsx', 'jpg', 'jpeg', 'png'])) {
-            throw new UnprocessableEntityHttpException('You can not upload this file.');
-        }
-
         $destinationPath = public_path(Task::PATH);
         $task = $this->findOrFail($id);
 

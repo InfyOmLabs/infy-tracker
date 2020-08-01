@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeEntry;
+use App\Models\User;
 use Auth;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,6 +91,26 @@ class ProjectRepository extends BaseRepository
     }
 
     /**
+     * @return Collection
+     */
+    public function getLoginUserAssignTasksProjects()
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name')
+            ->whereHas('users', function (Builder $query) {
+                $query->where('user_id', getLoggedInUserId());
+            })
+            ->whereHas('tasks', function (Builder $query) {
+                $query->where('status', '=', 0)
+                    ->whereHas('taskAssignee', function (Builder $query) {
+                        $query->where('user_id', getLoggedInUserId());
+                    });
+            });
+
+        return $query->pluck('name', 'id');
+    }
+
+    /**
      * get clients.
      *
      * @param int|null $clientId
@@ -103,6 +124,9 @@ class ProjectRepository extends BaseRepository
         if (!is_null($clientId)) {
             $query = $query->whereClientId($clientId);
         }
+        if (!getLoggedInUser()->hasPermissionTo('manage_all_tasks')) {
+            $query = getLoggedInUser()->projects; // get assigned projects list for particular user
+        }
 
         return $query->pluck('name', 'id');
     }
@@ -114,6 +138,12 @@ class ProjectRepository extends BaseRepository
     {
         $query = Project::whereHas('users', function (Builder $query) {
             $query->where('user_id', getLoggedInUserId());
+        })
+        ->whereHas('tasks', function (Builder $query) {
+            $query->where('status', '=', 0)
+                ->whereHas('taskAssignee', function (Builder $query) {
+                    $query->where('user_id', getLoggedInUserId());
+                });
         });
 
         /** @var Project[] $projects */
@@ -143,5 +173,41 @@ class ProjectRepository extends BaseRepository
 
         $project->update(['deleted_by' => getLoggedInUserId()]);
         $project->delete();
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getProjectsHavingPermission()
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name');
+        if (!getLoggedInUser()->hasPermissionTo('manage_time_entries')) {
+            $query = getLoggedInUser()->projects; // get assigned projects list for particular user
+        }
+
+        return $query->pluck('name', 'id');
+    }
+
+    /*
+     * @param $userId
+     *
+     * @return Collection
+     */
+    public function getProjectsByUserId($userId)
+    {
+        /** @var Builder|Project $query */
+        $query = Project::orderBy('name')
+            ->whereHas('users', function (Builder $query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->whereHas('tasks', function (Builder $query) use ($userId) {
+                $query->where('status', '=', 0)
+                    ->whereHas('taskAssignee', function (Builder $query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    });
+            });
+
+        return $query->pluck('name', 'id');
     }
 }

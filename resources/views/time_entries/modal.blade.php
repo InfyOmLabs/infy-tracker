@@ -8,7 +8,15 @@
             </div>
             {!! Form::open(['id'=>'timeEntryAddForm', 'class'=>'timeEntryAddForm']) !!}
             <div class="modal-body">
-                <div class="alert alert-danger" style="display: none" id="tmValidationErrorsBox"></div>
+                <div class="alert alert-danger" style="display: none" id="tmAddValidationErrorsBox"></div>
+                @can('manage_time_entries')
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {!! Form::label('User', 'User') !!}<span class="required">*</span>
+                            {!! Form::select('user_id', $users, Auth::id(), ['id' => 'timeUserId', 'class' => 'form-control', 'required', 'placeholder' => 'Select User']) !!}
+                        </div>
+                    </div>
+                @endcan
                 <div class="form-group row">
                     <div class="col-sm-4">
                         {!! Form::label('project', 'Project') !!}<span class="required">*</span>
