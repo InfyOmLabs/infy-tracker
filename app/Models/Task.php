@@ -13,14 +13,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Task.
  *
- * @property int $id
- * @property string $title
- * @property string $description
- * @property int $project_id
- * @property int $status
- * @property string $due_date
- * @property int|null $created_by
- * @property int|null $deleted_by
+ * @property int                             $id
+ * @property string                          $title
+ * @property string                          $description
+ * @property int                             $project_id
+ * @property int                             $status
+ * @property string                          $due_date
+ * @property int|null                        $created_by
+ * @property int|null                        $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -57,8 +57,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *
  * @property string|null $task_number
  * @property string|null $priority
- * @property int $totalDuration
- * @property int $totalDurationMin
+ * @property int         $totalDuration
+ * @property int         $totalDurationMin
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Task wherePriority($value)
  *

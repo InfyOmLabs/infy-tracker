@@ -10,15 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\TimeEntry.
  *
- * @property int $id
- * @property int $task_id
- * @property int $activity_type_id
- * @property int $user_id
- * @property string|null $start_time
- * @property string|null $end_time
- * @property int $duration
- * @property string $note
- * @property int|null $deleted_by
+ * @property int                             $id
+ * @property int                             $task_id
+ * @property int                             $activity_type_id
+ * @property int                             $user_id
+ * @property string|null                     $start_time
+ * @property string|null                     $end_time
+ * @property int                             $duration
+ * @property string                          $note
+ * @property int|null                        $deleted_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at

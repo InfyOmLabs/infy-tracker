@@ -14,10 +14,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\ReportFilter.
  *
- * @property int $id
- * @property int $report_id
- * @property string $param_type
- * @property int $param_id
+ * @property int                             $id
+ * @property int                             $report_id
+ * @property string                          $param_type
+ * @property int                             $param_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  *

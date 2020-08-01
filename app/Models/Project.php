@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Project.
  *
- * @property int $id
- * @property string $name
- * @property int|null $client_id
- * @property string $description
- * @property int|null $created_by
+ * @property int                             $id
+ * @property string                          $name
+ * @property int|null                        $client_id
+ * @property string                          $description
+ * @property int|null                        $created_by
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Client|null $client

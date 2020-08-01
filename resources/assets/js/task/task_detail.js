@@ -493,6 +493,26 @@ $(document).on('click', '.comment-display,.edit-comment', function () {
     $('.comment-cancel-icon-' + commentId).removeClass('d-none');
 })
 
+const toolbarOptions = [
+    ['bold', 'italic', 'underline', 'strike'],
+    ['blockquote', 'code-block'],
+
+    [{ 'header': 1 }, { 'header': 2 }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    [{ 'script': 'sub'}, { 'script': 'super' }],
+    [{ 'indent': '-1'}, { 'indent': '+1' }],
+    [{ 'direction': 'rtl' }],
+
+    [{ 'size': ['small', false, 'large', 'huge'] }],
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ 'color': [] }, { 'background': [] }],
+    [{ 'font': [] }],
+    [{ 'align': [] }],
+
+    ['clean']
+];
+
 /*
    - This method will create separate Quill Editor instance (but only once, then after it will use the existing created one) when some
    one will edit the comment.
@@ -503,6 +523,9 @@ window.setCommentEditData = function (commentId) {
     // create new Quill Editor instance
     quillCommentEdit[commentId] = new Quill('#commentEditContainer' + commentId,
         {
+            modules: {
+                toolbar: toolbarOptions
+            },
             theme: 'snow',
             placeholder: 'Add task description...',
         });
@@ -553,11 +576,17 @@ $(document).on('mouseleave', '.comments__information', function () {
 
 // quill editor initialization scripts
 let quillComment = new Quill('#commentContainer', {
+    modules: {
+        toolbar: toolbarOptions
+    },
     theme: 'snow',
     placeholder: 'Add comment...',
 });
 
 let quillTask = new Quill('#taskEditDescriptionContainer', {
+    modules: {
+        toolbar: toolbarOptions
+    },
     theme: 'snow',
     placeholder: 'Add task description...',
 });
