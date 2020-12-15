@@ -37,7 +37,7 @@ class TimeEntryDataTable
         );
         $query->when(
             isset($input['filter_project']) && !empty($input['filter_project']),
-            function (Builder $q) use ($input,$user) {
+            function (Builder $q) use ($input, $user) {
                 if ($user->can('manage_time_entries')) {
                     $taskIds = Task::whereProjectId($input['filter_project'])->get()->pluck('id')->toArray();
                     $q->whereIn('task_id', $taskIds);
