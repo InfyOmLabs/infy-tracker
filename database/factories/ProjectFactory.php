@@ -12,7 +12,7 @@ $factory->define(Project::class, function (Faker $faker) {
 
     return [
         'name'        => $faker->name,
-        'prefix'      => $faker->name,
+        'prefix'      => substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'), 0, 5),
         'description' => $faker->sentence,
         'client_id'   => $client->id,
     ];

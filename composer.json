@@ -1,40 +1,41 @@
 {
-  "name": "infyomlabs/infy-tracker",
-  "type": "project",
-  "version": "0.1.8-beta",
-  "description": "Create Projects / Tasks, Track Time, Show Daily Reports",
+    "name": "infyomlabs/infy-tracker",
+    "type": "project",
+    "version": "0.1.8-beta",
+    "description": "Create Projects / Tasks, Track Time, Show Daily Reports",
     "keywords": [
-      "time",
-      "tasks",
-      "projects",
-      "reports"
+        "time",
+        "tasks",
+        "projects",
+        "reports"
     ],
     "license": "MIT",
     "require": {
-    "php": "^7.2",
-    "appointer/swaggervel": "dev-master",
-    "barryvdh/laravel-ide-helper": "^2.6",
-    "doctrine/dbal": "~2.3",
-    "fideloper/proxy": "^4.0",
-    "infyomlabs/coreui-templates": "6.0.*",
-    "infyomlabs/laravel-generator": "6.0.x-dev",
-    "infyomlabs/swagger-generator": "dev-master",
-    "intervention/image": "^2.4",
-    "laravel/framework": "6.0.*",
-    "laravel/tinker": "^1.0",
-    "laravelcollective/html": "^6.0.0",
-    "pusher/pusher-php-server": "~4.0",
-    "spatie/laravel-permission": "^3.0",
-    "yajra/laravel-datatables-oracle": "~9.0"
-  },
+        "php": "^7.2.5|^8.0",
+        "appointer/swaggervel": "dev-master",
+        "barryvdh/laravel-ide-helper": "^2.6",
+        "doctrine/dbal": "~2.3",
+        "fideloper/proxy": "^4.4",
+        "infyomlabs/coreui-templates": "6.0.*",
+        "infyomlabs/laravel-generator": "6.0.x-dev",
+        "infyomlabs/swagger-generator": "dev-master",
+        "intervention/image": "^2.4",
+        "laravel/framework": "^6.20",
+        "laravel/tinker": "^2.5",
+        "laravelcollective/html": "^6.0.0",
+        "pusher/pusher-php-server": "~4.0",
+        "spatie/laravel-permission": "^3.0",
+        "yajra/laravel-datatables-oracle": "~9.0"
+    },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
+        "facade/ignition": "^1.16.4",
+        "fakerphp/faker": "^1.9.1",
         "filp/whoops": "^2.0",
-        "fzaninotto/faker": "^1.4",
         "laravel/dusk": "^5.3",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.5"
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^8.5.8|^9.3.3"
     },
     "config": {
         "optimize-autoloader": true,
@@ -52,7 +53,9 @@
         "psr-4": {
             "App\\": "app/"
         },
-       "files": ["app/helpers.php"],
+        "files": [
+            "app/helpers.php"
+        ],
         "classmap": [
             "database/seeds",
             "database/factories"

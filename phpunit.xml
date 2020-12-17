@@ -7,18 +7,10 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="false">
+         stopOnFailure="true">
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
-        </testsuite>
-
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
-        </testsuite>
-
-        <testsuite name="Integration">
-            <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
 
         <testsuite name="Repositories">
@@ -27,6 +19,18 @@
 
         <testsuite name="Controllers">
             <directory suffix="Test.php">./tests/Controllers</directory>
+        </testsuite>
+
+        <testsuite name="Models">
+            <directory suffix="Test.php">./tests/Models</directory>
+        </testsuite>
+
+        <testsuite name="Permissions">
+            <directory suffix="Test.php">./tests/Permissions</directory>
+        </testsuite>
+
+        <testsuite name="Traits">
+            <directory suffix="Test.php">./tests/Traits</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -2,6 +2,7 @@
 
 namespace Tests\Permissions;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
@@ -53,7 +54,10 @@ class UserControllerPermissionTest extends TestCase
 
         $user = factory(User::class)->raw();
 
-        $response = $this->postJson(route('users.store'), $user);
+        /** @var Role $role */
+        $role = factory(Role::class)->create();
+        $input = array_merge($user, ['role_id' => $role->id, 'password_confirmation' => $user['password']]);
+        $response = $this->postJson(route('users.store'), $input);
 
         $this->assertSuccessMessageResponse($response, 'User created successfully.');
     }
@@ -80,8 +84,11 @@ class UserControllerPermissionTest extends TestCase
         /** @var User $user */
         $user = factory(User::class)->create();
         $updateUser = factory(User::class)->raw(['id' => $user->id]);
+        /** @var Role $role */
+        $role = factory(Role::class)->create();
+        $input = array_merge($updateUser, ['role_id' => $role->id, 'password_confirmation' => $updateUser['password']]);
 
-        $response = $this->putJson(route('users.update', $user->id), $updateUser);
+        $response = $this->putJson(route('users.update', $user->id), $input);
 
         $this->assertSuccessMessageResponse($response, 'User updated successfully.');
     }
