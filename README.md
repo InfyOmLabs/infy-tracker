@@ -5,6 +5,7 @@
 [![Total Downloads](https://poser.pugx.org/infyomlabs/infy-tracker/downloads)](https://packagist.org/packages/infyomlabs/infy-tracker)
 [![Monthly Downloads](https://poser.pugx.org/infyomlabs/infy-tracker/d/monthly)](https://packagist.org/packages/infyomlabs/infy-tracker)
 [![Daily Downloads](https://poser.pugx.org/infyomlabs/infy-tracker/d/daily)](https://packagist.org/packages/infyomlabs/infy-tracker)
+![Test](https://github.com/InfyOmLabs/infy-tracker/workflows/Run%20tests/badge.svg)
 [![License](https://poser.pugx.org/infyomlabs/infy-tracker/license)](https://packagist.org/packages/infyomlabs/infy-tracker)
 
 **This package is still under development and not recommended to use in production.**
