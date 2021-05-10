@@ -19,7 +19,7 @@ Check more information [here](http://infyom.com/infytracker).
 
 You can download the fully working advanced version of this system from [here](https://codecanyon.net/item/infyprojects-project-management-system/29295013).
 
-[![InfyProjects](https://assets.infyom.com/open-source/infyprojects-banner.png)](https://bit.ly/3hbcDFT)
+[![InfyProjects](https://assets.infyom.com/open-source/infyprojects-banner.png)](https://1.envato.market/kjOGM0)
 
 You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
 
