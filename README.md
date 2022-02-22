@@ -13,15 +13,13 @@ InfyTracker
 
 InfyTracker is a minimal time tracking and task management app built on [Laravel](https://laravel.com/) + [CoreUI](https://coreui.io/) for small teams to keep everything simple and everyone on the same page.
 
-Check more information [here](http://infyom.com/infytracker).
-
 ## Advance Stable Version
 
-You can download the fully working advanced version of this system from [here](https://codecanyon.net/item/infyprojects-project-management-system/29295013).
+You can download the fully working advanced version of this system from [here](https://1.envato.market/YgR3ne).
 
-[![InfyProjects](https://assets.infyom.com/open-source/infyprojects-banner.png)](https://1.envato.market/kjOGM0)
+[![InfyProjects](https://assets.infyom.com/open-source/new/infyprojects-banner.png)](https://1.envato.market/YgR3ne)
 
-You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
+You can also check out our other paid products on [CodeCanyon](https://1.envato.market/BXAnR1).
 
 ## Support Us
 
@@ -41,10 +39,6 @@ You can support us by either sponsoring us or buying one of our paid products. O
 
 <a href="https://opencollective.com/infyomlabs#backer"><img src="https://opencollective.com/infyomlabs/backers.svg?width=890"></a>
 
-### Buy our Paid Products
-
-You can also check out our other paid products on [CodeCanyon](https://codecanyon.net/user/infyomlabs/portfolio).
-
 ### Follow Us
 
 - [Twitter](https://twitter.com/infyom)
@@ -56,3 +50,16 @@ You can also check out our other paid products on [CodeCanyon](https://codecanyo
 ## Made with InfyOm Generator
 
 Also, Do not forget to add your website to [Made with InfyOm Generator List](https://github.com/InfyOmLabs/laravel-generator/blob/develop/made-with-generator.md) list.
+
+## Security
+
+If you discover any security-related issues, create an issue using the issue tracker.
+
+## Credits
+
+- [InfyOm Technologies](https://github.com/infyomlabs)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
