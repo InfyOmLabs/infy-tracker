@@ -9,7 +9,7 @@ InfyTracker
 ![Test](https://github.com/InfyOmLabs/infy-tracker/workflows/Tests/badge.svg)
 [![License](https://poser.pugx.org/infyomlabs/infy-tracker/license)](https://packagist.org/packages/infyomlabs/infy-tracker)
 
-**This package is still under development and not recommended to use in production.**
+**This package is not longer maintained and not recommended to use in production. Check the advanced paid stable version below Or feel free to use archieved version.**
 
 InfyTracker is a minimal time tracking and task management app built on [Laravel](https://laravel.com/) + [CoreUI](https://coreui.io/) for small teams to keep everything simple and everyone on the same page.
 
